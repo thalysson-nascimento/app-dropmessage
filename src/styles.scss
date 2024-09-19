@@ -1,0 +1,27 @@
+@import "../node_modules/@glidejs/glide/dist/css/glide.core.min.css";
+@import "../node_modules/@glidejs/glide/dist/css/glide.theme.min.css";
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Garante que o padding e a border sejam incluídos nas dimensões dos elementos */
+}
+
+body {
+  height: 100vh;
+}
+
+:root {
+  --text-dark: #454545;
+  --text-dark-secundary: #7b7b7b;
+  --text-dark-d1: #828282;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  font-size: var(--text-medium);
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+  color: --text-dark;
+}

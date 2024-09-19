@@ -1,0 +1,116 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.header {
+  height: 4rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+body {
+  display: grid;
+  height: 100vh;
+}
+
+.list-post-message {
+  display: flex;
+  height: calc(100vh - 4rem);
+}
+
+.list-post-message::-webkit-scrollbar {
+  width: 0;
+}
+
+.user-post-image {
+  padding: 1rem;
+  flex: none;
+  margin-right: 10px;
+  width: 100%;
+  scroll-snap-align: start;
+}
+
+img {
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-avatar {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+}
+
+.actions {
+  display: flex;
+}
+
+.icon-camera {
+  border: none;
+  padding: 0.4rem;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  background-color: #f6f6f6;
+}
+
+.header {
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Novo estilo para sobrepor a .heater */
+.heater {
+  position: fixed;
+  bottom: 2rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center; /* Centraliza verticalmente */
+  margin: 0 auto;
+  width: 100%;
+  z-index: 100;
+}
+
+.lottie-container {
+  background-color: #fff;
+  border-radius: 50%;
+  width: 50px;
+  background-color: rgba(255, 255, 255, 0.872);
+}
+
+.container {
+  position: relative;
+  height: 100vh; // Ocupa a tela inteira
+  .swiper-container {
+    height: 100%;
+    width: 100%;
+  }
+  .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    img {
+      width: 100%;
+      border-radius: 10px 10px 0 0;
+    }
+    h3 {
+      margin: 10px 0;
+      font-size: 24px;
+    }
+  }
+}
