@@ -43,8 +43,9 @@ img {
 }
 
 .user-avatar {
-  width: 6rem;
-  height: 6rem;
+  margin-top: 10px;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
 }
 
@@ -54,11 +55,10 @@ img {
 
 .icon-camera {
   border: none;
-  padding: 0.4rem;
   border-radius: 50%;
   align-items: center;
   justify-content: center;
-  background-color: #f6f6f6;
+  background-color: none;
 }
 
 .header {
@@ -89,28 +89,9 @@ img {
   background-color: rgba(255, 255, 255, 0.872);
 }
 
-.container {
-  position: relative;
-  height: 100vh; // Ocupa a tela inteira
-  .swiper-container {
-    height: 100%;
-    width: 100%;
-  }
-  .swiper-slide {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    img {
-      width: 100%;
-      border-radius: 10px 10px 0 0;
-    }
-    h3 {
-      margin: 10px 0;
-      font-size: 24px;
-    }
-  }
+.no-matches-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }

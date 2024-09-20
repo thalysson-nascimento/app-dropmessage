@@ -2,10 +2,18 @@
   <div class="header">
     <div class="title-app">DropMessage</div>
     <div class="actions">
-      <button class="icon-camera">
-        <img src="assets/camera.svg" alt="Câmera" style="width: 27px" />
-      </button>
-      <div>config</div>
+      <div
+        id="lottie-icon-camera"
+        class="lottie-icon-camera"
+        style="width: 67px; height: 67px"
+      ></div>
+      <div>
+        <img
+          class="user-avatar"
+          src="https://media.istockphoto.com/id/1211311866/pt/foto/stylish-casual-woman-enjoying-sun-at-tropical-beach.jpg?s=612x612&w=0&k=20&c=W52Cl-zvdNoAzPE65KtsXE4-9-bvP8cr6QQBssK6o_Q="
+          alt=""
+        />
+      </div>
     </div>
   </div>
 
@@ -20,7 +28,11 @@
         <!-- Template para o último slide -->
         <ng-template #noMatchesSlide>
           <div class="no-matches-message">
-            {{ post.name }}
+            <div
+              id="lottie-icon-no-match"
+              class="lottie-icon-no-match"
+              style="width: 250px; height: 250px"
+            ></div>
           </div>
         </ng-template>
       </swiper-slide>
@@ -28,7 +40,7 @@
   </div>
 </div>
 
-<div class="heater">
+<div class="heater" *ngIf="showLikeButton">
   <div
     id="lottie-container"
     class="lottie-container"

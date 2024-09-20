@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
+  NgZone,
   OnInit,
 } from '@angular/core';
 import { default as lottie } from 'lottie-web';
@@ -22,23 +23,59 @@ register();
 export class PostMessagesComponent implements OnInit, AfterViewInit {
   posts!: Array<{ id: string; path: string; name: string }>;
   animation: any;
+  iconAnimationCamera: any;
   mySwiper: any;
+  iconAnimationNoMatch: any;
+  showLikeButton: boolean = true;
 
-  constructor(private postService: PostService) {}
+  constructor(private postService: PostService, private zone: NgZone) {}
 
   ngOnInit(): void {
     this.loadPostService();
   }
 
   ngAfterViewInit() {
-    this.loadAnimationIcon('like-heart.json', 'lottie-container');
+    this.zone.runOutsideAngular(() => {
+      this.loadAnimationIconHeart('like-heart.json', 'lottie-container');
+      this.loadAnimationIconCamera('camera.json', 'lottie-icon-camera');
+      this.loadAnimationIconNoMacth('no-macth.json', 'lottie-icon-no-match');
+    });
     this.initializeSwiper();
+  }
+
+  initializeSwiper() {
+    this.zone.runOutsideAngular(() => {
+      const swiperContainer = document.querySelector('.mySwiper') as any;
+
+      if (swiperContainer) {
+        this.mySwiper = swiperContainer.swiper;
+
+        this.mySwiper.on('slideChangeTransitionEnd', () => {
+          const activeIndex = this.mySwiper.activeIndex;
+
+          if (activeIndex > 0) {
+            const postToRemove = this.posts[activeIndex - 1];
+
+            this.removePost(postToRemove.id);
+          }
+        });
+
+        this.mySwiper.on('reachEnd', () => {
+          const activeIndex = this.mySwiper.activeIndex;
+          console.log(this.posts.length);
+          if (activeIndex === this.posts.length - 2) {
+            this.zone.run(() => {
+              this.showLikeButton = false;
+            });
+          }
+        });
+      }
+    });
   }
 
   loadPostService() {
     this.postService.listPost().subscribe((response) => {
       this.posts = response;
-      console.log('response: ', this.posts);
 
       // Adiciona o último slide com a mensagem no final do array
       this.posts.push({
@@ -49,7 +86,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  loadAnimationIcon(pathIconAnimation: string, idElement: string) {
+  loadAnimationIconHeart(pathIconAnimation: string, idElement: string) {
     const animationContainer = document.getElementById(idElement);
     if (animationContainer) {
       this.animation = lottie.loadAnimation({
@@ -66,33 +103,28 @@ export class PostMessagesComponent implements OnInit, AfterViewInit {
     }
   }
 
-  initializeSwiper() {
-    const swiperContainer = document.querySelector('.mySwiper') as any;
-
-    if (swiperContainer) {
-      this.mySwiper = swiperContainer.swiper;
-
-      this.mySwiper.on('slideChangeTransitionEnd', () => {
-        const activeIndex = this.mySwiper.activeIndex;
-
-        // Checa se o slide atual não é o último
-        if (activeIndex > 0) {
-          const postToRemove = this.posts[activeIndex - 1];
-
-          console.log('Slide mudou para: ', activeIndex);
-          console.log('Post ativo: ', postToRemove.id);
-
-          // Remove o post ativo da lista de posts, mas não o último com a mensagem
-          this.removePost(postToRemove.id);
-        }
+  loadAnimationIconCamera(pathIconAnimation: string, idElement: string) {
+    const animationContainer = document.getElementById(idElement);
+    if (animationContainer) {
+      this.iconAnimationCamera = lottie.loadAnimation({
+        container: animationContainer,
+        path: `assets/icon-animation/${pathIconAnimation}`,
+        renderer: 'svg',
+        loop: false,
+        autoplay: true,
       });
+    }
+  }
 
-      this.mySwiper.on('reachBeginning', () => {
-        console.log('Chegou ao primeiro slide');
-      });
-
-      this.mySwiper.on('reachEnd', () => {
-        console.log('Chegou ao último slide');
+  loadAnimationIconNoMacth(pathIconAnimation: string, idElement: string) {
+    const animationContainer = document.getElementById(idElement);
+    if (animationContainer) {
+      this.iconAnimationNoMatch = lottie.loadAnimation({
+        container: animationContainer,
+        path: `assets/icon-animation/${pathIconAnimation}`,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
       });
     }
   }
@@ -100,15 +132,12 @@ export class PostMessagesComponent implements OnInit, AfterViewInit {
   removePost(postId: string) {
     const postIndex = this.posts.findIndex((post) => post.id === postId);
 
-    // Não remover o último post (com a mensagem)
     if (postIndex !== -1 && postId !== 'no-matches') {
       this.posts.splice(postIndex, 1);
-      console.log('Post removido com ID: ', postId);
 
       setTimeout(() => {
         this.mySwiper.removeSlide(postIndex);
         this.mySwiper.update();
-        console.log('Swiper atualizado e slide removido:', this.mySwiper);
       }, 0);
     }
   }
