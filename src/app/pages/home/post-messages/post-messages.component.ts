@@ -6,8 +6,11 @@ import {
   NgZone,
   OnInit,
 } from '@angular/core';
+
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { default as lottie } from 'lottie-web';
 import { register } from 'swiper/element/bundle';
+import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
 import { PostService } from '../../../shared/service/post/post.service';
 
 register();
@@ -28,7 +31,11 @@ export class PostMessagesComponent implements OnInit, AfterViewInit {
   iconAnimationNoMatch: any;
   showLikeButton: boolean = true;
 
-  constructor(private postService: PostService, private zone: NgZone) {}
+  constructor(
+    private postService: PostService,
+    private zone: NgZone,
+    private bottomSheet: MatBottomSheet
+  ) {}
 
   ngOnInit(): void {
     this.loadPostService();
@@ -140,5 +147,9 @@ export class PostMessagesComponent implements OnInit, AfterViewInit {
         this.mySwiper.update();
       }, 0);
     }
+  }
+
+  openBottomSheet(): void {
+    this.bottomSheet.open(BottomSheetComponent);
   }
 }

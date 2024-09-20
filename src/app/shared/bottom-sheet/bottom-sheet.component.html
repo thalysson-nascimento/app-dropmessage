@@ -1,0 +1,69 @@
+<div class="contain-bottomsheet">
+  <div class="contain-header-bottomsheet">
+    <span class="bottomsheet-text-header">
+      Escolha o tempo que o seu post ficará visível.
+    </span>
+    <div class="contain-arrow-down">
+      <button aria-label="fechar modal" class="button-down" (click)="dismiss()">
+        <img
+          aria-hidden="true"
+          src="assets/icon-static/arrow-down.svg"
+          alt=""
+        />
+      </button>
+    </div>
+  </div>
+
+  <ul class="list-action-timer">
+    <li class="action-timer" (click)="selectPostTimer('thirtyMinutes')">
+      <div class="contain-icon-and-description">
+        <img
+          src="assets/icon-static/camera-bottomsheet.svg"
+          class="icon-camera-timer"
+          alt=""
+        />
+        <div>
+          <p>30 minutos</p>
+          <span class="drescription-timer"
+            >compartilhar e deixar seu post visível por pouco tempo.</span
+          >
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+
+    <li class="action-timer" (click)="selectPostTimer('sixtyMinutes')">
+      <div class="contain-icon-and-description">
+        <img
+          src="assets/icon-static/camera-bottomsheet.svg"
+          class="icon-camera-timer"
+          alt=""
+        />
+        <div>
+          <p>60 minutos</p>
+          <span class="drescription-timer"
+            >compartilhar e deixar seu post visível por mais tempo.</span
+          >
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+
+    <li class="action-timer" (click)="selectPostTimer('oneDay')">
+      <div class="contain-icon-and-description">
+        <img
+          src="assets/icon-static/camera-bottomsheet.svg"
+          class="icon-camera-timer"
+          alt=""
+        />
+        <div>
+          <p>24 horas</p>
+          <span class="drescription-timer"
+            >compartilhar e deixar seu post visível por um dia.</span
+          >
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+  </ul>
+</div>
