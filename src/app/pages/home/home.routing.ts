@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home.component';
+import { ListSettingsComponent } from './list-settings/list-settings.component';
 import { PostMessagesComponent } from './post-messages/post-messages.component';
 
 export const HomeRouting: Routes = [
@@ -9,13 +10,17 @@ export const HomeRouting: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'post-messages',  // Redireciona para sign ao acessar "auth/"
-        pathMatch: 'full'
+        redirectTo: 'post-messages', // Redireciona para sign ao acessar "auth/"
+        pathMatch: 'full',
       },
       {
         path: 'post-messages',
-        component: PostMessagesComponent
+        component: PostMessagesComponent,
       },
-    ]
-  }
+      {
+        path: 'list-settings',
+        component: ListSettingsComponent,
+      },
+    ],
+  },
 ];
