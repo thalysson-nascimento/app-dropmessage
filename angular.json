@@ -44,6 +44,11 @@
           },
           "configurations": {
             "production": {
+              "extractLicenses": true,
+              "aot": true,
+              "namedChunks": false,
+              "sourceMap": false,
+              "optimization": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -61,16 +66,35 @@
               "ssr": {
                 "entry": "server.ts"
               },
-              "prerender": true
+              "prerender": true,
+              "define": {
+                "process.env.NODE_ENV": "'production'"
+              }
             },
             "development": {
+              "aot": false,
+              "namedChunks": true,
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
               "outputHashing": "none",
               "index": "src/index.html",
               "browser": "src/main.ts",
-              "prerender": false
+              "prerender": false,
+              "define": {
+                "process.env.NODE_ENV": "'development'"
+              }
+            },
+            "mock": {
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": true,
+              "extractLicenses": false,
+              "prerender": false,
+              "namedChunks": true,
+              "define": {
+                "process.env.NODE_ENV": "'mock'"
+              }
             }
           },
           "defaultConfiguration": "production"
@@ -83,9 +107,12 @@
             },
             "development": {
               "buildTarget": "app-dropmessage:build:development"
+            },
+            "mock": {
+              "buildTarget": "app-dropmessage:build:mock"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "mock"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"

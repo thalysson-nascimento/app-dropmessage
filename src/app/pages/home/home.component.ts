@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
   selector: 'app-home',
   standalone: true,
   imports: [RouterModule, CommonModule],
-
+  providers: [],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
