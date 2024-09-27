@@ -5,6 +5,8 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root',
 })
 export class PostService {
+  constructor() {}
+
   listPost(): Observable<Array<{ id: string; path: string; name: string }>> {
     const posts = [
       {

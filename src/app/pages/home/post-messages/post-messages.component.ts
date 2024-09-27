@@ -44,7 +44,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadPostService();
-    console.log('PostMessagesComponent inicializado', this.posts);
   }
 
   ngAfterViewInit() {
@@ -107,23 +106,24 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   loadPostService() {
     this.postService.listPost().subscribe((response) => {
-      this.posts = response;
-
-      // Adiciona o último slide com a mensagem no final do array
-      this.posts.push({
-        id: 'no-matches',
-        path: '',
-        name: 'Você não tem mais matchs na sua localidade',
-      });
-
-      // Atualize o swiper após os dados serem carregados
-      setTimeout(() => {
-        if (this.mySwiper) {
-          this.mySwiper.update();
-          this.mySwiper.slideTo(0, 0, false); // Certifique-se de que comece no primeiro slide
-        }
-      }, 0);
+      console.log(response);
     });
+    // this.postService.listPost().subscribe((response) => {
+    //   this.posts = response;
+    //   // Adiciona o último slide com a mensagem no final do array
+    //   this.posts.push({
+    //     id: 'no-matches',
+    //     path: '',
+    //     name: 'Você não tem mais matchs na sua localidade',
+    //   });
+    //   // Atualize o swiper após os dados serem carregados
+    //   setTimeout(() => {
+    //     if (this.mySwiper) {
+    //       this.mySwiper.update();
+    //       this.mySwiper.slideTo(0, 0, false); // Certifique-se de que comece no primeiro slide
+    //     }
+    //   }, 0);
+    // });
   }
 
   loadAnimationIconHeart(pathIconAnimation: string, idElement: string) {

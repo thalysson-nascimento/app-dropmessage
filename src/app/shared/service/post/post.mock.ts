@@ -1,17 +1,19 @@
-import { HttpHeaders } from '@angular/common/http';
-import { Observable, mergeMap, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, delay, of } from 'rxjs';
 import { PostList } from '../../interface/post';
 import { PostBase } from './post.base';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class PostMock extends PostBase {
-  private apiUrl = `/pix`;
+  constructor(httpClient: HttpClient) {
+    super(httpClient); // Chamando o construtor da classe base
+  }
 
   listPost(): Observable<PostList> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer mock-token',
-    });
-
+    // Simulando a resposta mockada
     const mockResponse: PostList = {
       posts: [
         {
@@ -29,21 +31,10 @@ export class PostMock extends PostBase {
           path: 'https://jpimg.com.br/uploads/2019/04/thanos-vingadores.jpg',
           name: 'praia',
         },
-        {
-          id: 'homem-de-ferro-dddd',
-          path: 'https://disneyplusbrasil.com.br/wp-content/uploads/2022/10/Tony-Stark-Homem-de-Ferro.jpg',
-          name: 'gato',
-        },
-        {
-          id: 'homem-aranha-eeee',
-          path: 'https://cienciahoje.org.br/wp-content/uploads/2018/11/legiao_vpZw6kWY8GuK9cqCh5DJEFafL437IyAz02smlNgRoO.png.jpeg',
-          name: 'gato',
-        },
       ],
     };
 
-    return this.httpClient
-      .get<PostList>(this.apiUrl, { headers })
-      .pipe(mergeMap(() => of(mockResponse)));
+    // Retornando a resposta diretamente sem fazer a requisição HTTP
+    return of(mockResponse).pipe(delay(5000));
   }
 }

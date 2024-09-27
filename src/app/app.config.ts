@@ -3,9 +3,10 @@ import { provideRouter } from '@angular/router';
 import player from 'lottie-web';
 import { provideLottieOptions } from 'ngx-lottie';
 
+import { provideHttpClient } from '@angular/common/http';
 import { provideClientHydration } from '@angular/platform-browser';
-import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { routes } from './app.routes';
 
 export function playerFactory() {
   return player;
@@ -16,6 +17,8 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideLottieOptions({ player: playerFactory }),
     provideRouter(routes),
-    provideClientHydration(), provideAnimationsAsync(),
+    provideClientHydration(),
+    provideAnimationsAsync(),
+    provideHttpClient(),
   ],
 };

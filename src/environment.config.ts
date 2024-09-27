@@ -4,6 +4,7 @@ interface TypeEnveronment {
   production: boolean;
   baseURL: string;
   pathURL: string;
+  mock: boolean;
 }
 
 export const environmentConfig: Record<Environment, TypeEnveronment> = {
@@ -11,16 +12,19 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
     baseURL: 'https://prod.com',
     pathURL: '/api/v1',
     production: true,
+    mock: false,
   },
   mock: {
     baseURL: 'https://mock.com',
     pathURL: '/api/mock',
     production: false,
+    mock: true,
   },
   development: {
-    baseURL: 'https://develop.com',
+    baseURL: 'http://localhost:3000/',
     pathURL: '/api/dev',
     production: false,
+    mock: false,
   },
 };
 

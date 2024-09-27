@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container">
   <div class="header">
     <div class="title-app">DropMessage</div>
     <div class="actions">
@@ -22,12 +22,10 @@
   <div>
     <swiper-container class="list-post-message mySwiper">
       <swiper-slide *ngFor="let post of posts" class="user-post-image">
-        <!-- Se for o último slide, exibe o texto -->
         <ng-container *ngIf="post.id !== 'no-matches'; else noMatchesSlide">
           <img [src]="post.path" alt="" />
         </ng-container>
 
-        <!-- Template para o último slide -->
         <ng-template #noMatchesSlide>
           <div class="no-matches-message">
             <div
@@ -48,4 +46,4 @@
     class="lottie-container"
     style="width: 120px; height: 120px"
   ></div>
-</div>
+</div> -->
