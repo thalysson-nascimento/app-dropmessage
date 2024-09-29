@@ -5,5 +5,9 @@ export interface Post {
 }
 
 export interface PostList {
-  posts: Post[];
+  currentPage: number;
+  totalPages: number;
+  perPage: number;
+  totalItems: number;
+  data: Post[];
 }

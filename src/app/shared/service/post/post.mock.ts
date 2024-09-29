@@ -15,26 +15,30 @@ export class PostMock extends PostBase {
   listPost(): Observable<PostList> {
     // Simulando a resposta mockada
     const mockResponse: PostList = {
-      posts: [
+      currentPage: 1,
+      totalPages: 3,
+      perPage: 4,
+      totalItems: 12,
+      data: [
         {
-          id: 'game-of-throne-aaaa',
+          id: '1a79a4d60de6718e8e5b326e338ae533',
           path: 'https://br.web.img3.acsta.net/pictures/19/03/21/16/15/4239577.jpg',
-          name: 'praia',
+          name: 'Item One',
         },
         {
-          id: 'dragon-ball-bbbb',
+          id: '9b74c9897bac770ffc029102a200c5de',
           path: 'https://m.media-amazon.com/images/S/pv-target-images/334f00b53cf3ef848ea7048b25711bc98e8236ce1685a096990c80d0965835ea.png',
-          name: 'gato',
+          name: 'Item Two',
         },
         {
-          id: 'thanos-cccc',
+          id: '6dcd4ce23d88e2ee9568ba546c007c63',
           path: 'https://jpimg.com.br/uploads/2019/04/thanos-vingadores.jpg',
-          name: 'praia',
+          name: 'Item Three',
         },
       ],
     };
 
     // Retornando a resposta diretamente sem fazer a requisição HTTP
-    return of(mockResponse).pipe(delay(5000));
+    return of(mockResponse).pipe(delay(3000));
   }
 }
