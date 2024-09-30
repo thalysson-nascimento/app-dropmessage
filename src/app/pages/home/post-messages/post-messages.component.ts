@@ -75,6 +75,30 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  // initializeSwiper() {
+  //   if (isPlatformBrowser(this.platformId)) {
+  //     this.zone.runOutsideAngular(() => {
+  //       const swiperContainer = document.querySelector('.mySwiper') as any;
+
+  //       if (swiperContainer) {
+  //         this.mySwiper = swiperContainer.swiper;
+
+  //         this.mySwiper.on('slideChangeTransitionEnd', () => {
+  //           const activeIndex = this.mySwiper.activeIndex;
+
+  //           if (activeIndex > 0) {
+  //             const postToRemove = this.posts[activeIndex - 1];
+  //             const currentIndex = this.mySwiper.activeIndex;
+
+  //             this.removePost(postToRemove.id);
+  //             this.mySwiper.slideTo(currentIndex - 1);
+  //           }
+  //         });
+  //       }
+  //     });
+  //   }
+  // }
+
   initializeSwiper() {
     if (isPlatformBrowser(this.platformId)) {
       this.zone.runOutsideAngular(() => {
@@ -83,15 +107,16 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
         if (swiperContainer) {
           this.mySwiper = swiperContainer.swiper;
 
+          // Reinicia o swiper no índice correto
+          this.mySwiper.slideTo(0, 0, false); // Reseta para o slide inicial
+
           this.mySwiper.on('slideChangeTransitionEnd', () => {
             const activeIndex = this.mySwiper.activeIndex;
 
             if (activeIndex > 0) {
               const postToRemove = this.posts[activeIndex - 1];
-              const currentIndex = this.mySwiper.activeIndex;
 
               this.removePost(postToRemove.id);
-              this.mySwiper.slideTo(currentIndex - 1);
             }
           });
         }
@@ -113,6 +138,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       console.log(this.posts);
 
       this.isLoaded = true;
+
       setTimeout(() => {
         const lottieContainerElement =
           document.querySelector<HTMLElement>('#lottie-container');
@@ -182,10 +208,16 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   removePost(postId: string) {
     const postIndex = this.posts.findIndex((post) => post.id === postId);
+
     if (postIndex !== -1 && postId !== 'no-matches') {
-      this.posts.splice(0, 1);
-      console.log('lista de todos os objetos', this.posts);
-      console.log('== postIndex ==>', postIndex);
+      this.mySwiper.setTransition(0);
+
+      setTimeout(() => {
+        this.mySwiper.removeSlide(postIndex);
+        this.mySwiper.update();
+
+        this.mySwiper.setTransition(300);
+      }, 0);
     }
   }
 

@@ -90,9 +90,8 @@
       </swiper-slide>
     </swiper-container>
 
-    <div class="heater">
+    <div class="heater" *ngIf="showLikeButton">
       <div
-        *ngIf="showLikeButton"
         id="lottie-container"
         class="lottie-container"
         style="width: 120px; height: 120px"
