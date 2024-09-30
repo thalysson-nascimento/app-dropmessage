@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { default as lottie } from 'lottie-web';
 import { register } from 'swiper/element/bundle';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
+import { Post } from '../../../shared/interface/post';
 import { PostService } from '../../../shared/service/post/post.service';
 
 register();
@@ -107,16 +108,21 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
         if (swiperContainer) {
           this.mySwiper = swiperContainer.swiper;
 
-          // Reinicia o swiper no índice correto
-          this.mySwiper.slideTo(0, 0, false); // Reseta para o slide inicial
-
           this.mySwiper.on('slideChangeTransitionEnd', () => {
             const activeIndex = this.mySwiper.activeIndex;
 
             if (activeIndex > 0) {
               const postToRemove = this.posts[activeIndex - 1];
 
-              this.removePost(postToRemove.id);
+              this.removePost(postToRemove);
+            }
+          });
+
+          this.mySwiper.on('reachEnd', () => {
+            const activeIndex = this.mySwiper.activeIndex;
+
+            if (activeIndex === 0) {
+              this.showLikeButton = false;
             }
           });
         }
@@ -206,18 +212,14 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  removePost(postId: string) {
-    const postIndex = this.posts.findIndex((post) => post.id === postId);
+  removePost(post: Post) {
+    const postIndex = this.posts.findIndex((post) => post.id === post.id);
 
-    if (postIndex !== -1 && postId !== 'no-matches') {
-      this.mySwiper.setTransition(0);
+    console.log('realizar requizição em pilha para remover o post:', post);
 
-      setTimeout(() => {
-        this.mySwiper.removeSlide(postIndex);
-        this.mySwiper.update();
-
-        this.mySwiper.setTransition(300);
-      }, 0);
+    if (postIndex !== -1 && post.id !== 'no-matches') {
+      this.mySwiper.removeSlide(postIndex);
+      this.mySwiper.update();
     }
   }
 
