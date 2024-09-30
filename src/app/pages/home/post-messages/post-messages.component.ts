@@ -19,6 +19,14 @@ import { PostService } from '../../../shared/service/post/post.service';
 
 register();
 
+interface LottieAnimationOptions {
+  pathIconAnimation: string;
+  idElement: string;
+  loop?: boolean;
+  autoplay?: boolean;
+  onClick?: boolean;
+}
+
 @Component({
   selector: 'app-post-messages',
   standalone: true,
@@ -53,21 +61,25 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.zone.runOutsideAngular(() => {
-        this.loadAnimationIconCamera('camera.json', 'lottie-icon-camera');
+        this.loadLottieAnimation({
+          pathIconAnimation: 'camera.json',
+          idElement: 'lottie-icon-camera',
+          loop: false,
+          autoplay: true,
+        });
+
+        this.loadLottieAnimation({
+          pathIconAnimation: 'loading.json',
+          idElement: 'lottie-icon-is-loading',
+          loop: true,
+          autoplay: true,
+        });
       });
     }
   }
 
   ngOnDestroy(): void {
     if (this.mySwiper) {
-      /**
-       * Destroi o Swiper para evitar memory leak.
-       * Os eventos `'slideChangeTransitionEnd'` e `'reachEnd'` precisam ser removidos explicitamente,
-       * senão o Swiper continuará a emitir eventos mesmo após o componente ter sido destruído.
-       * Além disso, o Swiper precisa ser destruído manualmente com o método `destroy()`.
-       * O Swiper é criado fora do contexto do Zone.js no método `ngAfterViewInit()`, portanto
-       * precisamos acessá-lo e destruí-lo também fora do contexto do Zone.js.
-       */
       this.mySwiper.off('slideChangeTransitionEnd');
       this.mySwiper.off('reachEnd');
       this.mySwiper.destroy(true, true);
@@ -75,31 +87,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       console.log('Swiper destruído');
     }
   }
-
-  // initializeSwiper() {
-  //   if (isPlatformBrowser(this.platformId)) {
-  //     this.zone.runOutsideAngular(() => {
-  //       const swiperContainer = document.querySelector('.mySwiper') as any;
-
-  //       if (swiperContainer) {
-  //         this.mySwiper = swiperContainer.swiper;
-
-  //         this.mySwiper.on('slideChangeTransitionEnd', () => {
-  //           const activeIndex = this.mySwiper.activeIndex;
-
-  //           if (activeIndex > 0) {
-  //             const postToRemove = this.posts[activeIndex - 1];
-  //             const currentIndex = this.mySwiper.activeIndex;
-
-  //             this.removePost(postToRemove.id);
-  //             this.mySwiper.slideTo(currentIndex - 1);
-  //           }
-  //         });
-  //       }
-  //     });
-  //   }
-  // }
-
   initializeSwiper() {
     if (isPlatformBrowser(this.platformId)) {
       this.zone.runOutsideAngular(() => {
@@ -111,10 +98,12 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
           this.mySwiper.on('slideChangeTransitionEnd', () => {
             const activeIndex = this.mySwiper.activeIndex;
 
-            if (activeIndex > 0) {
+            if (activeIndex > 0 && activeIndex <= this.posts.length) {
               const postToRemove = this.posts[activeIndex - 1];
 
-              this.removePost(postToRemove);
+              if (postToRemove && postToRemove.id !== 'no-matches') {
+                this.removePostFromSwiper(postToRemove);
+              }
             }
           });
 
@@ -144,83 +133,92 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       console.log(this.posts);
 
       this.isLoaded = true;
-
-      setTimeout(() => {
-        const lottieContainerElement =
-          document.querySelector<HTMLElement>('#lottie-container');
-
-        if (lottieContainerElement) {
-          console.log(
-            'Elemento #lottie-container existe:',
-            lottieContainerElement
-          );
-          this.zone.runOutsideAngular(() => {
-            this.loadAnimationIconHeart('like-heart.json', 'lottie-container');
-            this.loadAnimationIconNoMacth(
-              'no-macth.json',
-              'lottie-icon-no-match'
-            );
-            this.initializeSwiper();
-          });
-        } else {
-          console.error('O elemento #lottie-container não existe');
-        }
-      }, 0);
+      this.loadLottieAnimationIcon();
     });
   }
 
-  loadAnimationIconHeart(pathIconAnimation: string, idElement: string) {
+  loadLottieAnimationIcon() {
+    setTimeout(() => {
+      const lottieContainerElement =
+        document.querySelector<HTMLElement>('#lottie-container');
+
+      if (lottieContainerElement) {
+        console.log(
+          'Elemento #lottie-container existe:',
+          lottieContainerElement
+        );
+        this.zone.runOutsideAngular(() => {
+          this.loadLottieAnimation({
+            pathIconAnimation: 'like-heart.json',
+            idElement: 'lottie-container',
+            loop: false,
+            autoplay: false,
+            onClick: true,
+          });
+
+          this.loadLottieAnimation({
+            pathIconAnimation: 'no-macth.json',
+            idElement: 'lottie-icon-no-match',
+            loop: true,
+            autoplay: true,
+          });
+
+          this.initializeSwiper();
+        });
+      } else {
+        console.error('O elemento #lottie-container não existe');
+      }
+    }, 0);
+  }
+
+  loadLottieAnimation(options: LottieAnimationOptions): void {
+    const {
+      pathIconAnimation,
+      idElement,
+      loop = false,
+      autoplay = false,
+      onClick = false,
+    } = options;
+
     const animationContainer = document.getElementById(idElement);
     if (animationContainer) {
-      this.animation = lottie.loadAnimation({
+      const animation = lottie.loadAnimation({
         container: animationContainer,
         path: `assets/icon-animation/${pathIconAnimation}`,
         renderer: 'svg',
-        loop: false,
-        autoplay: false,
+        loop,
+        autoplay,
       });
 
-      animationContainer.addEventListener('click', () => {
-        this.animation.goToAndPlay(0, true);
-      });
+      if (onClick) {
+        animationContainer.addEventListener('click', () => {
+          animation.goToAndPlay(0, true);
+        });
+      }
+    } else {
+      console.error(`Elemento com ID ${idElement} não encontrado.`);
     }
   }
 
-  loadAnimationIconCamera(pathIconAnimation: string, idElement: string) {
-    const animationContainer = document.getElementById(idElement);
-    if (animationContainer) {
-      this.iconAnimationCamera = lottie.loadAnimation({
-        container: animationContainer,
-        path: `assets/icon-animation/${pathIconAnimation}`,
-        renderer: 'svg',
-        loop: false,
-        autoplay: true,
-      });
-    }
-  }
-
-  loadAnimationIconNoMacth(pathIconAnimation: string, idElement: string) {
-    const animationContainer = document.getElementById(idElement);
-    if (animationContainer) {
-      this.iconAnimationNoMatch = lottie.loadAnimation({
-        container: animationContainer,
-        path: `assets/icon-animation/${pathIconAnimation}`,
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-      });
-    }
-  }
-
-  removePost(post: Post) {
-    const postIndex = this.posts.findIndex((post) => post.id === post.id);
-
-    console.log('realizar requizição em pilha para remover o post:', post);
+  removePostFromSwiper(post: Post) {
+    const postIndex = this.posts.findIndex((p) => p.id === post.id);
 
     if (postIndex !== -1 && post.id !== 'no-matches') {
-      this.mySwiper.removeSlide(postIndex);
+      this.dislikePostMessage(post);
+      this.posts.splice(postIndex, 1); // Remove o post do array
+      this.mySwiper.removeSlide(postIndex); // Remove o slide correspondente
       this.mySwiper.update();
+    } else {
+      console.log('Post não encontrado ou é o "no-matches"');
     }
+  }
+
+  dislikePostMessage(post: Post) {
+    console.log('Descurtiu o post:', post);
+  }
+
+  likePostMessage(post: Post) {
+    console.log('Curtiu o post:', post);
   }
 
   openBottomSheet(): void {
