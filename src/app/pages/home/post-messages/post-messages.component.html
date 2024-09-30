@@ -12,22 +12,25 @@
         <img
           (click)="goToListSettings()"
           class="user-avatar"
-          src="https://media.istockphoto.com/id/1211311866/pt/foto/stylish-casual-woman-enjoying-sun-at-tropical-beach.jpg?s=612x612&w=0&k=20&c=W52Cl-zvdNoAzPE65KtsXE4-9-bvP8cr6QQBssK6o_Q="
+          src="assets/jo.jpeg"
           alt=""
         />
       </div>
     </div>
   </div>
+  <div *ngIf="!isLoaded">
+    <div class="contain-loading">
+      <div id="lottie-icon-is-loading" class="lottie-icon-no-match"></div>
+    </div>
+  </div>
 
-  <div>
+  <div *ngIf="isLoaded" class="contain-swiper">
     <swiper-container class="list-post-message mySwiper">
       <swiper-slide *ngFor="let post of posts" class="user-post-image">
-        <!-- Se for o último slide, exibe o texto -->
         <ng-container *ngIf="post.id !== 'no-matches'; else noMatchesSlide">
           <img [src]="post.path" alt="" />
         </ng-container>
 
-        <!-- Template para o último slide -->
         <ng-template #noMatchesSlide>
           <div class="no-matches-message">
             <div
@@ -39,13 +42,13 @@
         </ng-template>
       </swiper-slide>
     </swiper-container>
-  </div>
-</div>
 
-<div class="heater" *ngIf="showLikeButton">
-  <div
-    id="lottie-container"
-    class="lottie-container"
-    style="width: 120px; height: 120px"
-  ></div>
+    <div class="heater" *ngIf="showLikeButton">
+      <div
+        id="lottie-container"
+        class="lottie-container"
+        style="width: 120px; height: 120px"
+      ></div>
+    </div>
+  </div>
 </div>

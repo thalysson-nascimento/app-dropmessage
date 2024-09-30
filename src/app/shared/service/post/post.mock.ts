@@ -1,49 +1,44 @@
-import { HttpHeaders } from '@angular/common/http';
-import { Observable, mergeMap, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, delay, of } from 'rxjs';
 import { PostList } from '../../interface/post';
 import { PostBase } from './post.base';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class PostMock extends PostBase {
-  private apiUrl = `/pix`;
+  constructor(httpClient: HttpClient) {
+    super(httpClient); // Chamando o construtor da classe base
+  }
 
   listPost(): Observable<PostList> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer mock-token',
-    });
-
+    // Simulando a resposta mockada
     const mockResponse: PostList = {
-      posts: [
+      currentPage: 1,
+      totalPages: 3,
+      perPage: 4,
+      totalItems: 12,
+      data: [
         {
-          id: 'game-of-throne-aaaa',
+          id: '1a79a4d60de6718e8e5b326e338ae533',
           path: 'https://br.web.img3.acsta.net/pictures/19/03/21/16/15/4239577.jpg',
-          name: 'praia',
+          name: 'game of thrones',
         },
         {
-          id: 'dragon-ball-bbbb',
+          id: '9b74c9897bac770ffc029102a200c5de',
           path: 'https://m.media-amazon.com/images/S/pv-target-images/334f00b53cf3ef848ea7048b25711bc98e8236ce1685a096990c80d0965835ea.png',
-          name: 'gato',
+          name: 'dragon ball z',
         },
         {
-          id: 'thanos-cccc',
+          id: '6dcd4ce23d88e2ee9568ba546c007c63',
           path: 'https://jpimg.com.br/uploads/2019/04/thanos-vingadores.jpg',
-          name: 'praia',
-        },
-        {
-          id: 'homem-de-ferro-dddd',
-          path: 'https://disneyplusbrasil.com.br/wp-content/uploads/2022/10/Tony-Stark-Homem-de-Ferro.jpg',
-          name: 'gato',
-        },
-        {
-          id: 'homem-aranha-eeee',
-          path: 'https://cienciahoje.org.br/wp-content/uploads/2018/11/legiao_vpZw6kWY8GuK9cqCh5DJEFafL437IyAz02smlNgRoO.png.jpeg',
-          name: 'gato',
+          name: 'vingadores',
         },
       ],
     };
 
-    return this.httpClient
-      .get<PostList>(this.apiUrl, { headers })
-      .pipe(mergeMap(() => of(mockResponse)));
+    // Retornando a resposta diretamente sem fazer a requisição HTTP
+    return of(mockResponse).pipe(delay(3000));
   }
 }

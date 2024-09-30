@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "sourceMap": false,
             "outputPath": "dist/app-dropmessage",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -76,7 +77,6 @@
               "namedChunks": true,
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true,
               "outputHashing": "none",
               "index": "src/index.html",
               "browser": "src/main.ts",
@@ -88,7 +88,6 @@
             "mock": {
               "optimization": false,
               "outputHashing": "none",
-              "sourceMap": true,
               "extractLicenses": false,
               "prerender": false,
               "namedChunks": true,
