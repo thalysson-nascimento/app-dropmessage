@@ -33,6 +33,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   mySwiper: any;
   iconAnimationNoMatch: any;
   showLikeButton: boolean = true;
+  isLoaded: boolean = false;
 
   constructor(
     private postService: PostService,
@@ -43,22 +44,29 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.loadPostService();
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadPostService();
+    }
   }
 
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.zone.runOutsideAngular(() => {
-        this.loadAnimationIconHeart('like-heart.json', 'lottie-container');
         this.loadAnimationIconCamera('camera.json', 'lottie-icon-camera');
-        this.loadAnimationIconNoMacth('no-macth.json', 'lottie-icon-no-match');
-        this.initializeSwiper();
       });
     }
   }
 
   ngOnDestroy(): void {
     if (this.mySwiper) {
+      /**
+       * Destroi o Swiper para evitar memory leak.
+       * Os eventos `'slideChangeTransitionEnd'` e `'reachEnd'` precisam ser removidos explicitamente,
+       * senão o Swiper continuará a emitir eventos mesmo após o componente ter sido destruído.
+       * Além disso, o Swiper precisa ser destruído manualmente com o método `destroy()`.
+       * O Swiper é criado fora do contexto do Zone.js no método `ngAfterViewInit()`, portanto
+       * precisamos acessá-lo e destruí-lo também fora do contexto do Zone.js.
+       */
       this.mySwiper.off('slideChangeTransitionEnd');
       this.mySwiper.off('reachEnd');
       this.mySwiper.destroy(true, true);
@@ -75,28 +83,15 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
         if (swiperContainer) {
           this.mySwiper = swiperContainer.swiper;
 
-          // Reinicia o swiper no índice correto
-          this.mySwiper.slideTo(0, 0, false); // Reseta para o slide inicial
-
           this.mySwiper.on('slideChangeTransitionEnd', () => {
             const activeIndex = this.mySwiper.activeIndex;
 
             if (activeIndex > 0) {
               const postToRemove = this.posts[activeIndex - 1];
+              const currentIndex = this.mySwiper.activeIndex;
 
-              setTimeout(() => {
-                this.removePost(postToRemove.id);
-              }, 300); // Adiciona um pequeno atraso para garantir que a transição seja concluída
-            }
-          });
-
-          this.mySwiper.on('reachEnd', () => {
-            const activeIndex = this.mySwiper.activeIndex;
-            console.log(this.posts.length);
-            if (activeIndex === this.posts.length - 2) {
-              this.zone.run(() => {
-                this.showLikeButton = false;
-              });
+              this.removePost(postToRemove.id);
+              this.mySwiper.slideTo(currentIndex - 1);
             }
           });
         }
@@ -107,23 +102,39 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   loadPostService() {
     this.postService.listPost().subscribe((response) => {
       console.log(response);
+      this.posts = response.data;
+
+      this.posts.push({
+        id: 'no-matches',
+        path: '',
+        name: 'Você não tem mais matchs na sua localidade',
+      });
+
+      console.log(this.posts);
+
+      this.isLoaded = true;
+      setTimeout(() => {
+        const lottieContainerElement =
+          document.querySelector<HTMLElement>('#lottie-container');
+
+        if (lottieContainerElement) {
+          console.log(
+            'Elemento #lottie-container existe:',
+            lottieContainerElement
+          );
+          this.zone.runOutsideAngular(() => {
+            this.loadAnimationIconHeart('like-heart.json', 'lottie-container');
+            this.loadAnimationIconNoMacth(
+              'no-macth.json',
+              'lottie-icon-no-match'
+            );
+            this.initializeSwiper();
+          });
+        } else {
+          console.error('O elemento #lottie-container não existe');
+        }
+      }, 0);
     });
-    // this.postService.listPost().subscribe((response) => {
-    //   this.posts = response;
-    //   // Adiciona o último slide com a mensagem no final do array
-    //   this.posts.push({
-    //     id: 'no-matches',
-    //     path: '',
-    //     name: 'Você não tem mais matchs na sua localidade',
-    //   });
-    //   // Atualize o swiper após os dados serem carregados
-    //   setTimeout(() => {
-    //     if (this.mySwiper) {
-    //       this.mySwiper.update();
-    //       this.mySwiper.slideTo(0, 0, false); // Certifique-se de que comece no primeiro slide
-    //     }
-    //   }, 0);
-    // });
   }
 
   loadAnimationIconHeart(pathIconAnimation: string, idElement: string) {
@@ -171,20 +182,10 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   removePost(postId: string) {
     const postIndex = this.posts.findIndex((post) => post.id === postId);
-
     if (postIndex !== -1 && postId !== 'no-matches') {
-      this.posts.splice(postIndex, 1);
-
-      // Desativa transição ao remover o slide
-      this.mySwiper.setTransition(0);
-
-      setTimeout(() => {
-        this.mySwiper.removeSlide(postIndex);
-        this.mySwiper.update();
-
-        // Reativa transição
-        this.mySwiper.setTransition(300); // Ou o valor de tempo de transição que você está usando
-      }, 0);
+      this.posts.splice(0, 1);
+      console.log('lista de todos os objetos', this.posts);
+      console.log('== postIndex ==>', postIndex);
     }
   }
 

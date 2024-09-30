@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container">
   <div class="header">
     <div class="title-app">DropMessage</div>
     <div class="actions">
@@ -37,16 +37,66 @@
         </ng-template>
       </swiper-slide>
     </swiper-container>
-  </div>
-</div>
 
-<div>
-  <div class="heater">
-    <div
-      *ngIf="isloaded && showLikeButton"
-      id="lottie-container"
-      class="lottie-container"
-      style="width: 120px; height: 120px"
-    ></div>
+    <div class="heater">
+      <div
+        *ngIf="showLikeButton"
+        id="lottie-container"
+        class="lottie-container"
+        style="width: 120px; height: 120px"
+      ></div>
+    </div>
+  </div>
+</div> -->
+
+<div class="container">
+  <div class="header">
+    <div class="title-app">DropMessage</div>
+    <div class="actions">
+      <div
+        (click)="openBottomSheet()"
+        id="lottie-icon-camera"
+        class="lottie-icon-camera"
+        style="width: 67px; height: 67px"
+      ></div>
+      <div>
+        <img
+          (click)="goToListSettings()"
+          class="user-avatar"
+          src="https://media.istockphoto.com/id/1211311866/pt/foto/stylish-casual-woman-enjoying-sun-at-tropical-beach.jpg?s=612x612&w=0&k=20&c=W52Cl-zvdNoAzPE65KtsXE4-9-bvP8cr6QQBssK6o_Q="
+          alt=""
+        />
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!isLoaded">carregando...</div>
+
+  <div *ngIf="isLoaded">
+    <swiper-container class="list-post-message mySwiper">
+      <swiper-slide *ngFor="let post of posts" class="user-post-image">
+        <ng-container *ngIf="post.id !== 'no-matches'; else noMatchesSlide">
+          <img [src]="post.path" alt="" />
+        </ng-container>
+
+        <ng-template #noMatchesSlide>
+          <div class="no-matches-message">
+            <div
+              id="lottie-icon-no-match"
+              class="lottie-icon-no-match"
+              style="width: 400px; height: 400px"
+            ></div>
+          </div>
+        </ng-template>
+      </swiper-slide>
+    </swiper-container>
+
+    <div class="heater">
+      <div
+        *ngIf="showLikeButton"
+        id="lottie-container"
+        class="lottie-container"
+        style="width: 120px; height: 120px"
+      ></div>
+    </div>
   </div>
 </div>
