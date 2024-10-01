@@ -36,7 +36,7 @@ interface LottieAnimationOptions {
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
-  posts!: Array<{ id: string; path: string; name: string }>;
+  posts!: Post[];
   animation: any;
   iconAnimationCamera: any;
   mySwiper: any;
@@ -44,7 +44,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   showLikeButton: boolean = true;
   isLoaded: boolean = false;
   likePostMessageWhitHeart!: Post;
-
+  private likeButtonClicked: boolean = false;
   constructor(
     private postService: PostService,
     private zone: NgZone,
@@ -88,6 +88,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       console.log('Swiper destruído');
     }
   }
+
   initializeSwiper() {
     if (isPlatformBrowser(this.platformId)) {
       this.zone.runOutsideAngular(() => {
@@ -102,11 +103,16 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
             const activeIndex = this.mySwiper.activeIndex;
 
             if (activeIndex > 0 && activeIndex <= this.posts.length) {
-              const postToRemove = this.posts[activeIndex - 1];
+              // Apenas remove o post se o slide não foi trocado pelo clique no botão de like
+              if (!this.likeButtonClicked) {
+                const postToRemove = this.posts[activeIndex - 1];
 
-              if (postToRemove && postToRemove.id !== 'no-matches') {
-                this.removePostFromSwiper(postToRemove);
+                if (postToRemove && postToRemove.id !== 'no-matches') {
+                  this.removePostFromSwiper(postToRemove);
+                }
               }
+              // Reseta a variável após o slide mudar
+              this.likeButtonClicked = false;
             }
           });
 
@@ -117,7 +123,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
             const likePostSwiper = this.posts[activeIndex];
 
             if (likePostSwiper && likePostSwiper.id !== 'no-matches') {
-              // console.log('===>', likePostSwiper);
               this.likePostMessageWhitHeart = likePostSwiper;
             }
           });
@@ -133,6 +138,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
   }
+
   loadFistPostMessageForLikeHeartButton(activeIndex: any) {
     const activeIndexSwiper = activeIndex;
     const likeHeartPost = this.posts[activeIndexSwiper];
@@ -226,15 +232,37 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  dislikePostMessage(post: Post) {
-    console.log('Descurtiu o post:', post);
-  }
-
   likePostMessage() {
     console.log('Curtiu o post:', this.likePostMessageWhitHeart);
     if (this.mySwiper) {
+      this.likeButtonClicked = true;
+
       this.mySwiper.slideNext();
+
+      setTimeout(() => {
+        const activeIndex = this.mySwiper.activeIndex;
+        const postToRemove = this.posts[activeIndex - 1];
+
+        if (postToRemove && postToRemove.id !== 'no-matches') {
+          this.removePostFromSwiperWithLikeButton(postToRemove);
+        }
+      }, 100);
     }
+  }
+  removePostFromSwiperWithLikeButton(post: Post) {
+    const postIndex = this.posts.findIndex((p) => p.id === post.id);
+
+    if (postIndex !== -1 && post.id !== 'no-matches') {
+      this.posts.splice(postIndex, 1); // Remove o post do array
+      this.mySwiper.removeSlide(postIndex); // Remove o slide correspondente
+      this.mySwiper.update();
+    } else {
+      console.log('Post não encontrado ou é o "no-matches"');
+    }
+  }
+
+  dislikePostMessage(post: Post) {
+    console.log('Descurtiu o post:', post);
   }
 
   openBottomSheet(): void {
