@@ -12,6 +12,7 @@ import { Inject, PLATFORM_ID } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { default as lottie } from 'lottie-web';
+import { Subject, takeUntil } from 'rxjs';
 import { register } from 'swiper/element/bundle';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
 import { Post } from '../../../shared/interface/post';
@@ -45,6 +46,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoaded: boolean = false;
   likePostMessageWhitHeart!: Post;
   private likeButtonClicked: boolean = false;
+  private destroy$: Subject<void> = new Subject<void>();
+
   constructor(
     private postService: PostService,
     private zone: NgZone,
@@ -80,6 +83,9 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+
     if (this.mySwiper) {
       this.mySwiper.off('slideChangeTransitionEnd');
       this.mySwiper.off('reachEnd');
@@ -146,18 +152,26 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   loadPostService() {
-    this.postService.listPost().subscribe((response) => {
-      this.posts = response.data;
+    this.postService
+      .listPost()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.posts = response.data;
 
-      this.posts.push({
-        id: 'no-matches',
-        path: '',
-        name: 'Você não tem mais matchs na sua localidade',
+          this.posts.push({
+            id: 'no-matches',
+            path: '',
+            name: 'Você não tem mais matchs na sua localidade',
+          });
+
+          this.isLoaded = true;
+          this.loadLottieAnimationIcon();
+        },
+        error: (error) => {
+          console.error(error);
+        },
       });
-
-      this.isLoaded = true;
-      this.loadLottieAnimationIcon();
-    });
   }
 
   loadLottieAnimationIcon() {
