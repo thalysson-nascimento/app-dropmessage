@@ -43,6 +43,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   iconAnimationNoMatch: any;
   showLikeButton: boolean = true;
   isLoaded: boolean = false;
+  likePostMessageWhitHeart!: Post;
 
   constructor(
     private postService: PostService,
@@ -95,6 +96,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
         if (swiperContainer) {
           this.mySwiper = swiperContainer.swiper;
 
+          this.loadFistPostMessageForLikeHeartButton(this.mySwiper.activeIndex);
+
           this.mySwiper.on('slideChangeTransitionEnd', () => {
             const activeIndex = this.mySwiper.activeIndex;
 
@@ -104,6 +107,18 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
               if (postToRemove && postToRemove.id !== 'no-matches') {
                 this.removePostFromSwiper(postToRemove);
               }
+            }
+          });
+
+          this.mySwiper.on('slideChange', () => {
+            console.log('slideChange');
+            const activeIndex = this.mySwiper.activeIndex;
+
+            const likePostSwiper = this.posts[activeIndex];
+
+            if (likePostSwiper && likePostSwiper.id !== 'no-matches') {
+              // console.log('===>', likePostSwiper);
+              this.likePostMessageWhitHeart = likePostSwiper;
             }
           });
 
@@ -118,10 +133,14 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
   }
+  loadFistPostMessageForLikeHeartButton(activeIndex: any) {
+    const activeIndexSwiper = activeIndex;
+    const likeHeartPost = this.posts[activeIndexSwiper];
+    this.likePostMessageWhitHeart = likeHeartPost;
+  }
 
   loadPostService() {
     this.postService.listPost().subscribe((response) => {
-      console.log(response);
       this.posts = response.data;
 
       this.posts.push({
@@ -129,8 +148,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
         path: '',
         name: 'Você não tem mais matchs na sua localidade',
       });
-
-      console.log(this.posts);
 
       this.isLoaded = true;
       this.loadLottieAnimationIcon();
@@ -143,10 +160,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
         document.querySelector<HTMLElement>('#lottie-container');
 
       if (lottieContainerElement) {
-        console.log(
-          'Elemento #lottie-container existe:',
-          lottieContainerElement
-        );
         this.zone.runOutsideAngular(() => {
           this.loadLottieAnimation({
             pathIconAnimation: 'like-heart.json',
@@ -217,8 +230,11 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log('Descurtiu o post:', post);
   }
 
-  likePostMessage(post: Post) {
-    console.log('Curtiu o post:', post);
+  likePostMessage() {
+    console.log('Curtiu o post:', this.likePostMessageWhitHeart);
+    if (this.mySwiper) {
+      this.mySwiper.slideNext();
+    }
   }
 
   openBottomSheet(): void {

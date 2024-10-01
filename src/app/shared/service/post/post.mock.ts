@@ -39,6 +39,6 @@ export class PostMock extends PostBase {
     };
 
     // Retornando a resposta diretamente sem fazer a requisição HTTP
-    return of(mockResponse).pipe(delay(3000));
+    return of(mockResponse).pipe(delay(1000));
   }
 }
