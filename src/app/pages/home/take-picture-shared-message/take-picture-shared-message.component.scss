@@ -67,23 +67,21 @@ button:disabled {
 
 .contain-lottie {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .lottie-icon-camera-register {
   width: 22rem;
   height: 22rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.snapshot {
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-  // align-items: center;
-  // overflow: hidden;
-  height: 100dvh;
-  // width: 100vw;
+.contain-shared-message {
+  position: relative;
+  z-index: 1;
 }
 
 .button-take-snapshot {

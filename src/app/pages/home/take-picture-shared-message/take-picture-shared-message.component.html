@@ -1,41 +1,3 @@
-<!-- <div class="header">
-  <img
-    src="assets/icon-static/arrow-left.svg"
-    style="width: 24px; height: 24px"
-    alt=""
-    (click)="goToPostList()"
-  />
-</div>
-
-<div *ngIf="cameraAllowed; else noCamera">
-  <div id="camera-app" style="width: 100%; height: 100%">
-    <img
-      *ngIf="cameraImage"
-      [src]="cameraImage"
-      alt="Preview da Foto"
-      style="width: 100%; height: auto"
-    />
-  </div>
-
-  <button (click)="takePhoto()" style="margin-top: 10px">Tirar Foto</button>
-</div>
-
-<ng-template #noCamera>
-  <div class="contain-permission-denied">
-    <img
-      src="assets/icon-static/camera-not-allowed.svg"
-      class="icon-camera-denied"
-      alt="icone de permissoes negadas para acesso de câmera"
-    />
-    <p class="text-permission-denied">
-      Para postar messagens, é necessário que você permita o uso da câmera do
-      seu dispositivo.
-    </p>
-    <button (click)="requestCameraPermissionAgain()">
-      Permitir uso de câmera
-    </button>
-  </div>
-</ng-template> -->
 <div class="container">
   <div class="header">
     <img
@@ -46,12 +8,10 @@
     />
   </div>
 
-  <!-- [@fadeInOut]="showLottieIcon ? 'in' : 'out'" -->
-
   <div class="contain-lottie" [@fadeInOut]="showLottieIcon ? 'in' : 'out'">
     <div
       id="lottie-icon-camera-register"
-      class="lottie-icon-camera lottie-icon-camera-register"
+      class="lottie-icon-camera-register"
     ></div>
   </div>
 
@@ -78,7 +38,10 @@
           Para fazer um post, é necessário que você permita o uso da câmera do
           seu dispositivo.
         </p>
-        <button (click)="requestCameraPermissionAgain()">
+        <button
+          class="button-take-snapshot"
+          (click)="requestCameraPermissionAgain()"
+        >
           Permitir uso de câmera
         </button>
       </div>

@@ -35,7 +35,7 @@ interface LottieAnimationOptions {
   styleUrls: ['./take-picture-shared-message.component.scss'],
   animations: [
     trigger('fadeInOut', [
-      state('in', style({ opacity: 1, display: 'block' })),
+      state('in', style({ opacity: 1, display: 'flex' })),
       state('out', style({ opacity: 0, display: 'none' })),
       transition('in => out', [animate('1s ease-out')]),
       transition('out => in', [animate('1s ease-in')]),
