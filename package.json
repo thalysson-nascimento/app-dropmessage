@@ -30,6 +30,7 @@
     "@capacitor/camera": "^6.0.2",
     "@capacitor/cli": "^6.1.2",
     "@capacitor/core": "^6.1.2",
+    "@capacitor/dialog": "^6.0.1",
     "@glidejs/glide": "^3.6.2",
     "@types/swiper": "^5.4.3",
     "express": "^4.18.2",

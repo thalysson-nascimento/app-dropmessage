@@ -16,6 +16,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType } from '@capacitor/camera';
+import { Dialog } from '@capacitor/dialog';
 import { default as lottie } from 'lottie-web';
 import { delay, timer } from 'rxjs';
 
@@ -92,16 +93,50 @@ export class TakePictureSharedMessageComponent
         });
       });
   }
-
   async checkCameraPermission() {
-    const permission = await Camera.requestPermissions({
-      permissions: ['camera'],
-    });
+    // Verifica se a permissão já foi concedida
+    const permission = await Camera.checkPermissions();
 
     if (permission.camera === 'granted') {
       this.cameraAllowed = true;
+      return; // Não continua, pois a permissão já foi concedida
+    }
+
+    // Se a permissão não foi concedida, solicita a permissão
+    const permissionRequest = await Camera.requestPermissions({
+      permissions: ['camera'],
+    });
+
+    if (permissionRequest.camera === 'granted') {
+      this.cameraAllowed = true;
     } else {
       this.cameraAllowed = false;
+      await this.showCameraPermissionModal();
+    }
+  }
+
+  async showCameraPermissionModal() {
+    const { value } = await Dialog.confirm({
+      title: 'Permissão de Câmera',
+      message:
+        'Para fazer um post, é necessário que você permita o uso da câmera do seu dispositivo. Deseja permitir agora?',
+      okButtonTitle: 'Permitir',
+      cancelButtonTitle: 'Cancelar',
+    });
+
+    if (value) {
+      // Solicitar a permissão novamente somente se ainda não foi concedida
+      const permissionRequest = await Camera.requestPermissions({
+        permissions: ['camera'],
+      });
+
+      if (permissionRequest.camera === 'granted') {
+        this.cameraAllowed = true;
+      } else {
+        this.cameraAllowed = false;
+      }
+    } else {
+      console.log('Permissão negada pelo usuário.');
     }
   }
 
