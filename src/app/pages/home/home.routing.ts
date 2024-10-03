@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './home.component';
 import { ListSettingsComponent } from './list-settings/list-settings.component';
 import { PostMessagesComponent } from './post-messages/post-messages.component';
+import { TakePictureSharedMessageComponent } from './take-picture-shared-message/take-picture-shared-message.component';
 
 export const HomeRouting: Routes = [
   {
@@ -20,6 +21,10 @@ export const HomeRouting: Routes = [
       {
         path: 'list-settings',
         component: ListSettingsComponent,
+      },
+      {
+        path: 'take-picture-shared-message',
+        component: TakePictureSharedMessageComponent,
       },
     ],
   },
