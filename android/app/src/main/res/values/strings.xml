@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">app-dropmessage</string>
+    <string name="title_activity_main">app-dropmessage</string>
+    <string name="package_name">br.com.dropmessage</string>
+    <string name="custom_url_scheme">br.com.dropmessage</string>
+</resources>
