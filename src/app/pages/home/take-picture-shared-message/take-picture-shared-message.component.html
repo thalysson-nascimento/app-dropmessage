@@ -1,1 +1,29 @@
-<p>take-picture-shared-message works!</p>
+<div *ngIf="cameraAllowed; else noCamera">
+  <div id="camera-app" style="width: 100%; height: 100%">
+    <img
+      *ngIf="cameraImage"
+      [src]="cameraImage"
+      alt="Preview da Foto"
+      style="width: 100%; height: auto"
+    />
+  </div>
+
+  <button (click)="takePhoto()" style="margin-top: 10px">Tirar Foto</button>
+</div>
+
+<ng-template #noCamera>
+  <div class="contain-permission-denied">
+    <img
+      src="assets/icon-static/camera-not-allowed.svg"
+      class="icon-camera-denied"
+      alt="icone de permissoes negadas para acesso de câmera"
+    />
+    <p>
+      Para postar messagens, é necessário que você permita o uso da câmera do
+      seu dispositivo.
+    </p>
+    <button (click)="requestCameraPermissionAgain()" style="margin-top: 10px">
+      Permitir uso de câmera
+    </button>
+  </div>
+</ng-template>

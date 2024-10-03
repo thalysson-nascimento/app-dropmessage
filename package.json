@@ -7,6 +7,7 @@
     "start:mock": "ng serve --configuration mock --host 0.0.0.0",
     "start:development": "ng serve --configuration development",
     "start:production": "ng serve --configuration production",
+    "build:mock": "ng build --configuration mock",
     "build:development": "ng build --configuration development",
     "build:production": "ng build --configuration production",
     "serve:ssr:app-dropmessage": "node dist/app-dropmessage/server/server.mjs"
@@ -26,6 +27,7 @@
     "@angular/router": "^18.2.0",
     "@angular/ssr": "^18.2.4",
     "@capacitor/android": "^6.1.2",
+    "@capacitor/camera": "^6.0.2",
     "@capacitor/cli": "^6.1.2",
     "@capacitor/core": "^6.1.2",
     "@glidejs/glide": "^3.6.2",

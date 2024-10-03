@@ -5,6 +5,7 @@ import {
   Renderer2,
 } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'bottom-sheet-overview',
@@ -16,7 +17,8 @@ import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 export class BottomSheetComponent {
   constructor(
     private bottomSheetRef: MatBottomSheetRef<BottomSheetComponent>,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private router: Router
   ) {}
 
   dismiss(): void {
@@ -41,6 +43,8 @@ export class BottomSheetComponent {
   }
 
   selectPostTimer(timer: string) {
+    this.router.navigate(['/home/take-picture-shared-message']);
+    this.bottomSheetRef.dismiss();
     console.log(timer);
   }
 }
