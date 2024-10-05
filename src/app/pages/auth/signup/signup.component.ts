@@ -22,4 +22,8 @@ export class SignupComponent implements OnInit {
   navigateToSign() {
     this.router.navigate(['auth/sign']); // Redireciona para a rota signup
   }
+
+  navigateToPosts() {
+    this.router.navigate(['home/post-messages']); // Redireciona para a rota signup
+  }
 }

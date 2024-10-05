@@ -1,0 +1,49 @@
+<div class="contain-bottomsheet">
+  <div class="contain-header-bottomsheet">
+    <div class="contain-arrow-down">
+      <button aria-label="fechar modal" class="button-down" (click)="dismiss()">
+        <img
+          aria-hidden="true"
+          src="assets/icon-static/arrow-down.svg"
+          alt=""
+        />
+      </button>
+    </div>
+  </div>
+
+  <ul class="list-action-timer">
+    <li class="action-timer" (click)="takePhoto()">
+      <div class="contain-icon-and-description">
+        <img
+          src="assets/icon-static/icon-camera.svg"
+          class="icon-choose-photo"
+          alt=""
+        />
+        <div>
+          <p>Tirar foto</p>
+          <span class="drescription-timer"
+            >Tire sua melhor foto para compartilhar.</span
+          >
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+
+    <li class="action-timer" (click)="chooseFromGallery()">
+      <div class="contain-icon-and-description">
+        <img
+          src="assets/icon-static/gallery.svg"
+          class="icon-choose-photo"
+          alt=""
+        />
+        <div>
+          <p>Selecionar da galeria</p>
+          <span class="drescription-timer"
+            >Escolha sua melhor foto da galeria para compartilhar.</span
+          >
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+  </ul>
+</div>

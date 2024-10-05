@@ -91,6 +91,8 @@
               "extractLicenses": false,
               "prerender": false,
               "namedChunks": true,
+              "browser": "src/main.ts",
+              "index": "src/index.html",
               "define": {
                 "process.env.NODE_ENV": "'mock'"
               }
