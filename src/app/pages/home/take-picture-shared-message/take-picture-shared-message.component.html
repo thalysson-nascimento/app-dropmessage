@@ -20,19 +20,48 @@
     [@fadeInOut]="showSnapshot ? 'in' : 'out'"
   >
     <div>
-      <div class="contain-photo-preview" *ngIf="cameraAllowed; else noCamera">
-        <div id="camera-app">
+      <div *ngIf="!cameraImage; else takePhoto">
+        <div class="contain-permission">
           <img
-            *ngIf="cameraImage"
-            [src]="cameraImage"
-            class="photo-preview"
-            alt="Preview da Foto"
+            src="assets/icon-static/icon-camera.svg"
+            class="icon-camera-allowed"
+            alt="icone de permissoes negadas para acesso de câmera"
           />
+          <p class="text-permission-denied">
+            Tire uma foto ou escolha uma da galeria para postar ;)
+          </p>
+          <button (click)="openBottomSheet()" class="button-take-snapshot">
+            Tirar Foto
+          </button>
         </div>
-        <button (click)="takePhoto()" class="button-take-snapshot">
-          Tirar Foto
-        </button>
       </div>
+
+      <ng-template #takePhoto>
+        <div
+          class="contain-photo-preview"
+          *ngIf="cameraAllowed && cameraImage; else noCamera"
+        >
+          <div id="camera-app">
+            <img
+              *ngIf="cameraImage"
+              [src]="cameraImage"
+              class="photo-preview"
+              alt="Preview da Foto"
+            />
+          </div>
+          <button (click)="openBottomSheet()" class="button-take-snapshot">
+            Tirar Foto
+          </button>
+
+          <button
+            *ngIf="cameraImage"
+            (click)="postMessagePhoto(cameraImage)"
+            class="button-take-snapshot"
+          >
+            Postar foto
+          </button>
+        </div>
+      </ng-template>
 
       <ng-template #noCamera>
         <div class="contain-permission-denied">

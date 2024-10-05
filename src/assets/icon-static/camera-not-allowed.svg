@@ -1,9 +1,16 @@
-<svg width="169" height="157" viewBox="0 0 169 157" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="169" height="157" fill="white"/>
-<rect x="28" y="32.6433" width="108" height="101" rx="20" fill="#E9E5E5"/>
-<circle cx="82" cy="82.6433" r="28" fill="white"/>
-<circle cx="82" cy="82.6433" r="20" fill="#373847"/>
-<circle cx="43" cy="46.6433" r="6" fill="#F55572"/>
-<rect x="11" y="33.5164" width="11.6144" height="167.331" transform="rotate(-49.5499 11 33.5164)" fill="#373847"/>
-<rect x="18.5353" y="24.6782" width="17.9746" height="167.331" transform="rotate(-49.5499 18.5353 24.6782)" fill="white"/>
+<svg width="254" height="258" viewBox="0 0 254 258" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1163_94)">
+<rect width="254" height="258" fill="white"/>
+<rect x="18" y="41" width="200" height="200" rx="40" fill="#E9E5E5"/>
+<ellipse cx="118" cy="141.5" rx="50" ry="49.5" fill="white"/>
+<circle cx="117.5" cy="141.5" r="35.5" fill="#373847"/>
+<circle cx="50.5" cy="72.5" r="10.5" fill="#F55572"/>
+<rect y="34.879" width="25" height="311.472" transform="rotate(-44.3314 0 34.879)" fill="#373847"/>
+<rect x="18.3079" y="17.9696" width="25" height="311.472" transform="rotate(-44.3314 18.3079 17.9696)" fill="white"/>
+</g>
+<defs>
+<clipPath id="clip0_1163_94">
+<rect width="254" height="258" fill="white"/>
+</clipPath>
+</defs>
 </svg>

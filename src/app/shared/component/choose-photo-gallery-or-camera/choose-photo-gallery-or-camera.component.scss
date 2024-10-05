@@ -1,0 +1,70 @@
+.icon-choose-photo {
+  width: 3rem;
+  margin-right: 1rem;
+}
+
+.contain-header-bottomsheet {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.bottomsheet-text-header {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.button-down {
+  all: unset;
+  display: inline-flex; /* Para manter a imagem corretamente dentro do botão */
+  align-items: center;
+  justify-content: center;
+  cursor: pointer; /* Garantir que o cursor de pointer seja mantido */
+  padding: 0.2rem;
+
+  img {
+    display: block; /* Remove possíveis espaçamentos ao redor da imagem */
+  }
+}
+
+.contain-arrow-down {
+  text-align: right;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    border-bottom: 1px solid #e2e2e2;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .contain-icon-and-description {
+    display: flex;
+  }
+
+  .action-timer {
+    display: flex;
+    flex-direction: row;
+    transition: opacity 0.3s ease-in-out;
+
+    &.active {
+      background-color: #d0d0d0;
+      opacity: 1;
+    }
+
+    .drescription-timer {
+      font-size: 12px;
+      color: #838383;
+      padding-right: 1rem;
+    }
+  }
+}

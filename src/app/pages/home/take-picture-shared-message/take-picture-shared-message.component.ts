@@ -14,11 +14,13 @@ import {
   OnInit,
   PLATFORM_ID,
 } from '@angular/core';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { Dialog } from '@capacitor/dialog';
 import { default as lottie } from 'lottie-web';
 import { delay, timer } from 'rxjs';
+import { ChoosePhotoGalleryOrCameraComponent } from '../../../shared/component/choose-photo-gallery-or-camera/choose-photo-gallery-or-camera.component';
 
 interface LottieAnimationOptions {
   pathIconAnimation: string;
@@ -55,7 +57,8 @@ export class TakePictureSharedMessageComponent
   constructor(
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private zone: NgZone
+    private zone: NgZone,
+    private bottomSheet: MatBottomSheet
   ) {}
 
   ngOnInit() {
@@ -189,5 +192,21 @@ export class TakePictureSharedMessageComponent
 
   goToPostList() {
     this.router.navigate(['/home']);
+  }
+
+  openBottomSheet(): void {
+    const bottomSheetRef = this.bottomSheet.open(
+      ChoosePhotoGalleryOrCameraComponent
+    );
+
+    bottomSheetRef.instance.imageSelected.subscribe(
+      (imagePath: string | null) => {
+        this.cameraImage = imagePath;
+      }
+    );
+  }
+
+  postMessagePhoto(imageCamera: any) {
+    console.log(imageCamera);
   }
 }

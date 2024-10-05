@@ -1,0 +1,28 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1164_168)">
+<rect width="200" height="200" fill="white"/>
+<circle cx="100" cy="100" r="100" fill="url(#paint0_linear_1164_168)"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M24 164.982C42.6764 144.125 69.8111 131 100.011 131C130.212 131 157.346 144.125 176.023 164.982C157.682 186.416 130.433 200 100.011 200C69.5898 200 42.341 186.416 24 164.982Z" fill="url(#paint1_linear_1164_168)"/>
+<circle cx="100.5" cy="72.5" r="48.5" fill="url(#paint2_linear_1164_168)"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M149.187 72.5C149.187 90.0205 139.896 105.371 125.973 113.894L116.173 82.4244C121.963 80.7078 126.187 75.3472 126.187 69C126.187 61.268 119.919 55 112.187 55C110.671 55 109.212 55.2408 107.845 55.6861L98 24.0732C98.8894 24.0246 99.7851 24 100.687 24C127.472 24 149.187 45.7142 149.187 72.5Z" fill="#323030"/>
+<rect x="83.7759" y="38.755" width="7" height="13.1552" transform="rotate(45.0344 83.7759 38.755)" fill="#323030"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M101.09 24.001L101.089 24L101.09 24.001C101.06 24.0008 101.03 24.0007 101 24.0005L140.294 100.624C140.371 100.515 140.448 100.407 140.525 100.298L152 122.5L147.074 86.992C148.505 82.4157 149.276 77.5479 149.276 72.5C149.276 45.819 127.731 24.17 101.09 24.001Z" fill="#FE7718"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_1164_168" x1="100" y1="0" x2="100" y2="200" gradientUnits="userSpaceOnUse">
+<stop stop-color="#3070F3"/>
+<stop offset="1" stop-color="#19397C"/>
+</linearGradient>
+<linearGradient id="paint1_linear_1164_168" x1="100" y1="131" x2="176" y2="131" gradientUnits="userSpaceOnUse">
+<stop offset="0.0175931" stop-color="#B9E0F3"/>
+<stop offset="1" stop-color="#5387BA"/>
+</linearGradient>
+<linearGradient id="paint2_linear_1164_168" x1="149" y1="24" x2="63" y2="121" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FDE4DE"/>
+<stop offset="1" stop-color="#FDC0AB"/>
+</linearGradient>
+<clipPath id="clip0_1164_168">
+<rect width="200" height="200" fill="white"/>
+</clipPath>
+</defs>
+</svg>
