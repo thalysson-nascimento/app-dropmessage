@@ -208,5 +208,6 @@ export class TakePictureSharedMessageComponent
 
   postMessagePhoto(imageCamera: any) {
     console.log(imageCamera);
+    this.router.navigate(['/home/send-message-success']);
   }
 }
