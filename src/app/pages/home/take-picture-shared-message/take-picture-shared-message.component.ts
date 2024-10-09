@@ -11,6 +11,7 @@ import {
   Component,
   Inject,
   NgZone,
+  OnDestroy,
   OnInit,
   PLATFORM_ID,
 } from '@angular/core';
@@ -19,8 +20,11 @@ import { Router } from '@angular/router';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { Dialog } from '@capacitor/dialog';
 import { default as lottie } from 'lottie-web';
-import { delay, timer } from 'rxjs';
+import { Subject, delay, takeUntil, timer } from 'rxjs';
+import { currentEnvironment } from '../../../../environment.config';
 import { ChoosePhotoGalleryOrCameraComponent } from '../../../shared/component/choose-photo-gallery-or-camera/choose-photo-gallery-or-camera.component';
+import { ExpirationTimerService } from '../../../shared/service/expiration-timer/expiration-timer.service';
+import { SharedPostMessageService } from '../../../shared/service/shared-post-message/shared-post-message.service';
 
 interface LottieAnimationOptions {
   pathIconAnimation: string;
@@ -46,23 +50,40 @@ interface LottieAnimationOptions {
   ],
 })
 export class TakePictureSharedMessageComponent
-  implements OnInit, AfterViewInit
+  implements OnInit, AfterViewInit, OnDestroy
 {
   cameraAllowed: boolean = false;
   locationAllowed: boolean = false;
   cameraImage: string | null = null;
   showLottieIcon: boolean = true;
   showSnapshot: boolean = false;
+  disabledButton: boolean = false;
+  expirationTimer: string = '';
+  destroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
     private zone: NgZone,
-    private bottomSheet: MatBottomSheet
+    private bottomSheet: MatBottomSheet,
+    private sharedPostMessageService: SharedPostMessageService,
+    private expirationTimerService: ExpirationTimerService
   ) {}
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   ngOnInit() {
+    console.log(currentEnvironment.baseURL);
     this.checkCameraPermission();
+    this.expirationTimerService
+      .getExpirationTimer()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((expirationTimer: string) => {
+        this.expirationTimer = expirationTimer;
+      });
   }
 
   ngAfterViewInit(): void {
@@ -207,7 +228,43 @@ export class TakePictureSharedMessageComponent
   }
 
   postMessagePhoto(imageCamera: any) {
-    console.log(imageCamera);
-    this.router.navigate(['/home/send-message-success']);
+    // const file = imageCamera;
+    // const expirationTimer = this.expirationTimer;
+
+    // this.sharedPostMessageService
+    //   .postMessage({ file, expirationTimer })
+    //   .subscribe({
+    //     next: () => {
+    //       this.disabledButton = true;
+    //       this.router.navigate(['/home/send-message-success']);
+    //     },
+    //     error: (error) => {
+    //       console.log('Erro ao enviar mensagem:', error);
+    //       this.disabledButton = true;
+    //     },
+    //   });
+    if (imageCamera) {
+      fetch(imageCamera)
+        .then((res) => res.blob())
+        .then((blob) => {
+          const file = new File([blob], 'image.png', { type: 'image/png' });
+          const expirationTimer = this.expirationTimer;
+
+          console.log('===>', file, expirationTimer);
+
+          this.sharedPostMessageService
+            .postMessage({ file, expirationTimer })
+            .subscribe({
+              next: () => {
+                this.disabledButton = true;
+                this.router.navigate(['/home/send-message-success']);
+              },
+              error: (error) => {
+                console.log('Erro ao enviar mensagem:', error);
+                this.disabledButton = true;
+              },
+            });
+        });
+    }
   }
 }

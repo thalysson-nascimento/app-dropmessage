@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
+import { ExpirationTimerService } from '../service/expiration-timer/expiration-timer.service';
 
 @Component({
   selector: 'bottom-sheet-overview',
@@ -18,7 +19,8 @@ export class BottomSheetComponent {
   constructor(
     private bottomSheetRef: MatBottomSheetRef<BottomSheetComponent>,
     private renderer: Renderer2,
-    private router: Router
+    private router: Router,
+    private expirationTimerService: ExpirationTimerService
   ) {}
 
   dismiss(): void {
@@ -45,6 +47,6 @@ export class BottomSheetComponent {
   selectPostTimer(timer: string) {
     this.router.navigate(['/home/take-picture-shared-message']);
     this.bottomSheetRef.dismiss();
-    console.log(timer);
+    this.expirationTimerService.setExpirationTimer(timer);
   }
 }
