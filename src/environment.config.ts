@@ -21,7 +21,7 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
     mock: true,
   },
   development: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:3000/api',
     pathURL: '/api/dev',
     production: false,
     mock: false,

@@ -22,18 +22,23 @@ export class PostMock extends PostBase {
       data: [
         {
           id: '1a79a4d60de6718e8e5b326e338ae533',
-          path: 'https://br.web.img3.acsta.net/pictures/19/03/21/16/15/4239577.jpg',
-          name: 'game of thrones',
+          image:
+            'https://br.web.img3.acsta.net/pictures/19/03/21/16/15/4239577.jpg',
+          expirationTimer: 'game of thrones',
+          typeExpirationTimer: '',
         },
         {
           id: '9b74c9897bac770ffc029102a200c5de',
-          path: 'https://m.media-amazon.com/images/S/pv-target-images/334f00b53cf3ef848ea7048b25711bc98e8236ce1685a096990c80d0965835ea.png',
-          name: 'dragon ball z',
+          image:
+            'https://m.media-amazon.com/images/S/pv-target-images/334f00b53cf3ef848ea7048b25711bc98e8236ce1685a096990c80d0965835ea.png',
+          expirationTimer: 'dragon ball z',
+          typeExpirationTimer: '',
         },
         {
           id: '6dcd4ce23d88e2ee9568ba546c007c63',
-          path: 'https://jpimg.com.br/uploads/2019/04/thanos-vingadores.jpg',
-          name: 'vingadores',
+          image: 'https://jpimg.com.br/uploads/2019/04/thanos-vingadores.jpg',
+          expirationTimer: 'vingadores',
+          typeExpirationTimer: '',
         },
       ],
     };

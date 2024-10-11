@@ -10,12 +10,13 @@ import { PostBase } from './post.base';
 })
 export class PostService extends PostBase {
   private baseURL = currentEnvironment.baseURL;
+
   constructor(httpClient: HttpClient) {
     super(httpClient);
   }
 
   listPost(): Observable<PostList> {
-    return this.httpClient.get<PostList>(`${this.baseURL}`).pipe(
+    return this.httpClient.get<PostList>(`${this.baseURL}/post-message`).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         return throwError(() => errorResponse);
       })

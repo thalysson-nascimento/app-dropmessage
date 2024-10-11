@@ -1,7 +1,8 @@
 export interface Post {
   id: string;
-  path: string;
-  name: string;
+  image: string;
+  typeExpirationTimer: string;
+  expirationTimer: string;
 }
 
 export interface PostList {

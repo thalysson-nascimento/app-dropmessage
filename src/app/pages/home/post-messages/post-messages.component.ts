@@ -12,7 +12,7 @@ import { Inject, PLATFORM_ID } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { default as lottie } from 'lottie-web';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, delay, takeUntil } from 'rxjs';
 import { register } from 'swiper/element/bundle';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
 import { Post } from '../../../shared/interface/post';
@@ -154,15 +154,18 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   loadPostService() {
     this.postService
       .listPost()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(this.destroy$), delay(2000))
       .subscribe({
         next: (response) => {
           this.posts = response.data;
 
+          console.log('===>', this.posts);
+
           this.posts.push({
             id: 'no-matches',
-            path: '',
-            name: 'Você não tem mais matchs na sua localidade',
+            image: 'Você não tem mais matchs na sua localidade',
+            expirationTimer: '',
+            typeExpirationTimer: '',
           });
 
           this.isLoaded = true;
