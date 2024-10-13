@@ -25,3 +25,19 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Posteriormente aplicar o SSL
+
+          // "options": {
+          //   "proxyConfig": "proxy.conf.json",
+          //   "ssl": true,
+          //   "sslKey": "cert/server.key",
+          //   "sslCert": "cert/server.crt"
+          // },
+
+colocar no angular.json
+"serve": {
+"builder": "@angular-devkit/build-angular:dev-server",
+"options": {
+"proxyConfig": "proxy.conf.json"
+},

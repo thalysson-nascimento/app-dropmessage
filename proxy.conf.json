@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://674b8c097088941e42a373144e2cfcce.serveo.net",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
