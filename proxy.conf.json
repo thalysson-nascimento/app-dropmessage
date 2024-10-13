@@ -1,6 +1,6 @@
 {
-  "/api": {
-    "target": "https://674b8c097088941e42a373144e2cfcce.serveo.net",
+  "/api/*": {
+    "target": "https://d5e4528d54de0aca4d1c629764632f52.serveo.net",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

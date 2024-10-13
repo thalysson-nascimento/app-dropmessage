@@ -6,7 +6,7 @@
     "start": "ng serve",
     "start:mock": "ng serve --configuration mock --host 0.0.0.0",
     "start:dev": "ng serve --configuration development",
-    "start:prod": "ng serve --configuration production",
+    "start:prod": "ng serve --configuration production --proxy-config proxy.conf.json",
     "build:mock": "ng build --configuration mock",
     "build:dev": "ng build --configuration development",
     "build:prod": "ng build --configuration production",

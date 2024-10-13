@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { currentEnvironment } from '../../../../environment.config';
+import { CreateUserCredentialsService } from '../../../shared/service/create-user-credentials/create-user-credentials.service';
 
 @Component({
   selector: 'app-signup',
@@ -13,7 +14,10 @@ export class SignupComponent implements OnInit {
   private baseUrl: string = currentEnvironment.baseURL;
   name = 'oii';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private createUserCredentialsService: CreateUserCredentialsService
+  ) {}
 
   ngOnInit(): void {
     console.log(this.baseUrl);
@@ -25,5 +29,17 @@ export class SignupComponent implements OnInit {
 
   navigateToPosts() {
     this.router.navigate(['home/post-messages']); // Redireciona para a rota signup
+  }
+
+  createUser() {
+    console.log('Criando usário...');
+    this.createUserCredentialsService.userCredentials().subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
   }
 }
