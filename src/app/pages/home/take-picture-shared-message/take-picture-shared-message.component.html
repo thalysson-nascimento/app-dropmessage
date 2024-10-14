@@ -8,7 +8,25 @@
     />
   </div>
 
-  <div class="contain-lottie" [@fadeInOut]="showLottieIcon ? 'in' : 'out'">
+  <div>
+    <div class="contain-photo-preview">
+      <div id="camera-app">
+        <img [src]="cameraImage" class="photo-preview" alt="Preview da Foto" />
+      </div>
+      <button (click)="openBottomSheet()" class="button-take-snapshot">
+        Tirar Foto
+      </button>
+
+      <button
+        (click)="postMessagePhoto(cameraImage)"
+        class="button-take-snapshot"
+      >
+        Postar foto
+      </button>
+    </div>
+  </div>
+
+  <!-- <div class="contain-lottie" [@fadeInOut]="showLottieIcon ? 'in' : 'out'">
     <div
       id="lottie-icon-camera-register"
       class="lottie-icon-camera-register"
@@ -82,6 +100,6 @@
           </button>
         </div>
       </ng-template>
-    </div>
-  </div>
+    </div> 
+  </div>-->
 </div>

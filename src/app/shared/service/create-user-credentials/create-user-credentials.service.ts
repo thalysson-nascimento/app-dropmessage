@@ -13,7 +13,7 @@ export class CreateUserCredentialsService {
     const baseURL = currentEnvironment.baseURL;
     return this.httpClient.post(`${baseURL}/user-credentials`, {
       name: 'Thalysson',
-      email: 'ta@aaasalak.camaom',
+      email: 'ta@aaasaaslak.camaom',
       password: '123456',
     });
   }
