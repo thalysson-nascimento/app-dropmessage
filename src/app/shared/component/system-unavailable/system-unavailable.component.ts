@@ -11,7 +11,7 @@ import {
   PLATFORM_ID,
 } from '@angular/core';
 import { default as lottie } from 'lottie-web';
-import { SecondaryButtonDirective } from '../../directives/secundary-button/secundary-button.directive';
+import { ButtonStyleDirective } from '../../directives/button-style/button-style.directive';
 
 interface LottieAnimationOptions {
   pathIconAnimation: string;
@@ -21,7 +21,7 @@ interface LottieAnimationOptions {
   onClick?: boolean;
 }
 
-const SharedComponents = [SecondaryButtonDirective];
+const SharedComponents = [ButtonStyleDirective];
 
 @Component({
   selector: 'app-system-unavailable',

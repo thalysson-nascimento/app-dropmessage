@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-logo-dropmessage',
@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   standalone: true,
 })
 export class LogoDropmessageComponent implements OnInit {
+  @Input()
+  fontSize?: string = '1rem';
+
   constructor() {}
 
   ngOnInit() {}

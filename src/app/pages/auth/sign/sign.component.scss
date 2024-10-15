@@ -1,0 +1,40 @@
+.contain-sign {
+  display: flex;
+  height: 100dvh;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+.contain-form-login {
+  width: 100%;
+}
+
+.contain-logo {
+  line-height: 7rem;
+}
+
+.input-custom {
+  width: 100%;
+}
+
+img {
+  width: 15rem;
+}
+
+.regiter-acount {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  margin-top: 2rem;
+}
+
+.text-login {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.input-custom {
+  margin-bottom: 1rem;
+}

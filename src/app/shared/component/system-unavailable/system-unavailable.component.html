@@ -10,7 +10,11 @@
   </p>
 
   <div class="contain-button-system-unavailable">
-    <button appButtonSecondary (click)="tryAgainLoadingPostMessage()">
+    <button
+      appButtonStyle
+      [buttonType]="'secondary'"
+      (click)="tryAgainLoadingPostMessage()"
+    >
       Tentar novamente
     </button>
   </div>
