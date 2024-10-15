@@ -14,4 +14,8 @@ export class ListSettingsComponent implements OnInit {
   goToHomePostMessages() {
     this.router.navigateByUrl('/home/post-messages');
   }
+
+  goToSign() {
+    this.router.navigate(['auth/sign']); // Redireciona para a rota signup
+  }
 }

@@ -1,16 +1,45 @@
-<p>signup works!</p>
-<h2>{{ name }}</h2>
-<button (click)="navigateToSign()">Login</button>
+<div class="contain-sign">
+  <div class="contain-back-button">
+    <img
+      src="assets/icon-static/arrow-left.svg"
+      (click)="goToAuthSign()"
+      alt=""
+    />
+  </div>
 
-<input type="text" />
+  <div class="icon-relationcip">
+    <img
+      src="assets/icon-static/icon-relationchip-register.svg"
+      alt="ilustracao de duas pessoas se abraçando. Mulher de cabelos longos abraçada suavemente com rapaz de cabelo curto sem barba"
+    />
+  </div>
 
-<br /><br />
-
-<p>listar de posts</p>
-<br />
-
-<button (click)="navigateToPosts()">listar posts</button>
-
-<br /><br />
-
-<button (click)="createUser()">cadastrar usuario</button>
+  <div class="contain-form-login">
+    <p class="text-login">crie sua conta</p>
+    <input type="text" placeholder="nome" appInputCustom class="input-custom" />
+    <input
+      type="email"
+      placeholder="email"
+      id=""
+      appInputCustom
+      class="input-custom"
+      style="text-transform: lowercase"
+    />
+    <input
+      type="password"
+      placeholder="senha"
+      id=""
+      appInputCustom
+      class="input-custom"
+    />
+    <button
+      appButtonStyle
+      [buttonType]="'primary'"
+      (click)="createAccount()"
+      [disabled]="buttonDisalbled"
+      [disabledButton]="buttonDisalbled"
+    >
+      criar conta
+    </button>
+  </div>
+</div>

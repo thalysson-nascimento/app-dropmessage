@@ -2,7 +2,7 @@
   <img
     src="assets/icon-static/arrow-left.svg"
     (click)="goToHomePostMessages()"
-    alt=""
+    alt="voltar"
   />
   <div>
     <img class="user-avatar" src="assets/jo.jpeg" alt="" />
@@ -74,7 +74,7 @@
         </div>
         <img src="assets/icon-static/arrow-right.svg" alt="" />
       </li>
-      <li class="action-timer">
+      <li class="action-timer" (click)="goToSign()">
         <div class="contain-icon-and-description">
           <!-- <img
             src="assets/icon-static/icon-logout.svg"
