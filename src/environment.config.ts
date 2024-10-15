@@ -9,7 +9,7 @@ interface TypeEnveronment {
 
 export const environmentConfig: Record<Environment, TypeEnveronment> = {
   production: {
-    baseURL: 'https://aafa00e8cb8089101d586ac6fd621bad.serveo.net/api',
+    baseURL: 'https://cbcf4b115c50c003d3dfcb08bb8a0a5d.serveo.net',
     pathURL: '/api/v1',
     production: true,
     mock: false,

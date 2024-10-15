@@ -1,0 +1,17 @@
+<div class="contain-system-unavailable">
+  <p class="title-system-unavailable">Ops, sistema indisponível!</p>
+
+  <div class="contain-icon-animation">
+    <div id="lottie-icon-system-unavailable" class="icon-animation"></div>
+  </div>
+
+  <p>
+    {{ infoMessage }}
+  </p>
+
+  <div class="contain-button-system-unavailable">
+    <button appButtonSecondary (click)="tryAgainLoadingPostMessage()">
+      Tentar novamente
+    </button>
+  </div>
+</div>

@@ -15,6 +15,8 @@ import { default as lottie } from 'lottie-web';
 import { Subject, delay, takeUntil } from 'rxjs';
 import { register } from 'swiper/element/bundle';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
+import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
+import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { Post } from '../../../shared/interface/post';
 import { PostService } from '../../../shared/service/post/post.service';
 
@@ -28,10 +30,12 @@ interface LottieAnimationOptions {
   onClick?: boolean;
 }
 
+const SharedComponent = [LogoDropmessageComponent, SystemUnavailableComponent];
+
 @Component({
   selector: 'app-post-messages',
   standalone: true,
-  imports: [NgFor, NgIf],
+  imports: [NgFor, NgIf, ...SharedComponent],
   templateUrl: './post-messages.component.html',
   styleUrl: './post-messages.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -45,6 +49,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   showLikeButton: boolean = true;
   isLoaded: boolean = false;
   likePostMessageWhitHeart!: Post;
+  showSystemUnavailable: boolean = false;
+  textInformationSystemUnavailable: string = '';
   private likeButtonClicked: boolean = false;
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -57,6 +63,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.textInformationSystemUnavailable =
+      'No momento estamos com nossos sistemas indisponíves, volte novamente mais tarde!';
     if (isPlatformBrowser(this.platformId)) {
       this.loadPostService();
     }
@@ -169,10 +177,13 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
           });
 
           this.isLoaded = true;
+          this.showSystemUnavailable = false;
           this.loadLottieAnimationIcon();
         },
         error: (error) => {
           console.error(error);
+          this.showSystemUnavailable = true;
+          this.isLoaded = false;
         },
       });
   }
@@ -288,5 +299,12 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   goToListSettings() {
     this.router.navigateByUrl('home/list-settings');
+  }
+
+  tryAgainLoadingPostMessage() {
+    console.log('botão clicado');
+    this.showSystemUnavailable = false;
+    this.isLoaded = false;
+    this.loadPostService();
   }
 }
