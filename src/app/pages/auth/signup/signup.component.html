@@ -14,6 +14,13 @@
     />
   </div>
 
+  <div class="bouncing-dots">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
   <div class="contain-form-login">
     <p class="text-login">crie sua conta</p>
     <input type="text" placeholder="nome" appInputCustom class="input-custom" />
@@ -34,12 +41,19 @@
     />
     <button
       appButtonStyle
+      class="button-create-acount"
       [buttonType]="'primary'"
       (click)="createAccount()"
       [disabled]="buttonDisalbled"
       [disabledButton]="buttonDisalbled"
     >
-      criar conta
+      <!-- criar conta -->
+      <div class="bouncing-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
     </button>
   </div>
 </div>

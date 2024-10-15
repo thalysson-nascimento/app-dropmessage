@@ -44,3 +44,45 @@
 .contain-back-button {
   width: 100%;
 }
+
+.button-create-acount {
+  display: flex;
+  justify-content: center; /* Alinha horizontalmente */
+  align-items: center; /* Alinha verticalmente */
+  width: 100%;
+}
+
+.bouncing-dots {
+  display: flex;
+  justify-content: space-around;
+  width: 45px;
+
+  .dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #fff;
+    border-radius: 50%;
+    animation: bounce 0.6s ease-in-out infinite;
+
+    &:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    &:nth-child(4) {
+      animation-delay: 0.3s;
+    }
+  }
+
+  @keyframes bounce {
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.4);
+    }
+  }
+}
