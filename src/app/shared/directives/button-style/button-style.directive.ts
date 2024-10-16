@@ -5,7 +5,6 @@ import {
   Input,
   OnChanges,
   Renderer2,
-  SimpleChanges,
 } from '@angular/core';
 
 @Directive({
@@ -18,7 +17,7 @@ export class ButtonStyleDirective implements OnChanges {
 
   constructor(private el: ElementRef, private renderer: Renderer2) {}
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     this.setStyle();
 
     if (this.disabledButton) {
@@ -32,6 +31,7 @@ export class ButtonStyleDirective implements OnChanges {
 
   private setStyle() {
     this.renderer.setStyle(this.el.nativeElement, 'width', '100%');
+    this.renderer.setStyle(this.el.nativeElement, 'height', '3.5rem');
     this.renderer.setStyle(this.el.nativeElement, 'color', '#fff');
     this.renderer.setStyle(this.el.nativeElement, 'border', 'none');
     this.renderer.setStyle(this.el.nativeElement, 'padding', '1rem 2rem');

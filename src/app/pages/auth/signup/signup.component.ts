@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { currentEnvironment } from '../../../../environment.config';
@@ -15,7 +16,7 @@ const SharedComponents = [
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [...SharedComponents],
+  imports: [...SharedComponents, CommonModule],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss',
 })

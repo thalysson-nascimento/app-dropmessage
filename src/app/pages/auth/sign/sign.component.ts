@@ -18,7 +18,7 @@ const SharedComponents = [
   styleUrl: './sign.component.scss',
 })
 export class SignComponent {
-  buttonDisalbled: boolean = true;
+  buttonDisalbled: boolean = false;
 
   constructor(private router: Router) {}
 

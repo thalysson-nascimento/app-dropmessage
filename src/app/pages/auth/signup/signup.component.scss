@@ -47,33 +47,38 @@
 
 .button-create-acount {
   display: flex;
-  justify-content: center; /* Alinha horizontalmente */
-  align-items: center; /* Alinha verticalmente */
+  justify-content: center;
+  align-items: center;
   width: 100%;
+  margin-bottom: 1rem;
 }
 
 .bouncing-dots {
   display: flex;
   justify-content: space-around;
-  width: 45px;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+  width: 50px;
+  height: 1.2rem;
 
   .dot {
     width: 0.5rem;
     height: 0.5rem;
     background-color: #fff;
     border-radius: 50%;
-    animation: bounce 0.6s ease-in-out infinite;
+    animation: bounce 0.7s ease-in-out infinite;
 
     &:nth-child(2) {
       animation-delay: 0.1s;
     }
 
     &:nth-child(3) {
-      animation-delay: 0.2s;
+      animation-delay: 0.3s;
     }
 
     &:nth-child(4) {
-      animation-delay: 0.3s;
+      animation-delay: 0.4s;
     }
   }
 

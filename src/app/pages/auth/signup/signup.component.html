@@ -14,13 +14,6 @@
     />
   </div>
 
-  <div class="bouncing-dots">
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-  </div>
-
   <div class="contain-form-login">
     <p class="text-login">crie sua conta</p>
     <input type="text" placeholder="nome" appInputCustom class="input-custom" />
@@ -46,9 +39,10 @@
       (click)="createAccount()"
       [disabled]="buttonDisalbled"
       [disabledButton]="buttonDisalbled"
+      aria-label="criar conta"
     >
-      <!-- criar conta -->
-      <div class="bouncing-dots">
+      <span *ngIf="!buttonDisalbled">criar conta</span>
+      <div *ngIf="buttonDisalbled" class="bouncing-dots">
         <div class="dot"></div>
         <div class="dot"></div>
         <div class="dot"></div>
