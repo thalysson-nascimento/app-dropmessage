@@ -64,7 +64,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.textInformationSystemUnavailable =
-      'No momento estamos com nossos sistemas indisponíves, volte novamente mais tarde!';
+      'No momento estamos com nossos serviço indisponíves, volte novamente mais tarde!';
     if (isPlatformBrowser(this.platformId)) {
       this.loadPostService();
     }
