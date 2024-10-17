@@ -52,7 +52,7 @@ export class SignupComponent implements OnInit {
   }
 
   createAccount() {
-    this.router.navigate(['home/post-messages']);
+    this.router.navigate(['auth/data-complete']);
   }
 
   goToAuthSign() {
