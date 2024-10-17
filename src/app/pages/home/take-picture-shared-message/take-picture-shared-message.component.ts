@@ -117,6 +117,7 @@ export class TakePictureSharedMessageComponent
         });
       });
   }
+
   async checkCameraPermission() {
     // Verifica se a permissão já foi concedida
     const permission = await Camera.checkPermissions();

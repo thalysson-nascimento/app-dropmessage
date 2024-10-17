@@ -1,3 +1,37 @@
-<p>sign works!</p>
-<h2>Login</h2>
-<button (click)="navigateToSignup()">Criar Cadastro</button>
+<div class="contain-sign">
+  <div class="contain-logo">
+    <app-logo-dropmessage [fontSize]="'2rem'"></app-logo-dropmessage>
+  </div>
+
+  <img src="assets/icon-static/icon-relationchip.svg" alt="" />
+
+  <div class="contain-form-login">
+    <p class="text-login">Login</p>
+    <input
+      type="text"
+      placeholder="login"
+      appInputCustom
+      class="input-custom"
+    />
+    <input
+      type="password"
+      placeholder="senha"
+      id=""
+      appInputCustom
+      class="input-custom"
+    />
+    <button
+      appButtonStyle
+      [buttonType]="'primary'"
+      (click)="userSign()"
+      [disabled]="buttonDisalbled"
+      [disabledButton]="buttonDisalbled"
+    >
+      entrar
+    </button>
+  </div>
+
+  <div class="regiter-acount">
+    <p (click)="navigateToSignup()">Ainda nao possui uma conta?</p>
+  </div>
+</div>

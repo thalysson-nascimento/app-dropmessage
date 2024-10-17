@@ -1,0 +1,21 @@
+.contain-system-unavailable {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  height: calc(100vh - 4rem);
+  padding: 1rem;
+}
+
+.icon-animation {
+  width: 100%;
+}
+
+.title-system-unavailable {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.contain-button-system-unavailable {
+  margin-top: 2rem;
+}

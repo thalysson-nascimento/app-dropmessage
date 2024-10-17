@@ -1,0 +1,103 @@
+<div class="container">
+  <div
+    class="contain-shared-message"
+    [@fadeInOut]="showSnapshot ? 'in' : 'out'"
+  >
+    <div>
+      <div *ngIf="!cameraImage; else takePhoto">
+        <div class="contain-permission">
+          <div class="contain-svg">
+            <div [innerHTML]="sanitizedSvg"></div>
+          </div>
+
+          <div class="contain-button-take-photo">
+            <button
+              appButtonStyle
+              [buttonType]="'primary'"
+              (click)="openBottomSheet()"
+            >
+              Tirar foto para perfil.
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #takePhoto>
+        <div
+          class="contain-photo-preview"
+          *ngIf="cameraAllowed && cameraImage; else noCamera"
+        >
+          <div id="camera-app">
+            <img
+              *ngIf="cameraImage"
+              [src]="cameraImage"
+              class="photo-preview"
+              alt="Preview da Foto"
+            />
+          </div>
+          <div class="contain-button-take-photo">
+            <button
+              appButtonStyle
+              [buttonType]="'primary'"
+              (click)="openBottomSheet()"
+            >
+              Tirar foto para perfil
+            </button>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #noCamera>
+        <div class="contain-permission-denied">
+          <img
+            src="assets/icon-static/camera-not-allowed.svg"
+            class="icon-camera-denied"
+            alt="icone de permissoes negadas para acesso de câmera"
+          />
+          <div class="contain-button-take-photo">
+            <button
+              appButtonStyle
+              [buttonType]="'primary'"
+              (click)="requestCameraPermissionAgain()"
+            >
+              Permitir uso de câmera
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+
+    <div class="contain-form-login">
+      <p class="text-complete-perfil">Completar perfil</p>
+      <input
+        type="text"
+        placeholder="data de nascimento"
+        appInputCustom
+        class="input-custom"
+      />
+      <input
+        type="text"
+        placeholder="sexo"
+        id=""
+        appInputCustom
+        class="input-custom"
+      />
+      <input
+        type="text"
+        placeholder="interesses"
+        id=""
+        appInputCustom
+        class="input-custom"
+      />
+      <button
+        appButtonStyle
+        [buttonType]="'primary'"
+        (click)="completeDataFlow(cameraImage)"
+        [disabled]="buttonDisalbled"
+        [disabledButton]="buttonDisalbled"
+      >
+        completar perfil
+      </button>
+    </div>
+  </div>
+</div>

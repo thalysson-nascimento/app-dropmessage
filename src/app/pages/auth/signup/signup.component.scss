@@ -1,0 +1,93 @@
+.contain-sign {
+  display: flex;
+  height: 100dvh;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+.contain-form-login {
+  width: 100%;
+}
+
+.contain-logo {
+  line-height: 7rem;
+}
+
+.input-custom {
+  width: 100%;
+}
+
+.icon-relationcip {
+  width: 15rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+}
+
+.regiter-acount {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  margin-top: 2rem;
+}
+
+.text-login {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.input-custom {
+  margin-bottom: 1rem;
+}
+
+.contain-back-button {
+  width: 100%;
+}
+
+.button-create-acount {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.bouncing-dots {
+  display: flex;
+  justify-content: space-around;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+  width: 50px;
+  height: 1.2rem;
+
+  .dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #fff;
+    border-radius: 50%;
+    animation: bounce 0.7s ease-in-out infinite;
+
+    &:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    &:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+  }
+
+  @keyframes bounce {
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.4);
+    }
+  }
+}

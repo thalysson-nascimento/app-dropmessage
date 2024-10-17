@@ -1,6 +1,8 @@
 <div class="container">
   <div class="header">
-    <div class="title-app">DropMessage</div>
+    <div class="title-app">
+      <app-logo-dropmessage></app-logo-dropmessage>
+    </div>
     <div class="actions">
       <div
         (click)="openBottomSheet()"
@@ -18,6 +20,14 @@
       </div>
     </div>
   </div>
+
+  <app-system-unavailable
+    *ngIf="showSystemUnavailable"
+    (clickLoading)="tryAgainLoadingPostMessage()"
+    [infoMessage]="textInformationSystemUnavailable"
+  >
+  </app-system-unavailable>
+
   <div *ngIf="!isLoaded">
     <div class="contain-loading">
       <div id="lottie-icon-is-loading" class="lottie-icon-no-match"></div>
