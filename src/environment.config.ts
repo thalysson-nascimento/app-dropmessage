@@ -2,6 +2,7 @@ type Environment = 'production' | 'mock' | 'development';
 
 interface TypeEnveronment {
   production: boolean;
+  baseUrlSocket: string;
   baseURL: string;
   pathURL: string;
   mock: boolean;
@@ -13,18 +14,21 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
     pathURL: '/api/v1',
     production: true,
     mock: false,
+    baseUrlSocket: '',
   },
   mock: {
     baseURL: 'https://mock.com',
     pathURL: '/api/mock',
     production: false,
     mock: true,
+    baseUrlSocket: '',
   },
   development: {
     baseURL: 'http://localhost:3000/api',
     pathURL: '/api/dev',
     production: false,
     mock: false,
+    baseUrlSocket: 'http://localhost:3000',
   },
 };
 
