@@ -24,7 +24,7 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
     baseUrlSocket: '',
   },
   development: {
-    baseURL: 'http://localhost:3000/api',
+    baseURL: 'http://localhost:3000',
     pathURL: '/api/dev',
     production: false,
     mock: false,
