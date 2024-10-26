@@ -33,13 +33,16 @@ const SharedComponent = [LogoDropmessageComponent, SystemUnavailableComponent];
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
-  posts!: Post[];
+  posts: Post[] = [];
   mySwiper: any;
   showLikeButton: boolean = true;
   isLoaded: boolean = false;
   likePostMessageWhitHeart!: Post;
   showSystemUnavailable: boolean = false;
   textInformationSystemUnavailable: string = '';
+  currentPage: number = 1;
+  isLoadingMorePosts: boolean = false;
+  totalPosts: number = 0;
   private likeButtonClicked: boolean = false;
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -132,8 +135,17 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
           this.mySwiper.on('reachEnd', () => {
             const activeIndex = this.mySwiper.activeIndex;
 
+            this.loadMorePosts();
             if (activeIndex === 0) {
               this.showLikeButton = false;
+              setTimeout(() => {
+                this.lottieAnimationIconService.loadLottieAnimation({
+                  pathIconAnimation: 'no-macth.json',
+                  idElement: 'lottie-icon-no-match',
+                  loop: true,
+                  autoplay: true,
+                });
+              }, 500);
             }
           });
         }
@@ -150,16 +162,17 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   loadPostMessage() {
     this.postMessageService.listPost().subscribe({
       next: (response) => {
-        console.log(response);
-        this.posts = response.data;
+        this.totalPosts += response.data.length;
+        this.posts = [...this.posts, ...response.data];
         this.isLoaded = true;
+        this.loadIconHeart(this.posts); // verificar se vai desativar
 
-        this.loadIconHeart(this.posts);
-
-        setTimeout(() => {
-          this.initializeSwiper();
-          this.findObjetNoMacthOnResponse(response.data);
-        }, 100);
+        if (this.currentPage === 1) {
+          setTimeout(() => {
+            this.initializeSwiper();
+            this.findObjetNoMacthOnResponse(response.data);
+          }, 100);
+        }
       },
       error: (error) => {
         console.error(error);
@@ -179,6 +192,29 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
         autoplay: true,
       });
     }
+  }
+
+  loadMorePosts() {
+    if (this.isLoadingMorePosts) return;
+
+    this.isLoadingMorePosts = true;
+    this.currentPage++;
+
+    this.postMessageService.listPost(this.currentPage).subscribe({
+      next: (response) => {
+        if (response.data.length > 0) {
+          this.posts = [...this.posts, ...response.data];
+          this.mySwiper.update(); // Atualiza o Swiper com os novos slides
+        } else {
+          console.log('Não há mais posts para carregar.');
+        }
+        this.isLoadingMorePosts = false;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar mais posts:', error);
+        this.isLoadingMorePosts = false;
+      },
+    });
   }
 
   loadIconHeart(post: Post[]) {
