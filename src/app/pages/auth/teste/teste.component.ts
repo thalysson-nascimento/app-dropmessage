@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { SocketService } from '../../../shared/service/socket/socket.service';
+import { Post } from '../../../shared/interface/post';
+import { SocketAddNewPostMessageService } from '../../../shared/service/socketAddNewPostMessage/socket-add-new-post-message.service';
+import { SocketRemovePostMessageService } from '../../../shared/service/socketRemovePostMessage/socket-remove-post-message.service';
 
 @Component({
   selector: 'app-teste',
@@ -11,32 +13,57 @@ import { SocketService } from '../../../shared/service/socket/socket.service';
   imports: [CommonModule],
 })
 export class TesteComponent implements OnInit, OnDestroy {
-  posts!: any; // Variável que armazenará os dados recebidos
-  private subscription!: Subscription; // Armazena a inscrição
+  posts: Post[] = []; // Variável que armazenará os dados recebidos
+  socketSubscription!: Subscription;
+  expirationSubscription!: Subscription;
 
-  constructor(private socketService: SocketService) {}
+  constructor(
+    private socketAddNewPostMessageService: SocketAddNewPostMessageService,
+    private socketRemovePostMessageService: SocketRemovePostMessageService,
+    private cdRef: ChangeDetectorRef
+  ) {}
 
-  ngOnInit() {
-    this.subscription = this.socketService.listenForUpdates().subscribe({
-      next: (data) => {
-        if (this.posts !== data) {
-          this.posts = data;
-          console.log('===>', this.posts);
-        }
-      },
-      error: (error) => {
-        console.error('Erro ao receber dados: ===>', error);
-      },
-    });
+  ngOnInit(): void {
+    this.addNewSocketPostMessage();
+    this.removeSocketPostMessage();
   }
 
-  ngOnDestroy() {
-    // Cancelar a inscrição para evitar vazamentos de memória
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+  addNewSocketPostMessage() {
+    this.posts;
+    this.socketSubscription = this.socketAddNewPostMessageService
+      .onNewPostMessage()
+      .subscribe({
+        next: (data) => {
+          console.log(data);
+          this.posts.push(data);
+          this.cdRef.detectChanges();
+          // this.posts = [...this.posts, data];
+        },
+        error: (err) => console.error('Erro ao receber post:', err),
+      });
+  }
 
-    // Desconectar o WebSocket ao sair do componente
-    this.socketService.disconnect();
+  removeSocketPostMessage() {
+    this.expirationSubscription = this.socketRemovePostMessageService
+      .onPostExpired()
+      .subscribe({
+        next: (expiredPostId: string) => {
+          console.log('removendo port com o ID: ', expiredPostId);
+          this.posts = this.posts.filter(
+            (post: Post) => post.id !== expiredPostId
+          );
+          this.cdRef.detectChanges(); // Força atualização
+        },
+        error: (err) => console.error('Erro ao remover post:', err),
+      });
+  }
+
+  ngOnDestroy(): void {
+    if (this.socketSubscription) {
+      this.socketSubscription.unsubscribe();
+    }
+    if (this.expirationSubscription) {
+      this.expirationSubscription.unsubscribe();
+    }
   }
 }

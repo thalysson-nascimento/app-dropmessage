@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { currentEnvironment } from '../../../environment.config';
 import { PostMock } from '../../shared/service/post/post.mock';
-import { PostService } from '../../shared/service/post/post.service';
+import { PostMessageService } from '../../shared/service/post/post.service';
 import { DevelopmentRequestHttpBackend } from '../../shared/utils/developmentRequestHttpBackend/developmentRequestHttpBackend';
 
 const environmentMock = currentEnvironment.mock;
@@ -18,8 +18,8 @@ const environmentMock = currentEnvironment.mock;
       ? [{ provide: HttpBackend, useClass: DevelopmentRequestHttpBackend }]
       : [],
     {
-      provide: PostService,
-      useClass: environmentMock ? PostMock : PostService,
+      provide: PostMessageService,
+      useClass: environmentMock ? PostMock : PostMessageService,
     },
   ],
   templateUrl: './home.component.html',

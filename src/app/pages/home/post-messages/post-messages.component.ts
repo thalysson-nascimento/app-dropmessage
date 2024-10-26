@@ -11,24 +11,16 @@ import {
 import { Inject, PLATFORM_ID } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
-import { default as lottie } from 'lottie-web';
-import { Subject, delay, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 import { register } from 'swiper/element/bundle';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
 import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { Post } from '../../../shared/interface/post';
-import { PostService } from '../../../shared/service/post/post.service';
+import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
+import { PostMessageService } from '../../../shared/service/post/post.service';
 
 register();
-
-interface LottieAnimationOptions {
-  pathIconAnimation: string;
-  idElement: string;
-  loop?: boolean;
-  autoplay?: boolean;
-  onClick?: boolean;
-}
 
 const SharedComponent = [LogoDropmessageComponent, SystemUnavailableComponent];
 
@@ -41,24 +33,25 @@ const SharedComponent = [LogoDropmessageComponent, SystemUnavailableComponent];
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
-  posts!: Post[];
-  animation: any;
-  iconAnimationCamera: any;
+  posts: Post[] = [];
   mySwiper: any;
-  iconAnimationNoMatch: any;
   showLikeButton: boolean = true;
   isLoaded: boolean = false;
   likePostMessageWhitHeart!: Post;
   showSystemUnavailable: boolean = false;
   textInformationSystemUnavailable: string = '';
+  currentPage: number = 1;
+  isLoadingMorePosts: boolean = false;
+  totalPosts: number = 0;
   private likeButtonClicked: boolean = false;
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
-    private postService: PostService,
+    private postMessageService: PostMessageService,
     private zone: NgZone,
     private bottomSheet: MatBottomSheet,
     private router: Router,
+    private lottieAnimationIconService: LottieAnimationIconService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -66,28 +59,26 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.textInformationSystemUnavailable =
       'No momento estamos com nossos serviço indisponíves, volte novamente mais tarde!';
     if (isPlatformBrowser(this.platformId)) {
-      this.loadPostService();
+      this.loadPostMessage();
     }
   }
 
   ngAfterViewInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.zone.runOutsideAngular(() => {
-        this.loadLottieAnimation({
-          pathIconAnimation: 'camera.json',
-          idElement: 'lottie-icon-camera',
-          loop: false,
-          autoplay: true,
-        });
-
-        this.loadLottieAnimation({
-          pathIconAnimation: 'loading.json',
-          idElement: 'lottie-icon-is-loading',
-          loop: true,
-          autoplay: true,
-        });
+    this.zone.runOutsideAngular(() => {
+      this.lottieAnimationIconService.loadLottieAnimation({
+        pathIconAnimation: 'camera.json',
+        idElement: 'lottie-icon-camera',
+        loop: false,
+        autoplay: true,
       });
-    }
+
+      this.lottieAnimationIconService.loadLottieAnimation({
+        pathIconAnimation: 'loading.json',
+        idElement: 'lottie-icon-is-loading',
+        loop: true,
+        autoplay: true,
+      });
+    });
   }
 
   ngOnDestroy(): void {
@@ -144,8 +135,17 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
           this.mySwiper.on('reachEnd', () => {
             const activeIndex = this.mySwiper.activeIndex;
 
+            this.loadMorePosts();
             if (activeIndex === 0) {
               this.showLikeButton = false;
+              setTimeout(() => {
+                this.lottieAnimationIconService.loadLottieAnimation({
+                  pathIconAnimation: 'no-macth.json',
+                  idElement: 'lottie-icon-no-match',
+                  loop: true,
+                  autoplay: true,
+                });
+              }, 500);
             }
           });
         }
@@ -159,92 +159,79 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.likePostMessageWhitHeart = likeHeartPost;
   }
 
-  loadPostService() {
-    this.postService
-      .listPost()
-      .pipe(takeUntil(this.destroy$), delay(2000))
-      .subscribe({
-        next: (response) => {
-          this.posts = response.data;
+  loadPostMessage() {
+    this.postMessageService.listPost().subscribe({
+      next: (response) => {
+        this.totalPosts += response.data.length;
+        this.posts = [...this.posts, ...response.data];
+        this.isLoaded = true;
+        this.loadIconHeart(this.posts); // verificar se vai desativar
 
-          console.log('===>', this.posts);
-
-          this.posts.push({
-            id: 'no-matches',
-            image: 'Você não tem mais matchs na sua localidade',
-            expirationTimer: '',
-            typeExpirationTimer: '',
-          });
-
-          this.isLoaded = true;
-          this.showSystemUnavailable = false;
-          this.loadLottieAnimationIcon();
-        },
-        error: (error) => {
-          console.error(error);
-          this.showSystemUnavailable = true;
-          this.isLoaded = false;
-        },
-      });
+        if (this.currentPage === 1) {
+          setTimeout(() => {
+            this.initializeSwiper();
+            this.findObjetNoMacthOnResponse(response.data);
+          }, 100);
+        }
+      },
+      error: (error) => {
+        console.error(error);
+        this.showSystemUnavailable = true;
+        this.isLoaded = false;
+      },
+    });
   }
+  findObjetNoMacthOnResponse(data: Post[]) {
+    const noMatchPost = data.find((post) => post.id === 'no-matches');
 
-  loadLottieAnimationIcon() {
-    setTimeout(() => {
-      const lottieContainerElement =
-        document.querySelector<HTMLElement>('#lottie-container');
-
-      if (lottieContainerElement) {
-        this.zone.runOutsideAngular(() => {
-          this.loadLottieAnimation({
-            pathIconAnimation: 'like-heart.json',
-            idElement: 'lottie-container',
-            loop: false,
-            autoplay: false,
-            onClick: true,
-          });
-
-          this.loadLottieAnimation({
-            pathIconAnimation: 'no-macth.json',
-            idElement: 'lottie-icon-no-match',
-            loop: true,
-            autoplay: true,
-          });
-
-          this.initializeSwiper();
-        });
-      } else {
-        console.error('O elemento #lottie-container não existe');
-      }
-    }, 0);
-  }
-
-  loadLottieAnimation(options: LottieAnimationOptions): void {
-    const {
-      pathIconAnimation,
-      idElement,
-      loop = false,
-      autoplay = false,
-      onClick = false,
-    } = options;
-
-    const animationContainer = document.getElementById(idElement);
-    if (animationContainer) {
-      const animation = lottie.loadAnimation({
-        container: animationContainer,
-        path: `assets/icon-animation/${pathIconAnimation}`,
-        renderer: 'svg',
-        loop,
-        autoplay,
+    if (noMatchPost) {
+      this.lottieAnimationIconService.loadLottieAnimation({
+        pathIconAnimation: 'no-macth.json',
+        idElement: 'lottie-icon-no-match',
+        loop: true,
+        autoplay: true,
       });
-
-      if (onClick) {
-        animationContainer.addEventListener('click', () => {
-          animation.goToAndPlay(0, true);
-        });
-      }
-    } else {
-      console.error(`Elemento com ID ${idElement} não encontrado.`);
     }
+  }
+
+  loadMorePosts() {
+    if (this.isLoadingMorePosts) return;
+
+    this.isLoadingMorePosts = true;
+    this.currentPage++;
+
+    this.postMessageService.listPost(this.currentPage).subscribe({
+      next: (response) => {
+        if (response.data.length > 0) {
+          this.posts = [...this.posts, ...response.data];
+          this.mySwiper.update(); // Atualiza o Swiper com os novos slides
+        } else {
+          console.log('Não há mais posts para carregar.');
+        }
+        this.isLoadingMorePosts = false;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar mais posts:', error);
+        this.isLoadingMorePosts = false;
+      },
+    });
+  }
+
+  loadIconHeart(post: Post[]) {
+    if (post.length === 1) {
+      return (this.showLikeButton = false);
+    }
+    setTimeout(() => {
+      this.lottieAnimationIconService.loadLottieAnimation({
+        pathIconAnimation: 'like-heart.json',
+        idElement: 'lottie-container',
+        loop: false,
+        autoplay: false,
+        onClick: true,
+      });
+    }, 100);
+
+    return (this.showLikeButton = true);
   }
 
   removePostFromSwiper(post: Post) {
@@ -305,6 +292,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log('botão clicado');
     this.showSystemUnavailable = false;
     this.isLoaded = false;
-    this.loadPostService();
+    this.loadPostMessage();
   }
 }
