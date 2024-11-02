@@ -1,0 +1,37 @@
+<div class="contain">
+  <div class="header">
+    <div class="contain-back-button">
+      <img
+        src="assets/icon-static/arrow-left.svg"
+        (click)="goToBack()"
+        alt=""
+      />
+    </div>
+  </div>
+
+  <div class="contain-avatar-match">
+    <div class="left-content">
+      <img class="avatar" [src]="initiatorImage" alt="" />
+    </div>
+    <div class="right-content">
+      <img class="avatar" [src]="recipientImage" alt="" />
+    </div>
+  </div>
+
+  <div class="contain-image">
+    <img class="image-background" src="/assets/icon-static/vector.svg" alt="" />
+  </div>
+
+  <div class="contain-description">
+    <p class="title-match">
+      Uauu, você acaba de dar <span class="title-pink">match</span>
+    </p>
+    <span>O jeito mais fácil de fazer novas amizades</span>
+  </div>
+
+  <div class="contain-button">
+    <button appButtonStyle [buttonType]="'primary'" (click)="goToProfile()">
+      Ir para o perfil
+    </button>
+  </div>
+</div>
