@@ -1,0 +1,49 @@
+.contain-header-bottomsheet {
+  display: flex;
+}
+
+.button-down {
+  all: unset;
+  display: inline-flex; /* Para manter a imagem corretamente dentro do botão */
+  align-items: center;
+  justify-content: center;
+  cursor: pointer; /* Garantir que o cursor de pointer seja mantido */
+  padding: 0.2rem;
+
+  img {
+    display: block; /* Remove possíveis espaçamentos ao redor da imagem */
+  }
+}
+
+.contain-arrow-down {
+  text-align: right;
+  display: flex;
+  width: 100;
+}
+
+.image-error-request {
+  width: 300px;
+}
+
+.contain-error-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.title-error-message {
+  font-size: 1.5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.description-error-message {
+  font-size: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  color: #7b7b7b;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}

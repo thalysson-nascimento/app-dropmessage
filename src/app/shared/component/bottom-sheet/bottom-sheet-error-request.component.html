@@ -1,0 +1,20 @@
+<div class="contain-bottomsheet">
+  <div class="contain-arrow-down">
+    <button aria-label="fechar modal" class="button-down" (click)="dismiss()">
+      <img aria-hidden="true" src="assets/icon-static/arrow-down.svg" alt="" />
+    </button>
+  </div>
+
+  <div class="contain-error-message">
+    <img
+      src="assets/icon-static/error-request.svg"
+      class="image-error-request"
+      alt=""
+    />
+
+    <p class="title-error-message">{{ data?.messageTitle }}</p>
+    <span class="description-error-message">{{
+      data?.messageDescription
+    }}</span>
+  </div>
+</div>
