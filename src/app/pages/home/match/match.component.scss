@@ -1,0 +1,85 @@
+.contain {
+  width: 100%; // Ocupa 100% da largura da tela
+  height: 100vh; // Ocupa 100% da altura da tela
+  display: flex;
+  flex-direction: column;
+  position: relative; // Para posicionar os filhos de forma absoluta
+
+  opacity: 0; // Inicialmente invisível
+  transition: opacity 1s ease-in-out; // Transição suave para opacidade
+
+  &.fade-in {
+    opacity: 1; // Transição para visível
+  }
+}
+
+.contain-image {
+  width: 100%; // Pode ajustar conforme necessário
+  height: auto; // Permite que a imagem mantenha a proporção
+  position: relative; // Necessário para o z-index funcionar corretamente
+  margin-top: 3rem;
+}
+
+.image-background {
+  width: 100%; // Faz a imagem ocupar 100% da largura do contêiner
+  height: auto; // Mantém a proporção da imagem
+}
+
+.header {
+  width: 100%;
+  padding: 1rem;
+}
+
+.contain-avatar-match {
+  position: absolute; // Posiciona a div sobre a imagem
+  width: 100%; // Ocupa 100% da largura do contêiner pai
+  margin-top: 5rem;
+  z-index: 1; // Garante que fique acima da imagem
+  display: flex; // Para o layout interno
+  flex-direction: column; // Para empilhar conteúdo
+  align-items: center; // Centraliza o conteúdo
+  justify-content: center; // Centraliza o conteúdo
+  padding: 1rem;
+
+  .left-content {
+    width: 100%;
+    text-align: left;
+  }
+
+  .right-content {
+    width: 100%;
+    text-align: right;
+  }
+}
+
+.contain-button {
+  width: 100%;
+  padding: 1rem;
+}
+
+.avatar {
+  width: 11rem;
+  height: 11rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.title-match {
+  font-weight: 700;
+  padding: 1rem;
+  font-size: 2rem;
+  color: #2c2c2c;
+}
+
+.title-pink {
+  color: #d732a8;
+}
+
+.contain-description {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.contain-back-button {
+  width: 100%;
+}
