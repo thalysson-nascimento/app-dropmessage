@@ -3,11 +3,16 @@ import { provideRouter } from '@angular/router';
 import player from 'lottie-web';
 import { provideLottieOptions } from 'ngx-lottie';
 
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from '@angular/common/http';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { Socket, io } from 'socket.io-client';
 import { routes } from './app.routes';
+import { tokenStorageSecurityInterceptor } from './shared/interceptors/token-storage-security-interceptor/token-storage-security.interceptor';
 
 export const SOCKET_IO_URL = 'http://localhost:3000';
 export const socket: Socket = io(SOCKET_IO_URL, {
@@ -31,5 +36,6 @@ export const appConfig: ApplicationConfig = {
     // o servidor nao tem as apis do browser, caso nao habilite ele irá usar o XMLHttpRequest, tornando menos
     // eficiente ok
     provideHttpClient(withFetch()), // habilitando a função fatch nativa do navegador para integrar com o httpClient.
+    provideHttpClient(withInterceptors([tokenStorageSecurityInterceptor])),
   ],
 };

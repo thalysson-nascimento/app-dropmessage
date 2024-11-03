@@ -16,6 +16,7 @@ import { ButtonStyleDirective } from '../../../shared/directives/button-style/bu
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { Sign } from '../../../shared/interface/sign.interface';
 import { LoginService } from '../../../shared/service/sign/sign.service';
+import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 
 const SharedComponents = [
   LogoDropmessageComponent,
@@ -46,7 +47,8 @@ export class SignComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private loginService: LoginService,
-    private bottomSheet: MatBottomSheet
+    private bottomSheet: MatBottomSheet,
+    private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService
   ) {}
 
   ngOnInit(): void {
@@ -55,8 +57,8 @@ export class SignComponent implements OnInit {
 
   userLoginFormBuilder() {
     this.userLoginFormGroup = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      email: ['thalysson@gmail.com', [Validators.required, Validators.email]],
+      password: ['123456', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -72,12 +74,21 @@ export class SignComponent implements OnInit {
 
       this.loginService.login(login).subscribe({
         next: (response) => {
-          this.isLoadingButton = false;
           console.log(response);
+          this.isLoadingButton = false;
+
+          if (!response.userData.isUploadAvatar) {
+            // this.router.navigate(['auth/upload-avatar']);
+            return console.log('redirecionar para o upload de imagem');
+          }
+
+          this.tokenStorageSecurityRequestService.saveToken(response.token);
+
+          this.router.navigateByUrl('home/post-messages');
         },
         error: (responseError: HttpErrorResponse) => {
           this.isLoadingButton = false;
-          console.log(responseError.error.message.message);
+          this.tokenStorageSecurityRequestService.deleteToken();
           this.openBottomSheet(
             'Ops, ocorreu um erro.',
             responseError.error.message.message
