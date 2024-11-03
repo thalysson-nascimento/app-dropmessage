@@ -5,33 +5,44 @@
 
   <img src="assets/icon-static/icon-relationchip.svg" alt="" />
 
-  <div class="contain-form-login">
+  <form
+    [formGroup]="userLoginFormGroup"
+    (submit)="userSign()"
+    class="contain-form-login"
+  >
     <p class="text-login">Login</p>
     <input
       type="text"
       placeholder="login"
       appInputCustom
       class="input-custom"
+      formControlName="email"
     />
     <input
       type="password"
       placeholder="senha"
-      id=""
       appInputCustom
       class="input-custom"
+      formControlName="password"
     />
     <button
+      class="button-login"
+      type="submit"
       appButtonStyle
       [buttonType]="'primary'"
-      (click)="userSign()"
-      [disabled]="buttonDisalbled"
-      [disabledButton]="buttonDisalbled"
+      [disabled]="buttonDisalbled || userLoginFormGroup.invalid"
+      [disabledButton]="buttonDisalbled || userLoginFormGroup.invalid"
     >
-      entrar
+      <span *ngIf="!isLoadingButton">entrar</span>
+      <app-loading
+        *ngIf="isLoadingButton"
+        width="22px"
+        height="22px"
+        lineHeight="2px"
+      ></app-loading>
     </button>
-  </div>
-
-  <div class="regiter-acount">
-    <p (click)="navigateToSignup()">Ainda nao possui uma conta?</p>
-  </div>
+    <div class="regiter-acount">
+      <p (click)="navigateToSignup()">Ainda nao possui uma conta?</p>
+    </div>
+  </form>
 </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 
 @Component({
   selector: 'app-list-settings',
@@ -7,7 +8,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./list-settings.component.scss'],
 })
 export class ListSettingsComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService
+  ) {}
 
   ngOnInit() {}
 
@@ -16,6 +20,7 @@ export class ListSettingsComponent implements OnInit {
   }
 
   goToSign() {
+    this.tokenStorageSecurityRequestService.deleteToken();
     this.router.navigate(['auth/sign']); // Redireciona para a rota signup
   }
 }
