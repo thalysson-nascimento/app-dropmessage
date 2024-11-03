@@ -14,14 +14,28 @@
     />
   </div>
 
-  <div class="contain-form-login">
+  <form
+    [formGroup]="createAccountFormGroup"
+    (submit)="createAccountUser()"
+    class="contain-form-login"
+    class="contain-form-login"
+  >
     <p class="text-login">Crie sua conta</p>
-    <input type="text" placeholder="nome" appInputCustom class="input-custom" />
+    <input
+      type="text"
+      placeholder="nome"
+      id="name"
+      appInputCustom
+      formControlName="name"
+      maxlength="30"
+      class="input-custom"
+    />
     <input
       type="email"
       placeholder="email"
-      id=""
+      id="email"
       appInputCustom
+      formControlName="email"
       class="input-custom"
       style="text-transform: lowercase"
     />
@@ -30,15 +44,16 @@
       placeholder="senha"
       id=""
       appInputCustom
+      formControlName="password"
       class="input-custom"
     />
     <button
       appButtonStyle
+      type="submit"
       class="button-create-acount"
       [buttonType]="'primary'"
-      (click)="createAccount()"
-      [disabled]="buttonDisalbled"
-      [disabledButton]="buttonDisalbled"
+      [disabled]="buttonDisalbled || createAccountFormGroup.invalid"
+      [disabledButton]="buttonDisalbled || createAccountFormGroup.invalid"
       aria-label="criar conta"
     >
       <span *ngIf="!buttonDisalbled">criar conta</span>
@@ -49,5 +64,5 @@
         <div class="dot"></div>
       </div>
     </button>
-  </div>
+  </form>
 </div>
