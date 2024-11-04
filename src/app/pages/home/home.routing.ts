@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { CreateAvatarComponent } from './create-avatar/create-avatar.component';
 import { HomeComponent } from './home.component';
 import { ListSettingsComponent } from './list-settings/list-settings.component';
 import { MatchComponent } from './match/match.component';
@@ -35,6 +36,10 @@ export const HomeRouting: Routes = [
       {
         path: 'match-notification',
         component: MatchComponent,
+      },
+      {
+        path: 'create-avatar',
+        component: CreateAvatarComponent,
       },
     ],
   },

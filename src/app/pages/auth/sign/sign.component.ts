@@ -78,13 +78,12 @@ export class SignComponent implements OnInit {
           this.isLoadingButton = false;
 
           if (!response.userData.isUploadAvatar) {
-            // this.router.navigate(['auth/upload-avatar']);
-            return console.log('redirecionar para o upload de imagem');
+            this.tokenStorageSecurityRequestService.saveToken(response.token);
+            return this.router.navigate(['home/create-avatar']);
           }
 
           this.tokenStorageSecurityRequestService.saveToken(response.token);
-
-          this.router.navigateByUrl('home/post-messages');
+          return this.router.navigateByUrl('home/post-messages');
         },
         error: (responseError: HttpErrorResponse) => {
           this.isLoadingButton = false;
