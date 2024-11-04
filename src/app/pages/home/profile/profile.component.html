@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="header">
+    <img
+      src="assets/icon-static/arrow-left.svg"
+      style="width: 24px; height: 24px"
+      alt=""
+      (click)="goToPostMessage()"
+    />
+  </div>
+
+  <div class="contain-avatar">
+    <img [src]="userData.avatar" class="avatar" alt="" />
+  </div>
+
+  <div class="contain-name-emai">
+    <p class="name">{{ userData.name }}</p>
+    <p class="email">{{ userData.email }}</p>
+  </div>
+</div>
