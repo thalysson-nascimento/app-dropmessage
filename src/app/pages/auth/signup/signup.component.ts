@@ -85,6 +85,7 @@ export class SignupComponent implements OnInit {
           console.log(response);
           this.isLoadingButton = false;
           this.buttonDisalbled = false;
+          this.router.navigateByUrl('auth/information-user-registred');
         },
         error: (responseError) => {
           this.isLoadingButton = false;
