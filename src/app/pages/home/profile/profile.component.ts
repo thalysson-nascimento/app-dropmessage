@@ -4,7 +4,7 @@ import { PostLikeStateComponent } from '../../../shared/component/post-like-stat
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { UserData } from '../../../shared/interface/user-data.interface';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
-import { UserDataCacheService } from '../../../shared/service/user-data-cache/user-data-cache.service';
+import { UserDataCacheService } from '../../../shared/service/user-cache/user-data-cache.service';
 
 const SharedComponent = [PostLikeStateComponent, ButtonStyleDirective];
 

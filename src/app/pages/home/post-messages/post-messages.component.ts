@@ -20,7 +20,7 @@ import { Post } from '../../../shared/interface/post';
 import { UserData } from '../../../shared/interface/user-data.interface';
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 import { PostMessageService } from '../../../shared/service/post/post.service';
-import { UserDataCacheService } from '../../../shared/service/user-data-cache/user-data-cache.service';
+import { UserDataCacheService } from '../../../shared/service/user-cache/user-data-cache.service';
 import { UserDataService } from '../../../shared/service/user-data/user-data.service';
 
 register();
