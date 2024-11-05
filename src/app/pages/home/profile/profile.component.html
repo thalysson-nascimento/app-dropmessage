@@ -12,8 +12,75 @@
     <img [src]="userData.avatar" class="avatar" alt="" />
   </div>
 
-  <div class="contain-name-emai">
+  <div class="contain-name-email">
     <p class="name">{{ userData.name }}</p>
     <p class="email">{{ userData.email }}</p>
   </div>
+
+  <div class="contain-button">
+    <button appButtonStyle [buttonType]="'secondary'">Editar perfil</button>
+  </div>
+
+  <app-post-like-state></app-post-like-state>
+
+  <ul class="list-action-timer">
+    <li class="action-timer">
+      <div class="contain-icon-and-description">
+        <!-- <img
+          src="assets/icon-static/galery.svg"
+          class="icon-camera-timer"
+          alt=""
+        /> -->
+        <div>
+          <p>Meus Posts</p>
+          <span class="drescription-timer"
+            >Veja todos os seus posts compartilhados.</span
+          >
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+    <li class="action-timer">
+      <div class="contain-icon-and-description">
+        <!-- <img
+          src="assets/icon-static/notification.svg"
+          class="icon-camera-timer"
+          alt=""
+        /> -->
+        <div>
+          <p>Notificação</p>
+          <span class="drescription-timer">acompanhe suas notificações</span>
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+    <li class="action-timer">
+      <div class="contain-icon-and-description">
+        <!-- <img
+          src="assets/icon-static/icon-chat-2.svg"
+          class="icon-camera-timer"
+          alt=""
+        /> -->
+        <div>
+          <p>Chat</p>
+          <span class="drescription-timer">veja suas conversas</span>
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+    <li class="action-timer" (click)="goToSign()">
+      <div class="contain-icon-and-description">
+        <!-- <img
+          src="assets/icon-static/icon-logout.svg"
+          class="icon-camera-timer"
+          alt=""
+        /> -->
+        <div>
+          <p>Sair</p>
+          <span class="drescription-timer">encerrar sessão</span>
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+  </ul>
 </div>

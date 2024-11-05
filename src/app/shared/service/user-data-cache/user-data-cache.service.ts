@@ -18,4 +18,8 @@ export class UserDataCacheService {
   getUserDataCache(): Observable<UserData | null> {
     return this.behaviorSubjectUserDataCache$.asObservable();
   }
+
+  resetUserDataCache() {
+    this.behaviorSubjectUserDataCache$.next(null);
+  }
 }
