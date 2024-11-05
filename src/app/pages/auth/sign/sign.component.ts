@@ -1,6 +1,6 @@
 import { NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
 import { LoadingComponent } from '../../../shared/component/loading/loading.component';
 import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
+import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { Sign } from '../../../shared/interface/sign.interface';
@@ -23,6 +24,7 @@ const SharedComponents = [
   InputCustomDirective,
   ButtonStyleDirective,
   LoadingComponent,
+  ModalComponent,
 ];
 
 const CoreModule = [ReactiveFormsModule, NgIf];
@@ -42,6 +44,9 @@ export class SignComponent implements OnInit {
   buttonDisalbled: boolean = false;
   userLoginFormGroup!: FormGroup;
   isLoadingButton: boolean = false;
+  errorMessage: string = 'error';
+  @ViewChild('dialog') modal!: ModalComponent;
+  isOpen: boolean = false;
 
   constructor(
     private router: Router,
@@ -88,10 +93,8 @@ export class SignComponent implements OnInit {
         error: (responseError: HttpErrorResponse) => {
           this.isLoadingButton = false;
           this.tokenStorageSecurityRequestService.deleteToken();
-          this.openBottomSheet(
-            'Ops, ocorreu um erro.',
-            responseError.error.message.message
-          );
+          this.errorMessage = responseError.error.message.message;
+          this.modal.openDialog();
         },
       });
     }
@@ -104,5 +107,9 @@ export class SignComponent implements OnInit {
         messageDescription: messageDescription,
       },
     });
+  }
+
+  closeDialog() {
+    this.isOpen = false;
   }
 }
