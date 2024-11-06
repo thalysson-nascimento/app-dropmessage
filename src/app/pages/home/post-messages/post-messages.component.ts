@@ -11,14 +11,17 @@ import {
 import { Inject, PLATFORM_ID } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, take } from 'rxjs';
 import { register } from 'swiper/element/bundle';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
 import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { Post } from '../../../shared/interface/post';
+import { UserData } from '../../../shared/interface/user-data.interface';
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 import { PostMessageService } from '../../../shared/service/post/post.service';
+import { UserDataCacheService } from '../../../shared/service/user-cache/user-data-cache.service';
+import { UserDataService } from '../../../shared/service/user-data/user-data.service';
 
 register();
 
@@ -45,6 +48,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   totalPosts: number = 0;
   private likeButtonClicked: boolean = false;
   private destroy$: Subject<void> = new Subject<void>();
+  userData!: UserData;
 
   constructor(
     private postMessageService: PostMessageService,
@@ -52,13 +56,16 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     private bottomSheet: MatBottomSheet,
     private router: Router,
     private lottieAnimationIconService: LottieAnimationIconService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private userDataService: UserDataService,
+    private userDataCacheService: UserDataCacheService
   ) {}
 
   ngOnInit(): void {
     this.textInformationSystemUnavailable =
       'No momento estamos com nossos serviço indisponíves, volte novamente mais tarde!';
     if (isPlatformBrowser(this.platformId)) {
+      this.loadUserData();
       this.loadPostMessage();
     }
   }
@@ -285,7 +292,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   goToListSettings() {
-    this.router.navigateByUrl('home/list-settings');
+    this.router.navigateByUrl('home/profile');
   }
 
   tryAgainLoadingPostMessage() {
@@ -293,5 +300,34 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showSystemUnavailable = false;
     this.isLoaded = false;
     this.loadPostMessage();
+  }
+
+  loadUserData() {
+    this.userDataCacheService
+      .getUserDataCache()
+      .pipe(take(1))
+      .subscribe({
+        next: (cachedData) => {
+          if (cachedData) {
+            this.userData = cachedData;
+            console.log('Dados carregados do cache:', this.userData);
+          } else {
+            // Caso o cache esteja vazio, faz a chamada à API para carregar os dados
+            this.userDataService.userData().subscribe({
+              next: (response) => {
+                this.userData = response;
+                this.userDataCacheService.setUserDataCache(response);
+                console.log('Dados carregados da API:', this.userData);
+              },
+              error: (error) => {
+                console.log('Erro ao carregar dados do usuário:', error);
+              },
+            });
+          }
+        },
+        error: (error) => {
+          console.log('Erro ao acessar o cache de dados do usuário:', error);
+        },
+      });
   }
 }

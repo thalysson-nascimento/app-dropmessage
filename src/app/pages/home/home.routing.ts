@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
+import { CreateAvatarComponent } from './create-avatar/create-avatar.component';
 import { HomeComponent } from './home.component';
 import { ListSettingsComponent } from './list-settings/list-settings.component';
 import { MatchComponent } from './match/match.component';
 import { PostMessagesComponent } from './post-messages/post-messages.component';
+import { ProfileComponent } from './profile/profile.component';
 import { SendMessageSuccessComponent } from './send-message-success/send-message-success.component';
 import { TakePictureSharedMessageComponent } from './take-picture-shared-message/take-picture-shared-message.component';
 
@@ -35,6 +37,14 @@ export const HomeRouting: Routes = [
       {
         path: 'match-notification',
         component: MatchComponent,
+      },
+      {
+        path: 'create-avatar',
+        component: CreateAvatarComponent,
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
       },
     ],
   },

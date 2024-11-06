@@ -46,3 +46,31 @@
     </div>
   </form>
 </div>
+
+<app-modal #dialog>
+  <div class="contain-title">
+    <p class="title-error">Ops, ocorreu um erro!</p>
+  </div>
+
+  <div class="contain-image">
+    <img
+      src="assets/icon-static/error-request.svg"
+      class="image-error-request"
+      alt=""
+    />
+  </div>
+
+  <div class="contain-description-error">
+    <p class="description-error">{{ errorMessage }}</p>
+  </div>
+
+  <div class="contain-button-system-unavailable">
+    <button
+      appButtonStyle
+      [buttonType]="'secondary'"
+      (click)="dialog.closeDialog()"
+    >
+      Tentar novamente
+    </button>
+  </div>
+</app-modal>

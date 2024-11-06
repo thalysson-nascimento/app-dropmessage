@@ -10,6 +10,7 @@ import {
 } from '@angular/common/http';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideNgxMask } from 'ngx-mask';
 import { Socket, io } from 'socket.io-client';
 import { routes } from './app.routes';
 import { tokenStorageSecurityInterceptor } from './shared/interceptors/token-storage-security-interceptor/token-storage-security.interceptor';
@@ -32,6 +33,9 @@ export const appConfig: ApplicationConfig = {
     { provide: 'SOCKET_IO', useValue: socket },
     provideClientHydration(),
     provideAnimationsAsync(),
+    provideNgxMask({
+      dropSpecialCharacters: false,
+    }),
     // porque habilitar essa função? Como estamos trabalhando com renderização no lado do servidor,
     // o servidor nao tem as apis do browser, caso nao habilite ele irá usar o XMLHttpRequest, tornando menos
     // eficiente ok

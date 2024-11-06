@@ -1,0 +1,207 @@
+<div class="container">
+  <div
+    class="contain-shared-message"
+    [@fadeInOut]="showSnapshot ? 'in' : 'out'"
+  >
+    <div>
+      <p class="text-complete-perfil">Completar perfil</p>
+      <div *ngIf="!cameraImage; else takePhoto">
+        <div class="contain-permission">
+          <div class="contain-svg">
+            <div [innerHTML]="sanitizedSvg"></div>
+          </div>
+
+          <div class="contain-button-take-photo">
+            <button
+              appButtonStyle
+              [buttonType]="'primary'"
+              (click)="openBottomSheet()"
+            >
+              Tirar foto para perfil.
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #takePhoto>
+        <div
+          class="contain-photo-preview"
+          *ngIf="cameraAllowed && cameraImage; else noCamera"
+        >
+          <div id="camera-app">
+            <img
+              *ngIf="cameraImage"
+              [src]="cameraImage"
+              class="photo-preview"
+              alt="Preview da Foto"
+            />
+          </div>
+          <div class="contain-button-take-photo">
+            <button
+              appButtonStyle
+              [buttonType]="'primary'"
+              (click)="openBottomSheet()"
+            >
+              Tirar foto para perfil
+            </button>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #noCamera>
+        <div class="contain-permission-denied">
+          <img
+            src="assets/icon-static/camera-not-allowed.svg"
+            class="icon-camera-denied"
+            alt="icone de permissoes negadas para acesso de câmera"
+          />
+          <div class="contain-button-take-photo">
+            <button
+              appButtonStyle
+              [buttonType]="'primary'"
+              (click)="requestCameraPermissionAgain()"
+            >
+              Permitir uso de câmera
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+
+    <form
+      [formGroup]="avatarAndCompletedFormGroup"
+      (submit)="createAvatarAndCompletedData()"
+      class="contain-form-login"
+    >
+      <input
+        type="text"
+        placeholder="data de nascimento"
+        appInputCustom
+        class="input-custom"
+        maxlength="10"
+        formControlName="dateOfBirth"
+        mask="00/00/0000"
+      />
+      <div
+        class="contain-data-invalid"
+        *ngIf="
+        avatarAndCompletedFormGroup.get('dateOfBirth')?.touched &&
+        avatarAndCompletedFormGroup.get('dateOfBirth')?.errors?.['invalidDate']
+      "
+      >
+        <p class="data-invalid">Data inválida</p>
+      </div>
+      <div
+        class="contain-data-invalid"
+        *ngIf="
+        avatarAndCompletedFormGroup.get('dateOfBirth')?.errors?.['underage']
+      "
+      >
+        <p class="data-invalid">O usuário deve ter pelo menos 18 anos</p>
+      </div>
+      <div
+        class="contain-data-invalid"
+        *ngIf="
+        avatarAndCompletedFormGroup.get('dateOfBirth')?.errors?.['futureDate']
+      "
+      >
+        <p class="data-invalid">A data não pode ser maior que a data atual</p>
+      </div>
+      <input
+        (click)="openModalGender()"
+        type="text"
+        placeholder="como você se identifica?"
+        id=""
+        [value]="typeGender"
+        readonly
+        appInputCustom
+        class="input-custom"
+        formControlName="gender"
+      />
+      <input
+        (click)="openModalInterests()"
+        type="text"
+        placeholder="interesses"
+        id=""
+        appInputCustom
+        class="input-custom"
+        formControlName="interests"
+      />
+      <button
+        appButtonStyle
+        [buttonType]="'primary'"
+        type="submit"
+        (click)="completeDataFlow(cameraImage)"
+        [disabled]="avatarAndCompletedFormGroup.invalid"
+        [disabledButton]="avatarAndCompletedFormGroup.invalid"
+      >
+        completar perfil
+      </button>
+    </form>
+  </div>
+</div>
+
+<app-modal #genderModal>
+  <ul appListStyle>
+    <li (click)="selectGender('masculino')">
+      <span label>masculino</span>
+      <img icon src="assets/icon-static/arrow-right.svg" alt="Icone" />
+    </li>
+    <li (click)="selectGender('feminino')">
+      <span label>feminino</span>
+      <img icon src="assets/icon-static/arrow-right.svg" alt="Outro Icone" />
+    </li>
+    <li (click)="selectGender('não binário')">
+      <span label>não binário</span>
+      <img icon src="assets/icon-static/arrow-right.svg" alt="Outro Icone" />
+    </li>
+  </ul>
+</app-modal>
+
+<app-modal #interestsModal>
+  <ul appListStyle>
+    <li (click)="selectInterests('homem')">
+      <span label>homem</span>
+      <img icon src="assets/icon-static/arrow-right.svg" alt="Icone" />
+    </li>
+    <li (click)="selectInterests('mulher')">
+      <span label>mulher</span>
+      <img icon src="assets/icon-static/arrow-right.svg" alt="Outro Icone" />
+    </li>
+    <li (click)="selectInterests('ambos')">
+      <span label>ambos</span>
+      <img icon src="assets/icon-static/arrow-right.svg" alt="Outro Icone" />
+    </li>
+  </ul>
+</app-modal>
+
+<app-modal #modalPhotoNotFound>
+  <div class="contain-title">
+    <p class="title-error">Ops, foto do perfil!</p>
+  </div>
+
+  <div class="contain-image">
+    <img
+      src="assets/icon-static/take-photo.svg"
+      class="image-take-foto-profile"
+      alt=""
+    />
+  </div>
+
+  <div class="contain-description-error">
+    <p class="description-error">
+      Para concluir o seu cadastro você precisa tirar ou selecionar uma foto
+      para o seu perfil.
+    </p>
+  </div>
+
+  <div class="contain-button-system-unavailable">
+    <button
+      appButtonStyle
+      [buttonType]="'secondary'"
+      (click)="modalPhotoNotFound.closeDialog(); openBottomSheet()"
+    >
+      Tirar foto
+    </button>
+  </div>
+</app-modal>

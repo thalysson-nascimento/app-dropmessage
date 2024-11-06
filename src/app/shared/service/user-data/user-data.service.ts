@@ -2,19 +2,17 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { currentEnvironment } from '../../../../environment.config';
+import { UserData } from '../../interface/user-data.interface';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CreateUserCredentialsService {
+export class UserDataService {
+  private baseURL = currentEnvironment.baseURL;
+
   constructor(private httpClient: HttpClient) {}
 
-  userCredentials(): Observable<any> {
-    const baseURL = currentEnvironment.baseURL;
-    return this.httpClient.post(`${baseURL}/user-credentials`, {
-      name: 'Thalysson',
-      email: 'ta@aaasaaslak.camaom',
-      password: '123456',
-    });
+  userData(): Observable<UserData> {
+    return this.httpClient.get<UserData>(`${this.baseURL}/user`);
   }
 }

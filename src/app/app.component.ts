@@ -13,7 +13,7 @@ register();
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'app-dropmessage';
+  title = 'ShotMessage';
 
   constructor() {
     this.configureStatusBar();

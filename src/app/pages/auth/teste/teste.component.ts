@@ -1,6 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { Post } from '../../../shared/interface/post';
 import { SocketAddNewPostMessageService } from '../../../shared/service/socketAddNewPostMessage/socket-add-new-post-message.service';
 import { SocketRemovePostMessageService } from '../../../shared/service/socketRemovePostMessage/socket-remove-post-message.service';
@@ -8,20 +15,25 @@ import { SocketRemovePostMessageService } from '../../../shared/service/socketRe
 @Component({
   selector: 'app-teste',
   templateUrl: './teste.component.html',
-  styleUrls: ['./teste.component.css'],
+  styleUrls: ['./teste.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ModalComponent],
 })
 export class TesteComponent implements OnInit, OnDestroy {
   posts: Post[] = []; // Variável que armazenará os dados recebidos
   socketSubscription!: Subscription;
   expirationSubscription!: Subscription;
+  @ViewChild('dialog') dialog!: ModalComponent;
 
   constructor(
     private socketAddNewPostMessageService: SocketAddNewPostMessageService,
     private socketRemovePostMessageService: SocketRemovePostMessageService,
     private cdRef: ChangeDetectorRef
   ) {}
+
+  openDialog() {
+    this.dialog.openDialog();
+  }
 
   ngOnInit(): void {
     this.addNewSocketPostMessage();

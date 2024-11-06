@@ -1,0 +1,23 @@
+.contain-like-state {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #fff2dc;
+  padding: 1.5rem;
+  border-radius: 0.8rem;
+}
+
+.contain-data {
+  text-align: center;
+
+  p {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ed9500;
+  }
+  span {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #fbbf5b;
+  }
+}
