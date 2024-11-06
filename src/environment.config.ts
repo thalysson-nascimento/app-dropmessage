@@ -6,6 +6,7 @@ interface TypeEnveronment {
   baseURL: string;
   pathURL: string;
   mock: boolean;
+  apiKeyGeoLocationCageData: string;
 }
 
 export const environmentConfig: Record<Environment, TypeEnveronment> = {
@@ -15,6 +16,7 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
     production: true,
     mock: false,
     baseUrlSocket: '',
+    apiKeyGeoLocationCageData: 'ea70a7a8d9f34c4894602cc11e0407ae',
   },
   mock: {
     baseURL: 'https://mock.com',
@@ -22,6 +24,7 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
     production: false,
     mock: true,
     baseUrlSocket: '',
+    apiKeyGeoLocationCageData: 'ea70a7a8d9f34c4894602cc11e0407ae',
   },
   development: {
     baseURL: 'http://localhost:3000',
@@ -29,6 +32,7 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
     production: false,
     mock: false,
     baseUrlSocket: 'http://localhost:3000',
+    apiKeyGeoLocationCageData: 'ea70a7a8d9f34c4894602cc11e0407ae',
   },
 };
 

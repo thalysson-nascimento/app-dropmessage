@@ -7,6 +7,7 @@ import { PostMessagesComponent } from './post-messages/post-messages.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SendMessageSuccessComponent } from './send-message-success/send-message-success.component';
 import { TakePictureSharedMessageComponent } from './take-picture-shared-message/take-picture-shared-message.component';
+import { UserLocationComponent } from './user-location/user-location.component';
 
 export const HomeRouting: Routes = [
   {
@@ -45,6 +46,10 @@ export const HomeRouting: Routes = [
       {
         path: 'profile',
         component: ProfileComponent,
+      },
+      {
+        path: 'user-location',
+        component: UserLocationComponent,
       },
     ],
   },
