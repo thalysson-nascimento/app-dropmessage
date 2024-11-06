@@ -7,6 +7,7 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
+import { Geolocation } from '@capacitor/geolocation';
 import { LoadingComponent } from '../../../shared/component/loading/loading.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
@@ -50,29 +51,39 @@ export class UserLocationComponent implements OnInit {
     }
   }
 
-  loadGeoLocation() {
+  async loadGeoLocation() {
     this.isLoadingButton = true;
     this.isLoadingLocation = true;
     this.buttonDisalbled = true;
 
-    return this.geoLocationService.getGeolocation().subscribe({
-      next: (response) => {
-        this.state = response.results[0].components.state;
-        this.city = response.results[0].components.city;
-        this.stateCode = response.results[0].components.state_code;
-      },
-      error: (error) => {
-        this.isLoadingButton = false;
-        this.isLoadingLocation = false;
-        this.buttonDisalbled = false;
-        console.log(error);
-      },
-      complete: () => {
-        this.isLoadingButton = false;
-        this.isLoadingLocation = false;
-        this.buttonDisalbled = false;
-      },
-    });
+    try {
+      const position = await Geolocation.getCurrentPosition();
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      return this.geoLocationService
+        .getGeolocation(latitude, longitude)
+        .subscribe({
+          next: (response) => {
+            this.state = response.results[0].components.state;
+            this.city = response.results[0].components.city;
+            this.stateCode = response.results[0].components.state_code;
+          },
+          error: (error) => {
+            this.isLoadingButton = false;
+            this.isLoadingLocation = false;
+            this.buttonDisalbled = false;
+            console.log(error);
+          },
+          complete: () => {
+            this.isLoadingButton = false;
+            this.isLoadingLocation = false;
+            this.buttonDisalbled = false;
+          },
+        });
+    } catch (error) {
+      return `${error}: erro ao obter a localização do usuário.`;
+    }
   }
 
   confirmUserLocation() {

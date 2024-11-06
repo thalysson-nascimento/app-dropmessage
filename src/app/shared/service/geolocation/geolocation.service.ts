@@ -10,11 +10,9 @@ import { Location } from '../../interface/location-success.interface';
 export class GeolocationService {
   constructor(private httpCliente: HttpClient) {}
 
-  getGeolocation(): Observable<Location> {
-    const lat = '-7.11532';
-    const lon = '-34.861';
+  getGeolocation(latitude: number, longitude: number): Observable<Location> {
     const apiKey = currentEnvironment.apiKeyGeoLocationCageData;
-    const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=${apiKey}`;
+    const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`;
 
     return this.httpCliente.get<Location>(url);
   }
