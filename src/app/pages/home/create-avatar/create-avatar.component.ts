@@ -12,7 +12,14 @@ import {
   NgZone,
   OnDestroy,
   OnInit,
+  ViewChild,
 } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -23,14 +30,19 @@ import { Subject, delay, timer } from 'rxjs';
 import { currentEnvironment } from '../../../../environment.config';
 import { ChoosePhotoGalleryOrCameraComponent } from '../../../shared/component/choose-photo-gallery-or-camera/choose-photo-gallery-or-camera.component';
 import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
+import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
+import { ListStyleDirective } from '../../../shared/directives/list-style/list-style.directive';
+import { CreateAvatarAndDataComplete } from '../../../shared/interface/create-avatar-and-data-complete.interface';
 import { DataCompletedService } from '../../../shared/service/data-completed/data-completed.service';
 
 const SharedComponents = [
   LogoDropmessageComponent,
   InputCustomDirective,
   ButtonStyleDirective,
+  ModalComponent,
+  ListStyleDirective,
 ];
 
 interface LottieAnimationOptions {
@@ -41,7 +53,7 @@ interface LottieAnimationOptions {
   onClick?: boolean;
 }
 
-const CoreModules = [CommonModule];
+const CoreModules = [CommonModule, ReactiveFormsModule];
 
 @Component({
   selector: 'app-create-avatar',
@@ -61,16 +73,21 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
   locationAllowed: boolean = false;
   cameraImage: string | null = null;
   showSnapshot: boolean = false;
-  disabledButton: boolean = false;
   sanitizedSvg!: SafeHtml;
-  buttonDisalbled: boolean = false;
+  avatarAndCompletedFormGroup!: FormGroup;
+  isLoadingButton: boolean = false;
   destroy$: Subject<void> = new Subject<void>();
+  @ViewChild('genderModal') genderModal!: ModalComponent;
+  @ViewChild('interestsModal') interestsModal!: ModalComponent;
+  typeGender: string = '';
+  typeInterests: string = '';
 
   constructor(
     private router: Router,
     private zone: NgZone,
     private bottomSheet: MatBottomSheet,
     private domSanitizer: DomSanitizer,
+    private formBuilder: FormBuilder,
     private dataCompletedService: DataCompletedService
   ) {}
 
@@ -78,6 +95,43 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log(currentEnvironment.baseURL);
     this.loadSvgUrl();
     this.checkCameraPermission();
+    this.avatarAndComlpetedDataFormBuilder();
+  }
+
+  avatarAndComlpetedDataFormBuilder() {
+    this.avatarAndCompletedFormGroup = this.formBuilder.group({
+      dateOfBirth: ['', [Validators.required, Validators.minLength(10)]],
+      gender: ['', [Validators.required]],
+      interests: ['', [Validators.required]],
+    });
+  }
+
+  openModalGender() {
+    this.genderModal.openDialog();
+  }
+
+  openModalInterests() {
+    this.interestsModal.openDialog();
+  }
+
+  selectGender(selectedTypeGender: string) {
+    console.log(selectedTypeGender);
+    this.typeGender = selectedTypeGender;
+    this.avatarAndCompletedFormGroup
+      .get('gender')
+      ?.setValue(selectedTypeGender);
+    // Fecha o modal após a seleção
+    this.genderModal.closeDialog();
+  }
+
+  selectInterests(selectedInterests: string) {
+    console.log(selectedInterests);
+    this.typeInterests = selectedInterests;
+    this.avatarAndCompletedFormGroup
+      .get('interests')
+      ?.setValue(selectedInterests);
+    // Fecha o modal após a seleção
+    this.interestsModal.closeDialog();
   }
 
   ngAfterViewInit(): void {
@@ -185,31 +239,51 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  completeDataFlow(camera: any) {
-    this.router.navigateByUrl('home/post-messages');
-    // if (imageCamera) {
-    //   fetch(imageCamera)
-    //     .then((res) => res.blob())
-    //     .then((blob) => {
-    //       const file = new File([blob], 'image.png', { type: 'image/png' });
-    //       const dateOfBirth = '';
-    //       const gender = '';
+  teste() {
+    console.log('oi');
+  }
 
-    //       this.dataCompletedService
-    //         .dataCompleted({
-    //           file,
-    //           dateOfBirth,
-    //           gender,
-    //         })
-    //         .subscribe({
-    //           next: () => {
-    //             this.router.navigate(['home/post-message']);
-    //           },
-    //           error: (error) => {
-    //             console.log('Erro ao enviar mensagem:', error);
-    //           },
-    //         });
-    //     });
-    // }
+  createAvatarAndCompletedData() {
+    if (this.avatarAndCompletedFormGroup.valid) {
+      console.log(this.avatarAndCompletedFormGroup.getRawValue());
+      const createAavatar =
+        this.avatarAndCompletedFormGroup.getRawValue() as CreateAvatarAndDataComplete;
+
+      console.log('--->', this.cameraImage);
+      console.log('--->', createAavatar);
+    }
+  }
+
+  completeDataFlow(cameraImage: any) {
+    // this.router.navigateByUrl('home/post-messages');
+    if (cameraImage) {
+      fetch(cameraImage)
+        .then((res) => res.blob())
+        .then((blob) => {
+          const file = new File([blob], 'image.png', { type: 'image/png' });
+          const userCompletedDataForm =
+            this.avatarAndCompletedFormGroup.getRawValue() as CreateAvatarAndDataComplete;
+          console.log('====>', file);
+          console.log('====>', userCompletedDataForm);
+
+          this.dataCompletedService
+            .dataCompleted({
+              file,
+              dateOfBirth: userCompletedDataForm.dateOfBirth,
+              gender: userCompletedDataForm.gender,
+              interests: userCompletedDataForm.interests,
+            })
+            .subscribe({
+              next: (response) => {
+                console.log(response);
+                this.router.navigate(['home/post-messages']);
+                this.isLoadingButton = true;
+              },
+              error: (error) => {
+                console.log('Erro ao enviar mensagem:', error);
+              },
+            });
+        });
+    }
   }
 }

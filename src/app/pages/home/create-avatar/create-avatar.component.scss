@@ -43,6 +43,15 @@
   padding-inline: 4rem;
 }
 
+.input-wrapper {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.input-custom {
+  pointer-events: none; /* Desativa eventos de clique no input */
+}
+
 .contain-photo-preview {
   display: flex;
   flex-direction: column;

@@ -8,6 +8,7 @@ interface DataCompleted {
   file: Blob;
   dateOfBirth: string;
   gender: string;
+  interests: string;
 }
 
 @Injectable({
@@ -24,14 +25,16 @@ export class DataCompletedService extends DataCompletedBase {
     file,
     dateOfBirth,
     gender,
+    interests,
   }: DataCompleted): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('dateOfBirth', dateOfBirth);
     formData.append('gender', gender);
+    formData.append('interests', interests);
 
     return this.httpClient
-      .post<any>(`${this.baseURL}/data-completed`, formData)
+      .post<any>(`${this.baseURL}/avatar-and-about`, formData)
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           return throwError(() => errorResponse);
