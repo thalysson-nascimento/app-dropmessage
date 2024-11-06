@@ -80,7 +80,33 @@
         class="input-custom"
         maxlength="10"
         formControlName="dateOfBirth"
+        mask="00/00/0000"
       />
+      <div
+        class="contain-data-invalid"
+        *ngIf="
+        avatarAndCompletedFormGroup.get('dateOfBirth')?.touched &&
+        avatarAndCompletedFormGroup.get('dateOfBirth')?.errors?.['invalidDate']
+      "
+      >
+        <p class="data-invalid">Data inválida</p>
+      </div>
+      <div
+        class="contain-data-invalid"
+        *ngIf="
+        avatarAndCompletedFormGroup.get('dateOfBirth')?.errors?.['underage']
+      "
+      >
+        <p class="data-invalid">O usuário deve ter pelo menos 18 anos</p>
+      </div>
+      <div
+        class="contain-data-invalid"
+        *ngIf="
+        avatarAndCompletedFormGroup.get('dateOfBirth')?.errors?.['futureDate']
+      "
+      >
+        <p class="data-invalid">A data não pode ser maior que a data atual</p>
+      </div>
       <input
         (click)="openModalGender()"
         type="text"
@@ -147,4 +173,35 @@
       <img icon src="assets/icon-static/arrow-right.svg" alt="Outro Icone" />
     </li>
   </ul>
+</app-modal>
+
+<app-modal #modalPhotoNotFound>
+  <div class="contain-title">
+    <p class="title-error">Ops, foto do perfil!</p>
+  </div>
+
+  <div class="contain-image">
+    <img
+      src="assets/icon-static/take-photo.svg"
+      class="image-take-foto-profile"
+      alt=""
+    />
+  </div>
+
+  <div class="contain-description-error">
+    <p class="description-error">
+      Para concluir o seu cadastro você precisa tirar ou selecionar uma foto
+      para o seu perfil.
+    </p>
+  </div>
+
+  <div class="contain-button-system-unavailable">
+    <button
+      appButtonStyle
+      [buttonType]="'secondary'"
+      (click)="modalPhotoNotFound.closeDialog(); openBottomSheet()"
+    >
+      Tirar foto
+    </button>
+  </div>
 </app-modal>

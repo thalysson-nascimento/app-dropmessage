@@ -48,10 +48,6 @@
   cursor: pointer;
 }
 
-.input-custom {
-  pointer-events: none; /* Desativa eventos de clique no input */
-}
-
 .contain-photo-preview {
   display: flex;
   flex-direction: column;
@@ -91,4 +87,60 @@
 .icon-camera-denied {
   width: 10rem;
   height: 10rem;
+}
+
+.contain-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.title-error {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.contain-description-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.description-error-message {
+  font-size: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  color: #7b7b7b;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.contain-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contain-button-system-unavailable {
+  margin-top: 2rem;
+  margin-left: 3rem;
+  margin-right: 3rem;
+}
+
+.image-take-foto-profile {
+  width: 12rem;
+  margin-bottom: 2rem;
+}
+
+.data-invalid {
+  font-size: 0.8rem;
+  color: rgb(220, 165, 0);
+}
+
+.contain-data-invalid {
+  padding-bottom: 1rem;
+  padding-left: 1rem;
 }

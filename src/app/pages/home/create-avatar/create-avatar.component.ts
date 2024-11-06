@@ -26,6 +26,7 @@ import { Router } from '@angular/router';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { Dialog } from '@capacitor/dialog';
 import DOMPurify from 'dompurify';
+import { NgxMaskDirective } from 'ngx-mask';
 import { Subject, delay, timer } from 'rxjs';
 import { currentEnvironment } from '../../../../environment.config';
 import { ChoosePhotoGalleryOrCameraComponent } from '../../../shared/component/choose-photo-gallery-or-camera/choose-photo-gallery-or-camera.component';
@@ -36,6 +37,7 @@ import { InputCustomDirective } from '../../../shared/directives/input-custom/in
 import { ListStyleDirective } from '../../../shared/directives/list-style/list-style.directive';
 import { CreateAvatarAndDataComplete } from '../../../shared/interface/create-avatar-and-data-complete.interface';
 import { DataCompletedService } from '../../../shared/service/data-completed/data-completed.service';
+import { dateOfBirthValidator } from '../../../shared/validators/dateOfBirthValidator.validator';
 
 const SharedComponents = [
   LogoDropmessageComponent,
@@ -43,7 +45,10 @@ const SharedComponents = [
   ButtonStyleDirective,
   ModalComponent,
   ListStyleDirective,
+  NgxMaskDirective,
 ];
+
+const CoreModules = [CommonModule, ReactiveFormsModule];
 
 interface LottieAnimationOptions {
   pathIconAnimation: string;
@@ -52,8 +57,6 @@ interface LottieAnimationOptions {
   autoplay?: boolean;
   onClick?: boolean;
 }
-
-const CoreModules = [CommonModule, ReactiveFormsModule];
 
 @Component({
   selector: 'app-create-avatar',
@@ -79,6 +82,8 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
   destroy$: Subject<void> = new Subject<void>();
   @ViewChild('genderModal') genderModal!: ModalComponent;
   @ViewChild('interestsModal') interestsModal!: ModalComponent;
+  @ViewChild('modalPhotoNotFound') modalPhotoNotFound!: ModalComponent;
+
   typeGender: string = '';
   typeInterests: string = '';
 
@@ -100,7 +105,10 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   avatarAndComlpetedDataFormBuilder() {
     this.avatarAndCompletedFormGroup = this.formBuilder.group({
-      dateOfBirth: ['', [Validators.required, Validators.minLength(10)]],
+      dateOfBirth: [
+        '',
+        [Validators.required, Validators.minLength(8), dateOfBirthValidator()],
+      ],
       gender: ['', [Validators.required]],
       interests: ['', [Validators.required]],
     });
@@ -245,18 +253,20 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   createAvatarAndCompletedData() {
     if (this.avatarAndCompletedFormGroup.valid) {
-      console.log(this.avatarAndCompletedFormGroup.getRawValue());
-      const createAavatar =
-        this.avatarAndCompletedFormGroup.getRawValue() as CreateAvatarAndDataComplete;
+      if (this.cameraImage === null) {
+        this.modalPhotoNotFound.openDialog();
+        return;
+      }
 
-      console.log('--->', this.cameraImage);
-      console.log('--->', createAavatar);
+      if (!this.cameraAllowed) {
+        this.showCameraPermissionModal();
+        return;
+      }
     }
   }
 
   completeDataFlow(cameraImage: any) {
-    // this.router.navigateByUrl('home/post-messages');
-    if (cameraImage) {
+    if (cameraImage && this.cameraAllowed) {
       fetch(cameraImage)
         .then((res) => res.blob())
         .then((blob) => {
