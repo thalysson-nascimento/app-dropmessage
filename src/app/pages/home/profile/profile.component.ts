@@ -48,4 +48,8 @@ export class ProfileComponent implements OnInit {
     this.userDataCacheService.resetUserDataCache();
     this.router.navigateByUrl('auth/sign'); // Redireciona para a rota signup
   }
+
+  goToPrivecePolice() {
+    this.router.navigateByUrl('auth/privacy-police');
+  }
 }
