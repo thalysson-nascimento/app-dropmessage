@@ -7,6 +7,7 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
 import { LoadingComponent } from '../../../shared/component/loading/loading.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
@@ -29,18 +30,19 @@ const CoreModule = [CommonModule];
   standalone: true,
 })
 export class UserLocationComponent implements OnInit {
-  buttonDisalbled: boolean = false;
+  buttonDisalbled: boolean = true;
   state: string = '';
   stateCode: string = '';
   city: string = '';
-  isLoadingButton: boolean = false;
-  isLoadingLocation: boolean = false;
+  isLoadingButton: boolean = true;
+  isLoadingLocation: boolean = true;
   errorMessage: string = 'error';
 
   @ViewChild('modalErrorUserLocation') modalErrorUserLocation!: ModalComponent;
 
   constructor(
     private geoLocationService: GeolocationService,
+    private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
     private userLocationService: UserLocationService
   ) {}
@@ -97,8 +99,8 @@ export class UserLocationComponent implements OnInit {
         city: this.city,
       })
       .subscribe({
-        next: (response) => {
-          console.log(response);
+        next: () => {
+          this.router.navigateByUrl('home/post-messages');
         },
         error: (responseError: HttpErrorResponse) => {
           console.log(responseError);

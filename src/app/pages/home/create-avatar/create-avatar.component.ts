@@ -273,8 +273,6 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
           const file = new File([blob], 'image.png', { type: 'image/png' });
           const userCompletedDataForm =
             this.avatarAndCompletedFormGroup.getRawValue() as CreateAvatarAndDataComplete;
-          console.log('====>', file);
-          console.log('====>', userCompletedDataForm);
 
           this.dataCompletedService
             .dataCompleted({
@@ -284,13 +282,14 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
               interests: userCompletedDataForm.interests,
             })
             .subscribe({
-              next: (response) => {
-                console.log(response);
-                this.router.navigate(['home/post-messages']);
-                this.isLoadingButton = true;
+              next: () => {
+                this.router.navigateByUrl('home/user-location');
               },
               error: (error) => {
                 console.log('Erro ao enviar mensagem:', error);
+              },
+              complete: () => {
+                this.isLoadingButton = false;
               },
             });
         });
