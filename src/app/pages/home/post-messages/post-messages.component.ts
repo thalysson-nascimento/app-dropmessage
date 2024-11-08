@@ -11,13 +11,14 @@ import {
 import { Inject, PLATFORM_ID } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
-import { Subject, take } from 'rxjs';
+import { Subject } from 'rxjs';
 import { register } from 'swiper/element/bundle';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
 import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
+import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
 import { Post } from '../../../shared/interface/post';
-import { UserData } from '../../../shared/interface/user-data.interface';
+import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 import { PostMessageService } from '../../../shared/service/post/post.service';
 import { UserDataCacheService } from '../../../shared/service/user-cache/user-data-cache.service';
@@ -48,7 +49,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   totalPosts: number = 0;
   private likeButtonClicked: boolean = false;
   private destroy$: Subject<void> = new Subject<void>();
-  userData!: UserData;
+  dataAvatar!: AvatarSuccess;
 
   constructor(
     private postMessageService: PostMessageService,
@@ -58,14 +59,15 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     private lottieAnimationIconService: LottieAnimationIconService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private userDataService: UserDataService,
-    private userDataCacheService: UserDataCacheService
+    private userDataCacheService: UserDataCacheService,
+    private cacheAvatarService: CacheAvatarService
   ) {}
 
   ngOnInit(): void {
     this.textInformationSystemUnavailable =
       'No momento estamos com nossos serviço indisponíves, volte novamente mais tarde!';
     if (isPlatformBrowser(this.platformId)) {
-      this.loadUserData();
+      this.loadAvatarCache();
       this.loadPostMessage();
     }
   }
@@ -302,32 +304,42 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loadPostMessage();
   }
 
-  loadUserData() {
-    this.userDataCacheService
-      .getUserDataCache()
-      .pipe(take(1))
-      .subscribe({
-        next: (cachedData) => {
-          if (cachedData) {
-            this.userData = cachedData;
-            console.log('Dados carregados do cache:', this.userData);
-          } else {
-            // Caso o cache esteja vazio, faz a chamada à API para carregar os dados
-            this.userDataService.userData().subscribe({
-              next: (response) => {
-                this.userData = response;
-                this.userDataCacheService.setUserDataCache(response);
-                console.log('Dados carregados da API:', this.userData);
-              },
-              error: (error) => {
-                console.log('Erro ao carregar dados do usuário:', error);
-              },
-            });
-          }
-        },
-        error: (error) => {
-          console.log('Erro ao acessar o cache de dados do usuário:', error);
-        },
-      });
+  loadAvatarCache() {
+    this.cacheAvatarService.getDataAvatarCache().subscribe({
+      next: (response) => {
+        if (response) {
+          this.dataAvatar = response;
+        }
+      },
+      error: (error) => {
+        console.log('Erro ao carregar avatar do cache:', error);
+      },
+    });
+    // this.userDataCacheService
+    //   .getUserDataCache()
+    //   .pipe(take(1))
+    //   .subscribe({
+    //     next: (cachedData) => {
+    //       if (cachedData) {
+    //         this.userData = cachedData;
+    //         console.log('Dados carregados do cache:', this.userData);
+    //       } else {
+    //         // Caso o cache esteja vazio, faz a chamada à API para carregar os dados
+    //         this.userDataService.userData().subscribe({
+    //           next: (response) => {
+    //             this.userData = response;
+    //             this.userDataCacheService.setUserDataCache(response);
+    //             console.log('Dados carregados da API:', this.userData);
+    //           },
+    //           error: (error) => {
+    //             console.log('Erro ao carregar dados do usuário:', error);
+    //           },
+    //         });
+    //       }
+    //     },
+    //     error: (error) => {
+    //       console.log('Erro ao acessar o cache de dados do usuário:', error);
+    //     },
+    //   });
   }
 }

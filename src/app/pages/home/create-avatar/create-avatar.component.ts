@@ -36,7 +36,9 @@ import { ButtonStyleDirective } from '../../../shared/directives/button-style/bu
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { ListStyleDirective } from '../../../shared/directives/list-style/list-style.directive';
 import { CreateAvatarAndDataComplete } from '../../../shared/interface/create-avatar-and-data-complete.interface';
-import { DataCompletedService } from '../../../shared/service/data-completed/data-completed.service';
+import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
+import { CreateAvatarService } from '../../../shared/service/create-avatar/create-avatar.service';
+// import { DataCompletedService } from '../../../shared/service/data-completed/data-completed.service';
 import { dateOfBirthValidator } from '../../../shared/validators/dateOfBirthValidator.validator';
 
 const SharedComponents = [
@@ -83,6 +85,7 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('genderModal') genderModal!: ModalComponent;
   @ViewChild('interestsModal') interestsModal!: ModalComponent;
   @ViewChild('modalPhotoNotFound') modalPhotoNotFound!: ModalComponent;
+  @ViewChild('modalErrorRequest') modalErrorRequest!: ModalComponent;
 
   typeGender: string = '';
   typeInterests: string = '';
@@ -93,7 +96,9 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
     private bottomSheet: MatBottomSheet,
     private domSanitizer: DomSanitizer,
     private formBuilder: FormBuilder,
-    private dataCompletedService: DataCompletedService
+    // private dataCompletedService: DataCompletedService,
+    private createAvatarService: CreateAvatarService,
+    private cacheAvatarService: CacheAvatarService
   ) {}
 
   ngOnInit() {
@@ -247,10 +252,6 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  teste() {
-    console.log('oi');
-  }
-
   createAvatarAndCompletedData() {
     if (this.avatarAndCompletedFormGroup.valid) {
       if (this.cameraImage === null) {
@@ -266,6 +267,7 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   completeDataFlow(cameraImage: any) {
+    this.isLoadingButton = true;
     if (cameraImage && this.cameraAllowed) {
       fetch(cameraImage)
         .then((res) => res.blob())
@@ -274,19 +276,23 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
           const userCompletedDataForm =
             this.avatarAndCompletedFormGroup.getRawValue() as CreateAvatarAndDataComplete;
 
-          this.dataCompletedService
-            .dataCompleted({
+          this.createAvatarService
+            .avatar({
               file,
               dateOfBirth: userCompletedDataForm.dateOfBirth,
               gender: userCompletedDataForm.gender,
               interests: userCompletedDataForm.interests,
             })
             .subscribe({
-              next: () => {
+              next: (response) => {
+                this.isLoadingButton = false;
+                this.cacheAvatarService.setDataAvatarCache(response);
                 this.router.navigateByUrl('home/user-location');
               },
               error: (error) => {
+                this.isLoadingButton = true;
                 console.log('Erro ao enviar mensagem:', error);
+                this.modalErrorRequest.openDialog();
               },
               complete: () => {
                 this.isLoadingButton = false;

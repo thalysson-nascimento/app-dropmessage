@@ -128,6 +128,7 @@
         formControlName="interests"
       />
       <button
+        class="buttom-create-avatar"
         appButtonStyle
         [buttonType]="'primary'"
         type="submit"
@@ -135,7 +136,13 @@
         [disabled]="avatarAndCompletedFormGroup.invalid"
         [disabledButton]="avatarAndCompletedFormGroup.invalid"
       >
-        completar perfil
+        <span *ngIf="!isLoadingButton">completar perfil</span>
+        <div *ngIf="isLoadingButton" class="bouncing-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
       </button>
     </form>
   </div>
@@ -202,6 +209,36 @@
       (click)="modalPhotoNotFound.closeDialog(); openBottomSheet()"
     >
       Tirar foto
+    </button>
+  </div>
+</app-modal>
+
+<app-modal #modalErrorRequest>
+  <div class="contain-title">
+    <p class="title-error">Ops, error de requisição!</p>
+  </div>
+
+  <div class="contain-image">
+    <img
+      src="assets/icon-static/take-photo.svg"
+      class="image-take-foto-profile"
+      alt=""
+    />
+  </div>
+
+  <div class="contain-description-error">
+    <p class="description-error">
+      Ops no momento houve um erro de requisição. Tente novamente mais tarde.
+    </p>
+  </div>
+
+  <div class="contain-button-system-unavailable">
+    <button
+      appButtonStyle
+      [buttonType]="'secondary'"
+      (click)="modalErrorRequest.closeDialog()"
+    >
+      Tentar novamente
     </button>
   </div>
 </app-modal>

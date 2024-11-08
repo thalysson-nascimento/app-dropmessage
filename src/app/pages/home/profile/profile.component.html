@@ -9,12 +9,12 @@
   </div>
 
   <div class="contain-avatar">
-    <img [src]="userData.avatar" class="avatar" alt="" />
+    <img [src]="avatar.image" class="avatar" alt="" />
   </div>
 
   <div class="contain-name-email">
-    <p class="name">{{ userData.name }}</p>
-    <p class="email">{{ userData.email }}</p>
+    <p class="name">{{ avatar.user.name }}</p>
+    <p class="email">{{ avatar.user.email }}</p>
   </div>
 
   <div class="contain-button">
@@ -73,7 +73,7 @@
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
     </li>
-    <li class="action-timer" (click)="goToSign()">
+    <li class="action-timer" (click)="logout()">
       <div class="contain-icon-and-description">
         <div>
           <p>Sair</p>
