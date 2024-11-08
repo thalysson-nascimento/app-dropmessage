@@ -30,19 +30,16 @@ import { NgxMaskDirective } from 'ngx-mask';
 import { Subject, delay, timer } from 'rxjs';
 import { currentEnvironment } from '../../../../environment.config';
 import { ChoosePhotoGalleryOrCameraComponent } from '../../../shared/component/choose-photo-gallery-or-camera/choose-photo-gallery-or-camera.component';
-import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { ListStyleDirective } from '../../../shared/directives/list-style/list-style.directive';
-import { CreateAvatarAndDataComplete } from '../../../shared/interface/create-avatar-and-data-complete.interface';
+import { AboutMe } from '../../../shared/interface/about-me.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { CreateAvatarService } from '../../../shared/service/create-avatar/create-avatar.service';
-// import { DataCompletedService } from '../../../shared/service/data-completed/data-completed.service';
 import { dateOfBirthValidator } from '../../../shared/validators/dateOfBirthValidator.validator';
 
 const SharedComponents = [
-  LogoDropmessageComponent,
   InputCustomDirective,
   ButtonStyleDirective,
   ModalComponent,
@@ -51,14 +48,6 @@ const SharedComponents = [
 ];
 
 const CoreModules = [CommonModule, ReactiveFormsModule];
-
-interface LottieAnimationOptions {
-  pathIconAnimation: string;
-  idElement: string;
-  loop?: boolean;
-  autoplay?: boolean;
-  onClick?: boolean;
-}
 
 @Component({
   selector: 'app-create-avatar',
@@ -274,7 +263,7 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
         .then((blob) => {
           const file = new File([blob], 'image.png', { type: 'image/png' });
           const userCompletedDataForm =
-            this.avatarAndCompletedFormGroup.getRawValue() as CreateAvatarAndDataComplete;
+            this.avatarAndCompletedFormGroup.getRawValue() as AboutMe;
 
           this.createAvatarService
             .avatar({

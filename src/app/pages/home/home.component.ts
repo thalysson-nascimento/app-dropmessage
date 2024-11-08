@@ -3,7 +3,6 @@ import { HttpBackend } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { currentEnvironment } from '../../../environment.config';
-import { ButtonStyleDirective } from '../../shared/directives/button-style/button-style.directive';
 import { MatchDataDetailsService } from '../../shared/service/match-details/match-data-details.service';
 import { PostMock } from '../../shared/service/post/post.mock';
 import { PostMessageService } from '../../shared/service/post/post.service';
@@ -11,12 +10,11 @@ import { SocketMatchService } from '../../shared/service/socket-match/socket-mat
 import { DevelopmentRequestHttpBackend } from '../../shared/utils/developmentRequestHttpBackend/developmentRequestHttpBackend';
 
 const environmentMock = currentEnvironment.mock;
-const SharedComponents = [ButtonStyleDirective];
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterModule, CommonModule, ...SharedComponents],
+  imports: [RouterModule, CommonModule],
   providers: [
     environmentMock
       ? [{ provide: HttpBackend, useClass: DevelopmentRequestHttpBackend }]
@@ -48,7 +46,6 @@ export class HomeComponent implements OnInit {
       next: (response) => {
         this.matchDataDetailsService.setMatchedDetails(response);
         this.router.navigateByUrl('home/match-notification');
-        console.log('novo ==>>', response);
       },
       error: () => {},
     });

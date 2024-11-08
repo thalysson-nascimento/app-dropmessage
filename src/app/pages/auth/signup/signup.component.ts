@@ -10,17 +10,12 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { currentEnvironment } from '../../../../environment.config';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
-import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { CreateAccount } from '../../../shared/interface/create-account.interface';
 import { CreateAccountService } from '../../../shared/service/create-account/create-account.service';
 
-const SharedComponents = [
-  LogoDropmessageComponent,
-  InputCustomDirective,
-  ButtonStyleDirective,
-];
+const SharedComponents = [InputCustomDirective, ButtonStyleDirective];
 
 const CoreModule = [ReactiveFormsModule, CommonModule];
 

@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
@@ -28,16 +28,12 @@ const SharedComponents = [
   ModalComponent,
 ];
 
-const CoreModule = [ReactiveFormsModule, NgIf];
+const CoreModule = [ReactiveFormsModule, CommonModule];
 
 @Component({
   selector: 'app-sign',
   standalone: true,
-  imports: [
-    ...SharedComponents,
-    ...CoreModule,
-    BottomSheetErrorRequestComponent,
-  ],
+  imports: [...SharedComponents, ...CoreModule],
   templateUrl: './sign.component.html',
   styleUrls: ['./sign.component.scss'],
 })

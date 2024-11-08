@@ -21,6 +21,6 @@ export class ListSettingsComponent implements OnInit {
 
   goToSign() {
     this.tokenStorageSecurityRequestService.deleteToken();
-    this.router.navigate(['auth/sign']); // Redireciona para a rota signup
+    this.router.navigate(['auth/sign']);
   }
 }

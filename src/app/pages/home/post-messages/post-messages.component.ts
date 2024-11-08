@@ -21,8 +21,6 @@ import { Post } from '../../../shared/interface/post';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 import { PostMessageService } from '../../../shared/service/post/post.service';
-import { UserDataCacheService } from '../../../shared/service/user-cache/user-data-cache.service';
-import { UserDataService } from '../../../shared/service/user-data/user-data.service';
 
 register();
 
@@ -58,8 +56,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private lottieAnimationIconService: LottieAnimationIconService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private userDataService: UserDataService,
-    private userDataCacheService: UserDataCacheService,
     private cacheAvatarService: CacheAvatarService
   ) {}
 
@@ -117,7 +113,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
             const activeIndex = this.mySwiper.activeIndex;
 
             if (activeIndex > 0 && activeIndex <= this.posts.length) {
-              // Apenas remove o post se o slide não foi trocado pelo clique no botão de like
               if (!this.likeButtonClicked) {
                 const postToRemove = this.posts[activeIndex - 1];
 
@@ -125,7 +120,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
                   this.removePostFromSwiper(postToRemove);
                 }
               }
-              // Reseta a variável após o slide mudar
               this.likeButtonClicked = false;
             }
           });
@@ -174,7 +168,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
         this.totalPosts += response.data.length;
         this.posts = [...this.posts, ...response.data];
         this.isLoaded = true;
-        this.loadIconHeart(this.posts); // verificar se vai desativar
+        this.loadIconHeart(this.posts);
 
         if (this.currentPage === 1) {
           setTimeout(() => {
@@ -213,7 +207,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       next: (response) => {
         if (response.data.length > 0) {
           this.posts = [...this.posts, ...response.data];
-          this.mySwiper.update(); // Atualiza o Swiper com os novos slides
+          this.mySwiper.update();
         } else {
           console.log('Não há mais posts para carregar.');
         }
@@ -248,8 +242,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (postIndex !== -1 && post.id !== 'no-matches') {
       this.dislikePostMessage(post);
-      this.posts.splice(postIndex, 1); // Remove o post do array
-      this.mySwiper.removeSlide(postIndex); // Remove o slide correspondente
+      this.posts.splice(postIndex, 1);
+      this.mySwiper.removeSlide(postIndex);
       this.mySwiper.update();
     } else {
       console.log('Post não encontrado ou é o "no-matches"');
@@ -277,8 +271,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     const postIndex = this.posts.findIndex((p) => p.id === post.id);
 
     if (postIndex !== -1 && post.id !== 'no-matches') {
-      this.posts.splice(postIndex, 1); // Remove o post do array
-      this.mySwiper.removeSlide(postIndex); // Remove o slide correspondente
+      this.posts.splice(postIndex, 1);
+      this.mySwiper.removeSlide(postIndex);
       this.mySwiper.update();
     } else {
       console.log('Post não encontrado ou é o "no-matches"');
@@ -315,31 +309,5 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('Erro ao carregar avatar do cache:', error);
       },
     });
-    // this.userDataCacheService
-    //   .getUserDataCache()
-    //   .pipe(take(1))
-    //   .subscribe({
-    //     next: (cachedData) => {
-    //       if (cachedData) {
-    //         this.userData = cachedData;
-    //         console.log('Dados carregados do cache:', this.userData);
-    //       } else {
-    //         // Caso o cache esteja vazio, faz a chamada à API para carregar os dados
-    //         this.userDataService.userData().subscribe({
-    //           next: (response) => {
-    //             this.userData = response;
-    //             this.userDataCacheService.setUserDataCache(response);
-    //             console.log('Dados carregados da API:', this.userData);
-    //           },
-    //           error: (error) => {
-    //             console.log('Erro ao carregar dados do usuário:', error);
-    //           },
-    //         });
-    //       }
-    //     },
-    //     error: (error) => {
-    //       console.log('Erro ao acessar o cache de dados do usuário:', error);
-    //     },
-    //   });
   }
 }

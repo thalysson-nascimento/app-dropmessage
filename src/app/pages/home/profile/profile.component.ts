@@ -5,7 +5,6 @@ import { ButtonStyleDirective } from '../../../shared/directives/button-style/bu
 import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
-import { UserDataCacheService } from '../../../shared/service/user-cache/user-data-cache.service';
 
 const SharedComponent = [PostLikeStateComponent, ButtonStyleDirective];
 
@@ -21,7 +20,6 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private userDataCacheService: UserDataCacheService,
     private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
     private cacheAvatarService: CacheAvatarService
   ) {}
@@ -38,14 +36,6 @@ export class ProfileComponent implements OnInit {
         }
       },
     });
-    // this.userDataCacheService.getUserDataCache().subscribe({
-    //   next: (response) => {
-    //     if (response) {
-    //       this.userData = response;
-    //       console.log('this.userData', this.userData);
-    //     }
-    //   },
-    // });
   }
 
   goToPostMessage() {
@@ -55,7 +45,7 @@ export class ProfileComponent implements OnInit {
   logout() {
     this.tokenStorageSecurityRequestService.deleteToken();
     this.cacheAvatarService.resetDataAvatarCache();
-    this.router.navigateByUrl('auth/sign'); // Redireciona para a rota signup
+    this.router.navigateByUrl('auth/sign');
   }
 
   goToPrivecePolice() {

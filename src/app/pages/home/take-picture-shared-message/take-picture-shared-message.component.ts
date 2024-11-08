@@ -229,21 +229,6 @@ export class TakePictureSharedMessageComponent
   }
 
   postMessagePhoto(imageCamera: any) {
-    // const file = imageCamera;
-    // const expirationTimer = this.expirationTimer;
-
-    // this.sharedPostMessageService
-    //   .postMessage({ file, expirationTimer })
-    //   .subscribe({
-    //     next: () => {
-    //       this.disabledButton = true;
-    //       this.router.navigate(['/home/send-message-success']);
-    //     },
-    //     error: (error) => {
-    //       console.log('Erro ao enviar mensagem:', error);
-    //       this.disabledButton = true;
-    //     },
-    //   });
     if (imageCamera) {
       fetch(imageCamera)
         .then((res) => res.blob())

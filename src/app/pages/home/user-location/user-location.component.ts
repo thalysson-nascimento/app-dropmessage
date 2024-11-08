@@ -53,7 +53,6 @@ export class UserLocationComponent implements OnInit {
     this.checkLocationPermission();
   }
 
-  // Função para verificar se a permissão de localização já foi concedida
   async checkLocationPermission() {
     const permissionStatus = await Geolocation.checkPermissions();
 
@@ -67,12 +66,11 @@ export class UserLocationComponent implements OnInit {
   }
 
   async handlePermissionRequest() {
-    // Solicita a permissão para o usuário
     const permissionStatus = await Geolocation.requestPermissions();
 
     if (permissionStatus.location === 'granted') {
-      this.modalConfirmePermissionLocation.closeDialog(); // Fecha o modal
-      this.loadGeoLocation(); // Carrega a geolocalização
+      this.modalConfirmePermissionLocation.closeDialog();
+      this.loadGeoLocation();
     } else {
       this.errorMessage = 'Permissão de localização negada.';
       this.modalErrorUserLocation.openDialog();

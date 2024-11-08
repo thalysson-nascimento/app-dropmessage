@@ -16,7 +16,7 @@ export const HomeRouting: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'post-messages', // Redireciona para sign ao acessar "auth/"
+        redirectTo: 'post-messages',
         pathMatch: 'full',
       },
       {
