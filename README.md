@@ -41,3 +41,5 @@ colocar no angular.json
 "options": {
 "proxyConfig": "proxy.conf.json"
 },
+
+./gradlew assembleDebug

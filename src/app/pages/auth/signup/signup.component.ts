@@ -112,4 +112,8 @@ export class SignupComponent implements OnInit {
       },
     });
   }
+
+  goToPrivecePolice() {
+    this.router.navigateByUrl('auth/privacy-police');
+  }
 }

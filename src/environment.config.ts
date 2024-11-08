@@ -6,15 +6,17 @@ interface TypeEnveronment {
   baseURL: string;
   pathURL: string;
   mock: boolean;
+  apiKeyGeoLocationCageData: string;
 }
 
 export const environmentConfig: Record<Environment, TypeEnveronment> = {
   production: {
-    baseURL: 'https://cbcf4b115c50c003d3dfcb08bb8a0a5d.serveo.net',
+    baseURL: 'https://fd67372b656e4bdb3efcd3e938114ca2.serveo.net',
     pathURL: '/api/v1',
     production: true,
     mock: false,
-    baseUrlSocket: '',
+    baseUrlSocket: 'https://fd67372b656e4bdb3efcd3e938114ca2.serveo.net',
+    apiKeyGeoLocationCageData: 'ea70a7a8d9f34c4894602cc11e0407ae',
   },
   mock: {
     baseURL: 'https://mock.com',
@@ -22,13 +24,15 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
     production: false,
     mock: true,
     baseUrlSocket: '',
+    apiKeyGeoLocationCageData: 'ea70a7a8d9f34c4894602cc11e0407ae',
   },
   development: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'https://fd67372b656e4bdb3efcd3e938114ca2.serveo.net',
     pathURL: '/api/dev',
     production: false,
     mock: false,
-    baseUrlSocket: 'http://localhost:3000',
+    baseUrlSocket: 'https://fd67372b656e4bdb3efcd3e938114ca2.serveo.net',
+    apiKeyGeoLocationCageData: 'ea70a7a8d9f34c4894602cc11e0407ae',
   },
 };
 

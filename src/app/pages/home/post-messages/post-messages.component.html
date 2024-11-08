@@ -1,7 +1,7 @@
 <div class="container">
   <div class="header">
     <div class="title-app">
-      <app-logo-dropmessage></app-logo-dropmessage>
+      <app-logo-dropmessage [fontSize]="'1rem'"></app-logo-dropmessage>
     </div>
     <div class="actions">
       <div
@@ -14,7 +14,7 @@
         <img
           (click)="goToListSettings()"
           class="user-avatar"
-          [src]="userData.avatar"
+          [src]="dataAvatar.image"
           alt=""
         />
       </div>

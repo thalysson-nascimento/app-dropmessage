@@ -16,6 +16,7 @@ import { ModalComponent } from '../../../shared/component/modal/modal.component'
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { Sign } from '../../../shared/interface/sign.interface';
+import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { LoginService } from '../../../shared/service/sign/sign.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 
@@ -53,7 +54,8 @@ export class SignComponent implements OnInit {
     private formBuilder: FormBuilder,
     private loginService: LoginService,
     private bottomSheet: MatBottomSheet,
-    private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService
+    private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
+    private cacheAvatarService: CacheAvatarService
   ) {}
 
   ngOnInit(): void {
@@ -79,15 +81,18 @@ export class SignComponent implements OnInit {
 
       this.loginService.login(login).subscribe({
         next: (response) => {
-          console.log(response);
           this.isLoadingButton = false;
+          this.tokenStorageSecurityRequestService.saveToken(response.token);
+          this.cacheAvatarService.setDataAvatarCache(response.avatar);
 
-          if (!response.userData.isUploadAvatar) {
-            this.tokenStorageSecurityRequestService.saveToken(response.token);
-            return this.router.navigate(['home/create-avatar']);
+          if (!response.userVerificationData.isUploadAvatar) {
+            return this.router.navigateByUrl('home/create-avatar');
           }
 
-          this.tokenStorageSecurityRequestService.saveToken(response.token);
+          if (!response.userVerificationData.validatorLocation) {
+            return this.router.navigateByUrl('home/user-location');
+          }
+
           return this.router.navigateByUrl('home/post-messages');
         },
         error: (responseError: HttpErrorResponse) => {
