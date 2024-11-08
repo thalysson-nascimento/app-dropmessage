@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { AuthComponent } from './auth.component';
-import { DataCompleteComponent } from './data-complete/data-complete.component';
 import { InformationUserRegistredComponent } from './information-user-registred/information-user-registred.component';
 import { PrivacyPoliceComponent } from './privacy-police/privacy-police.component';
 import { SignComponent } from './sign/sign.component';
@@ -24,10 +23,6 @@ export const authRouting: Routes = [
       {
         path: 'auth/signup',
         component: SignupComponent,
-      },
-      {
-        path: 'auth/data-complete',
-        component: DataCompleteComponent,
       },
       {
         path: 'auth/information-user-registred',
