@@ -12,10 +12,11 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideNgxMask } from 'ngx-mask';
 import { Socket, io } from 'socket.io-client';
+import { currentEnvironment } from '../environment.config';
 import { routes } from './app.routes';
 import { tokenStorageSecurityInterceptor } from './shared/interceptors/token-storage-security-interceptor/token-storage-security.interceptor';
 
-export const SOCKET_IO_URL = 'http://localhost:3000';
+export const SOCKET_IO_URL = currentEnvironment.baseUrlSocket;
 export const socket: Socket = io(SOCKET_IO_URL, {
   transports: ['websocket', 'polling'],
   reconnection: true,

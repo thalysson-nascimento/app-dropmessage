@@ -39,6 +39,8 @@ export class UserLocationComponent implements OnInit {
   errorMessage: string = 'error';
 
   @ViewChild('modalErrorUserLocation') modalErrorUserLocation!: ModalComponent;
+  @ViewChild('modalConfirmePermissionLocation')
+  modalConfirmePermissionLocation!: ModalComponent;
 
   constructor(
     private geoLocationService: GeolocationService,
@@ -48,8 +50,32 @@ export class UserLocationComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.loadGeoLocation();
+    this.checkLocationPermission();
+  }
+
+  // Função para verificar se a permissão de localização já foi concedida
+  async checkLocationPermission() {
+    const permissionStatus = await Geolocation.checkPermissions();
+
+    if (permissionStatus.location === 'granted') {
+      if (isPlatformBrowser(this.platformId)) {
+        this.loadGeoLocation();
+      }
+    } else {
+      this.modalConfirmePermissionLocation.openDialog();
+    }
+  }
+
+  async handlePermissionRequest() {
+    // Solicita a permissão para o usuário
+    const permissionStatus = await Geolocation.requestPermissions();
+
+    if (permissionStatus.location === 'granted') {
+      this.modalConfirmePermissionLocation.closeDialog(); // Fecha o modal
+      this.loadGeoLocation(); // Carrega a geolocalização
+    } else {
+      this.errorMessage = 'Permissão de localização negada.';
+      this.modalErrorUserLocation.openDialog();
     }
   }
 
@@ -71,11 +97,13 @@ export class UserLocationComponent implements OnInit {
             this.city = response.results[0].components.city;
             this.stateCode = response.results[0].components.state_code;
           },
-          error: (error) => {
+          error: (responseError) => {
             this.isLoadingButton = false;
             this.isLoadingLocation = false;
             this.buttonDisalbled = false;
-            console.log(error);
+            this.errorMessage = responseError.error.message.message;
+            this.modalErrorUserLocation.openDialog();
+            console.log(responseError);
           },
           complete: () => {
             this.isLoadingButton = false;
@@ -83,8 +111,10 @@ export class UserLocationComponent implements OnInit {
             this.buttonDisalbled = false;
           },
         });
-    } catch (error) {
-      return `${error}: erro ao obter a localização do usuário.`;
+    } catch (responseError: any) {
+      this.errorMessage = `error do try cacth: ${responseError}`;
+      this.modalErrorUserLocation.openDialog();
+      return `${responseError}: erro ao obter a localização do usuário.`;
     }
   }
 

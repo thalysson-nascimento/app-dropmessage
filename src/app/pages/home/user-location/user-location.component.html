@@ -68,3 +68,33 @@
     </button>
   </div>
 </app-modal>
+
+<app-modal #modalConfirmePermissionLocation>
+  <div class="contain-title">
+    <p class="title-error">Ops, error de permissão de localização!</p>
+  </div>
+
+  <div class="contain-image">
+    <img
+      src="assets/icon-static/error-request.svg"
+      class="image-error-request"
+      alt=""
+    />
+  </div>
+
+  <div class="contain-description-error">
+    <p class="description-error">
+      Para continuar você precisa conceder permissão de localização.
+    </p>
+  </div>
+
+  <div class="contain-button-system-unavailable">
+    <button
+      appButtonStyle
+      [buttonType]="'secondary'"
+      (click)="handlePermissionRequest()"
+    >
+      Conceder permissão
+    </button>
+  </div>
+</app-modal>
