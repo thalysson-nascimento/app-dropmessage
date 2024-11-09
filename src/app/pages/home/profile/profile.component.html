@@ -8,13 +8,17 @@
     />
   </div>
 
-  <div class="contain-avatar">
-    <img [src]="avatar.image" class="avatar" alt="" />
-  </div>
+  <div *ngIf="avatar">
+    <div class="contain-avatar">
+      <div>
+        <img [src]="avatar.image" class="avatar" alt="" />
+      </div>
+    </div>
 
-  <div class="contain-name-email">
-    <p class="name">{{ avatar.user.name }}</p>
-    <p class="email">{{ avatar.user.email }}</p>
+    <div class="contain-name-email">
+      <p class="name">{{ avatar.user.name }}</p>
+      <p class="email">{{ avatar.user.email }}</p>
+    </div>
   </div>
 
   <div class="contain-button">

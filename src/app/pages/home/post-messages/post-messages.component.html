@@ -10,7 +10,7 @@
         class="lottie-icon-camera"
         style="width: 67px; height: 67px"
       ></div>
-      <div>
+      <div *ngIf="dataAvatar">
         <img
           (click)="goToListSettings()"
           class="user-avatar"

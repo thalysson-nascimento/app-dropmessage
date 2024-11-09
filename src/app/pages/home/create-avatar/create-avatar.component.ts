@@ -275,7 +275,8 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
             .subscribe({
               next: (response) => {
                 this.isLoadingButton = false;
-                this.cacheAvatarService.setDataAvatarCache(response);
+                // this.cacheAvatarService.setDataAvatarCache(response);
+                this.cacheAvatarService.setAvatarCachePreferences(response);
                 this.router.navigateByUrl('home/user-location');
               },
               error: (error) => {

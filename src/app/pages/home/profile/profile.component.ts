@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PostLikeStateComponent } from '../../../shared/component/post-like-state/post-like-state.component';
@@ -6,6 +7,7 @@ import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 
+const CoreModule = [NgIf];
 const SharedComponent = [PostLikeStateComponent, ButtonStyleDirective];
 
 @Component({
@@ -13,7 +15,7 @@ const SharedComponent = [PostLikeStateComponent, ButtonStyleDirective];
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
   standalone: true,
-  imports: [...SharedComponent],
+  imports: [...SharedComponent, ...CoreModule],
 })
 export class ProfileComponent implements OnInit {
   avatar!: AvatarSuccess;
@@ -29,11 +31,16 @@ export class ProfileComponent implements OnInit {
   }
 
   loadCacheAvatar() {
-    this.cacheAvatarService.getDataAvatarCache().subscribe({
+    this.cacheAvatarService.getAvatarCachePreferences().subscribe({
       next: (response) => {
         if (response) {
           this.avatar = response;
+        } else {
+          console.log('Avatar não encontrado no cache.');
         }
+      },
+      error: (error) => {
+        console.log('Erro ao carregar avatar do cache:', error);
       },
     });
   }
@@ -44,7 +51,7 @@ export class ProfileComponent implements OnInit {
 
   logout() {
     this.tokenStorageSecurityRequestService.deleteToken();
-    this.cacheAvatarService.resetDataAvatarCache();
+    this.cacheAvatarService.resetAvatarCachePreferences();
     this.router.navigateByUrl('auth/sign');
   }
 

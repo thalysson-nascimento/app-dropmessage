@@ -299,13 +299,13 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   loadAvatarCache() {
-    this.cacheAvatarService.getDataAvatarCache().subscribe({
+    this.cacheAvatarService.getAvatarCachePreferences().subscribe({
       next: (response) => {
         if (response) {
-          return (this.dataAvatar = response);
+          this.dataAvatar = response;
+        } else {
+          console.log('Avatar não encontrado no cache.');
         }
-
-        return console.log('Avatar carregado do cache:', response);
       },
       error: (error) => {
         console.log('Erro ao carregar avatar do cache:', error);
