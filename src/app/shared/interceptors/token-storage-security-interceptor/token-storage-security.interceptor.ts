@@ -6,6 +6,7 @@ import {
 } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { TokenStorageSecurityRequestService } from '../../service/token-storage-security-request/token-storage-security-request.service';
 
 export const tokenStorageSecurityInterceptor: HttpInterceptorFn = (
@@ -13,16 +14,18 @@ export const tokenStorageSecurityInterceptor: HttpInterceptorFn = (
   next: HttpHandlerFn
 ): Observable<HttpEvent<any>> => {
   const tokenStorageService = inject(TokenStorageSecurityRequestService);
-  const token = tokenStorageService.getToken();
 
-  if (token) {
-    console.log('Token existe:', token);
-    const authReq = request.clone({
-      headers: request.headers.set('Authorization', `Bearer ${token}`),
-    });
-    return next(authReq);
-  }
-
-  console.log('Token não existe');
-  return next(request);
+  return tokenStorageService.getToken().pipe(
+    switchMap((token) => {
+      if (token) {
+        const authReq = request.clone({
+          headers: request.headers.set('Authorization', `Bearer ${token}`),
+        });
+        return next(authReq);
+      } else {
+        console.log('Token não existe');
+        return next(request);
+      }
+    })
+  );
 };

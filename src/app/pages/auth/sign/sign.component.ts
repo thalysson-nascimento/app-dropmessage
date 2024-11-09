@@ -79,7 +79,8 @@ export class SignComponent implements OnInit {
         next: (response) => {
           this.isLoadingButton = false;
           this.tokenStorageSecurityRequestService.saveToken(response.token);
-          this.cacheAvatarService.setDataAvatarCache(response.avatar);
+
+          this.cacheAvatarService.setAvatarCachePreferences(response.avatar);
 
           if (!response.userVerificationData.isUploadAvatar) {
             return this.router.navigateByUrl('home/create-avatar');

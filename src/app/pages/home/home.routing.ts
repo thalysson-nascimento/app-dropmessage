@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
+import { AuthHomeGuard } from '../../shared/guard/auth-home/auth-home.guard';
 import { CreateAvatarComponent } from './create-avatar/create-avatar.component';
 import { HomeComponent } from './home.component';
-import { ListSettingsComponent } from './list-settings/list-settings.component';
 import { MatchComponent } from './match/match.component';
 import { PostMessagesComponent } from './post-messages/post-messages.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -13,6 +13,7 @@ export const HomeRouting: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    canActivate: [AuthHomeGuard],
     children: [
       {
         path: '',
@@ -22,10 +23,6 @@ export const HomeRouting: Routes = [
       {
         path: 'post-messages',
         component: PostMessagesComponent,
-      },
-      {
-        path: 'list-settings',
-        component: ListSettingsComponent,
       },
       {
         path: 'take-picture-shared-message',

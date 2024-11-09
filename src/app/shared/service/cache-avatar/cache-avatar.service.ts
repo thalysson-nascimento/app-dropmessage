@@ -1,25 +1,32 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Preferences } from '@capacitor/preferences';
+import { Observable, from, map } from 'rxjs';
 import { AvatarSuccess } from '../../interface/avatar.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CacheAvatarService {
-  private behaviorSubjectAvatarCache$: BehaviorSubject<AvatarSuccess | null> =
-    new BehaviorSubject<AvatarSuccess | null>(null);
-
   constructor() {}
 
-  setDataAvatarCache(avatar: AvatarSuccess | null) {
-    this.behaviorSubjectAvatarCache$.next(avatar);
+  setAvatarCachePreferences(avatar: AvatarSuccess): Observable<void> {
+    const setPreference = Preferences.set({
+      key: 'avatarCachePreferences',
+      value: JSON.stringify(avatar),
+    });
+
+    return from(setPreference);
   }
 
-  getDataAvatarCache(): Observable<AvatarSuccess | null> {
-    return this.behaviorSubjectAvatarCache$.asObservable();
+  getAvatarCachePreferences(): Observable<AvatarSuccess> {
+    return from(Preferences.get({ key: 'avatarCachePreferences' })).pipe(
+      map((result) => {
+        return result.value ? JSON.parse(result.value) : null;
+      })
+    );
   }
 
-  resetDataAvatarCache() {
-    this.behaviorSubjectAvatarCache$.next(null);
+  resetAvatarCachePreferences(): Observable<void> {
+    return from(Preferences.remove({ key: 'avatarCachePreferences' }));
   }
 }

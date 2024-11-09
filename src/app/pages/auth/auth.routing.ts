@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from '../../shared/guard/auth/auth.guard';
 import { AuthComponent } from './auth.component';
 import { InformationUserRegistredComponent } from './information-user-registred/information-user-registred.component';
 import { PrivacyPoliceComponent } from './privacy-police/privacy-police.component';
@@ -10,6 +11,7 @@ export const authRouting: Routes = [
   {
     path: '',
     component: AuthComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
