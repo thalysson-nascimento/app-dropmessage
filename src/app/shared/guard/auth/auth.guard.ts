@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
+import { Observable, map } from 'rxjs';
 import { TokenStorageSecurityRequestService } from '../../service/token-storage-security-request/token-storage-security-request.service';
 
 @Injectable({
@@ -11,12 +12,16 @@ export class AuthGuard implements CanActivate {
     private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService
   ) {}
 
-  canActivate(): boolean {
-    if (this.tokenStorageSecurityRequestService.isAuthenticated()) {
-      // Redireciona para a página "home/post-message" se o usuário já estiver autenticado
-      this.router.navigate(['home/post-messages']);
-      return false;
-    }
-    return true; // Permite acesso à rota "auth/sign" se o usuário não estiver autenticado
+  canActivate(): Observable<boolean> {
+    return this.tokenStorageSecurityRequestService.isAuthenticated().pipe(
+      map((isAuthenticated) => {
+        if (isAuthenticated) {
+          // Redireciona para a página "home/post-messages" se o usuário já estiver autenticado
+          this.router.navigate(['home/post-messages']);
+          return false; // Bloqueia o acesso à rota de autenticação
+        }
+        return true; // Permite acesso à rota "auth/sign" se o usuário não estiver autenticado
+      })
+    );
   }
 }

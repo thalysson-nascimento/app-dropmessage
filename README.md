@@ -43,3 +43,5 @@ colocar no angular.json
 },
 
 ./gradlew assembleDebug
+
+sudo kill -9 `sudo lsof -t -i:4200`
