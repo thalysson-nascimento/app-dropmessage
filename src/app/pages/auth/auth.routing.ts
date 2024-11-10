@@ -1,42 +1,46 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from '../../shared/guard/auth/auth.guard';
-import { AuthComponent } from './auth.component';
-import { InformationUserRegistredComponent } from './information-user-registred/information-user-registred.component';
-import { PrivacyPoliceComponent } from './privacy-police/privacy-police.component';
-import { SignComponent } from './sign/sign.component';
-import { SignupComponent } from './signup/signup.component';
-import { TesteComponent } from './teste/teste.component';
 
 export const authRouting: Routes = [
   {
     path: '',
-    component: AuthComponent,
+    loadComponent: () =>
+      import('./auth.component').then((m) => m.AuthComponent),
     canActivate: [AuthGuard],
     children: [
       {
         path: '',
-        redirectTo: 'auth/sign', // Redireciona para sign ao acessar "auth/"
+        redirectTo: 'auth/sign',
         pathMatch: 'full',
       },
       {
         path: 'auth/sign',
-        component: SignComponent,
+        loadComponent: () =>
+          import('./sign/sign.component').then((m) => m.SignComponent),
       },
       {
         path: 'auth/signup',
-        component: SignupComponent,
+        loadComponent: () =>
+          import('./signup/signup.component').then((m) => m.SignupComponent),
       },
       {
         path: 'auth/information-user-registred',
-        component: InformationUserRegistredComponent,
+        loadComponent: () =>
+          import(
+            './information-user-registred/information-user-registred.component'
+          ).then((m) => m.InformationUserRegistredComponent),
       },
       {
         path: 'auth/teste',
-        component: TesteComponent,
+        loadComponent: () =>
+          import('./teste/teste.component').then((m) => m.TesteComponent),
       },
       {
         path: 'auth/privacy-police',
-        component: PrivacyPoliceComponent,
+        loadComponent: () =>
+          import('./privacy-police/privacy-police.component').then(
+            (m) => m.PrivacyPoliceComponent
+          ),
       },
     ],
   },
