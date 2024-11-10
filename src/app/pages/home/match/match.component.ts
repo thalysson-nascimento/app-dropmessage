@@ -25,12 +25,15 @@ export class MatchComponent implements OnInit {
     this.matchDataDetailsService
       .getMatchedDetails()
       .subscribe((response: MatchDetails[]) => {
+        console.log('========================>', response);
         this.initiatorImage = response[0].avatar;
         this.recipientImage = response[1].avatar;
       });
   }
 
-  goToBack() {}
+  goToBack() {
+    window.history.back();
+  }
 
   goToProfile() {}
 }

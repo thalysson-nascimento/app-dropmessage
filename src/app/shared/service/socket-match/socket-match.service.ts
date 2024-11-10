@@ -9,7 +9,7 @@ export class SocketMatchService {
   constructor(@Inject('SOCKET_IO') private socket: Socket) {}
 
   // Entra na sala com o ID do usuário
-  joinRoom(userId: string) {
+  joinRoom(userId: string | undefined) {
     this.socket.emit('join', userId);
   }
 

@@ -4,13 +4,6 @@
   display: flex;
   flex-direction: column;
   position: relative; // Para posicionar os filhos de forma absoluta
-
-  opacity: 0; // Inicialmente invisível
-  transition: opacity 1s ease-in-out; // Transição suave para opacidade
-
-  &.fade-in {
-    opacity: 1; // Transição para visível
-  }
 }
 
 .contain-image {
