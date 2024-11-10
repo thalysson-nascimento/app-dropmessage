@@ -11,11 +11,11 @@ interface TypeEnveronment {
 
 export const environmentConfig: Record<Environment, TypeEnveronment> = {
   production: {
-    baseURL: 'https://7890ee939bcf28e0fc2cba5608e9fa00.serveo.net',
+    baseURL: 'https://508871edc01c810b31aaea72bcf45c41.serveo.net',
     pathURL: '/api/v1',
     production: true,
     mock: false,
-    baseUrlSocket: 'https://7890ee939bcf28e0fc2cba5608e9fa00.serveo.net',
+    baseUrlSocket: 'https://508871edc01c810b31aaea72bcf45c41.serveo.net',
     apiKeyGeoLocationCageData: 'ea70a7a8d9f34c4894602cc11e0407ae',
   },
   mock: {
@@ -27,11 +27,11 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
     apiKeyGeoLocationCageData: 'ea70a7a8d9f34c4894602cc11e0407ae',
   },
   development: {
-    baseURL: 'https://7890ee939bcf28e0fc2cba5608e9fa00.serveo.net',
+    baseURL: 'https://508871edc01c810b31aaea72bcf45c41.serveo.net',
     pathURL: '/api/dev',
     production: false,
     mock: false,
-    baseUrlSocket: 'https://7890ee939bcf28e0fc2cba5608e9fa00.serveo.net',
+    baseUrlSocket: 'https://508871edc01c810b31aaea72bcf45c41.serveo.net',
     apiKeyGeoLocationCageData: 'ea70a7a8d9f34c4894602cc11e0407ae',
   },
 };

@@ -58,6 +58,13 @@ export const HomeRouting: Routes = [
             (m) => m.UserLocationComponent
           ),
       },
+      {
+        path: 'notification',
+        loadComponent: () =>
+          import('./notification/notification.component').then(
+            (m) => m.NotificationComponent
+          ),
+      },
     ],
   },
 ];

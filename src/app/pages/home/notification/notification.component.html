@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="header">
+    <img
+      src="assets/icon-static/arrow-left.svg"
+      style="width: 24px; height: 24px"
+      alt=""
+      (click)="goToProfile()"
+    />
+  </div>
+
+  <h1 class="title">Notificação</h1>
+  <p class="subtitle">Veja quem curtiu suas postagens</p>
+
+  <hr class="line" />
+
+  <div class="contain-shimmer" *ngIf="isLoading">
+    <app-load-shimmer [height]="'10rem'"></app-load-shimmer>
+    <app-load-shimmer [height]="'10rem'"></app-load-shimmer>
+  </div>
+
+  <ul class="list-notification" *ngFor="let notification of notifications">
+    <li class="notification">
+      <div class="contain-description">
+        <img [src]="notification.user.avatar" class="avatar" alt="" />
+        <p class="description-notification">
+          <span class="text-highlight">{{ notification.user.name }}</span>
+          curtiu sua postagem
+          <span class="text-highlight">{{ notification.createdAt }}</span>
+        </p>
+      </div>
+      <div class="contain-post-message">
+        <img [src]="notification.post.image" class="post-message" alt="" />
+      </div>
+    </li>
+  </ul>
+</div>
