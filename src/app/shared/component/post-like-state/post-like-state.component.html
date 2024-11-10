@@ -1,14 +1,16 @@
-<div class="contain-like-state">
+<app-load-shimmer [height]="'5.5rem'" *ngIf="isLoading"></app-load-shimmer>
+
+<div class="contain-like-state" *ngIf="!isLoading">
   <div class="contain-data">
-    <p>0</p>
+    <p>{{ likePreferences.totalPosts }}</p>
     <span>total de post</span>
   </div>
   <div class="contain-data">
-    <p>0</p>
-    <span>total de curtidas</span>
+    <p>{{ likePreferences.totalReceivedLikes }}</p>
+    <span>curtidas recebidas</span>
   </div>
   <div class="contain-data">
-    <p>0</p>
+    <p>{{ likePreferences.totalGivenLikes }}</p>
     <span>você curtiu</span>
   </div>
 </div>
