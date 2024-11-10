@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit {
     this.socketMatchService.onMatchNotification().subscribe({
       next: (response) => {
         this.matchDataDetailsService.setMatchedDetails(response);
-        this.router.navigateByUrl('home/match-notification');
+        this.router.navigateByUrl('home/match');
       },
       error: () => {},
     });

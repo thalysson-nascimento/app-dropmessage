@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Socket } from 'socket.io-client';
+import { MatchUsers } from '../../interface/match-users.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class SocketMatchService {
     this.socket.emit('join', userId);
   }
 
-  onMatchNotification(): Observable<any> {
+  onMatchNotification(): Observable<MatchUsers[]> {
     return new Observable((observer) => {
       console.log('match ===>', observer);
       this.socket.on('match', (data) => observer.next(data));

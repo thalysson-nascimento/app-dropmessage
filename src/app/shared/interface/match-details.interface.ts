@@ -1,5 +1,5 @@
-export interface MatchDetails {
-  id: string;
-  avatar: string;
-  name: string;
-}
+// export interface MatchDetails {
+//   id: string;
+//   avatar: string;
+//   name: string;
+// }

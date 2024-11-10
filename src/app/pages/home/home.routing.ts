@@ -33,7 +33,7 @@ export const HomeRouting: Routes = [
         component: SendMessageSuccessComponent,
       },
       {
-        path: 'match-notification',
+        path: 'match',
         component: MatchComponent,
       },
       {

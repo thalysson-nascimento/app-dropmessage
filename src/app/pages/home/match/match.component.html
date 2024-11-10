@@ -8,30 +8,32 @@
       />
     </div>
   </div>
-
-  <div class="contain-avatar-match">
-    <div class="left-content">
-      <img class="avatar" [src]="initiatorImage" alt="" />
-    </div>
-    <div class="right-content">
-      <img class="avatar" [src]="recipientImage" alt="" />
-    </div>
+  <div>
+    <h1 class="title">Match</h1>
   </div>
 
   <div class="contain-image">
-    <img class="image-background" src="/assets/icon-static/vector.svg" alt="" />
+    <div class="image-background"></div>
+    <div class="image-avatar-match">
+      <img class="avatar" [src]="matchUser?.avatar" alt="" />
+      <div class="infor-user-match">
+        <p class="locarion-match">
+          {{ matchUser?.UserLocation?.city }}/{{
+            matchUser?.UserLocation?.stateCode
+          }}
+        </p>
+        <p class="name-match">{{ nameUserFormated }}</p>
+      </div>
+    </div>
   </div>
 
   <div class="contain-description">
-    <p class="title-match">
-      Uauu, você acaba de dar <span class="title-pink">match</span>
-    </p>
-    <span>O jeito mais fácil de fazer novas amizades</span>
+    <p class="description">O jeito mais rápido de fazer novas amizades!</p>
   </div>
 
   <div class="contain-button">
-    <button appButtonStyle [buttonType]="'primary'" (click)="goToProfile()">
-      Ir para o perfil
+    <button appButtonStyle [buttonType]="'secondary'" (click)="goToProfile()">
+      Conversar com {{ firstNameMatch }}
     </button>
   </div>
 </div>
