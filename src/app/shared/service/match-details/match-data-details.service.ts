@@ -1,21 +1,22 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { MatchDetails } from '../../interface/match-details.interface';
+import { MatchUsers } from '../../interface/match-users.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MatchDataDetailsService {
-  private matchedDetails$: BehaviorSubject<MatchDetails[]> =
-    new BehaviorSubject<MatchDetails[]>([]);
+  private matchedDetails$: BehaviorSubject<MatchUsers[]> = new BehaviorSubject<
+    MatchUsers[]
+  >([]);
 
   constructor() {}
 
-  setMatchedDetails(matches: MatchDetails[]): void {
+  setMatchedDetails(matches: MatchUsers[]): void {
     this.matchedDetails$.next(matches);
   }
 
-  getMatchedDetails(): Observable<MatchDetails[]> {
+  getMatchedDetails(): Observable<MatchUsers[]> {
     return this.matchedDetails$.asObservable();
   }
 }

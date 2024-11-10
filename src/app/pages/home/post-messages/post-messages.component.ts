@@ -11,7 +11,7 @@ import {
 import { Inject, PLATFORM_ID } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, concatMap } from 'rxjs';
 import { register } from 'swiper/element/bundle';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
 import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
@@ -19,6 +19,7 @@ import { SystemUnavailableComponent } from '../../../shared/component/system-una
 import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
 import { Post } from '../../../shared/interface/post';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
+import { LikePostMessageService } from '../../../shared/service/like-post-message/like-post-message.service';
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 import { PostMessageService } from '../../../shared/service/post/post.service';
 
@@ -47,6 +48,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   totalPosts: number = 0;
   private likeButtonClicked: boolean = false;
   private destroy$: Subject<void> = new Subject<void>();
+  likePostMessageQueue = new Subject<string>();
   dataAvatar!: AvatarSuccess;
 
   constructor(
@@ -56,12 +58,16 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private lottieAnimationIconService: LottieAnimationIconService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private cacheAvatarService: CacheAvatarService
+    private cacheAvatarService: CacheAvatarService,
+    private likePostMessageService: LikePostMessageService
   ) {}
 
   ngOnInit(): void {
+    this.handleLikePostMessageQueue();
+
     this.textInformationSystemUnavailable =
       'No momento estamos com nossos serviço indisponíves, volte novamente mais tarde!';
+
     if (isPlatformBrowser(this.platformId)) {
       this.loadAvatarCache();
       this.loadPostMessage();
@@ -252,6 +258,18 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   likePostMessage() {
     console.log('Curtiu o post:', this.likePostMessageWhitHeart);
+    // this.likePostMessageService
+    //   .likePostMessage(this.likePostMessageWhitHeart.id)
+    //   .subscribe({
+    //     next: (response) => {
+    //       console.log(response);
+    //     },
+    //     error: (error) => {
+    //       console.log(error);
+    //     },
+    //   });
+    this.likePostMessageQueue.next(this.likePostMessageWhitHeart.id);
+
     if (this.mySwiper) {
       this.likeButtonClicked = true;
 
@@ -267,6 +285,24 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       }, 100);
     }
   }
+
+  handleLikePostMessageQueue() {
+    this.likePostMessageQueue
+      .pipe(
+        concatMap((postId) =>
+          this.likePostMessageService.likePostMessage(postId)
+        )
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('Post curtido:', response);
+        },
+        error: (error) => {
+          console.error('Erro ao curtir o post:', error);
+        },
+      });
+  }
+
   removePostFromSwiperWithLikeButton(post: Post) {
     const postIndex = this.posts.findIndex((p) => p.id === post.id);
 

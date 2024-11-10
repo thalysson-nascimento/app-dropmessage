@@ -4,13 +4,6 @@
   display: flex;
   flex-direction: column;
   position: relative; // Para posicionar os filhos de forma absoluta
-
-  opacity: 0; // Inicialmente invisível
-  transition: opacity 1s ease-in-out; // Transição suave para opacidade
-
-  &.fade-in {
-    opacity: 1; // Transição para visível
-  }
 }
 
 .contain-image {
@@ -57,20 +50,6 @@
   padding: 1rem;
 }
 
-.avatar {
-  width: 11rem;
-  height: 11rem;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.title-match {
-  font-weight: 700;
-  padding: 1rem;
-  font-size: 2rem;
-  color: #2c2c2c;
-}
-
 .title-pink {
   color: #d732a8;
 }
@@ -82,4 +61,118 @@
 
 .contain-back-button {
   width: 100%;
+}
+
+//////////////////////////////////////////////
+.contain-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.title {
+  font-weight: 700;
+  padding-left: 1rem;
+  padding-top: 2rem;
+  font-size: var(--font-size-xxlarge);
+  color: var(--text-dark);
+  position: relative; /* Necessário para que o `top` funcione */
+  animation: slideUp 0.5s ease forwards;
+  opacity: 0;
+}
+
+@keyframes animationRotateImageBackground {
+  from {
+    transform: rotate(12deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(-12deg);
+    opacity: 1;
+  }
+}
+
+.image-background {
+  width: 70%;
+  height: 23rem;
+  background-color: var(--color-light-dark);
+  border-radius: 3rem;
+  position: relative;
+  transform: rotate(-12deg);
+  animation: animationRotateImageBackground 0.5s ease forwards;
+}
+
+@keyframes animationRotateImageAvatar {
+  from {
+    transform: rotate(-12deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0);
+    opacity: 1;
+  }
+}
+
+.image-avatar-match {
+  width: 70%;
+  height: 23rem;
+  background-color: var(--text-dark);
+  border-radius: 3rem;
+  position: absolute;
+  animation: animationRotateImageAvatar 0.5s ease forwards;
+  opacity: 0;
+  animation-delay: 0.1s;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 3rem;
+  object-fit: cover;
+}
+
+.name-match {
+  font-size: var(--font-size-xxlarge);
+  font-weight: 700;
+}
+
+.infor-user-match {
+  position: absolute;
+  bottom: 0; /* Posiciona no fundo da imagem */
+  width: 100%;
+  color: white;
+  padding: 1rem;
+  border-radius: 0 0 3rem 3rem; /* Bordas arredondadas para coincidir com o contorno da imagem */
+}
+
+.locarion-match,
+.name-match {
+  margin: 0;
+  text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.contain-description {
+  margin: 2rem;
+  text-align: center;
+}
+
+.description {
+  font-weight: 700;
+  color: var(--text-dark);
+  animation: slideUp 0.5s ease forwards;
+  opacity: 0;
+  font-size: 1.5rem;
 }
