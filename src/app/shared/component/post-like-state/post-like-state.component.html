@@ -1,6 +1,13 @@
 <app-load-shimmer [height]="'5.5rem'" *ngIf="isLoading"></app-load-shimmer>
 
-<div class="contain-like-state" *ngIf="!isLoading">
+<div *ngIf="showErrorStatict" class="contain-like-state">
+  <p>
+    Ops, <br />
+    ocorreu um erro para mostrar suas statisticas!
+  </p>
+</div>
+
+<div class="contain-like-state" *ngIf="!isLoading && !showErrorStatict">
   <div class="contain-data">
     <p>{{ likePreferences.totalPosts }}</p>
     <span>total de post</span>

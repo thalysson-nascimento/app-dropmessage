@@ -2,6 +2,7 @@ import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import {
   provideRouter,
   withEnabledBlockingInitialNavigation,
+  withInMemoryScrolling,
 } from '@angular/router';
 import player from 'lottie-web';
 import { provideLottieOptions } from 'ngx-lottie';
@@ -33,7 +34,11 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideLottieOptions({ player: playerFactory }),
-    provideRouter(routes, withEnabledBlockingInitialNavigation()),
+    provideRouter(
+      routes,
+      withEnabledBlockingInitialNavigation(),
+      withInMemoryScrolling({ scrollPositionRestoration: 'top' })
+    ),
     { provide: 'SOCKET_IO', useValue: socket },
     provideClientHydration(),
     provideAnimationsAsync(),

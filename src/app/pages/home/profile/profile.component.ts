@@ -1,6 +1,7 @@
-import { NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { NgIf, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
+import { App } from '@capacitor/app';
 import { PostLikeStateComponent } from '../../../shared/component/post-like-state/post-like-state.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
@@ -23,11 +24,20 @@ export class ProfileComponent implements OnInit {
   constructor(
     private router: Router,
     private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
-    private cacheAvatarService: CacheAvatarService
+    private cacheAvatarService: CacheAvatarService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
     this.loadCacheAvatar();
+  }
+
+  navigateBackUsingApp() {
+    if (isPlatformBrowser(this.platformId)) {
+      App.addListener('backButton', () => {
+        this.router.navigateByUrl('home/post-messages');
+      });
+    }
   }
 
   loadCacheAvatar() {
@@ -47,6 +57,7 @@ export class ProfileComponent implements OnInit {
 
   goToPostMessage() {
     this.router.navigateByUrl('home/post-messages');
+    this.navigateBackUsingApp();
   }
 
   logout() {
@@ -56,6 +67,10 @@ export class ProfileComponent implements OnInit {
   }
 
   goToPrivecePolice() {
-    this.router.navigateByUrl('auth/privacy-police');
+    this.router.navigateByUrl('home/privacy-police');
+  }
+
+  goToNotification() {
+    this.router.navigateByUrl('home/notification');
   }
 }

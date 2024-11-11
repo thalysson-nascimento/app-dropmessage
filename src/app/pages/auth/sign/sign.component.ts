@@ -1,6 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,6 +16,8 @@ import {
 } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
+import { App } from '@capacitor/app';
+import { PluginListenerHandle } from '@capacitor/core';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
 import { LoadingComponent } from '../../../shared/component/loading/loading.component';
 import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
@@ -37,13 +46,14 @@ const CoreModule = [ReactiveFormsModule, CommonModule];
   templateUrl: './sign.component.html',
   styleUrls: ['./sign.component.scss'],
 })
-export class SignComponent implements OnInit {
+export class SignComponent implements OnInit, OnDestroy {
   buttonDisalbled: boolean = false;
   userLoginFormGroup!: FormGroup;
   isLoadingButton: boolean = false;
   errorMessage: string = 'error';
   @ViewChild('dialog') modal!: ModalComponent;
   isOpen: boolean = false;
+  backButtonListener!: PluginListenerHandle;
 
   constructor(
     private router: Router,
@@ -51,11 +61,25 @@ export class SignComponent implements OnInit {
     private loginService: LoginService,
     private bottomSheet: MatBottomSheet,
     private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
-    private cacheAvatarService: CacheAvatarService
+    private cacheAvatarService: CacheAvatarService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {
     this.userLoginFormBuilder();
+    this.navigateBackUsingApp();
+  }
+
+  ngOnDestroy(): void {
+    if (this.backButtonListener) {
+      this.backButtonListener.remove();
+    }
+  }
+
+  async navigateBackUsingApp() {
+    this.backButtonListener = await App.addListener('backButton', () => {
+      App.exitApp();
+    });
   }
 
   userLoginFormBuilder() {
