@@ -65,6 +65,13 @@ export const HomeRouting: Routes = [
             (m) => m.NotificationComponent
           ),
       },
+      {
+        path: 'privacy-police',
+        loadComponent: () =>
+          import('./privacy-police/privacy-police.component').then(
+            (m) => m.PrivacyPoliceComponent
+          ),
+      },
     ],
   },
 ];

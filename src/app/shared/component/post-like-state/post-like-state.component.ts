@@ -16,6 +16,7 @@ const SharedComponents = [LoadShimmerComponent];
 export class PostLikeStateComponent implements OnInit {
   isLoading: boolean = true;
   likePreferences!: StaticLikePreferences;
+  showErrorStatict: boolean = false;
   constructor(
     private staticLikePreferencesService: StaticLikePreferencesService
   ) {}
@@ -31,6 +32,8 @@ export class PostLikeStateComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
+        this.showErrorStatict = true;
+        this.isLoading = false;
         console.error(err);
       },
     });

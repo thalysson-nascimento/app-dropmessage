@@ -3,11 +3,12 @@ import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
+import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { Notification } from '../../../shared/interface/notification.interface';
 import { NotificationService } from '../../../shared/service/notification/notification.service';
 
 const CoreModule = [NgIf, NgFor];
-const SharedComponent = [LoadShimmerComponent];
+const SharedComponent = [LoadShimmerComponent, SystemUnavailableComponent];
 
 @Component({
   selector: 'app-notification',
@@ -19,6 +20,7 @@ const SharedComponent = [LoadShimmerComponent];
 export class NotificationComponent implements OnInit {
   notifications: Notification[] = [];
   isLoading: boolean = true;
+  showSystemUnavailable: boolean = false;
 
   constructor(
     private router: Router,
@@ -38,6 +40,12 @@ export class NotificationComponent implements OnInit {
     }
   }
 
+  tryAgain() {
+    this.isLoading = true;
+    this.showSystemUnavailable = false;
+    this.loadNotification();
+  }
+
   goToProfile() {
     this.router.navigateByUrl('home/profile');
     this.navigateBackUsingApp();
@@ -49,9 +57,12 @@ export class NotificationComponent implements OnInit {
         console.log(response);
         this.notifications = response;
         this.isLoading = false;
+        this.showSystemUnavailable = false;
       },
       error: (error) => {
         console.error(error);
+        this.showSystemUnavailable = true;
+        this.isLoading = false;
       },
     });
   }

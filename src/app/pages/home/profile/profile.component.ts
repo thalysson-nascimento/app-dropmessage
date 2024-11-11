@@ -67,7 +67,7 @@ export class ProfileComponent implements OnInit {
   }
 
   goToPrivecePolice() {
-    this.router.navigateByUrl('auth/privacy-police');
+    this.router.navigateByUrl('home/privacy-police');
   }
 
   goToNotification() {
