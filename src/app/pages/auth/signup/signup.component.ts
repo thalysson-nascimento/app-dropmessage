@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
+import { App } from '@capacitor/app';
 import { currentEnvironment } from '../../../../environment.config';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
@@ -36,12 +37,21 @@ export class SignupComponent implements OnInit {
     private router: Router,
     private createAccountService: CreateAccountService,
     private formBuilder: FormBuilder,
-    private bottomSheet: MatBottomSheet
+    private bottomSheet: MatBottomSheet,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {
     console.log(this.baseUrl);
     this.createAccountFormBuilder();
+  }
+
+  navigateBackUsingApp() {
+    if (isPlatformBrowser(this.platformId)) {
+      App.addListener('backButton', () => {
+        this.router.navigateByUrl('auth/sign');
+      });
+    }
   }
 
   createAccountFormBuilder() {
@@ -97,6 +107,7 @@ export class SignupComponent implements OnInit {
 
   goToAuthSign() {
     this.router.navigate(['auth/sign']); // Redireciona para a rota signup
+    this.navigateBackUsingApp();
   }
 
   openBottomSheet(messageTitle: string, messageDescription: string) {

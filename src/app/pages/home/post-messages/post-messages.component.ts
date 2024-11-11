@@ -11,6 +11,8 @@ import {
 import { Inject, PLATFORM_ID } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
+import { App } from '@capacitor/app';
+import { PluginListenerHandle } from '@capacitor/core';
 import { Subject, concatMap } from 'rxjs';
 import { register } from 'swiper/element/bundle';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
@@ -50,6 +52,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   likePostMessageQueue = new Subject<string>();
   dataAvatar!: AvatarSuccess;
+  backButtonListener!: PluginListenerHandle;
 
   constructor(
     private postMessageService: PostMessageService,
@@ -64,6 +67,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.handleLikePostMessageQueue();
+    this.navigateBackUsingApp();
 
     this.textInformationSystemUnavailable =
       'No momento estamos com nossos serviço indisponíves, volte novamente mais tarde!';
@@ -72,6 +76,12 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       this.loadAvatarCache();
       this.loadPostMessage();
     }
+  }
+
+  async navigateBackUsingApp() {
+    this.backButtonListener = await App.addListener('backButton', () => {
+      App.exitApp();
+    });
   }
 
   ngAfterViewInit() {
@@ -95,6 +105,10 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+
+    if (this.backButtonListener) {
+      this.backButtonListener.remove();
+    }
 
     if (this.mySwiper) {
       this.mySwiper.off('slideChangeTransitionEnd');
