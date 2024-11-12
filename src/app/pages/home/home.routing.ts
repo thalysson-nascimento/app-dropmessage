@@ -72,6 +72,13 @@ export const HomeRouting: Routes = [
             (m) => m.PrivacyPoliceComponent
           ),
       },
+      {
+        path: 'user-post-message',
+        loadComponent: () =>
+          import('./user-post-message/user-post-message.component').then(
+            (m) => m.UserPostMessageComponent
+          ),
+      },
     ],
   },
 ];

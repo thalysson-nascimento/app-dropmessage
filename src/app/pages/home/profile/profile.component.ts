@@ -73,4 +73,8 @@ export class ProfileComponent implements OnInit {
   goToNotification() {
     this.router.navigateByUrl('home/notification');
   }
+
+  goToUserPosts() {
+    this.router.navigateByUrl('home/user-post-message');
+  }
 }
