@@ -79,6 +79,13 @@ export const HomeRouting: Routes = [
             (m) => m.UserPostMessageComponent
           ),
       },
+      {
+        path: 'user-data',
+        loadComponent: () =>
+          import('./user-data/user-data.component').then(
+            (m) => m.UserDataComponent
+          ),
+      },
     ],
   },
 ];

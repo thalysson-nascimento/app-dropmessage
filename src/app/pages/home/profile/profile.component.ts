@@ -77,4 +77,8 @@ export class ProfileComponent implements OnInit {
   goToUserPosts() {
     this.router.navigateByUrl('home/user-post-message');
   }
+
+  goToUserData() {
+    this.router.navigateByUrl('home/user-data');
+  }
 }
