@@ -10,14 +10,17 @@
         class="lottie-icon-camera"
         style="width: 67px; height: 67px"
       ></div>
-      <div *ngIf="dataAvatar">
+      <div *ngIf="imageLoaded; else loading">
         <img
           (click)="goToListSettings()"
-          class="user-avatar"
           [src]="dataAvatar.image"
-          alt=""
+          class="user-avatar"
+          alt="User Avatar"
         />
       </div>
+      <ng-template #loading>
+        <div class="contain-loading-avatar"></div>
+      </ng-template>
     </div>
   </div>
 

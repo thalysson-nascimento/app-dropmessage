@@ -53,6 +53,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   likePostMessageQueue = new Subject<string>();
   dataAvatar!: AvatarSuccess;
   backButtonListener!: PluginListenerHandle;
+  displayImageUrl: string | null = null;
+  imageLoaded = false;
 
   constructor(
     private postMessageService: PostMessageService,
@@ -117,6 +119,17 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       this.mySwiper = null;
       console.log('Swiper destruído');
     }
+  }
+
+  preloadImage(url: string) {
+    const img = new Image();
+    img.src = url;
+
+    // Evento 'load' para definir a imagem apenas após o carregamento completo
+    img.onload = () => {
+      this.displayImageUrl = url;
+      this.imageLoaded = true;
+    };
   }
 
   initializeSwiper() {
@@ -353,6 +366,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       next: (response) => {
         if (response) {
           this.dataAvatar = response;
+          this.preloadImage(this.dataAvatar.image);
         } else {
           console.log('Avatar não encontrado no cache.');
         }
