@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-medium);
+  background-color: #f6f6f6;
+  height: 100dvh;
+  overflow: auto;
+}
+
+.header {
+  padding: var(--space-medium);
+}
+
+.container-header {
+  background-color: #fff;
+  border-radius: 1rem;
+}
+
+.subtitle {
+  color: var(--text-dark-secundary);
+  margin-top: var(--space-small);
+}
+
+.container-title-subtitle {
+  padding-inline: var(--space-medium);
+  margin-top: var(--space-large);
+  margin-bottom: var(--space-large);
+}
+
+.acount-post {
+  margin-bottom: 1rem;
+}
+
+.contain-post-message {
+  background-color: #fff;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 1rem;
+}
