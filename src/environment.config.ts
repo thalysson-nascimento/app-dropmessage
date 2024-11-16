@@ -27,11 +27,11 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
     apiKeyGeoLocationCageData: 'ea70a7a8d9f34c4894602cc11e0407ae',
   },
   development: {
-    baseURL: 'https://api-dropmessage-database-production.up.railway.app',
+    baseURL: 'http://localhost:3000',
     pathURL: '/api/dev',
     production: false,
     mock: false,
-    baseUrlSocket: 'https://api-dropmessage-database-production.up.railway.app',
+    baseUrlSocket: 'http://localhost:3000',
     apiKeyGeoLocationCageData: 'ea70a7a8d9f34c4894602cc11e0407ae',
   },
 };
