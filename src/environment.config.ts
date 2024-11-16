@@ -11,11 +11,11 @@ interface TypeEnveronment {
 
 export const environmentConfig: Record<Environment, TypeEnveronment> = {
   production: {
-    baseURL: 'https://f757eba3e0bf17c135f0880aa0c92e8f.serveo.net',
+    baseURL: 'https://api-dropmessage-database-production.up.railway.app',
     pathURL: '/api/v1',
     production: true,
     mock: false,
-    baseUrlSocket: 'https://f757eba3e0bf17c135f0880aa0c92e8f.serveo.net',
+    baseUrlSocket: 'https://api-dropmessage-database-production.up.railway.app',
     apiKeyGeoLocationCageData: 'ea70a7a8d9f34c4894602cc11e0407ae',
   },
   mock: {
@@ -27,11 +27,11 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
     apiKeyGeoLocationCageData: 'ea70a7a8d9f34c4894602cc11e0407ae',
   },
   development: {
-    baseURL: 'https://f757eba3e0bf17c135f0880aa0c92e8f.serveo.net',
+    baseURL: 'https://api-dropmessage-database-production.up.railway.app',
     pathURL: '/api/dev',
     production: false,
     mock: false,
-    baseUrlSocket: 'https://f757eba3e0bf17c135f0880aa0c92e8f.serveo.net',
+    baseUrlSocket: 'https://api-dropmessage-database-production.up.railway.app',
     apiKeyGeoLocationCageData: 'ea70a7a8d9f34c4894602cc11e0407ae',
   },
 };
