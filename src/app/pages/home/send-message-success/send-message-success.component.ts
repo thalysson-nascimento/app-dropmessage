@@ -15,6 +15,7 @@ interface LottieAnimationOptions {
   selector: 'app-send-message-success',
   templateUrl: './send-message-success.component.html',
   styleUrls: ['./send-message-success.component.scss'],
+  standalone: true,
 })
 export class SendMessageSuccessComponent implements OnInit {
   constructor(
