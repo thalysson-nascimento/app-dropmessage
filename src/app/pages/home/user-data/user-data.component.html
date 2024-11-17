@@ -36,31 +36,31 @@
         <ul appListStyle>
           <li>
             <span label>nome</span>
-            <p>Thalysson Nascimento</p>
+            <p>{{ myProfile.name }}</p>
           </li>
           <li>
             <span label>email</span>
-            <p>thalysson&#64;gmail.com</p>
+            <p>{{ myProfile.email }}</p>
           </li>
           <li>
             <span label>cidade</span>
-            <p>João Pessoa</p>
+            <p>{{ myProfile.UserLocation.city }}</p>
           </li>
           <li>
             <span label>estado</span>
-            <p>Paraíba</p>
+            <p>{{ myProfile.UserLocation.state }}</p>
           </li>
           <li>
             <span label>gênero</span>
-            <p>Masculino</p>
+            <p>{{ myProfile.About.gender }}</p>
           </li>
           <li>
             <span label>interesses</span>
-            <p>Mulher</p>
+            <p>{{ myProfile.About.interests }}</p>
           </li>
           <li>
             <span label>data de nascimento</span>
-            <p>11/11/2000</p>
+            <p>{{ myProfile.About.dateOfBirth }}</p>
           </li>
         </ul>
       </div>

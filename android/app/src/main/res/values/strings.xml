@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">ShotMessage</string>
-    <string name="title_activity_main">ShotMessage</string>
+    <string name="app_name">DatingMatch</string>
+    <string name="title_activity_main">DatingMatch</string>
     <string name="package_name">br.com.dropmessage</string>
     <string name="custom_url_scheme">br.com.dropmessage</string>
 </resources>

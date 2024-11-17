@@ -13,7 +13,7 @@ register();
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'ShotMessage';
+  title = 'DatingMatch';
 
   constructor() {
     this.configureStatusBar();

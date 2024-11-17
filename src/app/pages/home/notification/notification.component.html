@@ -1,47 +1,49 @@
 <div class="container">
-  <div class="header">
-    <img
-      src="assets/icon-static/arrow-left.svg"
-      style="width: 24px; height: 24px"
-      alt=""
-      (click)="goToProfile()"
-    />
+  <div class="container-header">
+    <div class="header">
+      <img
+        src="assets/icon-static/arrow-left.svg"
+        style="width: 24px; height: 24px"
+        alt=""
+        (click)="goToProfile()"
+      />
+    </div>
+
+    <div class="container-title-subtitle">
+      <h1 class="title">Notificação</h1>
+      <p class="subtitle">veja quem curtiu suas postagens</p>
+    </div>
   </div>
+  <div class="contain-body">
+    <app-system-unavailable
+      *ngIf="showSystemUnavailable"
+      (clickLoading)="tryAgain()"
+      [infoMessage]="
+        'No momento estamos com nossos serviços indisponíves, volte novamente mais tarde!'
+      "
+    >
+    </app-system-unavailable>
 
-  <app-system-unavailable
-    *ngIf="showSystemUnavailable"
-    (clickLoading)="tryAgain()"
-    [infoMessage]="
-      'No momento estamos com nossos serviços indisponíves, volte novamente mais tarde!'
-    "
-  >
-  </app-system-unavailable>
+    <div *ngIf="notifications.length === 0">
+      <p class="subtitle">Nenhuma notificação encontrada</p>
+    </div>
 
-  <div class="contain-shimmer" *ngIf="isLoading">
-    <app-load-shimmer [height]="'10rem'"></app-load-shimmer>
-    <app-load-shimmer [height]="'10rem'"></app-load-shimmer>
-  </div>
-
-  <div *ngIf="!isLoading && !showSystemUnavailable">
-    <h1 class="title">Notificação</h1>
-    <p class="subtitle">Veja quem curtiu suas postagens</p>
-
-    <hr class="line" />
-
-    <ul class="list-notification" *ngFor="let notification of notifications">
-      <li class="notification">
-        <div class="contain-description">
-          <img [src]="notification.user.avatar" class="avatar" alt="" />
-          <p class="description-notification">
-            <span class="text-highlight">{{ notification.user.name }}</span>
-            curtiu sua postagem
-            <span class="text-highlight">{{ notification.createdAt }}</span>
-          </p>
-        </div>
-        <div class="contain-post-message">
-          <img [src]="notification.post.image" class="post-message" alt="" />
-        </div>
-      </li>
-    </ul>
+    <div *ngIf="!showSystemUnavailable">
+      <ul class="list-notification" *ngFor="let notification of notifications">
+        <li class="notification">
+          <div class="contain-description">
+            <img [src]="notification.user.avatar" class="avatar" alt="" />
+            <p class="description-notification">
+              <span class="text-highlight">{{ notification.user.name }}</span>
+              curtiu sua postagem
+              <span class="text-highlight">{{ notification.createdAt }}</span>
+            </p>
+          </div>
+          <div class="contain-post-message">
+            <img [src]="notification.post.image" class="post-message" alt="" />
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
