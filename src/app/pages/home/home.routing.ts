@@ -86,6 +86,13 @@ export const HomeRouting: Routes = [
             (m) => m.UserDataComponent
           ),
       },
+      {
+        path: 'list-chat',
+        loadComponent: () =>
+          import('./list-chat/list-chat.component').then(
+            (m) => m.ListChatComponent
+          ),
+      },
     ],
   },
 ];

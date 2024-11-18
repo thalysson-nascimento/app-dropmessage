@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="container-header">
+    <div class="header">
+      <img
+        src="assets/icon-static/arrow-left.svg"
+        style="width: 24px; height: 24px"
+        alt=""
+        (click)="goToProfile()"
+      />
+    </div>
+
+    <div class="container-title-subtitle">
+      <h1 class="title">Chat</h1>
+      <p class="subtitle">Converse com os matches do seu perfil</p>
+    </div>
+  </div>
+  <div class="contain-body">
+    <div *ngIf="isLoading">
+      <app-load-shimmer [height]="'5rem'"></app-load-shimmer>
+      <app-load-shimmer [height]="'5rem'"></app-load-shimmer>
+      <app-load-shimmer [height]="'5rem'"></app-load-shimmer>
+    </div>
+
+    <app-system-unavailable
+      *ngIf="showSystemUnavailable"
+      (clickLoading)="tryAgain()"
+      [infoMessage]="
+        'No momento estamos com nossos serviços indisponíves, volte novamente mais tarde!'
+      "
+    >
+    </app-system-unavailable>
+
+    <div *ngIf="listChat.length === 0">
+      <p class="subtitle">No momento ainda não há matches.</p>
+    </div>
+
+    <div *ngIf="!showSystemUnavailable && !isLoading">
+      <ul appListStyle>
+        <li
+          *ngFor="let chat of listChat"
+          (click)="goToChat(chat.mathId, chat.hashPublicId)"
+        >
+          <img [src]="chat.avatar" class="avatar" alt="" />
+          <div class="contain-description">
+            <p>{{ chat.name }}</p>
+            <p class="last-message">ainda não iniciaram uma conversa</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

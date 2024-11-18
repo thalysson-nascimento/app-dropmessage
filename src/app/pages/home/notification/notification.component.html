@@ -32,12 +32,16 @@
       <ul class="list-notification" *ngFor="let notification of notifications">
         <li class="notification">
           <div class="contain-description">
-            <img [src]="notification.user.avatar" class="avatar" alt="" />
-            <p class="description-notification">
-              <span class="text-highlight">{{ notification.user.name }}</span>
-              curtiu sua postagem
-              <span class="text-highlight">{{ notification.createdAt }}</span>
-            </p>
+            <div>
+              <img [src]="notification.user.avatar" class="avatar" alt="" />
+            </div>
+            <div>
+              <p>
+                <span class="text-highlight">{{ notification.user.name }}</span>
+                curtiu sua postagem
+                <span class="text-highlight">{{ notification.createdAt }}</span>
+              </p>
+            </div>
           </div>
           <div class="contain-post-message">
             <img [src]="notification.post.image" class="post-message" alt="" />
