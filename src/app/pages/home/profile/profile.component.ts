@@ -81,4 +81,8 @@ export class ProfileComponent implements OnInit {
   goToUserData() {
     this.router.navigateByUrl('home/user-data');
   }
+
+  goToListChat() {
+    this.router.navigateByUrl('home/list-chat');
+  }
 }
