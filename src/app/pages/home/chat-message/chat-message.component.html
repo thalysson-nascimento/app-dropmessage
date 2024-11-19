@@ -1,0 +1,58 @@
+<div class="contain">
+  <div class="body">
+    <div class="header">
+      <img
+        src="assets/icon-static/arrow-left.svg"
+        style="width: 24px; height: 24px"
+        alt=""
+        (click)="goToListChat()"
+      />
+      <img src="assets/jo.jpeg" class="avatar" alt="" />
+      <div>
+        <p><strong>Dyana Joice</strong></p>
+        <span class="location">João Pessoa/PB</span>
+      </div>
+    </div>
+
+    <hr class="line" />
+
+    <div class="contain-messages">
+      <div
+        *ngFor="let message of messages"
+        [ngClass]="{ 'align-chat-right': getAlignment(message.id) }"
+        class="message"
+      >
+        <div class="group-message">
+          <img
+            *ngIf="!getAlignment(message.id)"
+            [src]="message.avatar"
+            class="avatar-message"
+            alt=""
+          />
+          <div class="message-user">
+            <p class="message-user-name">
+              {{ message.id === meuId ? "Você" : message.userName }}
+            </p>
+            <p class="message-text">{{ message.text }}</p>
+            <span class="message-time">{{ message.time }}</span>
+          </div>
+          <img
+            *ngIf="getAlignment(message.id)"
+            [src]="message.avatar"
+            class="avatar-message"
+            alt=""
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contain-send-message">
+    <input
+      type="text"
+      placeholder="Digite sua mensagem"
+      [(ngModel)]="newMessage"
+    />
+    <button class="button-send-message" (click)="sendMessage()">Enviar</button>
+  </div>
+</div>
