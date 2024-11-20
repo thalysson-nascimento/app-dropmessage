@@ -18,7 +18,7 @@ export class ChatMessageComponent implements OnInit {
   meuId = '11111111';
   messages = [
     {
-      id: '11111111',
+      userHashPublic: '11111111',
       userName: 'Thalysson',
       text: 'Olá, tudo bem?',
       time: '12:00',
@@ -26,7 +26,7 @@ export class ChatMessageComponent implements OnInit {
       alignRight: false, // Mensagem recebida
     },
     {
-      id: '22222222',
+      userHashPublic: '22222222',
       userName: 'Joyce Diana',
       text: 'Oi, tudo ótimo e você?',
       time: '12:01',
@@ -34,7 +34,7 @@ export class ChatMessageComponent implements OnInit {
       alignRight: true, // Mensagem enviada
     },
     {
-      id: '11111111',
+      userHashPublic: '11111111',
       userName: 'Thalysson',
       text: 'Tudo ótimo, adorei a foto do perfil. Ja que nao rolou o match no tinder, rolou por aqui kkkkkk',
       time: '12:00',
@@ -42,7 +42,7 @@ export class ChatMessageComponent implements OnInit {
       alignRight: false, // Mensagem recebida
     },
     {
-      id: '22222222',
+      userHashPublic: '22222222',
       userName: 'Joyce Diana',
       text: 'Oi, tudo ótimo e você?',
       time: '12:01',
@@ -50,7 +50,7 @@ export class ChatMessageComponent implements OnInit {
       alignRight: true, // Mensagem enviada
     },
     {
-      id: '11111111',
+      userHashPublic: '11111111',
       userName: 'Thalysson',
       text: 'Tudo ótimo, adorei a foto do perfil. Ja que nao rolou o match no tinder, rolou por aqui kkkkkk',
       time: '12:00',
@@ -64,7 +64,7 @@ export class ChatMessageComponent implements OnInit {
   sendMessage() {
     if (this.newMessage.trim()) {
       this.messages.push({
-        id: this.meuId,
+        userHashPublic: this.meuId,
         userName: 'Você',
         text: this.newMessage,
         time: new Date().toLocaleTimeString(),

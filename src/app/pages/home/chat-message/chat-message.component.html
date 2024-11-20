@@ -19,25 +19,25 @@
     <div class="contain-messages">
       <div
         *ngFor="let message of messages"
-        [ngClass]="{ 'align-chat-right': getAlignment(message.id) }"
+        [ngClass]="{ 'align-chat-right': getAlignment(message.userHashPublic) }"
         class="message"
       >
         <div class="group-message">
           <img
-            *ngIf="!getAlignment(message.id)"
+            *ngIf="!getAlignment(message.userHashPublic)"
             [src]="message.avatar"
             class="avatar-message"
             alt=""
           />
           <div class="message-user">
             <p class="message-user-name">
-              {{ message.id === meuId ? "Você" : message.userName }}
+              {{ message.userHashPublic === meuId ? "Você" : message.userName }}
             </p>
             <p class="message-text">{{ message.text }}</p>
             <span class="message-time">{{ message.time }}</span>
           </div>
           <img
-            *ngIf="getAlignment(message.id)"
+            *ngIf="getAlignment(message.userHashPublic)"
             [src]="message.avatar"
             class="avatar-message"
             alt=""
