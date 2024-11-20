@@ -16,32 +16,55 @@
 
     <hr class="line" />
 
-    <div class="contain-messages">
-      <div
-        *ngFor="let message of messages"
-        [ngClass]="{ 'align-chat-right': getAlignment(message.userHashPublic) }"
-        class="message"
+    <div class="contain-messages" #containMessages>
+      <div *ngIf="isLoading">
+        <div class="contain-loading">
+          <div id="lottie-icon-is-loading" class="lottie-icon-no-match"></div>
+        </div>
+      </div>
+
+      <app-system-unavailable
+        *ngIf="showSystemUnavailable"
+        (clickLoading)="tryAgain()"
+        [infoMessage]="
+          'No momento estamos com nossos serviço indisponíves, volte novamente mais tarde!'
+        "
       >
-        <div class="group-message">
-          <img
-            *ngIf="!getAlignment(message.userHashPublic)"
-            [src]="message.avatar"
-            class="avatar-message"
-            alt=""
-          />
-          <div class="message-user">
-            <p class="message-user-name">
-              {{ message.userHashPublic === meuId ? "Você" : message.userName }}
-            </p>
-            <p class="message-text">{{ message.text }}</p>
-            <span class="message-time">{{ message.time }}</span>
+      </app-system-unavailable>
+
+      <div *ngIf="!isLoading">
+        <div
+          *ngFor="let message of messages"
+          [ngClass]="{
+            'align-chat-right': getAlignment(message.user.userHashPublic)
+          }"
+          class="message"
+        >
+          <div class="group-message">
+            <img
+              *ngIf="!getAlignment(message.user.userHashPublic)"
+              [src]="message.user.avatar.image"
+              class="avatar-message"
+              alt=""
+            />
+            <div class="message-user">
+              <p class="message-user-name">
+                {{
+                  message.user.userHashPublic !== userHashPublic
+                    ? "Você"
+                    : message.user.name
+                }}
+              </p>
+              <p class="message-text">{{ message.content }}</p>
+              <span class="message-time">{{ message.createdAt }}</span>
+            </div>
+            <img
+              *ngIf="getAlignment(message.user.userHashPublic)"
+              [src]="message.user.avatar.image"
+              class="avatar-message"
+              alt=""
+            />
           </div>
-          <img
-            *ngIf="getAlignment(message.userHashPublic)"
-            [src]="message.avatar"
-            class="avatar-message"
-            alt=""
-          />
         </div>
       </div>
     </div>
@@ -53,6 +76,6 @@
       placeholder="Digite sua mensagem"
       [(ngModel)]="newMessage"
     />
-    <button class="button-send-message" (click)="sendMessage()">Enviar</button>
+    <button class="button-send-message">Enviar</button>
   </div>
 </div>

@@ -1,82 +1,90 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
+import { Message } from '../../../shared/interface/send-message.interface';
+import { GetSendMessageService } from '../../../shared/service/get-send-message/get-send-message.service';
+import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 
 const CoreModule = [CommonModule, FormsModule];
-
+const SharedComponent = [SystemUnavailableComponent];
 @Component({
   selector: 'app-chat-message',
   templateUrl: './chat-message.component.html',
   styleUrls: ['./chat-message.component.scss'],
-  imports: [...CoreModule],
+  imports: [...CoreModule, ...SharedComponent],
   standalone: true,
 })
-export class ChatMessageComponent implements OnInit {
+export class ChatMessageComponent implements OnInit, AfterViewInit {
+  isLoading: boolean = true;
+  showSystemUnavailable: boolean = false;
   isRightAligned: boolean = false;
   newMessage = '';
-  meuId = '11111111';
-  messages = [
-    {
-      userHashPublic: '11111111',
-      userName: 'Thalysson',
-      text: 'Olá, tudo bem?',
-      time: '12:00',
-      avatar: 'assets/jo.jpeg',
-      alignRight: false, // Mensagem recebida
-    },
-    {
-      userHashPublic: '22222222',
-      userName: 'Joyce Diana',
-      text: 'Oi, tudo ótimo e você?',
-      time: '12:01',
-      avatar: 'assets/jo.jpeg',
-      alignRight: true, // Mensagem enviada
-    },
-    {
-      userHashPublic: '11111111',
-      userName: 'Thalysson',
-      text: 'Tudo ótimo, adorei a foto do perfil. Ja que nao rolou o match no tinder, rolou por aqui kkkkkk',
-      time: '12:00',
-      avatar: 'assets/jo.jpeg',
-      alignRight: false, // Mensagem recebida
-    },
-    {
-      userHashPublic: '22222222',
-      userName: 'Joyce Diana',
-      text: 'Oi, tudo ótimo e você?',
-      time: '12:01',
-      avatar: 'assets/jo.jpeg',
-      alignRight: true, // Mensagem enviada
-    },
-    {
-      userHashPublic: '11111111',
-      userName: 'Thalysson',
-      text: 'Tudo ótimo, adorei a foto do perfil. Ja que nao rolou o match no tinder, rolou por aqui kkkkkk',
-      time: '12:00',
-      avatar: 'assets/jo.jpeg',
-      alignRight: false, // Mensagem recebida
-    },
-  ];
+  userHashPublic: string = 'bb49a0f902';
+  messages: Message[] = [];
 
-  constructor(private router: Router) {}
+  @ViewChild('containMessages') containMessages!: ElementRef;
 
-  sendMessage() {
-    if (this.newMessage.trim()) {
-      this.messages.push({
-        userHashPublic: this.meuId,
-        userName: 'Você',
-        text: this.newMessage,
-        time: new Date().toLocaleTimeString(),
-        avatar: 'assets/my-avatar.png',
-        alignRight: true,
-      });
-      this.newMessage = '';
-    }
-  }
+  constructor(
+    private router: Router,
+    private getSendMessageService: GetSendMessageService,
+    private lottieAnimationIconService: LottieAnimationIconService
+  ) {}
 
   ngOnInit() {
     this.isRightAligned = !this.isRightAligned;
+    this.loadSendMessage();
+  }
+
+  ngAfterViewInit(): void {
+    this.scrollToBottom();
+
+    this.lottieAnimationIconService.loadLottieAnimation({
+      pathIconAnimation: 'loading.json',
+      idElement: 'lottie-icon-is-loading',
+      loop: true,
+      autoplay: true,
+    });
+  }
+
+  loadSendMessage() {
+    this.getSendMessageService
+      .sendMessage('aae92ffd-7101-4702-877f-5fd8d4b85704')
+      .subscribe({
+        next: (response) => {
+          this.messages = response.messages.sort((a, b) => {
+            return (
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+            );
+          });
+
+          setTimeout(() => this.scrollToBottom(), 0);
+
+          console.log(response);
+        },
+        error: () => {
+          this.showSystemUnavailable = true;
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+          this.showSystemUnavailable = false;
+        },
+      });
+  }
+
+  scrollToBottom(): void {
+    if (this.containMessages) {
+      const element = this.containMessages.nativeElement;
+      element.scrollTop = element.scrollHeight;
+    }
   }
 
   goToListChat() {
@@ -84,6 +92,10 @@ export class ChatMessageComponent implements OnInit {
   }
 
   getAlignment(messageId: string): boolean {
-    return messageId === this.meuId;
+    return messageId !== this.userHashPublic;
+  }
+
+  tryAgain() {
+    this.loadSendMessage();
   }
 }
