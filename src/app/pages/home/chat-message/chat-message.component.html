@@ -68,17 +68,27 @@
       </div>
     </div>
     <div class="contain-send-message">
-      <div class="input-container">
+      <form
+        [formGroup]="sendMessageFormGroup"
+        (submit)="sendMessage()"
+        class="input-container"
+      >
         <input
+          formControlName="sendMessage"
           appInputCustom
+          maxlength="500"
           type="text"
           placeholder="Digite sua mensagem"
           class="input-field"
         />
-        <button class="button-send-message">
+        <button
+          class="button-send-message"
+          [disabled]="sendMessageFormGroup.invalid"
+          type="submit"
+        >
           <i class="fi fi-rr-paper-plane"></i>
         </button>
-      </div>
+      </form>
     </div>
   </div>
 </div>

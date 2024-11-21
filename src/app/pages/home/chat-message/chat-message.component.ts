@@ -6,7 +6,13 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
@@ -14,8 +20,9 @@ import { Message } from '../../../shared/interface/send-message.interface';
 import { DataConnectChatMessageService } from '../../../shared/service/data-connect-chat-message/data-connect-chat-message.service';
 import { GetSendMessageService } from '../../../shared/service/get-send-message/get-send-message.service';
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
+import { noOnlySpacesValidator } from '../../../shared/validators/noOnlySpacesValidator.validator';
 
-const CoreModule = [CommonModule, FormsModule];
+const CoreModule = [CommonModule, FormsModule, ReactiveFormsModule];
 const SharedComponent = [SystemUnavailableComponent, InputCustomDirective];
 
 @Component({
@@ -35,6 +42,8 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
   currentPage: number = 1;
   totalPage: number = 0;
   matchId: string = '';
+  disabledButton: boolean = false;
+  sendMessageFormGroup!: FormGroup;
 
   @ViewChild('containMessages') containMessages?: ElementRef;
 
@@ -42,11 +51,13 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
     private router: Router,
     private getSendMessageService: GetSendMessageService,
     private lottieAnimationIconService: LottieAnimationIconService,
-    private dataConnectChatMessageService: DataConnectChatMessageService
+    private dataConnectChatMessageService: DataConnectChatMessageService,
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit() {
     this.loadSendMessage();
+    this.createSendMessageFormBuilder();
   }
 
   ngAfterViewInit(): void {
@@ -56,6 +67,20 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
 
   ngOnChanges(): void {
     this.initializeScrollEvent();
+  }
+
+  createSendMessageFormBuilder() {
+    this.sendMessageFormGroup = this.formBuilder.group({
+      sendMessage: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(500),
+          noOnlySpacesValidator(),
+        ],
+      ],
+    });
   }
 
   initializeLottieAnimation(): void {
@@ -152,5 +177,11 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
 
   tryAgain(): void {
     this.loadSendMessage();
+  }
+
+  sendMessage() {
+    console.log('enviando mensagem');
+    console.log(this.sendMessageFormGroup.get('sendMessage')?.value.trim());
+    this.sendMessageFormGroup.reset();
   }
 }

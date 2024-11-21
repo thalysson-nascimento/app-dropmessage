@@ -176,9 +176,13 @@ input[appInputCustom] {
   border: none;
   padding-right: var(--space-medium);
   background: none;
-}
 
-i {
-  font-size: 24px;
-  color: var(--text-dark);
+  i {
+    font-size: 24px;
+    color: var(--text-dark);
+  }
+
+  &:disabled i {
+    color: var(--text-dark-light);
+  }
 }
