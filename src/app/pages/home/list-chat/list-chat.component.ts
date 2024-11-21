@@ -5,6 +5,7 @@ import { App } from '@capacitor/app';
 import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { ListChat } from '../../../shared/interface/list-chat.interface';
+import { DataConnectChatMessageService } from '../../../shared/service/data-connect-chat-message/data-connect-chat-message.service';
 import { ListChatService } from '../../../shared/service/list-chat/list-chat.service';
 
 const CoreModule = [NgIf, NgFor];
@@ -25,7 +26,8 @@ export class ListChatComponent implements OnInit {
   constructor(
     private router: Router,
     private listChatService: ListChatService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private dataConnectChatMessageService: DataConnectChatMessageService
   ) {}
 
   ngOnInit() {
@@ -37,14 +39,13 @@ export class ListChatComponent implements OnInit {
     this.showSystemUnavailable = false;
     this.loadListChat();
   }
+
   loadListChat() {
     this.listChatService.listChat().subscribe({
       next: (response) => {
-        console.log(response);
         this.listChat = response;
       },
       error: (error) => {
-        console.error(error);
         this.showSystemUnavailable = true;
         this.isLoading = false;
       },
@@ -69,6 +70,10 @@ export class ListChatComponent implements OnInit {
   }
 
   goToChat(mathId: string, hashPublicId: string) {
-    console.log({ mathId, hashPublicId });
+    this.dataConnectChatMessageService.setDataConnectChatMessage({
+      mathId,
+      hashPublicId,
+    });
+    this.router.navigateByUrl('home/chat-message');
   }
 }
