@@ -35,7 +35,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
   totalPage: number = 0;
   matchId: string = '';
 
-  @ViewChild('containMessages') containMessages!: ElementRef;
+  @ViewChild('containMessages') containMessages?: ElementRef;
 
   constructor(
     private router: Router,
@@ -49,17 +49,31 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.scrollToBottom();
+    this.initializeLottieAnimation();
+    this.initializeScrollEvent();
+  }
 
+  ngOnChanges(): void {
+    this.initializeScrollEvent();
+  }
+
+  initializeLottieAnimation(): void {
     this.lottieAnimationIconService.loadLottieAnimation({
       pathIconAnimation: 'loading.json',
       idElement: 'lottie-icon-is-loading',
       loop: true,
       autoplay: true,
     });
+  }
 
-    const element = this.containMessages.nativeElement;
-    element.addEventListener('scroll', () => this.onScroll(element));
+  initializeScrollEvent(): void {
+    if (this.containMessages?.nativeElement) {
+      console.log('Registrando scroll');
+      const element = this.containMessages.nativeElement;
+      element.addEventListener('scroll', () => this.onScroll(element));
+    } else {
+      console.error('Elemento #containMessages não encontrado');
+    }
   }
 
   loadSendMessage(
@@ -68,7 +82,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
     prepend: boolean = false
   ) {
     const element = this.containMessages?.nativeElement;
-    const previousHeight = prepend ? element.scrollHeight : 0;
+    const previousHeight = prepend ? element?.scrollHeight : 0;
 
     this.dataConnectChatMessageService
       .getDataConnectChatMessage()
@@ -77,7 +91,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
       });
 
     this.getSendMessageService
-      .sendMessage(this.matchId, page, limit)
+      .sendMessage('aae92ffd-7101-4702-877f-5fd8d4b85704', page, limit)
       .subscribe({
         next: (response) => {
           this.totalPage = response.pagination.totalPages;
@@ -86,12 +100,13 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
               new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
             );
           });
+          this.initializeScrollEvent();
 
           if (prepend) {
             this.messages = [...newMessages, ...this.messages];
             setTimeout(() => {
-              const newHeight = element.scrollHeight;
-              element.scrollTop = newHeight - previousHeight;
+              const newHeight = element?.scrollHeight || 0;
+              if (element) element.scrollTop = newHeight - previousHeight;
             }, 0);
           } else {
             this.messages = [...this.messages, ...newMessages];

@@ -14,39 +14,36 @@
       <p class="subtitle">Converse com os matches do seu perfil</p>
     </div>
   </div>
-  <div class="contain-body">
-    <div *ngIf="isLoading">
-      <app-load-shimmer [height]="'5rem'"></app-load-shimmer>
-      <app-load-shimmer [height]="'5rem'"></app-load-shimmer>
-      <app-load-shimmer [height]="'5rem'"></app-load-shimmer>
-    </div>
 
-    <app-system-unavailable
-      *ngIf="showSystemUnavailable"
-      (clickLoading)="tryAgain()"
-      [infoMessage]="
-        'No momento estamos com nossos serviços indisponíves, volte novamente mais tarde!'
-      "
-    >
-    </app-system-unavailable>
+  <div class="contain-loading" *ngIf="isLoading">
+    <div id="lottie-icon-is-loading" class="lottie-icon-no-match"></div>
+  </div>
 
-    <div *ngIf="listChat.length === 0">
-      <p class="subtitle">No momento ainda não há matches.</p>
-    </div>
+  <app-system-unavailable
+    *ngIf="showSystemUnavailable && !isLoading"
+    (clickLoading)="tryAgain()"
+    [infoMessage]="
+      'No momento estamos com nossos serviços indisponíves, volte novamente mais tarde!'
+    "
+  >
+  </app-system-unavailable>
 
-    <div *ngIf="!showSystemUnavailable && !isLoading">
-      <ul appListStyle>
-        <li
-          *ngFor="let chat of listChat"
-          (click)="goToChat(chat.mathId, chat.hashPublicId)"
-        >
-          <img [src]="chat.avatar" class="avatar" alt="" />
-          <div class="contain-description">
-            <p class="name">{{ chat.name }}</p>
-            <p class="last-message">ainda não iniciaram uma conversa</p>
-          </div>
-        </li>
-      </ul>
-    </div>
+  <div *ngIf="listChat.length === 0 && !showSystemUnavailable && !isLoading">
+    <p class="subtitle">No momento ainda não há matches.</p>
+  </div>
+
+  <div *ngIf="!showSystemUnavailable && !isLoading">
+    <ul appListStyle>
+      <li
+        *ngFor="let chat of listChat"
+        (click)="goToChat(chat.mathId, chat.hashPublicId)"
+      >
+        <img [src]="chat.avatar" class="avatar" alt="" />
+        <div class="contain-description">
+          <p class="name">{{ chat.name }}</p>
+          <p class="last-message">ainda não iniciaram uma conversa</p>
+        </div>
+      </li>
+    </ul>
   </div>
 </div>

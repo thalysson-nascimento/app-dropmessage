@@ -3,16 +3,19 @@
   height: 100vh; /* Ocupa 100% da altura da tela */
   display: flex;
   flex-direction: column;
-  background-color: var(--color-dp-gray-light);
-  padding: 1rem;
 }
 
 .body {
   flex: 8;
-  border-radius: var(--space-medium);
   display: flex;
   flex-direction: column;
-  background-color: var(--withe);
+}
+
+.messages-wrapper {
+  height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .header {
@@ -27,6 +30,14 @@
   color: var(--text-dark-secundary);
 }
 
+.contain-loading {
+  height: calc(100vh - 100px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
 .line {
   width: 100%;
   border-bottom: 1px solid #f6f6f6;
@@ -34,7 +45,7 @@
 
 .contain-send-message {
   width: 100%;
-  margin-top: var(--space-medium);
+  // margin-top: var(--space-medium);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -50,9 +61,6 @@ input {
 }
 
 .button-send-message {
-  padding: var(--space-medium);
-  border-radius: 50px;
-  background-color: var(--withe);
   border: none;
   color: var(--text-dark);
   cursor: pointer;
@@ -67,6 +75,10 @@ input {
   margin-right: var(--space-small);
 }
 
+.hidden {
+  display: none;
+}
+
 .avatar-message {
   width: 2rem;
   height: 2rem;
@@ -75,12 +87,10 @@ input {
 }
 
 .contain-messages {
-  flex: 1; /* Permite que a altura seja ajustada dinamicamente */
+  flex: 1;
   padding: 1rem;
-  overflow-y: auto; /* Habilita a rolagem vertical */
-  max-height: calc(
-    100vh - 200px
-  ); /* Ajuste conforme necessário para evitar overflow */
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
 }
 
 .message {
@@ -96,7 +106,7 @@ input {
     }
 
     .message-text {
-      background-color: var(--color-dp-gray-light);
+      background-color: #f6f6f6;
       margin-left: var(--space-large);
       border-end-start-radius: var(--space-medium);
       border-start-end-radius: var(--space-medium);
@@ -110,7 +120,7 @@ input {
 }
 
 .message-text {
-  background-color: var(--color-dp-gray-light);
+  background-color: #f6f6f6;
   color: var(--text-dark);
   padding: var(--space-medium);
   border-end-start-radius: var(--space-medium);
@@ -135,7 +145,6 @@ input {
 }
 
 .message-user {
-  // margin-left: var(--space-medium);
   margin-inline: var(--space-medium);
 }
 

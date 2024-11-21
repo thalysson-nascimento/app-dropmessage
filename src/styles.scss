@@ -34,23 +34,16 @@ body {
   --font-size-xxlarge: 3rem;
 }
 
+html,
 body {
-  font-family: "Roboto", sans-serif;
   font-size: var(--text-medium);
   color: var(--text-dark);
   -webkit-font-smoothing: antialiased;
-  color: --text-dark;
+  margin: 0;
+  font-family: "Roboto, Helvetica Neue", sans-serif;
+  height: 100%;
 }
 
 .mat-bottom-sheet-container {
   z-index: 2000; /* ou um valor alto o suficiente para estar sobre outros elementos */
-}
-
-html,
-body {
-  height: 100%;
-}
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
