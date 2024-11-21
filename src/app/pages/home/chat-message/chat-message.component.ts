@@ -9,13 +9,14 @@ import {
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
+import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { Message } from '../../../shared/interface/send-message.interface';
 import { DataConnectChatMessageService } from '../../../shared/service/data-connect-chat-message/data-connect-chat-message.service';
 import { GetSendMessageService } from '../../../shared/service/get-send-message/get-send-message.service';
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 
 const CoreModule = [CommonModule, FormsModule];
-const SharedComponent = [SystemUnavailableComponent];
+const SharedComponent = [SystemUnavailableComponent, InputCustomDirective];
 
 @Component({
   selector: 'app-chat-message',

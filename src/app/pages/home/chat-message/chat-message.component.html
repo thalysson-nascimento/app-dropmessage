@@ -12,7 +12,6 @@
       <span class="location">João Pessoa/PB</span>
     </div>
   </div>
-  <hr class="line" />
 
   <div *ngIf="isLoading">
     <div class="contain-loading">
@@ -57,7 +56,7 @@
               }}
             </p>
             <p class="message-text">{{ message.content }}</p>
-            <span class="message-time">{{ message.createdAt }}</span>
+            <p class="message-time">{{ message.createdAt }}</p>
           </div>
           <img
             *ngIf="getAlignment(message.user.userHashPublic)"
@@ -69,13 +68,16 @@
       </div>
     </div>
     <div class="contain-send-message">
-      <div class="contain-send-message">
+      <div class="input-container">
         <input
+          appInputCustom
           type="text"
           placeholder="Digite sua mensagem"
-          [(ngModel)]="newMessage"
+          class="input-field"
         />
-        <button class="button-send-message">Enviar</button>
+        <button class="button-send-message">
+          <i class="fi fi-rr-paper-plane"></i>
+        </button>
       </div>
     </div>
   </div>
