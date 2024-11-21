@@ -70,7 +70,6 @@ export class ListChatComponent implements OnInit {
   }
 
   goToChat(mathId: string, hashPublicId: string) {
-    console.log({ mathId, hashPublicId });
     this.dataConnectChatMessageService.setDataConnectChatMessage({
       mathId,
       hashPublicId,
