@@ -62,6 +62,7 @@ ul {
 
   .contain-icon-and-description {
     display: flex;
+    align-items: center;
   }
 
   .action-timer {
@@ -80,4 +81,10 @@ ul {
       padding-right: 1rem;
     }
   }
+}
+
+i {
+  font-size: var(--font-size-large);
+  color: var(--text-dark);
+  margin-right: var(--space-medium);
 }

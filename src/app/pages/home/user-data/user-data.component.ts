@@ -1,18 +1,13 @@
 import { NgIf } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { ListStyleDirective } from '../../../shared/directives/list-style/list-style.directive';
 import { MyProfile } from '../../../shared/interface/my-profile.interface';
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 import { MyProfileService } from '../../../shared/service/my-profile/my-profile.service';
 
-const SharedComponents = [
-  LoadShimmerComponent,
-  SystemUnavailableComponent,
-  ListStyleDirective,
-];
+const SharedComponents = [SystemUnavailableComponent, ListStyleDirective];
 const CoreModule = [NgIf];
 
 @Component({
