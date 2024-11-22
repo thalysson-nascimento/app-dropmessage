@@ -1,70 +1,57 @@
 <div class="container">
-  <div class="container-header">
-    <div class="header">
-      <img
-        src="assets/icon-static/arrow-left.svg"
-        style="width: 24px; height: 24px"
-        alt=""
-        (click)="goToProfile()"
-      />
-    </div>
-
-    <div class="container-title-subtitle">
-      <h1 class="title">Posts Compartilhados</h1>
-      <p class="subtitle">{{ userName }}</p>
-    </div>
+  <div class="header">
+    <img
+      src="assets/icon-static/arrow-left.svg"
+      style="width: 24px; height: 24px"
+      alt=""
+      (click)="goToProfile()"
+    />
   </div>
 
-  <div class="contain-post-message">
-    <div class="contain-account-post">
-      <app-load-shimmer
-        [height]="'2rem'"
-        *ngIf="isLoading && !showSystemUnavailable"
-      ></app-load-shimmer>
-      <p class="acount-post" *ngIf="!isLoading">
-        meus posts({{ listPostMessage.length }})
-      </p>
-    </div>
+  <div class="container-title-subtitle">
+    <h1 class="title">Posts Compartilhados</h1>
+    <p class="subtitle">{{ userName }}</p>
+  </div>
 
-    <app-system-unavailable
-      *ngIf="showSystemUnavailable"
-      (clickLoading)="tryAgain()"
-      [infoMessage]="
-        'No momento estamos com nossos serviços indisponíves, volte novamente mais tarde!'
-      "
-    >
-    </app-system-unavailable>
+  <div class="contain-loading" *ngIf="isLoading">
+    <div id="lottie-icon-is-loading" class="lottie-icon-no-match"></div>
+  </div>
 
-    <section *ngIf="!showSystemUnavailable">
-      <div *ngIf="isLoading">
-        <app-load-shimmer [height]="'10rem'"></app-load-shimmer>
-        <app-load-shimmer [height]="'10rem'"></app-load-shimmer>
-        <app-load-shimmer [height]="'10rem'"></app-load-shimmer>
-        <app-load-shimmer [height]="'10rem'"></app-load-shimmer>
-        <app-load-shimmer [height]="'10rem'"></app-load-shimmer>
-        <app-load-shimmer [height]="'10rem'"></app-load-shimmer>
-      </div>
+  <div class="contain-account-post">
+    <p class="acount-post" *ngIf="!isLoading">
+      meus posts({{ listPostMessage.length }})
+    </p>
+  </div>
 
-      <div *ngIf="!isLoading">
-        <div
-          class="image-container"
-          *ngFor="let postMessage of listPostMessage; let i = index"
-        >
+  <app-system-unavailable
+    *ngIf="showSystemUnavailable"
+    (clickLoading)="tryAgain()"
+    [infoMessage]="
+      'No momento estamos com nossos serviços indisponíves, volte novamente mais tarde!'
+    "
+  >
+  </app-system-unavailable>
+
+  <section *ngIf="!showSystemUnavailable">
+    <div *ngIf="!isLoading">
+      <div
+        class="image-container"
+        *ngFor="let postMessage of listPostMessage; let i = index"
+      >
+        <img
+          [src]="postMessage.image"
+          [style.height]="randomHeights[i]"
+          alt=""
+        />
+        <div class="overlay">
           <img
-            [src]="postMessage.image"
-            [style.height]="randomHeights[i]"
+            src="assets/icon-static/heart-like.svg"
+            class="heart-like"
             alt=""
           />
-          <div class="overlay">
-            <img
-              src="assets/icon-static/heart-like.svg"
-              class="heart-like"
-              alt=""
-            />
-            <p>{{ postMessage.totalLikes }}</p>
-          </div>
+          <p>{{ postMessage.totalLikes }}</p>
         </div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 </div>

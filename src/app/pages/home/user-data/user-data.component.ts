@@ -1,17 +1,13 @@
 import { NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { ListStyleDirective } from '../../../shared/directives/list-style/list-style.directive';
 import { MyProfile } from '../../../shared/interface/my-profile.interface';
+import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 import { MyProfileService } from '../../../shared/service/my-profile/my-profile.service';
 
-const SharedComponents = [
-  LoadShimmerComponent,
-  SystemUnavailableComponent,
-  ListStyleDirective,
-];
+const SharedComponents = [SystemUnavailableComponent, ListStyleDirective];
 const CoreModule = [NgIf];
 
 @Component({
@@ -21,18 +17,28 @@ const CoreModule = [NgIf];
   standalone: true,
   imports: [...SharedComponents, ...CoreModule],
 })
-export class UserDataComponent implements OnInit {
+export class UserDataComponent implements OnInit, AfterViewInit {
   isLoading: boolean = true;
   showSystemUnavailable: boolean = false;
   myProfile!: MyProfile;
 
   constructor(
     private router: Router,
-    private myProfileService: MyProfileService
+    private myProfileService: MyProfileService,
+    private lottieAnimationIconService: LottieAnimationIconService
   ) {}
 
   ngOnInit() {
     this.loadMyProfile();
+  }
+
+  ngAfterViewInit(): void {
+    this.lottieAnimationIconService.loadLottieAnimation({
+      pathIconAnimation: 'loading.json',
+      idElement: 'lottie-icon-is-loading',
+      loop: true,
+      autoplay: true,
+    });
   }
 
   goToProfile() {

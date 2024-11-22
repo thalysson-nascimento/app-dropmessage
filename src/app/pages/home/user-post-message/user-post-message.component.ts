@@ -1,13 +1,13 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { UserPostMessageElement } from '../../../shared/interface/user-post-message.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
+import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 import { UserPostMessageService } from '../../../shared/service/user-post-message/user-post-message.service';
 
-const SahredComponents = [LoadShimmerComponent, SystemUnavailableComponent];
+const SahredComponents = [SystemUnavailableComponent];
 
 const CoreModule = [NgIf, NgFor];
 
@@ -18,7 +18,7 @@ const CoreModule = [NgIf, NgFor];
   standalone: true,
   imports: [SahredComponents, CoreModule],
 })
-export class UserPostMessageComponent implements OnInit {
+export class UserPostMessageComponent implements OnInit, AfterViewInit {
   isLoading: boolean = true;
   randomHeights = ['15rem'];
   listPostMessage!: UserPostMessageElement[];
@@ -28,14 +28,21 @@ export class UserPostMessageComponent implements OnInit {
   constructor(
     private userPostMessageService: UserPostMessageService,
     private router: Router,
-    private cacheAvatarService: CacheAvatarService
+    private cacheAvatarService: CacheAvatarService,
+    private lottieAnimationIconService: LottieAnimationIconService
   ) {}
 
   ngOnInit() {
     this.loadUserName();
     this.loadUserPostMessage();
-    this.listPostMessage.forEach(() => {
-      this.randomHeights.push(this.getRandomHeight());
+  }
+
+  ngAfterViewInit(): void {
+    this.lottieAnimationIconService.loadLottieAnimation({
+      pathIconAnimation: 'loading.json',
+      idElement: 'lottie-icon-is-loading',
+      loop: true,
+      autoplay: true,
     });
   }
 
@@ -58,9 +65,13 @@ export class UserPostMessageComponent implements OnInit {
       next: (response) => {
         console.log(response);
         this.listPostMessage = response.userPostMessages;
+        this.listPostMessage.forEach(() => {
+          this.randomHeights.push(this.getRandomHeight());
+        });
       },
       error: () => {
         this.showSystemUnavailable = true;
+        this.isLoading = false;
       },
       complete: () => {
         this.isLoading = false;

@@ -1,14 +1,20 @@
 import { NgFor, NgIf, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
-import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { Notification } from '../../../shared/interface/notification.interface';
+import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 import { NotificationService } from '../../../shared/service/notification/notification.service';
 
 const CoreModule = [NgIf, NgFor];
-const SharedComponent = [LoadShimmerComponent, SystemUnavailableComponent];
+const SharedComponent = [SystemUnavailableComponent];
 
 @Component({
   selector: 'app-notification',
@@ -17,7 +23,7 @@ const SharedComponent = [LoadShimmerComponent, SystemUnavailableComponent];
   imports: [...CoreModule, ...SharedComponent],
   standalone: true,
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent implements OnInit, AfterViewInit {
   notifications: Notification[] = [];
   isLoading: boolean = true;
   showSystemUnavailable: boolean = false;
@@ -25,11 +31,21 @@ export class NotificationComponent implements OnInit {
   constructor(
     private router: Router,
     private notificationService: NotificationService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private lottieAnimationIconService: LottieAnimationIconService
   ) {}
 
   ngOnInit() {
     this.loadNotification();
+  }
+
+  ngAfterViewInit(): void {
+    this.lottieAnimationIconService.loadLottieAnimation({
+      pathIconAnimation: 'loading.json',
+      idElement: 'lottie-icon-is-loading',
+      loop: true,
+      autoplay: true,
+    });
   }
 
   navigateBackUsingApp() {
@@ -56,13 +72,15 @@ export class NotificationComponent implements OnInit {
       next: (response) => {
         console.log(response);
         this.notifications = response;
-        this.isLoading = false;
-        this.showSystemUnavailable = false;
       },
       error: (error) => {
         console.error(error);
         this.showSystemUnavailable = true;
         this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+        this.showSystemUnavailable = false;
       },
     });
   }

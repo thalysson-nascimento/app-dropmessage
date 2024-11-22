@@ -16,8 +16,6 @@ export class ListStyleDirective implements OnInit {
     listItems.forEach((item: HTMLElement, index: number) => {
       this.renderer.setStyle(item, 'display', 'flex');
       this.renderer.setStyle(item, 'width', '100%');
-      this.renderer.setStyle(item, 'paddingLeft', '1rem');
-      this.renderer.setStyle(item, 'paddingRight', '1rem');
       this.renderer.setStyle(item, 'paddingTop', '1.5rem');
       this.renderer.setStyle(item, 'paddingBottom', '1.5rem');
 

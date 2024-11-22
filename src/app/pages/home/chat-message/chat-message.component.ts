@@ -6,16 +6,25 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
-import { Message } from '../../../shared/interface/send-message.interface';
+import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
+import { Message } from '../../../shared/interface/get-send-message.interface';
 import { DataConnectChatMessageService } from '../../../shared/service/data-connect-chat-message/data-connect-chat-message.service';
 import { GetSendMessageService } from '../../../shared/service/get-send-message/get-send-message.service';
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
+import { SendMessageService } from '../../../shared/service/send-message/send-message.service';
+import { noOnlySpacesValidator } from '../../../shared/validators/noOnlySpacesValidator.validator';
 
-const CoreModule = [CommonModule, FormsModule];
-const SharedComponent = [SystemUnavailableComponent];
+const CoreModule = [CommonModule, FormsModule, ReactiveFormsModule];
+const SharedComponent = [SystemUnavailableComponent, InputCustomDirective];
 
 @Component({
   selector: 'app-chat-message',
@@ -34,32 +43,65 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
   currentPage: number = 1;
   totalPage: number = 0;
   matchId: string = '';
+  disabledButton: boolean = false;
+  sendMessageFormGroup!: FormGroup;
 
-  @ViewChild('containMessages') containMessages!: ElementRef;
+  @ViewChild('containMessages') containMessages?: ElementRef;
 
   constructor(
     private router: Router,
     private getSendMessageService: GetSendMessageService,
     private lottieAnimationIconService: LottieAnimationIconService,
-    private dataConnectChatMessageService: DataConnectChatMessageService
+    private dataConnectChatMessageService: DataConnectChatMessageService,
+    private formBuilder: FormBuilder,
+    private sendMessageService: SendMessageService
   ) {}
 
   ngOnInit() {
     this.loadSendMessage();
+    this.createSendMessageFormBuilder();
   }
 
   ngAfterViewInit(): void {
-    this.scrollToBottom();
+    this.initializeLottieAnimation();
+    this.initializeScrollEvent();
+  }
 
+  ngOnChanges(): void {
+    this.initializeScrollEvent();
+  }
+
+  createSendMessageFormBuilder() {
+    this.sendMessageFormGroup = this.formBuilder.group({
+      sendMessage: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(500),
+          noOnlySpacesValidator(),
+        ],
+      ],
+    });
+  }
+
+  initializeLottieAnimation(): void {
     this.lottieAnimationIconService.loadLottieAnimation({
       pathIconAnimation: 'loading.json',
       idElement: 'lottie-icon-is-loading',
       loop: true,
       autoplay: true,
     });
+  }
 
-    const element = this.containMessages.nativeElement;
-    element.addEventListener('scroll', () => this.onScroll(element));
+  initializeScrollEvent(): void {
+    if (this.containMessages?.nativeElement) {
+      console.log('Registrando scroll');
+      const element = this.containMessages.nativeElement;
+      element.addEventListener('scroll', () => this.onScroll(element));
+    } else {
+      console.error('Elemento #containMessages não encontrado');
+    }
   }
 
   loadSendMessage(
@@ -68,7 +110,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
     prepend: boolean = false
   ) {
     const element = this.containMessages?.nativeElement;
-    const previousHeight = prepend ? element.scrollHeight : 0;
+    const previousHeight = prepend ? element?.scrollHeight : 0;
 
     this.dataConnectChatMessageService
       .getDataConnectChatMessage()
@@ -77,7 +119,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
       });
 
     this.getSendMessageService
-      .sendMessage(this.matchId, page, limit)
+      .sendMessage('aae92ffd-7101-4702-877f-5fd8d4b85704', page, limit)
       .subscribe({
         next: (response) => {
           this.totalPage = response.pagination.totalPages;
@@ -86,12 +128,13 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
               new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
             );
           });
+          this.initializeScrollEvent();
 
           if (prepend) {
             this.messages = [...newMessages, ...this.messages];
             setTimeout(() => {
-              const newHeight = element.scrollHeight;
-              element.scrollTop = newHeight - previousHeight;
+              const newHeight = element?.scrollHeight || 0;
+              if (element) element.scrollTop = newHeight - previousHeight;
             }, 0);
           } else {
             this.messages = [...this.messages, ...newMessages];
@@ -136,5 +179,32 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
 
   tryAgain(): void {
     this.loadSendMessage();
+  }
+
+  sendMessage() {
+    if (this.sendMessageFormGroup.valid) {
+      console.log('enviando mensagem');
+      console.log(this.sendMessageFormGroup.get('sendMessage')?.value.trim());
+
+      const message = this.sendMessageFormGroup
+        .get('sendMessage')
+        ?.value.trim();
+      this.sendMessageService
+        .sendMessage({
+          matchId: this.matchId,
+          userHashPublic: this.userHashPublic,
+          content: message,
+        })
+        .subscribe({
+          next: (response) => {
+            console.log(response);
+          },
+          error: (error) => {
+            console.log(error);
+          },
+        });
+
+      this.sendMessageFormGroup.reset();
+    }
   }
 }

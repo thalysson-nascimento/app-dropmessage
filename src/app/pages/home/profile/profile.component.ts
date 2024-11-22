@@ -7,6 +7,7 @@ import { ButtonStyleDirective } from '../../../shared/directives/button-style/bu
 import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
+import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 
 const CoreModule = [NgIf];
 const SharedComponent = [PostLikeStateComponent, ButtonStyleDirective];
@@ -25,6 +26,7 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
     private cacheAvatarService: CacheAvatarService,
+    private userHashPublicService: UserHashPublicService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -49,6 +51,7 @@ export class ProfileComponent implements OnInit {
           console.log('Avatar não encontrado no cache.');
         }
       },
+
       error: (error) => {
         console.log('Erro ao carregar avatar do cache:', error);
       },
@@ -63,6 +66,7 @@ export class ProfileComponent implements OnInit {
   logout() {
     this.tokenStorageSecurityRequestService.deleteToken();
     this.cacheAvatarService.resetAvatarCachePreferences();
+    this.userHashPublicService.removeUserHashPublic();
     this.router.navigateByUrl('auth/sign');
   }
 

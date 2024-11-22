@@ -2,14 +2,15 @@ import { NgFor, NgIf, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
-import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { ListChat } from '../../../shared/interface/list-chat.interface';
 import { DataConnectChatMessageService } from '../../../shared/service/data-connect-chat-message/data-connect-chat-message.service';
 import { ListChatService } from '../../../shared/service/list-chat/list-chat.service';
+import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
+import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 
 const CoreModule = [NgIf, NgFor];
-const SharedComponent = [LoadShimmerComponent, SystemUnavailableComponent];
+const SharedComponent = [SystemUnavailableComponent];
 
 @Component({
   selector: 'app-list-chat',
@@ -27,7 +28,9 @@ export class ListChatComponent implements OnInit {
     private router: Router,
     private listChatService: ListChatService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private dataConnectChatMessageService: DataConnectChatMessageService
+    private dataConnectChatMessageService: DataConnectChatMessageService,
+    private lottieAnimationIconService: LottieAnimationIconService,
+    private userHashPublicService: UserHashPublicService
   ) {}
 
   ngOnInit() {
@@ -40,12 +43,21 @@ export class ListChatComponent implements OnInit {
     this.loadListChat();
   }
 
+  ngAfterViewInit(): void {
+    this.lottieAnimationIconService.loadLottieAnimation({
+      pathIconAnimation: 'loading.json',
+      idElement: 'lottie-icon-is-loading',
+      loop: true,
+      autoplay: true,
+    });
+  }
+
   loadListChat() {
     this.listChatService.listChat().subscribe({
       next: (response) => {
         this.listChat = response;
       },
-      error: (error) => {
+      error: () => {
         this.showSystemUnavailable = true;
         this.isLoading = false;
       },
@@ -69,11 +81,21 @@ export class ListChatComponent implements OnInit {
     this.navigateBackUsingApp();
   }
 
-  goToChat(mathId: string, hashPublicId: string) {
-    this.dataConnectChatMessageService.setDataConnectChatMessage({
-      mathId,
-      hashPublicId,
+  goToChat(mathId: string) {
+    console.log('MathId:', mathId);
+    this.userHashPublicService.getUserHashPublic().subscribe({
+      next: (hashPublicId) => {
+        if (hashPublicId) {
+          this.dataConnectChatMessageService.setDataConnectChatMessage({
+            mathId,
+            hashPublicId,
+          });
+          this.router.navigateByUrl('home/chat-message');
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao obter Hash Public ID:', err);
+      },
     });
-    this.router.navigateByUrl('home/chat-message');
   }
 }
