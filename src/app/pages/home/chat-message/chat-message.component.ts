@@ -16,10 +16,11 @@ import {
 import { Router } from '@angular/router';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
-import { Message } from '../../../shared/interface/send-message.interface';
+import { Message } from '../../../shared/interface/get-send-message.interface';
 import { DataConnectChatMessageService } from '../../../shared/service/data-connect-chat-message/data-connect-chat-message.service';
 import { GetSendMessageService } from '../../../shared/service/get-send-message/get-send-message.service';
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
+import { SendMessageService } from '../../../shared/service/send-message/send-message.service';
 import { noOnlySpacesValidator } from '../../../shared/validators/noOnlySpacesValidator.validator';
 
 const CoreModule = [CommonModule, FormsModule, ReactiveFormsModule];
@@ -52,7 +53,8 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
     private getSendMessageService: GetSendMessageService,
     private lottieAnimationIconService: LottieAnimationIconService,
     private dataConnectChatMessageService: DataConnectChatMessageService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private sendMessageService: SendMessageService
   ) {}
 
   ngOnInit() {
@@ -180,8 +182,29 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
   }
 
   sendMessage() {
-    console.log('enviando mensagem');
-    console.log(this.sendMessageFormGroup.get('sendMessage')?.value.trim());
-    this.sendMessageFormGroup.reset();
+    if (this.sendMessageFormGroup.valid) {
+      console.log('enviando mensagem');
+      console.log(this.sendMessageFormGroup.get('sendMessage')?.value.trim());
+
+      const message = this.sendMessageFormGroup
+        .get('sendMessage')
+        ?.value.trim();
+      this.sendMessageService
+        .sendMessage({
+          matchId: this.matchId,
+          userHashPublic: this.userHashPublic,
+          content: message,
+        })
+        .subscribe({
+          next: (response) => {
+            console.log(response);
+          },
+          error: (error) => {
+            console.log(error);
+          },
+        });
+
+      this.sendMessageFormGroup.reset();
+    }
   }
 }

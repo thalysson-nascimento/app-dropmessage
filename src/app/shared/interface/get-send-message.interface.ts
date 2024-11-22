@@ -1,4 +1,4 @@
-export interface SendMessage {
+export interface GetSendMessage {
   pagination: Pagination;
   messages: Message[];
 }
