@@ -52,6 +52,9 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
 
   @ViewChild('containMessages') containMessages?: ElementRef;
+  userMatchName!: string;
+  userMatchLocation!: { stateCode: string; city: string };
+  userMatchAvatar!: string;
 
   constructor(
     private router: Router,
@@ -74,6 +77,10 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
       .getDataConnectChatMessage()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((data) => {
+        this.userMatchAvatar = data.avatar;
+        this.userMatchName = data.name;
+        this.userMatchLocation = data.userLocation;
+
         this.matchId = data.mathId;
 
         if (this.matchId) {

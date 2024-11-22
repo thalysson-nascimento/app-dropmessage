@@ -1,4 +1,9 @@
 export interface DataConnectChatMessage {
   mathId: string;
-  hashPublicId: string;
+  name: string;
+  avatar: string;
+  userLocation: {
+    stateCode: string;
+    city: string;
+  };
 }

@@ -6,10 +6,14 @@
       alt=""
       (click)="goToListChat()"
     />
-    <img src="assets/jo.jpeg" class="avatar" alt="" />
+    <img [src]="userMatchAvatar" class="avatar" alt="" />
     <div>
-      <p><strong>Dyana Joice</strong></p>
-      <span class="location">João Pessoa/PB</span>
+      <p>
+        <strong>{{ userMatchName }}</strong>
+      </p>
+      <span class="location"
+        >{{ userMatchLocation.city }}/{{ userMatchLocation.stateCode }}</span
+      >
     </div>
   </div>
 
