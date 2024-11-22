@@ -3,6 +3,8 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  NgZone,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -14,6 +16,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { Message } from '../../../shared/interface/get-send-message.interface';
@@ -21,6 +24,8 @@ import { DataConnectChatMessageService } from '../../../shared/service/data-conn
 import { GetSendMessageService } from '../../../shared/service/get-send-message/get-send-message.service';
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 import { SendMessageService } from '../../../shared/service/send-message/send-message.service';
+import { SocketSenMessageService } from '../../../shared/service/socket-send-message/socket-sen-message.service';
+import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 import { noOnlySpacesValidator } from '../../../shared/validators/noOnlySpacesValidator.validator';
 
 const CoreModule = [CommonModule, FormsModule, ReactiveFormsModule];
@@ -33,20 +38,23 @@ const SharedComponent = [SystemUnavailableComponent, InputCustomDirective];
   imports: [...CoreModule, ...SharedComponent],
   standalone: true,
 })
-export class ChatMessageComponent implements OnInit, AfterViewInit {
+export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading: boolean = true;
   showSystemUnavailable: boolean = false;
   isLoadingMore: boolean = false;
   newMessage: string = '';
-  userHashPublic: string = 'bb49a0f902';
+  userHashPublic: string = '';
   messages: Message[] = [];
   currentPage: number = 1;
   totalPage: number = 0;
   matchId: string = '';
-  disabledButton: boolean = false;
   sendMessageFormGroup!: FormGroup;
+  private unsubscribe$ = new Subject<void>();
 
   @ViewChild('containMessages') containMessages?: ElementRef;
+  userMatchName!: string;
+  userMatchLocation!: { stateCode: string; city: string };
+  userMatchAvatar!: string;
 
   constructor(
     private router: Router,
@@ -54,12 +62,34 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
     private lottieAnimationIconService: LottieAnimationIconService,
     private dataConnectChatMessageService: DataConnectChatMessageService,
     private formBuilder: FormBuilder,
-    private sendMessageService: SendMessageService
+    private sendMessageService: SendMessageService,
+    private socketSenMessageService: SocketSenMessageService,
+    private userHashPublicService: UserHashPublicService,
+    private zone: NgZone
   ) {}
 
   ngOnInit() {
-    this.loadSendMessage();
+    this.onLoadUserHashPublic();
     this.createSendMessageFormBuilder();
+
+    // Obtenha o `matchId` antes de inicializar a escuta do socket ou carregar mensagens
+    this.dataConnectChatMessageService
+      .getDataConnectChatMessage()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((data) => {
+        this.userMatchAvatar = data.avatar;
+        this.userMatchName = data.name;
+        this.userMatchLocation = data.userLocation;
+
+        this.matchId = data.mathId;
+
+        if (this.matchId) {
+          this.onListenSocketSendMessage(this.matchId);
+          this.loadSendMessage(); // Carrega mensagens apenas após definir `matchId`
+        } else {
+          console.error('matchId não foi definido');
+        }
+      });
   }
 
   ngAfterViewInit(): void {
@@ -67,8 +97,17 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
     this.initializeScrollEvent();
   }
 
-  ngOnChanges(): void {
-    this.initializeScrollEvent();
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  onLoadUserHashPublic() {
+    this.userHashPublicService.getUserHashPublic().subscribe((result) => {
+      if (result) {
+        this.userHashPublic = result;
+      }
+    });
   }
 
   createSendMessageFormBuilder() {
@@ -96,7 +135,6 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
 
   initializeScrollEvent(): void {
     if (this.containMessages?.nativeElement) {
-      console.log('Registrando scroll');
       const element = this.containMessages.nativeElement;
       element.addEventListener('scroll', () => this.onScroll(element));
     } else {
@@ -112,33 +150,23 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
     const element = this.containMessages?.nativeElement;
     const previousHeight = prepend ? element?.scrollHeight : 0;
 
-    this.dataConnectChatMessageService
-      .getDataConnectChatMessage()
-      .subscribe((dataConnectChatMessage) => {
-        this.matchId = dataConnectChatMessage.mathId;
-      });
-
     this.getSendMessageService
-      .sendMessage('aae92ffd-7101-4702-877f-5fd8d4b85704', page, limit)
+      .sendMessage(this.matchId, page, limit)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.totalPage = response.pagination.totalPages;
-          const newMessages = response.messages.sort((a, b) => {
-            return (
+          const newMessages = response.messages.sort(
+            (a, b) =>
               new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-            );
-          });
-          this.initializeScrollEvent();
+          );
 
           if (prepend) {
             this.messages = [...newMessages, ...this.messages];
-            setTimeout(() => {
-              const newHeight = element?.scrollHeight || 0;
-              if (element) element.scrollTop = newHeight - previousHeight;
-            }, 0);
+            this.adjustScrollPosition(element, previousHeight);
           } else {
             this.messages = [...this.messages, ...newMessages];
-            setTimeout(() => this.scrollToBottom(), 0);
+            this.scrollToBottom(); // Garante que vá para o final ao carregar
           }
         },
         error: () => {
@@ -152,6 +180,16 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
       });
   }
 
+  adjustScrollPosition(
+    element: HTMLElement | undefined,
+    previousHeight: number
+  ): void {
+    if (element) {
+      const newHeight = element.scrollHeight;
+      element.scrollTop = newHeight - previousHeight;
+    }
+  }
+
   onScroll(element: HTMLElement): void {
     if (element.scrollTop === 0 && !this.isLoadingMore) {
       if (this.totalPage > this.currentPage) {
@@ -163,10 +201,12 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
   }
 
   scrollToBottom(): void {
-    const element = this.containMessages?.nativeElement;
-    if (element) {
-      element.scrollTop = element.scrollHeight;
-    }
+    setTimeout(() => {
+      const element = this.containMessages?.nativeElement;
+      if (element) {
+        element.scrollTop = element.scrollHeight;
+      }
+    });
   }
 
   goToListChat(): void {
@@ -174,7 +214,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
   }
 
   getAlignment(messageId: string): boolean {
-    return messageId !== this.userHashPublic;
+    return messageId === this.userHashPublic;
   }
 
   tryAgain(): void {
@@ -183,9 +223,6 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
 
   sendMessage() {
     if (this.sendMessageFormGroup.valid) {
-      console.log('enviando mensagem');
-      console.log(this.sendMessageFormGroup.get('sendMessage')?.value.trim());
-
       const message = this.sendMessageFormGroup
         .get('sendMessage')
         ?.value.trim();
@@ -195,16 +232,26 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
           userHashPublic: this.userHashPublic,
           content: message,
         })
+        .pipe(takeUntil(this.unsubscribe$))
         .subscribe({
-          next: (response) => {
-            console.log(response);
-          },
-          error: (error) => {
-            console.log(error);
-          },
+          next: () => this.scrollToBottom(),
+          error: (error) => console.error(error),
         });
 
       this.sendMessageFormGroup.reset();
     }
+  }
+
+  onListenSocketSendMessage(matchId: string) {
+    this.socketSenMessageService.joinRoomSendMessage(matchId);
+    this.socketSenMessageService
+      .onSendMessage()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((response) => {
+        this.zone.run(() => {
+          this.messages.push(response);
+          this.scrollToBottom(); // Vai para o final ao receber nova mensagem
+        });
+      });
   }
 }

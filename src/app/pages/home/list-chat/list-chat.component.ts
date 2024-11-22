@@ -3,6 +3,7 @@ import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
+import { DataConnectChatMessage } from '../../../shared/interface/data-connect-chat-message.interface';
 import { ListChat } from '../../../shared/interface/list-chat.interface';
 import { DataConnectChatMessageService } from '../../../shared/service/data-connect-chat-message/data-connect-chat-message.service';
 import { ListChatService } from '../../../shared/service/list-chat/list-chat.service';
@@ -55,6 +56,7 @@ export class ListChatComponent implements OnInit {
   loadListChat() {
     this.listChatService.listChat().subscribe({
       next: (response) => {
+        console.log('-->>>>', response);
         this.listChat = response;
       },
       error: () => {
@@ -81,21 +83,10 @@ export class ListChatComponent implements OnInit {
     this.navigateBackUsingApp();
   }
 
-  goToChat(mathId: string) {
-    console.log('MathId:', mathId);
-    this.userHashPublicService.getUserHashPublic().subscribe({
-      next: (hashPublicId) => {
-        if (hashPublicId) {
-          this.dataConnectChatMessageService.setDataConnectChatMessage({
-            mathId,
-            hashPublicId,
-          });
-          this.router.navigateByUrl('home/chat-message');
-        }
-      },
-      error: (err) => {
-        console.error('Erro ao obter Hash Public ID:', err);
-      },
-    });
+  goToChat(userSelectForChat: DataConnectChatMessage) {
+    this.dataConnectChatMessageService.setDataConnectChatMessage(
+      userSelectForChat
+    );
+    this.router.navigateByUrl('home/chat-message');
   }
 }
