@@ -207,7 +207,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getAlignment(messageId: string): boolean {
-    return messageId !== this.userHashPublic;
+    return messageId === this.userHashPublic;
   }
 
   tryAgain(): void {

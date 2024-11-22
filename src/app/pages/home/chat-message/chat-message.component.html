@@ -48,9 +48,15 @@
             alt=""
           />
           <div class="message-user">
-            <p class="message-user-name">
+            <p
+              [ngClass]="
+                message.user.userHashPublic === userHashPublic
+                  ? 'message-user-name margin-top-user-name'
+                  : 'message-user-name'
+              "
+            >
               {{
-                message.user.userHashPublic !== userHashPublic
+                message.user.userHashPublic === userHashPublic
                   ? "Você"
                   : message.user.name
               }}
