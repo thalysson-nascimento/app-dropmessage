@@ -53,14 +53,17 @@ export class HomeComponent implements OnInit {
   }
 
   onListenSocketMatch(userId: string | undefined) {
-    console.log('userId ===>', userId);
+    console.log('match userId ===>', userId);
     this.socketMatchService.joinRoom(userId);
     this.socketMatchService.onMatchNotification().subscribe({
       next: (response) => {
         this.matchDataDetailsService.setMatchedDetails(response);
         this.router.navigateByUrl('home/match');
       },
-      error: () => {},
+      error: (error) => {
+        console.warn('Esta ocorrendo o erro de rediercionamento no match');
+        console.log(error);
+      },
     });
   }
 }

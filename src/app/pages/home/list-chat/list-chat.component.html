@@ -34,10 +34,7 @@
 
   <div *ngIf="!showSystemUnavailable && !isLoading">
     <ul appListStyle>
-      <li
-        *ngFor="let chat of listChat"
-        (click)="goToChat(chat.mathId, chat.hashPublicId)"
-      >
+      <li *ngFor="let chat of listChat" (click)="goToChat(chat.mathId)">
         <img [src]="chat.avatar" class="avatar" alt="" />
         <div class="contain-description">
           <p class="name">{{ chat.name }}</p>

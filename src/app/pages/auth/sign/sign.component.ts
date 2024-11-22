@@ -28,6 +28,7 @@ import { Sign } from '../../../shared/interface/sign.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { LoginService } from '../../../shared/service/sign/sign.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
+import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 
 const SharedComponents = [
   LogoDropmessageComponent,
@@ -62,6 +63,7 @@ export class SignComponent implements OnInit, OnDestroy {
     private bottomSheet: MatBottomSheet,
     private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
     private cacheAvatarService: CacheAvatarService,
+    private userHashPublicService: UserHashPublicService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -105,6 +107,10 @@ export class SignComponent implements OnInit, OnDestroy {
           this.tokenStorageSecurityRequestService.saveToken(response.token);
 
           this.cacheAvatarService.setAvatarCachePreferences(response.avatar);
+
+          this.userHashPublicService.setUserHashPublic(
+            response.userVerificationData.userHashPublic
+          );
 
           if (!response.userVerificationData.isUploadAvatar) {
             return this.router.navigateByUrl('home/create-avatar');

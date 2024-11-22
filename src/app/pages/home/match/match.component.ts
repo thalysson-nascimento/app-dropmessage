@@ -36,6 +36,7 @@ export class MatchComponent implements OnInit {
       next: (token) => {
         if (token) {
           const decoded = jwtDecode(token);
+          console.log('decoded ===>', decoded);
           this.loadMatchDetails(decoded.sub);
         }
       },

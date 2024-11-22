@@ -17,6 +17,7 @@ export interface User {
 }
 
 export interface UserVerificationData {
+  userHashPublic: string;
   isUploadAvatar: boolean;
   verificationTokenEmail: boolean;
   validatorLocation: boolean;
