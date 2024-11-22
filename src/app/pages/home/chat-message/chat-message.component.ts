@@ -25,6 +25,7 @@ import { GetSendMessageService } from '../../../shared/service/get-send-message/
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 import { SendMessageService } from '../../../shared/service/send-message/send-message.service';
 import { SocketSenMessageService } from '../../../shared/service/socket-send-message/socket-sen-message.service';
+import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 import { noOnlySpacesValidator } from '../../../shared/validators/noOnlySpacesValidator.validator';
 
 const CoreModule = [CommonModule, FormsModule, ReactiveFormsModule];
@@ -42,12 +43,11 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   showSystemUnavailable: boolean = false;
   isLoadingMore: boolean = false;
   newMessage: string = '';
-  userHashPublic: string = 'bb49a0f902';
+  userHashPublic: string = '';
   messages: Message[] = [];
   currentPage: number = 1;
   totalPage: number = 0;
   matchId: string = '';
-  disabledButton: boolean = false;
   sendMessageFormGroup!: FormGroup;
   private unsubscribe$ = new Subject<void>();
 
@@ -61,17 +61,27 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     private formBuilder: FormBuilder,
     private sendMessageService: SendMessageService,
     private socketSenMessageService: SocketSenMessageService,
+    private userHashPublicService: UserHashPublicService,
     private zone: NgZone
   ) {}
 
   ngOnInit() {
-    this.loadSendMessage();
+    this.onLoadUserHashPublic();
     this.createSendMessageFormBuilder();
+
+    // Obtenha o `matchId` antes de inicializar a escuta do socket ou carregar mensagens
     this.dataConnectChatMessageService
       .getDataConnectChatMessage()
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((data) => {
         this.matchId = data.mathId;
-        this.onListenSocketSendMessage(this.matchId); // Conecta ao socket assim que o matchId é definido.
+
+        if (this.matchId) {
+          this.onListenSocketSendMessage(this.matchId);
+          this.loadSendMessage(); // Carrega mensagens apenas após definir `matchId`
+        } else {
+          console.error('matchId não foi definido');
+        }
       });
   }
 
@@ -80,13 +90,17 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initializeScrollEvent();
   }
 
-  ngOnChanges(): void {
-    this.initializeScrollEvent();
-  }
-
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  onLoadUserHashPublic() {
+    this.userHashPublicService.getUserHashPublic().subscribe((result) => {
+      if (result) {
+        this.userHashPublic = result;
+      }
+    });
   }
 
   createSendMessageFormBuilder() {
@@ -129,33 +143,23 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     const element = this.containMessages?.nativeElement;
     const previousHeight = prepend ? element?.scrollHeight : 0;
 
-    this.dataConnectChatMessageService
-      .getDataConnectChatMessage()
-      .subscribe((dataConnectChatMessage) => {
-        this.matchId = dataConnectChatMessage.mathId;
-      });
-
     this.getSendMessageService
       .sendMessage(this.matchId, page, limit)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.totalPage = response.pagination.totalPages;
-          const newMessages = response.messages.sort((a, b) => {
-            return (
+          const newMessages = response.messages.sort(
+            (a, b) =>
               new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-            );
-          });
-          this.initializeScrollEvent();
+          );
 
           if (prepend) {
             this.messages = [...newMessages, ...this.messages];
-            setTimeout(() => {
-              const newHeight = element?.scrollHeight || 0;
-              if (element) element.scrollTop = newHeight - previousHeight;
-            }, 0);
+            this.adjustScrollPosition(element, previousHeight);
           } else {
             this.messages = [...this.messages, ...newMessages];
-            setTimeout(() => this.scrollToBottom(), 0);
+            this.scrollToBottom(); // Garante que vá para o final ao carregar
           }
         },
         error: () => {
@@ -169,6 +173,16 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
+  adjustScrollPosition(
+    element: HTMLElement | undefined,
+    previousHeight: number
+  ): void {
+    if (element) {
+      const newHeight = element.scrollHeight;
+      element.scrollTop = newHeight - previousHeight;
+    }
+  }
+
   onScroll(element: HTMLElement): void {
     if (element.scrollTop === 0 && !this.isLoadingMore) {
       if (this.totalPage > this.currentPage) {
@@ -180,10 +194,12 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   scrollToBottom(): void {
-    const element = this.containMessages?.nativeElement;
-    if (element) {
-      element.scrollTop = element.scrollHeight;
-    }
+    setTimeout(() => {
+      const element = this.containMessages?.nativeElement;
+      if (element) {
+        element.scrollTop = element.scrollHeight;
+      }
+    });
   }
 
   goToListChat(): void {
@@ -211,10 +227,8 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
         })
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe({
-          next: () => {
-            setTimeout(() => this.scrollToBottom(), 0);
-          },
-          error: (error) => {},
+          next: () => this.scrollToBottom(),
+          error: (error) => console.error(error),
         });
 
       this.sendMessageFormGroup.reset();
@@ -226,13 +240,11 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.socketSenMessageService
       .onSendMessage()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: (response) => {
-          this.zone.run(() => {
-            this.messages.push(response);
-            setTimeout(() => this.scrollToBottom(), 0);
-          });
-        },
+      .subscribe((response) => {
+        this.zone.run(() => {
+          this.messages.push(response);
+          this.scrollToBottom(); // Vai para o final ao receber nova mensagem
+        });
       });
   }
 }
