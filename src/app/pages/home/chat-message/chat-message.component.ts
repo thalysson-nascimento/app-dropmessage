@@ -3,6 +3,8 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  NgZone,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -14,6 +16,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { Message } from '../../../shared/interface/get-send-message.interface';
@@ -21,6 +24,7 @@ import { DataConnectChatMessageService } from '../../../shared/service/data-conn
 import { GetSendMessageService } from '../../../shared/service/get-send-message/get-send-message.service';
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 import { SendMessageService } from '../../../shared/service/send-message/send-message.service';
+import { SocketSenMessageService } from '../../../shared/service/socket-send-message/socket-sen-message.service';
 import { noOnlySpacesValidator } from '../../../shared/validators/noOnlySpacesValidator.validator';
 
 const CoreModule = [CommonModule, FormsModule, ReactiveFormsModule];
@@ -33,7 +37,7 @@ const SharedComponent = [SystemUnavailableComponent, InputCustomDirective];
   imports: [...CoreModule, ...SharedComponent],
   standalone: true,
 })
-export class ChatMessageComponent implements OnInit, AfterViewInit {
+export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading: boolean = true;
   showSystemUnavailable: boolean = false;
   isLoadingMore: boolean = false;
@@ -45,6 +49,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
   matchId: string = '';
   disabledButton: boolean = false;
   sendMessageFormGroup!: FormGroup;
+  private unsubscribe$ = new Subject<void>();
 
   @ViewChild('containMessages') containMessages?: ElementRef;
 
@@ -54,12 +59,20 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
     private lottieAnimationIconService: LottieAnimationIconService,
     private dataConnectChatMessageService: DataConnectChatMessageService,
     private formBuilder: FormBuilder,
-    private sendMessageService: SendMessageService
+    private sendMessageService: SendMessageService,
+    private socketSenMessageService: SocketSenMessageService,
+    private zone: NgZone
   ) {}
 
   ngOnInit() {
     this.loadSendMessage();
     this.createSendMessageFormBuilder();
+    this.dataConnectChatMessageService
+      .getDataConnectChatMessage()
+      .subscribe((data) => {
+        this.matchId = data.mathId;
+        this.onListenSocketSendMessage(this.matchId); // Conecta ao socket assim que o matchId é definido.
+      });
   }
 
   ngAfterViewInit(): void {
@@ -69,6 +82,11 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
 
   ngOnChanges(): void {
     this.initializeScrollEvent();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   createSendMessageFormBuilder() {
@@ -96,7 +114,6 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
 
   initializeScrollEvent(): void {
     if (this.containMessages?.nativeElement) {
-      console.log('Registrando scroll');
       const element = this.containMessages.nativeElement;
       element.addEventListener('scroll', () => this.onScroll(element));
     } else {
@@ -119,7 +136,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
       });
 
     this.getSendMessageService
-      .sendMessage('aae92ffd-7101-4702-877f-5fd8d4b85704', page, limit)
+      .sendMessage(this.matchId, page, limit)
       .subscribe({
         next: (response) => {
           this.totalPage = response.pagination.totalPages;
@@ -183,9 +200,6 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
 
   sendMessage() {
     if (this.sendMessageFormGroup.valid) {
-      console.log('enviando mensagem');
-      console.log(this.sendMessageFormGroup.get('sendMessage')?.value.trim());
-
       const message = this.sendMessageFormGroup
         .get('sendMessage')
         ?.value.trim();
@@ -195,16 +209,30 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
           userHashPublic: this.userHashPublic,
           content: message,
         })
+        .pipe(takeUntil(this.unsubscribe$))
         .subscribe({
-          next: (response) => {
-            console.log(response);
+          next: () => {
+            setTimeout(() => this.scrollToBottom(), 0);
           },
-          error: (error) => {
-            console.log(error);
-          },
+          error: (error) => {},
         });
 
       this.sendMessageFormGroup.reset();
     }
+  }
+
+  onListenSocketSendMessage(matchId: string) {
+    this.socketSenMessageService.joinRoomSendMessage(matchId);
+    this.socketSenMessageService
+      .onSendMessage()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response) => {
+          this.zone.run(() => {
+            this.messages.push(response);
+            setTimeout(() => this.scrollToBottom(), 0);
+          });
+        },
+      });
   }
 }

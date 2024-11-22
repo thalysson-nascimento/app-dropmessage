@@ -4,9 +4,20 @@ export interface SendMessage {
   content: string;
 }
 export interface ResponseSuccessSendMessage {
+  id: string;
   createdAt: Date;
   content: string;
-  match: Match;
+  user: User;
+}
+
+export interface User {
+  userHashPublic: string;
+  name: string;
+  avatar: Avatar;
+}
+
+export interface Avatar {
+  image: string;
 }
 
 export interface Match {
