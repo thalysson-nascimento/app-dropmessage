@@ -33,7 +33,6 @@ import { ChoosePhotoGalleryOrCameraComponent } from '../../../shared/component/c
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
-import { ListStyleDirective } from '../../../shared/directives/list-style/list-style.directive';
 import { AboutMe } from '../../../shared/interface/about-me.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { CreateAvatarService } from '../../../shared/service/create-avatar/create-avatar.service';
@@ -43,7 +42,6 @@ const SharedComponents = [
   InputCustomDirective,
   ButtonStyleDirective,
   ModalComponent,
-  ListStyleDirective,
   NgxMaskDirective,
 ];
 
