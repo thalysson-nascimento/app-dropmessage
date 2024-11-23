@@ -40,6 +40,28 @@ body {
   margin-right: 10px;
   width: 100%;
   scroll-snap-align: start;
+  position: relative;
+}
+
+.contain-user-data {
+  position: absolute;
+  left: 2rem;
+  top: 2rem;
+}
+
+.user-name {
+  text-shadow: 2px 2px 4px rgba(68, 68, 68, 0.5);
+  z-index: 1;
+  color: white;
+  font-weight: 700;
+  font-size: var(--font-size-xlarge);
+}
+
+.user-location {
+  text-shadow: 2px 2px 4px rgba(68, 68, 68, 0.5);
+  z-index: 1;
+  color: white;
+  font-weight: 700;
 }
 
 img {
