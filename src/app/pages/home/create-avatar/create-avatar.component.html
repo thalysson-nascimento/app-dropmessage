@@ -149,35 +149,91 @@
 </div>
 
 <app-modal #genderModal>
-  <ul appListStyle>
-    <li (click)="selectGender('homem')">
-      <span label>homem</span>
-      <img icon src="assets/icon-static/arrow-right.svg" alt="Icone" />
+  <ul class="list-action-timer">
+    <div class="contain-title-modal">
+      <p>Como você se identifica?</p>
+    </div>
+
+    <li class="action-timer" (click)="selectGender('homem')">
+      <div class="contain-icon-and-description">
+        <i class="fi fi-tr-mars"></i>
+        <div>
+          <p>Homem</p>
+          <span class="drescription-timer"
+            >Se identifica com o genero atribuido.</span
+          >
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
     </li>
-    <li (click)="selectGender('mulher')">
-      <span label>mulher</span>
-      <img icon src="assets/icon-static/arrow-right.svg" alt="Outro Icone" />
+    <li class="action-timer" (click)="selectGender('mulher')">
+      <div class="contain-icon-and-description">
+        <i class="fi fi-tr-venus"></i>
+        <div>
+          <p>Mulher</p>
+          <span class="drescription-timer"
+            >Se identifica com o genero atribuido.</span
+          >
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
     </li>
-    <li (click)="selectGender('não binário')">
-      <span label>não binário</span>
-      <img icon src="assets/icon-static/arrow-right.svg" alt="Outro Icone" />
+    <li class="action-timer" (click)="selectGender('não binário')">
+      <div class="contain-icon-and-description">
+        <i class="fi fi-tr-transgender"></i>
+        <div>
+          <p>Não binario</p>
+          <span class="drescription-timer"
+            >Identidade além do binário tradicional.</span
+          >
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
     </li>
   </ul>
 </app-modal>
 
 <app-modal #interestsModal>
-  <ul appListStyle>
-    <li (click)="selectInterests('homem')">
-      <span label>homem</span>
-      <img icon src="assets/icon-static/arrow-right.svg" alt="Icone" />
+  <ul class="list-action-timer">
+    <div class="contain-title-modal">
+      <p>Qual o seu interesse?</p>
+    </div>
+
+    <li class="action-timer" (click)="selectInterests('homem')">
+      <div class="contain-icon-and-description">
+        <i class="fi fi-tr-mars"></i>
+        <div>
+          <p>Homem</p>
+          <span class="drescription-timer"
+            >Afinidade com o genero masculino.</span
+          >
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
     </li>
-    <li (click)="selectInterests('mulher')">
-      <span label>mulher</span>
-      <img icon src="assets/icon-static/arrow-right.svg" alt="Outro Icone" />
+    <li class="action-timer" (click)="selectInterests('mulher')">
+      <div class="contain-icon-and-description">
+        <i class="fi fi-tr-venus"></i>
+        <div>
+          <p>Mulher</p>
+          <span class="drescription-timer"
+            >Afinidade com o genero feminino.</span
+          >
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
     </li>
-    <li (click)="selectInterests('ambos')">
-      <span label>ambos</span>
-      <img icon src="assets/icon-static/arrow-right.svg" alt="Outro Icone" />
+    <li class="action-timer" (click)="selectInterests('ambos')">
+      <div class="contain-icon-and-description">
+        <i class="fi fi-tr-transgender"></i>
+        <div>
+          <p>Ambos</p>
+          <span class="drescription-timer"
+            >Afinidade com ambos os generos.</span
+          >
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
     </li>
   </ul>
 </app-modal>

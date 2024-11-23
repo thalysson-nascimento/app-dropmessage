@@ -6,6 +6,7 @@ import { Directive, ElementRef, OnInit, Renderer2 } from '@angular/core';
 })
 export class ListStyleDirective implements OnInit {
   constructor(private el: ElementRef, private renderer: Renderer2) {}
+
   ngOnInit(): void {
     this.applyStyles();
   }
@@ -18,34 +19,38 @@ export class ListStyleDirective implements OnInit {
       this.renderer.setStyle(item, 'width', '100%');
       this.renderer.setStyle(item, 'paddingTop', '1.5rem');
       this.renderer.setStyle(item, 'paddingBottom', '1.5rem');
-
       this.renderer.setStyle(item, 'justifyContent', 'space-between');
       this.renderer.setStyle(item, 'alignItems', 'center');
 
-      // Estilo para o texto e descrição
+      // Contêiner para texto
       const textContainer = this.renderer.createElement('div');
-      textContainer.style.flex = '1';
+      this.renderer.setStyle(textContainer, 'flex', '1');
+      this.renderer.setStyle(textContainer, 'display', 'flex');
+      this.renderer.setStyle(textContainer, 'flexDirection', 'column');
 
-      // Criar o label
-      const label = item.querySelector('[label]');
+      // Adiciona o <p> ou o label ao contêiner
+      const label = item.querySelector('[label]') || item.querySelector('p');
       if (label) {
         this.renderer.appendChild(textContainer, label);
       }
 
-      // Criar a descrição
+      // Adiciona a descrição (se existir) ao contêiner
       const description = item.querySelector('[description]');
       if (description) {
         this.renderer.setStyle(description, 'fontSize', '0.9rem');
         this.renderer.appendChild(textContainer, description);
       }
 
-      // Adiciona o container de texto à li
-      this.renderer.insertBefore(item, textContainer, item.firstChild);
+      // Insere o contêiner de texto antes do primeiro filho
+      if (label || description) {
+        this.renderer.insertBefore(item, textContainer, item.firstChild);
+      }
 
       // Estilo para o ícone
       const icon = item.querySelector('[icon]');
       if (icon) {
         this.renderer.setStyle(icon, 'marginLeft', 'auto');
+        this.renderer.setStyle(icon, 'maxHeight', '24px'); // Ajuste de tamanho
       }
 
       // Linha divisória inferior, exceto no último item

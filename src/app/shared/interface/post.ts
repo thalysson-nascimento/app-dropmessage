@@ -3,6 +3,12 @@ export interface Post {
   image: string;
   typeExpirationTimer: string;
   expirationTimer: string;
+  user: {
+    name: string;
+    avatar: string;
+    city?: string;
+    stateCode?: string;
+  };
 }
 
 export interface PostList {

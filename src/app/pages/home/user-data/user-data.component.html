@@ -56,5 +56,48 @@
         <p>{{ myProfile.About.dateOfBirth }}</p>
       </li>
     </ul>
+    <div class="contain-button">
+      <button appButtonStyle [buttonType]="'secondary'" (click)="openModal()">
+        Deletar conta
+      </button>
+    </div>
   </section>
 </div>
+
+<app-modal #dialog>
+  <div class="contain-title">
+    <p class="title-error">Ops, realmente deseja deletar sua conta?</p>
+  </div>
+
+  <!-- <div class="contain-image">
+    <img
+      src="assets/icon-static/error-request.svg"
+      class="image-error-request"
+      alt=""
+    />
+  </div> -->
+
+  <div class="contain-description-error">
+    <p class="description-error-message">
+      Após deletar sua conta você perderá todos os dados, seus posts e as
+      amizadas realizadas.
+    </p>
+  </div>
+
+  <div class="contain-button-system-unavailable">
+    <button
+      appButtonStyle
+      class="button-delete-acount"
+      [buttonType]="'secondary'"
+      (click)="deleteAccount()"
+    >
+      <span *ngIf="!buttonDisalbled">Deletar conta</span>
+      <div *ngIf="buttonDisalbled" class="bouncing-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </button>
+  </div>
+</app-modal>
