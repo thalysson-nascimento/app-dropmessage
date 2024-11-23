@@ -206,7 +206,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.currentPage === 1) {
           setTimeout(() => {
             this.initializeSwiper();
-            this.findObjetNoMacthOnResponse(response.data);
           }, 100);
         }
       },
@@ -216,18 +215,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isLoaded = false;
       },
     });
-  }
-  findObjetNoMacthOnResponse(data: Post[]) {
-    const noMatchPost = data.find((post) => post.id === 'no-matches');
-
-    if (noMatchPost) {
-      this.lottieAnimationIconService.loadLottieAnimation({
-        pathIconAnimation: 'no-macth.json',
-        idElement: 'lottie-icon-no-match',
-        loop: true,
-        autoplay: true,
-      });
-    }
   }
 
   loadMorePosts() {

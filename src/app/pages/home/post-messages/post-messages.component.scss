@@ -133,8 +133,22 @@ img {
 .no-matches-message {
   display: flex;
   align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.no-users-nearby {
+  width: 100%;
   height: 100%;
+  object-fit: cover;
+  padding: 2rem;
+}
+
+.title-no-users-nearby {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
 }
 
 .contain-loading {
