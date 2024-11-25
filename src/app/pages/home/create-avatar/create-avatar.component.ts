@@ -254,8 +254,8 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   completeDataFlow(cameraImage: any) {
-    this.isLoadingButton = true;
     if (cameraImage && this.cameraAllowed) {
+      this.isLoadingButton = true;
       fetch(cameraImage)
         .then((res) => res.blob())
         .then((blob) => {
@@ -272,13 +272,11 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
             })
             .subscribe({
               next: (response) => {
-                this.isLoadingButton = false;
-                // this.cacheAvatarService.setDataAvatarCache(response);
                 this.cacheAvatarService.setAvatarCachePreferences(response);
                 this.router.navigateByUrl('home/user-location');
               },
               error: (error) => {
-                this.isLoadingButton = true;
+                this.isLoadingButton = false;
                 console.log('Erro ao enviar mensagem:', error);
                 this.modalErrorRequest.openDialog();
               },
