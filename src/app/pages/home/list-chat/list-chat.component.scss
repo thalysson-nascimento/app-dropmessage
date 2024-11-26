@@ -35,9 +35,10 @@ ul {
   li {
     display: flex;
     align-items: center;
+    padding-top: 1rem;
     &:not(:last-child) {
       padding-bottom: var(--space-medium);
-      border-bottom: 1px solid #e2e2e2;
+      border-bottom: 1px solid #f1f1f1;
     }
   }
 }
