@@ -28,34 +28,13 @@ export class PostMock extends PostBase {
           typeExpirationTimer: '',
           user: {
             name: 'Jon Snow',
-            avatar: 'https://i.pravatar.cc/300?img=1',
-            city: 'Winterfell',
-            stateCode: 'Westeros',
-          },
-        },
-        {
-          id: '9b74c9897bac770ffc029102a200c5de',
-          image:
-            'https://m.media-amazon.com/images/S/pv-target-images/334f00b53cf3ef848ea7048b25711bc98e8236ce1685a096990c80d0965835ea.png',
-          expirationTimer: 'dragon ball z',
-          typeExpirationTimer: '',
-          user: {
-            name: 'Jon Snow',
-            avatar: 'https://i.pravatar.cc/300?img=1',
-            city: 'Winterfell',
-            stateCode: 'Westeros',
-          },
-        },
-        {
-          id: '6dcd4ce23d88e2ee9568ba546c007c63',
-          image: 'https://jpimg.com.br/uploads/2019/04/thanos-vingadores.jpg',
-          expirationTimer: 'vingadores',
-          typeExpirationTimer: '',
-          user: {
-            name: 'Jon Snow',
-            avatar: 'https://i.pravatar.cc/300?img=1',
-            city: 'Winterfell',
-            stateCode: 'Westeros',
+            avatar: {
+              image: 'https://i.pravatar.cc/300?img=1',
+            },
+            UserLocation: {
+              city: 'Winterfell',
+              stateCode: 'Westeros',
+            },
           },
         },
       ],

@@ -198,6 +198,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   loadPostMessage() {
     this.postMessageService.listPost().subscribe({
       next: (response) => {
+        console.log(response);
+
         this.totalPosts += response.data.length;
         this.posts = [...this.posts, ...response.data];
         this.isLoaded = true;
