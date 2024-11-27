@@ -1,8 +1,11 @@
 export interface MatchUsers {
-  id: string;
-  name: String;
+  id?: string;
+  matchId: string;
+  name: string;
   UserLocation: UserLocation;
-  avatar: string;
+  avatar: {
+    image: string;
+  };
 }
 
 export interface UserLocation {

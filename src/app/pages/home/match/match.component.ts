@@ -1,8 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
+import { DataConnectChatMessage } from '../../../shared/interface/data-connect-chat-message.interface';
 import { MatchUsers } from '../../../shared/interface/match-users.interface';
+import { DataConnectChatMessageService } from '../../../shared/service/data-connect-chat-message/data-connect-chat-message.service';
 import { MatchDataDetailsService } from '../../../shared/service/match-details/match-data-details.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 
@@ -23,7 +26,9 @@ export class MatchComponent implements OnInit {
   firstNameMatch!: string;
   constructor(
     private matchDataDetailsService: MatchDataDetailsService,
-    private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService
+    private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
+    private dataConnectChatMessageService: DataConnectChatMessageService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -67,5 +72,20 @@ export class MatchComponent implements OnInit {
     window.history.back();
   }
 
-  goToProfile() {}
+  goToPrivacyChat() {
+    if (this.matchUser) {
+      const userMatch: DataConnectChatMessage = {
+        mathId: this.matchUser?.matchId,
+        name: this.matchUser?.name,
+        avatar: this.matchUser?.avatar?.image,
+        userLocation: {
+          stateCode: this.matchUser?.UserLocation?.stateCode,
+          city: this.matchUser?.UserLocation?.city,
+        },
+      };
+      console.log(userMatch);
+      this.dataConnectChatMessageService.setDataConnectChatMessage(userMatch);
+      this.router.navigateByUrl('home/chat-message');
+    }
+  }
 }

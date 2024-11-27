@@ -15,7 +15,7 @@
   <div class="contain-image">
     <div class="image-background"></div>
     <div class="image-avatar-match">
-      <img class="avatar" [src]="matchUser?.avatar" alt="" />
+      <img class="avatar" [src]="matchUser?.avatar?.image" alt="" />
       <div class="infor-user-match">
         <p class="locarion-match">
           {{ matchUser?.UserLocation?.city }}/{{
@@ -32,7 +32,11 @@
   </div>
 
   <div class="contain-button">
-    <button appButtonStyle [buttonType]="'secondary'" (click)="goToProfile()">
+    <button
+      appButtonStyle
+      [buttonType]="'secondary'"
+      (click)="goToPrivacyChat()"
+    >
       Conversar com {{ firstNameMatch }}
     </button>
   </div>

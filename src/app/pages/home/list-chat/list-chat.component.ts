@@ -84,6 +84,7 @@ export class ListChatComponent implements OnInit {
   }
 
   goToChat(userSelectForChat: DataConnectChatMessage) {
+    console.log('===>', userSelectForChat);
     this.dataConnectChatMessageService.setDataConnectChatMessage(
       userSelectForChat
     );

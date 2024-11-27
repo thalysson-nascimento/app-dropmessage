@@ -174,14 +174,14 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
             this.loadMorePosts();
             if (activeIndex === 0) {
               this.showLikeButton = false;
-              setTimeout(() => {
-                this.lottieAnimationIconService.loadLottieAnimation({
-                  pathIconAnimation: 'no-macth.json',
-                  idElement: 'lottie-icon-no-match',
-                  loop: true,
-                  autoplay: true,
-                });
-              }, 500);
+              // setTimeout(() => {
+              //   this.lottieAnimationIconService.loadLottieAnimation({
+              //     pathIconAnimation: 'no-macth.json',
+              //     idElement: 'lottie-icon-no-match',
+              //     loop: true,
+              //     autoplay: true,
+              //   });
+              // }, 500);
             }
           });
         }
