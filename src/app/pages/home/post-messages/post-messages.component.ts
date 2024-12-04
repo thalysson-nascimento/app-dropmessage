@@ -393,4 +393,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       },
     });
   }
+
+  goToAdMobVideoReward() {
+    this.router.navigateByUrl('home/admob-video-reward');
+  }
 }

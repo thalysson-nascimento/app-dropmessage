@@ -103,9 +103,9 @@ export const HomeRouting: Routes = [
       {
         path: 'admob-video-reward',
         loadComponent: () =>
-          import('./admob-video-reward/admob-video-reward.component').then(
-            (m) => m.AdmobVideoRewardComponent
-          ),
+          import(
+            './post-messages/admob-video-reward/admob-video-reward.component'
+          ).then((m) => m.AdmobVideoRewardComponent),
       },
     ],
   },

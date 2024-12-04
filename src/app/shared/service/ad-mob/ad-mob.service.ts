@@ -18,8 +18,7 @@ export class AdmobService {
 
   async initializeAdmob(): Promise<void> {
     await AdMob.initialize({
-      initializeForTesting: true,
-      testingDevices: ['EMULATOR'],
+      initializeForTesting: false,
     });
 
     const [trackingInfo, consentInfo] = await Promise.all([
@@ -54,38 +53,43 @@ export class AdmobService {
   }
 
   async rewardVideo(): Promise<void> {
-    try {
-      AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
-        console.log('Vídeo com recompensa carregado:', info);
-      });
+    return new Promise<void>(async (resolve, reject) => {
+      try {
+        AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
+          console.log('Vídeo com recompensa carregado:', info);
+          resolve();
+        });
 
-      AdMob.addListener(
-        RewardAdPluginEvents.Rewarded,
-        (rewardItem: AdMobRewardItem) => {
-          console.log(rewardItem);
+        AdMob.addListener(
+          RewardAdPluginEvents.Rewarded,
+          (rewardItem: AdMobRewardItem) => {
+            console.log(rewardItem);
+          }
+        );
+
+        const options: RewardAdOptions = {
+          adId: 'ca-app-pub-8691674404508428/6895932094',
+          isTesting: true,
+          ssv: {
+            userId: 'user_id_teste',
+            customData: JSON.stringify({ email: 'user@example.com' }),
+          },
+        };
+
+        const isPrepared = await AdMob.prepareRewardVideoAd(options);
+
+        if (isPrepared) {
+          console.log('O vídeo com recompensa foi carregado com sucesso.');
+          await AdMob.showRewardVideoAd();
+        } else {
+          console.error('Erro ao carregar o vídeo com recompensa.');
+          reject('Erro ao carregar o vídeo com recompensa.');
         }
-      );
-
-      const options: RewardAdOptions = {
-        adId: 'ca-app-pub-8691674404508428/6895932094', // Substitua pelo ID do bloco de anúncios do AdMob
-        isTesting: true, // Ativar modo de teste
-        ssv: {
-          // userId: 'ca-app-pub-8691674404508428~8935039558', // ID do usuário para o servidor SSV
-          userId: 'user_id_teste',
-          customData: JSON.stringify({ email: 'user@example.com' }), // Dados personalizados
-        },
-      };
-      const isPrepared = await AdMob.prepareRewardVideoAd(options);
-
-      if (isPrepared) {
-        console.log('O vídeo com recompensa foi carregado com sucesso.');
-        await AdMob.showRewardVideoAd(); // Exibir o vídeo
-      } else {
-        console.error('Erro ao carregar o vídeo com recompensa.');
+      } catch (error) {
+        console.error('Erro ao preparar/exibir o vídeo de recompensa:', error);
+        reject(error);
       }
-    } catch (error) {
-      console.error('Erro ao preparar/exibir o vídeo de recompensa:', error);
-    }
+    });
   }
 
   async removeAdMob() {
