@@ -144,4 +144,8 @@ export class SignComponent implements OnInit, OnDestroy {
   closeDialog() {
     this.isOpen = false;
   }
+
+  navigateToTest() {
+    this.router.navigateByUrl('auth/teste');
+  }
 }
