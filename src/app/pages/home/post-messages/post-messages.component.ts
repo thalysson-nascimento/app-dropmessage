@@ -18,6 +18,7 @@ import { register } from 'swiper/element/bundle';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
 import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
+import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
 import { Post } from '../../../shared/interface/post';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
@@ -27,7 +28,11 @@ import { PostMessageService } from '../../../shared/service/post/post.service';
 
 register();
 
-const SharedComponent = [LogoDropmessageComponent, SystemUnavailableComponent];
+const SharedComponent = [
+  LogoDropmessageComponent,
+  SystemUnavailableComponent,
+  ButtonStyleDirective,
+];
 
 @Component({
   selector: 'app-post-messages',
@@ -139,17 +144,42 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (swiperContainer) {
           this.mySwiper = swiperContainer.swiper;
-
           this.loadFistPostMessageForLikeHeartButton(this.mySwiper.activeIndex);
 
+          // Configura o botão de curtida com base no slide atual
+          const updateShowLikeButton = (activeIndex: number) => {
+            const activePost = this.posts[activeIndex];
+
+            if (
+              activePost?.id === 'no-matches' ||
+              activePost?.id === 'watch-video-reward'
+            ) {
+              this.showLikeButton = false;
+              this.mySwiper.autoplay.stop();
+            } else {
+              this.showLikeButton = true;
+            }
+          };
+
+          // Inicializa no primeiro slide
+          updateShowLikeButton(this.mySwiper.activeIndex);
+
+          // Evento: transição de slides concluída
           this.mySwiper.on('slideChangeTransitionEnd', () => {
             const activeIndex = this.mySwiper.activeIndex;
 
+            // Atualiza o botão de curtida
+            updateShowLikeButton(activeIndex);
+
+            // Lógica para remover posts, se necessário
             if (activeIndex > 0 && activeIndex <= this.posts.length) {
               if (!this.likeButtonClicked) {
                 const postToRemove = this.posts[activeIndex - 1];
 
-                if (postToRemove && postToRemove.id !== 'no-matches') {
+                if (
+                  postToRemove?.id !== 'no-matches' &&
+                  postToRemove?.id !== 'watch-video-reward'
+                ) {
                   this.removePostFromSwiper(postToRemove);
                 }
               }
@@ -157,32 +187,30 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
             }
           });
 
+          // Evento: slide alterado
           this.mySwiper.on('slideChange', () => {
-            console.log('slideChange');
             const activeIndex = this.mySwiper.activeIndex;
 
+            // Atualiza a mensagem do botão com o post atual
             const likePostSwiper = this.posts[activeIndex];
-
-            if (likePostSwiper && likePostSwiper.id !== 'no-matches') {
+            if (
+              likePostSwiper?.id !== 'no-matches' &&
+              likePostSwiper?.id !== 'watch-video-reward'
+            ) {
               this.likePostMessageWhitHeart = likePostSwiper;
             }
           });
 
+          // Evento: chegou no último slide
           this.mySwiper.on('reachEnd', () => {
             const activeIndex = this.mySwiper.activeIndex;
-
-            this.loadMorePosts();
+            console.log('Chegou no último slide:', activeIndex);
             if (activeIndex === 0) {
               this.showLikeButton = false;
-              // setTimeout(() => {
-              //   this.lottieAnimationIconService.loadLottieAnimation({
-              //     pathIconAnimation: 'no-macth.json',
-              //     idElement: 'lottie-icon-no-match',
-              //     loop: true,
-              //     autoplay: true,
-              //   });
-              // }, 500);
             }
+
+            // Garante que o botão esteja oculto se necessário
+            // updateShowLikeButton(activeIndex);
           });
         }
       });
@@ -198,7 +226,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   loadPostMessage() {
     this.postMessageService.listPost().subscribe({
       next: (response) => {
-        console.log(response);
+        console.log('=====>', response);
 
         this.totalPosts += response.data.length;
         this.posts = [...this.posts, ...response.data];
@@ -364,5 +392,9 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('Erro ao carregar avatar do cache:', error);
       },
     });
+  }
+
+  goToAdMobVideoReward() {
+    this.router.navigateByUrl('home/admob-video-reward');
   }
 }

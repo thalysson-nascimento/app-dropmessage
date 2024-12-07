@@ -100,6 +100,13 @@ export const HomeRouting: Routes = [
             (m) => m.ChatMessageComponent
           ),
       },
+      {
+        path: 'admob-video-reward',
+        loadComponent: () =>
+          import(
+            './post-messages/admob-video-reward/admob-video-reward.component'
+          ).then((m) => m.AdmobVideoRewardComponent),
+      },
     ],
   },
 ];

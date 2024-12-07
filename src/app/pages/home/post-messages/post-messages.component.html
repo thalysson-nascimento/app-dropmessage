@@ -40,7 +40,9 @@
   <div *ngIf="isLoaded" class="contain-swiper">
     <swiper-container class="list-post-message mySwiper">
       <swiper-slide *ngFor="let post of posts" class="user-post-image">
-        <ng-container *ngIf="post.id !== 'no-matches'">
+        <ng-container
+          *ngIf="post.id !== 'no-matches' && post.id !== 'watch-video-reward'"
+        >
           <div class="contain-user-data">
             <p class="user-name">{{ post.user.name }}</p>
             <span class="user-location"
@@ -52,7 +54,34 @@
           <img [src]="post.image" alt="" />
         </ng-container>
 
-        <div class="no-matches-message">
+        <div
+          class="watch-video-reward"
+          *ngIf="post.id === 'watch-video-reward'"
+        >
+          <p class="title-no-users-nearby">Gostaria de mais curtidas?</p>
+          <img
+            class="no-users-nearby"
+            src="assets/icon-static/must-watch-video.svg"
+            alt=""
+          />
+          <!-- <p>No momento não encontramos novas amizades para você!</p> -->
+          <p>
+            Assista o vídeo publicitário abaixo para continuar com mais
+            curtidas.
+          </p>
+
+          <div class="contain-button-video-reward">
+            <button
+              appButtonStyle
+              [buttonType]="'secondary'"
+              (click)="goToAdMobVideoReward()"
+            >
+              Toque para assistir
+            </button>
+          </div>
+        </div>
+
+        <div class="no-matches-message" *ngIf="post.id === 'no-matches'">
           <p class="title-no-users-nearby">Ops, sem novas amizades!</p>
           <img
             class="no-users-nearby"

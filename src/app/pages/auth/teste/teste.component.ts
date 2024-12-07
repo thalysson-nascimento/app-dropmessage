@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
+  CUSTOM_ELEMENTS_SCHEMA,
   ChangeDetectorRef,
   Component,
   OnDestroy,
@@ -9,6 +11,7 @@ import {
 import { Subscription } from 'rxjs';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { Post } from '../../../shared/interface/post';
+import { AdmobService } from '../../../shared/service/ad-mob/ad-mob.service';
 import { SocketAddNewPostMessageService } from '../../../shared/service/socketAddNewPostMessage/socket-add-new-post-message.service';
 import { SocketRemovePostMessageService } from '../../../shared/service/socketRemovePostMessage/socket-remove-post-message.service';
 
@@ -17,9 +20,10 @@ import { SocketRemovePostMessageService } from '../../../shared/service/socketRe
   templateUrl: './teste.component.html',
   styleUrls: ['./teste.component.scss'],
   standalone: true,
-  imports: [CommonModule, ModalComponent],
+  imports: [CommonModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class TesteComponent implements OnInit, OnDestroy {
+export class TesteComponent implements OnInit, OnDestroy, AfterViewInit {
   posts: Post[] = []; // Variável que armazenará os dados recebidos
   socketSubscription!: Subscription;
   expirationSubscription!: Subscription;
@@ -28,8 +32,22 @@ export class TesteComponent implements OnInit, OnDestroy {
   constructor(
     private socketAddNewPostMessageService: SocketAddNewPostMessageService,
     private socketRemovePostMessageService: SocketRemovePostMessageService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private admobService: AdmobService
   ) {}
+
+  async onShowRewardAd() {
+    await this.admobService.rewardVideo();
+  }
+
+  ngAfterViewInit(): void {
+    try {
+      (window as any).adsbygoogle = (window as any).adsbygoogle || [];
+      (window as any).adsbygoogle.push({});
+    } catch (e) {
+      console.error('AdSense error:', e);
+    }
+  }
 
   openDialog() {
     this.dialog.openDialog();
@@ -38,6 +56,7 @@ export class TesteComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.addNewSocketPostMessage();
     this.removeSocketPostMessage();
+    this.onShowRewardAd();
   }
 
   addNewSocketPostMessage() {
@@ -71,6 +90,8 @@ export class TesteComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.admobService.removeAdMob();
+
     if (this.socketSubscription) {
       this.socketSubscription.unsubscribe();
     }
