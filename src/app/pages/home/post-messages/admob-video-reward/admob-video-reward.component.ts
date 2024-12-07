@@ -9,6 +9,7 @@ import {
 import { Router } from '@angular/router';
 import { AdmobService } from '../../../../shared/service/ad-mob/ad-mob.service';
 import { LottieAnimationIconService } from '../../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
+import { UpdateAdmobVideoRewardService } from '../../../../shared/service/update-admob-video-reward/update-admob-video-reward.service';
 
 const CoreModule = [NgIf];
 
@@ -24,11 +25,13 @@ export class AdmobVideoRewardComponent
   implements OnInit, OnDestroy, AfterViewInit
 {
   isLoading: boolean = true;
+  erroLoadVideoReward: boolean = false;
 
   constructor(
     private admobService: AdmobService,
     private router: Router,
-    private lottieAnimationIconService: LottieAnimationIconService
+    private lottieAnimationIconService: LottieAnimationIconService,
+    private updateAdmobVideoRewardService: UpdateAdmobVideoRewardService
   ) {}
   ngAfterViewInit(): void {
     this.initializeLottieAnimation();
@@ -43,13 +46,24 @@ export class AdmobVideoRewardComponent
   }
 
   async onShowRewardAd() {
-    this.isLoading = true;
     try {
       await this.admobService.rewardVideo();
     } catch (error) {
-      console.error('Erro ao carregar vídeo de recompensa:', error);
-    } finally {
+      this.erroLoadVideoReward = true;
       this.isLoading = false;
+    } finally {
+      this.updateAdmobVideoRewardService.updateVideoReward().subscribe({
+        next: () => {
+          this.isLoading = false;
+
+          this.router.navigateByUrl('home/post-messages');
+        },
+        error: (error) => {
+          console.log(error);
+          this.erroLoadVideoReward = true;
+          this.isLoading = false;
+        },
+      });
     }
   }
 
