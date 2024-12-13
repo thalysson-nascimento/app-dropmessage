@@ -26,6 +26,7 @@ import { ButtonStyleDirective } from '../../../shared/directives/button-style/bu
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { Sign } from '../../../shared/interface/sign.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
+import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
 import { LoginService } from '../../../shared/service/sign/sign.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
@@ -64,6 +65,7 @@ export class SignComponent implements OnInit, OnDestroy {
     private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
     private cacheAvatarService: CacheAvatarService,
     private userHashPublicService: UserHashPublicService,
+    private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -105,6 +107,7 @@ export class SignComponent implements OnInit, OnDestroy {
         next: (response) => {
           this.isLoadingButton = false;
           this.tokenStorageSecurityRequestService.saveToken(response.token);
+          this.preferencesUserAuthenticateService.savePreferences(response);
 
           this.cacheAvatarService.setAvatarCachePreferences(response.avatar);
 
@@ -112,15 +115,15 @@ export class SignComponent implements OnInit, OnDestroy {
             response.userVerificationData.userHashPublic
           );
 
-          if (!response.userVerificationData.isUploadAvatar) {
-            return this.router.navigateByUrl('home/create-avatar');
-          }
+          // if (!response.userVerificationData.isUploadAvatar) {
+          //   return this.router.navigateByUrl('home/create-avatar');
+          // }
 
-          if (!response.userVerificationData.validatorLocation) {
-            return this.router.navigateByUrl('home/user-location');
-          }
+          // if (!response.userVerificationData.validatorLocation) {
+          //   return this.router.navigateByUrl('home/user-location');
+          // }
 
-          return this.router.navigateByUrl('home/post-messages');
+          this.router.navigateByUrl('home/post-messages');
         },
         error: (responseError: HttpErrorResponse) => {
           this.isLoadingButton = false;

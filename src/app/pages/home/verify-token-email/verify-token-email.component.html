@@ -1,0 +1,38 @@
+<div class="contain">
+  <div class="contain-description-location">
+    <h1>Verifique seu email</h1>
+  </div>
+
+  <div class="contain-svg">
+    <img
+      class="svg"
+      src="assets/icon-static/verify-email.svg"
+      alt="Localização"
+    />
+  </div>
+
+  <p>Email enviado, caso não tenha recebido verifique sua caixa de spam.</p>
+
+  <div class="contain-button">
+    <button
+      class="button-login"
+      type="submit"
+      appButtonStyle
+      [buttonType]="'secondary'"
+      [disabled]="buttonDisalbled"
+      [disabledButton]="buttonDisalbled"
+      (click)="sendEmailConfirmation()"
+    >
+      <app-loading
+        *ngIf="isLoadingButton; else titleButtonConfirmeLocation"
+        width="22px"
+        height="22px"
+        lineHeight="2px"
+      ></app-loading>
+
+      <ng-template #titleButtonConfirmeLocation>
+        <span *ngIf="!isLoadingButton">enviar novamente</span>
+      </ng-template>
+    </button>
+  </div>
+</div>
