@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthHomeGuard } from '../../shared/guard/auth-home/auth-home.guard';
+import { VerifyUserPermissionResolver } from '../../shared/resolver/verify-user-permission/verify-user-permission.resolver';
 
 export const HomeRouting: Routes = [
   {
@@ -15,6 +16,9 @@ export const HomeRouting: Routes = [
       },
       {
         path: 'post-messages',
+        resolve: {
+          verify: VerifyUserPermissionResolver,
+        },
         loadComponent: () =>
           import('./post-messages/post-messages.component').then(
             (m) => m.PostMessagesComponent
@@ -106,6 +110,13 @@ export const HomeRouting: Routes = [
           import(
             './post-messages/admob-video-reward/admob-video-reward.component'
           ).then((m) => m.AdmobVideoRewardComponent),
+      },
+      {
+        path: 'verify-token-email',
+        loadComponent: () =>
+          import('./verify-token-email/verify-token-email.component').then(
+            (m) => m.VerifyTokenEmailComponent
+          ),
       },
     ],
   },

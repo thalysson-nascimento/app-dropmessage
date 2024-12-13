@@ -13,6 +13,7 @@ import { LoadingComponent } from '../../../shared/component/loading/loading.comp
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { GeolocationService } from '../../../shared/service/geolocation/geolocation.service';
+import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
 import { UserLocationService } from '../../../shared/service/user-location/user-location.service';
 
 const SharedComponents = [
@@ -46,6 +47,7 @@ export class UserLocationComponent implements OnInit {
     private geoLocationService: GeolocationService,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
+    private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
     private userLocationService: UserLocationService
   ) {}
 
@@ -117,8 +119,8 @@ export class UserLocationComponent implements OnInit {
   }
 
   confirmUserLocation() {
-    this.buttonDisalbled = true;
     this.isLoadingButton = true;
+    this.buttonDisalbled = true;
 
     this.userLocationService
       .location({
@@ -128,12 +130,36 @@ export class UserLocationComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          this.router.navigateByUrl('home/post-messages');
+          this.preferencesUserAuthenticateService.getToken().subscribe({
+            next: (response) => {
+              if (response) {
+                const updatedData = {
+                  ...response,
+                  userVerificationData: {
+                    ...response.userVerificationData,
+                    validatorLocation: true,
+                  },
+                };
+
+                this.preferencesUserAuthenticateService
+                  .savePreferences(updatedData)
+                  .subscribe({
+                    next: () => {
+                      this.router.navigateByUrl('home/post-messages');
+                    },
+                    error: (saveError) => {
+                      console.error('Erro ao salvar token:', saveError);
+                    },
+                  });
+              }
+            },
+            error: (getTokenError) => {
+              console.error('Erro ao obter token:', getTokenError);
+            },
+          });
         },
         error: (responseError: HttpErrorResponse) => {
-          console.log(responseError);
-          this.isLoadingButton = false;
-          this.buttonDisalbled = false;
+          console.error(responseError);
           this.errorMessage = responseError.error.message.message;
           this.modalErrorUserLocation.openDialog();
         },
