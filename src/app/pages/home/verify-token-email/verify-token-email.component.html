@@ -1,6 +1,6 @@
 <div class="contain">
   <div class="contain-description-location">
-    <h1>Verifique seu email</h1>
+    <h1>Verifique seu e-mail</h1>
   </div>
 
   <div class="contain-svg">
@@ -11,29 +11,42 @@
     />
   </div>
 
-  {{ token }}
-  <p>Email enviado, caso não tenha recebido verifique sua caixa de spam.</p>
+  <p>Verfique o código que foi enviado para o seu e-mail.</p>
 
-  <div class="contain-button">
-    <button
-      class="button-login"
-      type="submit"
-      appButtonStyle
-      [buttonType]="'secondary'"
-      [disabled]="buttonDisalbled"
-      [disabledButton]="buttonDisalbled"
-      (click)="sendEmailConfirmation()"
+  <div class="contain-form">
+    <form
+      [formGroup]="codeConfirmationEmailFormGroup"
+      (submit)="sendCodeEmailConfirmation()"
     >
-      <app-loading
-        *ngIf="isLoadingButton; else titleButtonConfirmeLocation"
-        width="22px"
-        height="22px"
-        lineHeight="2px"
-      ></app-loading>
+      <input
+        appInputCustom
+        placeholder="digite o código"
+        class="input-send-code"
+        formControlName="codeConfirmationEmail"
+        pattern="\d*"
+        maxlength="6"
+        minlength="6"
+      />
 
-      <ng-template #titleButtonConfirmeLocation>
-        <span *ngIf="!isLoadingButton">enviar novamente</span>
-      </ng-template>
-    </button>
+      <button
+        class="button-login"
+        type="submit"
+        appButtonStyle
+        [buttonType]="'secondary'"
+        [disabled]="buttonDisalbled || codeConfirmationEmailFormGroup.invalid"
+        [disabledButton]="codeConfirmationEmailFormGroup.invalid"
+      >
+        <app-loading
+          *ngIf="isLoadingButton; else titleButtonConfirmeLocation"
+          width="22px"
+          height="22px"
+          lineHeight="2px"
+        ></app-loading>
+
+        <ng-template #titleButtonConfirmeLocation>
+          <span>Confirmar código</span>
+        </ng-template>
+      </button>
+    </form>
   </div>
 </div>
