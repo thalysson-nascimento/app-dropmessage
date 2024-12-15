@@ -5,6 +5,19 @@ const config: CapacitorConfig = {
   appName: 'DatingMatch',
   webDir: 'dist/app-dropmessage/browser',
   plugins: {
+    App: {
+      allowNavigation: ['datingmatch://*'],
+    },
+    DeepLinks: {
+      androidPathPrefix: '/', // Prefixo para deep links no Android
+      customScheme: 'datingmatch', // Deve coincidir com o esquema do link
+      routes: [
+        {
+          path: '/verify-token-email',
+          component: 'app-verify-token-email',
+        },
+      ],
+    },
     AdMob: {
       androidAppId: 'ca-app-pub-8691674404508428~8935039558',
       maxAdContentRating: 'G', // (G, PG, T, MA) -> Altere conforme necessário

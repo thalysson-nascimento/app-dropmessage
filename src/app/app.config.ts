@@ -19,6 +19,7 @@ import { Socket, io } from 'socket.io-client';
 import { currentEnvironment } from '../environment.config';
 import { routes } from './app.routes';
 import { tokenStorageSecurityInterceptor } from './shared/interceptors/token-storage-security-interceptor/token-storage-security.interceptor';
+import { DeepLinkService } from './shared/service/deep-link/deep-link.service';
 
 export const SOCKET_IO_URL = currentEnvironment.baseUrlSocket;
 export const socket: Socket = io(SOCKET_IO_URL, {
@@ -50,5 +51,6 @@ export const appConfig: ApplicationConfig = {
     // eficiente ok
     provideHttpClient(withFetch()), // habilitando a função fatch nativa do navegador para integrar com o httpClient.
     provideHttpClient(withInterceptors([tokenStorageSecurityInterceptor])),
+    { provide: DeepLinkService, useClass: DeepLinkService },
   ],
 };
