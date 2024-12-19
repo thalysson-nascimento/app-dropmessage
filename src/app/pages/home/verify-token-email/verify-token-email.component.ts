@@ -49,7 +49,6 @@ export class VerifyTokenEmailComponent implements OnInit {
     const input = event.target;
     const maxLength = 6;
 
-    // Limita o número de caracteres
     if (input.value.length > maxLength) {
       input.value = input.value.slice(0, maxLength);
     }

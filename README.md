@@ -44,4 +44,20 @@ colocar no angular.json
 
 ./gradlew assembleDebug
 
+para gerar a release .aab
+../gradlew bundleRelease
+
+assinar o app
+ng build --configuration production
+npx cap copy
+cd android
+./gradlew bundleRelease
+
+Assinar o arquivo .aab
+keytool -genkeypair -v -keystore my-release-key.keystore -keyalg RSA -keysize 2048 -validity 10000 -alias my-key-alias
+jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore my-release-key.keystore app-release.aab my-key-alias
+
+Por fim, você pode usar o zipalign (ferramenta do Android SDK) para otimizar o pacote
+zipalign -v 4 app-release.aab app-release-aligned.aab
+
 sudo kill -9 `sudo lsof -t -i:4200`
