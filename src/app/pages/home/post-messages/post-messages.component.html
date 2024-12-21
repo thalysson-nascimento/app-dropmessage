@@ -44,12 +44,18 @@
           *ngIf="post.id !== 'no-matches' && post.id !== 'watch-video-reward'"
         >
           <div class="contain-user-data">
-            <p class="user-name">{{ post.user.name }}</p>
-            <span class="user-location"
-              >{{ post.user.UserLocation.city }}/{{
-                post.user.UserLocation.stateCode
-              }}</span
-            >
+            <div>
+              <p class="user-name">{{ post.user.name }}</p>
+              <span class="user-location">
+                <i class="fi fi-sr-marker"></i>
+                {{ post.user.UserLocation.city }}/{{
+                  post.user.UserLocation.stateCode
+                }}</span
+              >
+            </div>
+            <button class="button-report">
+              <i class="fi fi-br-menu-dots-vertical"></i>
+            </button>
           </div>
           <img [src]="post.image" alt="" />
         </ng-container>
