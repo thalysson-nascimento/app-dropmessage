@@ -36,7 +36,29 @@
     class="messages-wrapper"
     [class.hidden]="showSystemUnavailable || isLoading"
   >
-    <div class="contain-messages" #containMessages>
+    <div class="contain-tips" *ngIf="showOptionTips">
+      <div class="contain-loading-tips" *ngIf="isLoadingTips">
+        <app-load-shimmer [height]="'40px'"></app-load-shimmer>
+        <app-load-shimmer [height]="'40px'"></app-load-shimmer>
+        <app-load-shimmer [height]="'40px'"></app-load-shimmer>
+      </div>
+
+      <div *ngIf="!isLoadingTips">
+        <p class="title-tips">
+          Toque em uma das dicas abaixo para iniciar a conversa com
+          {{ userMatchName }}.
+        </p>
+      </div>
+      <div class="option-tips">
+        <div *ngFor="let tip of tips">
+          <button class="tip-item" (click)="choseTipsSendMessage(tip)">
+            {{ tip }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="contain-messages" *ngIf="!showOptionTips" #containMessages>
       <div
         *ngFor="let message of messages"
         [ngClass]="{
@@ -77,6 +99,7 @@
         </div>
       </div>
     </div>
+
     <div class="contain-send-message">
       <form
         [formGroup]="sendMessageFormGroup"

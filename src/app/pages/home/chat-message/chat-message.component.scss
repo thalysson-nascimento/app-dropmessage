@@ -76,6 +76,53 @@ input {
   object-fit: cover;
 }
 
+.contain-tips {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.option-tips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  padding: 1rem;
+}
+
+.title-tips {
+  line-height: 1.5rem;
+  color: var(--text-dark-secundary);
+  font-size: 0.8rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.contain-loading-tips {
+  width: 100%;
+  padding: 1rem;
+}
+
+.tip-item {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 2rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+
+  &:active {
+    background-color: #003f7f;
+  }
+}
+
 .contain-messages {
   flex: 1;
   padding: 1rem;
@@ -157,7 +204,6 @@ input {
   align-items: center;
   border: 1px solid #ccc;
   border-radius: 10px;
-  // padding: 5px;
   width: 100%;
 }
 
@@ -169,8 +215,8 @@ input {
 }
 
 input[appInputCustom] {
-  border: none !important; /* Remove a borda adicionada pela diretiva */
-  outline: none; /* Remove o contorno ao focar no input */
+  border: none !important;
+  outline: none;
 }
 
 .button-send-message {
