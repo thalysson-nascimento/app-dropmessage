@@ -118,6 +118,13 @@ export const HomeRouting: Routes = [
             (m) => m.VerifyTokenEmailComponent
           ),
       },
+      {
+        path: 'user-description',
+        loadComponent: () =>
+          import('./user-description/user-description.component').then(
+            (m) => m.UserDescriptionComponent
+          ),
+      },
     ],
   },
 ];

@@ -1,0 +1,64 @@
+<form
+  class="contain"
+  [formGroup]="userDescriptionFormGroup"
+  (submit)="saveUserDescription()"
+>
+  <div class="contain-input">
+    <p class="text-login">Fale sobre você</p>
+    <h1 class="title-description">
+      Ao você preencher o seu perfil a IA poderá ajudar a completá-lo.
+    </h1>
+    <textarea
+      type="text"
+      placeholder="Digite sua descrição aqui"
+      class="input-custom"
+      appInputCustom
+      maxlength="150"
+      formControlName="userDescription"
+      oninput="document.getElementById('charCounter').textContent = this.value.length"
+    ></textarea>
+
+    <div class="contain-character-counter">
+      <span class="character-counter">
+        <output id="charCounter">0</output>/150
+      </span>
+    </div>
+
+    <div class="contain-alert" *ngIf="showAlertUserDescription">
+      <p>
+        Continue com a descrição para uma análise mais precisa da IA com seus
+        futuros matches.
+      </p>
+    </div>
+
+    <div *ngIf="erroCompletedUserDescription">
+      <p>Ops, ocorreu um erro ao completar a descrição com a IA.</p>
+    </div>
+
+    <div *ngIf="showUserDescriptionComplete && !erroCompletedUserDescription">
+      <p class="information-title-ia">Descrição gerada por IA.</p>
+      <div class="contain-user-description-complete">
+        <p>{{ userDescriptionCompleted }}</p>
+        <div class="contain-button-apply-description">
+          <button
+            class="button-apply-description"
+            (click)="applyDescriptionForm()"
+          >
+            usar descrição
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contain-button">
+    <button
+      appButtonStyle
+      [buttonType]="'secondary'"
+      [disabled]="userDescriptionFormGroup.invalid"
+      [disabledButton]="userDescriptionFormGroup.invalid"
+    >
+      Salvar descrição
+    </button>
+  </div>
+</form>
