@@ -15,10 +15,7 @@ export class VerifyUserPermissionResolver implements Resolve<boolean> {
   resolve(): Observable<boolean> {
     return this.preferencesUserAuthenticateService.getToken().pipe(
       map((userData) => {
-        console.log('!!aaa!====>', userData);
-
         if (!userData?.userVerificationData.verificationTokenEmail) {
-          console.log('Nao tem token de verificação de email');
           this.router.navigateByUrl('home/verify-token-email');
           return false;
         }

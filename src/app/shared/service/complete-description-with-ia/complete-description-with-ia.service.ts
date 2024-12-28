@@ -6,7 +6,7 @@ import { currentEnvironment } from '../../../../environment.config';
 @Injectable({
   providedIn: 'root',
 })
-export class UserDescriptionCompletedService {
+export class CompleteDescriptionWithIA {
   private baseURL = currentEnvironment.baseURL;
 
   constructor(private httpClient: HttpClient) {}

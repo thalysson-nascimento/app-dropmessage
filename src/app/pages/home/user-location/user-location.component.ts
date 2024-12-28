@@ -145,7 +145,7 @@ export class UserLocationComponent implements OnInit {
                   .savePreferences(updatedData)
                   .subscribe({
                     next: () => {
-                      this.router.navigateByUrl('home/post-messages');
+                      this.router.navigateByUrl('home/user-description');
                     },
                     error: (saveError) => {
                       console.error('Erro ao salvar token:', saveError);

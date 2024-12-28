@@ -31,6 +31,10 @@
       </p>
     </div>
 
+    <div *ngIf="errorRequest">
+      <p>Ops, ocorreu um erro ao salvar sua descrição, tente novamente</p>
+    </div>
+
     <div *ngIf="erroCompletedUserDescription">
       <p>Ops, ocorreu um erro ao completar a descrição com a IA.</p>
     </div>
@@ -53,12 +57,19 @@
 
   <div class="contain-button">
     <button
+      class="button"
       appButtonStyle
       [buttonType]="'secondary'"
-      [disabled]="userDescriptionFormGroup.invalid"
-      [disabledButton]="userDescriptionFormGroup.invalid"
+      [disabled]="buttonDisalbled || userDescriptionFormGroup.invalid"
+      [disabledButton]="buttonDisalbled || userDescriptionFormGroup.invalid"
     >
-      Salvar descrição
+      <span *ngIf="!buttonDisalbled">Salvar descrição</span>
+      <div *ngIf="buttonDisalbled" class="bouncing-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
     </button>
   </div>
 </form>

@@ -6,10 +6,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
-import { UserDescriptionCompletedService } from '../../../shared/service/user-description-complete/user-description-completed.service';
+import { CompleteDescriptionWithIA } from '../../../shared/service/complete-description-with-ia/complete-description-with-ia.service';
+import { UserDescriptionService } from '../../../shared/service/user-description/user-description.service';
 import { noOnlySpacesValidator } from '../../../shared/validators/noOnlySpacesValidator.validator';
 
 const SharedComponent = [ButtonStyleDirective, InputCustomDirective];
@@ -29,10 +31,15 @@ export class UserDescriptionComponent implements OnInit {
   userDescriptionCompleted: string = '';
   erroCompletedUserDescription: boolean = false;
   aplicationUserDescriptionCompleted: boolean = false;
+  buttonDisalbled: boolean = false;
+  isLoadingButton: boolean = false;
+  errorRequest: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
-    private userDescriptionCompletedService: UserDescriptionCompletedService
+    private completeDescriptionWithIA: CompleteDescriptionWithIA,
+    private userDescriptionService: UserDescriptionService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -41,12 +48,10 @@ export class UserDescriptionComponent implements OnInit {
       .get('userDescription')
       ?.valueChanges.pipe(debounceTime(500))
       .subscribe((value: string) => {
-        console.log('---<', value.length);
-
         if (value.length === 0) {
           this.showUserDescriptionComplete = false;
           this.showAlertUserDescription = false;
-          return; // Interrompe o processamento para evitar reescrever o estado
+          return;
         }
 
         if (value.length > 80) {
@@ -60,7 +65,7 @@ export class UserDescriptionComponent implements OnInit {
           value.length > 80 &&
           !this.aplicationUserDescriptionCompleted
         ) {
-          this.userDescriptionCompletedService.complete(value).subscribe({
+          this.completeDescriptionWithIA.complete(value).subscribe({
             next: (response) => {
               this.showUserDescriptionComplete = true;
               this.showAlertUserDescription = false;
@@ -68,7 +73,6 @@ export class UserDescriptionComponent implements OnInit {
             },
             error: (error) => {
               this.erroCompletedUserDescription = true;
-              console.log('===>', error);
             },
           });
         }
@@ -91,7 +95,18 @@ export class UserDescriptionComponent implements OnInit {
 
   saveUserDescription() {
     if (this.userDescriptionFormGroup.valid) {
-      console.log('===>', this.userDescriptionFormGroup.value);
+      const userDescription =
+        this.userDescriptionFormGroup.get('userDescription')?.value;
+      this.userDescriptionService.description(userDescription).subscribe({
+        next: () => {
+          this.buttonDisalbled = true;
+          this.isLoadingButton = true;
+          this.router.navigateByUrl('home/post-messages');
+        },
+        error: () => {
+          this.errorRequest = true;
+        },
+      });
     }
   }
 

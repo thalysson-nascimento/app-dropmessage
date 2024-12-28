@@ -13,6 +13,10 @@
 
   <p>Verfique o código que foi enviado para o seu e-mail.</p>
 
+  <div class="contain-alert" *ngIf="invalidCode">
+    <p>Ops, código inválido!</p>
+  </div>
+
   <div class="contain-form">
     <form
       [formGroup]="codeConfirmationEmailFormGroup"
