@@ -23,19 +23,16 @@
     </div>
   </div>
 
-  <app-system-unavailable
+  <!-- <app-system-unavailable
     *ngIf="showSystemUnavailable && !isLoading"
     (clickLoading)="tryAgain()"
     [infoMessage]="
       'No momento estamos com nossos serviço indisponíves, volte novamente mais tarde!'
     "
   >
-  </app-system-unavailable>
+  </app-system-unavailable> -->
 
-  <div
-    class="messages-wrapper"
-    [class.hidden]="showSystemUnavailable || isLoading"
-  >
+  <div class="messages-wrapper" [class.hidden]="isLoading">
     <div class="contain-tips" *ngIf="showOptionTips">
       <div class="contain-loading-tips" *ngIf="isLoadingTips">
         <app-load-shimmer [height]="'40px'"></app-load-shimmer>
@@ -108,7 +105,6 @@
       >
         <input
           formControlName="sendMessage"
-          appInputCustom
           maxlength="500"
           type="text"
           placeholder="Digite sua mensagem"

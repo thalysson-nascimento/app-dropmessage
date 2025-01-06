@@ -48,6 +48,7 @@ export class UserDescriptionComponent implements OnInit {
       .get('userDescription')
       ?.valueChanges.pipe(debounceTime(500))
       .subscribe((value: string) => {
+        this.errorRequest = false;
         if (value.length === 0) {
           this.showUserDescriptionComplete = false;
           this.showAlertUserDescription = false;
@@ -93,27 +94,34 @@ export class UserDescriptionComponent implements OnInit {
     });
   }
 
-  saveUserDescription() {
-    if (this.userDescriptionFormGroup.valid) {
-      const userDescription =
-        this.userDescriptionFormGroup.get('userDescription')?.value;
-      this.userDescriptionService.description(userDescription).subscribe({
-        next: () => {
-          this.buttonDisalbled = true;
-          this.isLoadingButton = true;
-          this.router.navigateByUrl('home/post-messages');
-        },
-        error: () => {
-          this.errorRequest = true;
-        },
-      });
-    }
-  }
-
   applyDescriptionForm() {
     this.userDescriptionFormGroup
       .get('userDescription')
       ?.setValue(this.userDescriptionCompleted);
     this.aplicationUserDescriptionCompleted = true;
+  }
+
+  saveUserDescription() {
+    if (this.userDescriptionFormGroup.valid) {
+      this.buttonDisalbled = true;
+      this.isLoadingButton = true;
+      const userDescription =
+        this.userDescriptionFormGroup.get('userDescription')?.value;
+
+      this.userDescriptionService.description(userDescription).subscribe({
+        next: () => {
+          this.router.navigateByUrl('home/post-messages');
+        },
+        error: (error) => {
+          console.log(error);
+          this.errorRequest = true;
+          this.showUserDescriptionComplete = false;
+          this.showAlertUserDescription = false;
+
+          this.buttonDisalbled = false;
+          this.isLoadingButton = false;
+        },
+      });
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { currentEnvironment } from '../../../../environment.config';
@@ -12,12 +12,15 @@ export class CodeConfirmationEmailService {
   constructor(private httpClient: HttpClient) {}
 
   confirmation(code: number): Observable<{ userDescriprition: string }> {
+    const params = new HttpParams().set(
+      'codeConfirmationEmail',
+      code.toString()
+    );
+
     return this.httpClient
-      .post<{ userDescriprition: string }>(
+      .get<{ userDescriprition: string }>(
         `${this.baseURL}/code-confirmation-email`,
-        {
-          codeConfirmationEmail: code,
-        }
+        { params }
       )
       .pipe(
         catchError((error) => {

@@ -203,15 +203,17 @@ input {
   display: flex;
   align-items: center;
   border: 1px solid #ccc;
-  border-radius: 10px;
+  border-radius: 5rem;
   width: 100%;
+  padding: 1rem;
 }
 
 .input-field {
   flex: 1;
   border: none;
   outline: none;
-  font-size: 14px;
+  font-size: 1rem;
+  color: var(--text-dark);
 }
 
 input[appInputCustom] {
