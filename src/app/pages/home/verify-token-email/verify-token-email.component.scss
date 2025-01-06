@@ -86,3 +86,15 @@
   align-items: center;
   text-align: center;
 }
+
+.contain-alert {
+  padding: var(--space-medium);
+  background-color: #fdfacb;
+  border-radius: 0.5rem;
+  margin-top: var(--space-large);
+
+  p {
+    color: #9b8b55;
+    line-height: 1.5rem;
+  }
+}

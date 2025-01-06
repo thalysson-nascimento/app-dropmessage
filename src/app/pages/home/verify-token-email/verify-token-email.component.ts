@@ -6,9 +6,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { LoadingComponent } from '../../../shared/component/loading/loading.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
+import { CodeConfirmationEmailService } from '../../../shared/service/code-confirmation-email/code-confirmation-email.service';
 
 const SharedComponents = [
   ButtonStyleDirective,
@@ -29,8 +31,13 @@ export class VerifyTokenEmailComponent implements OnInit {
   buttonDisalbled: boolean = false;
   isLoadingButton: boolean = false;
   codeConfirmationEmailFormGroup!: FormGroup;
+  invalidCode: boolean = false;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private codeConfirmationEmailService: CodeConfirmationEmailService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.codeConfirmationEmailFormBuilder();
@@ -57,6 +64,20 @@ export class VerifyTokenEmailComponent implements OnInit {
   sendCodeEmailConfirmation() {
     this.isLoadingButton = true;
     this.buttonDisalbled = true;
-    console.log('clicado');
+
+    this.codeConfirmationEmailService
+      .confirmation(
+        this.codeConfirmationEmailFormGroup.value.codeConfirmationEmail
+      )
+      .subscribe({
+        next: () => {
+          this.router.navigateByUrl('home/create-avatar');
+        },
+        error: () => {
+          this.isLoadingButton = false;
+          this.buttonDisalbled = false;
+          this.invalidCode = true;
+        },
+      });
   }
 }
