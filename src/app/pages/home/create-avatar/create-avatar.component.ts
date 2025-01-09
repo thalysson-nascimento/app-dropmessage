@@ -27,15 +27,17 @@ import { Camera, CameraResultType } from '@capacitor/camera';
 import { Dialog } from '@capacitor/dialog';
 import DOMPurify from 'dompurify';
 import { NgxMaskDirective } from 'ngx-mask';
-import { Subject, delay, timer } from 'rxjs';
+import { Subject, delay, takeUntil, timer } from 'rxjs';
 import { currentEnvironment } from '../../../../environment.config';
 import { ChoosePhotoGalleryOrCameraComponent } from '../../../shared/component/choose-photo-gallery-or-camera/choose-photo-gallery-or-camera.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { AboutMe } from '../../../shared/interface/about-me.interface';
+import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { CreateAvatarService } from '../../../shared/service/create-avatar/create-avatar.service';
+import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { dateOfBirthValidator } from '../../../shared/validators/dateOfBirthValidator.validator';
 
 const SharedComponents = [
@@ -76,6 +78,7 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   typeGender: string = '';
   typeInterests: string = '';
+  pageView: string = 'DatingMatch:CreateAvatar';
 
   constructor(
     private router: Router,
@@ -83,7 +86,7 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
     private bottomSheet: MatBottomSheet,
     private domSanitizer: DomSanitizer,
     private formBuilder: FormBuilder,
-    // private dataCompletedService: DataCompletedService,
+    private loggerService: LoggerService,
     private createAvatarService: CreateAvatarService,
     private cacheAvatarService: CacheAvatarService
   ) {}
@@ -93,6 +96,11 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loadSvgUrl();
     this.checkCameraPermission();
     this.avatarAndComlpetedDataFormBuilder();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   avatarAndComlpetedDataFormBuilder() {
@@ -138,11 +146,6 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.hideLottieAfterDelay();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   async loadSvgUrl() {
     const response = await fetch(
       'assets/icon-static/icon-completo-profile.svg'
@@ -176,9 +179,39 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     if (permissionRequest.camera === 'granted') {
+      const logger: TrackAction = {
+        pageView: this.pageView,
+        category: 'user_create_avatar',
+        event: 'click',
+        label: 'button:camera_alow',
+        message: 'permissao concedida para camera',
+        statusCode: 200,
+        level: 'info',
+      };
+
+      this.loggerService
+        .info(logger)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe();
       this.cameraAllowed = true;
     } else {
       this.cameraAllowed = false;
+
+      const logger: TrackAction = {
+        pageView: this.pageView,
+        category: 'user_create_avatar',
+        event: 'click',
+        label: 'button:camera_denied',
+        message: 'permissao nao concedida para camera',
+        statusCode: 402,
+        level: 'warn',
+      };
+
+      this.loggerService
+        .info(logger)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe();
+
       await this.showCameraPermissionModal();
     }
   }
@@ -187,7 +220,7 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
     const { value } = await Dialog.confirm({
       title: 'Permissão de Câmera',
       message:
-        'Para fazer um post, é necessário que você permita o uso da câmera do seu dispositivo. Deseja permitir agora?',
+        'Para compartilhar um post, é necessário que você permita o uso da câmera do seu dispositivo. Deseja permitir agora?',
       okButtonTitle: 'Permitir',
       cancelButtonTitle: 'Cancelar',
     });
@@ -220,6 +253,17 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async requestCameraPermissionAgain() {
+    const logger: TrackAction = {
+      pageView: this.pageView,
+      category: 'user_create_avatar',
+      event: 'click',
+      label: 'button:Permitir uso de câmera',
+      message: 'permitir uso da câmera',
+      statusCode: 200,
+      level: 'info',
+    };
+
+    this.loggerService.info(logger).pipe(takeUntil(this.destroy$)).subscribe();
     await this.checkCameraPermission();
   }
 
@@ -273,6 +317,37 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
             .subscribe({
               next: (response) => {
                 this.cacheAvatarService.setAvatarCachePreferences(response);
+
+                const loggerGender: TrackAction = {
+                  pageView: this.pageView,
+                  category: 'user_create_avatar',
+                  event: 'click',
+                  label: 'modal:Como você se identifica',
+                  message: userCompletedDataForm.gender,
+                  statusCode: 200,
+                  level: 'info',
+                };
+
+                this.loggerService
+                  .info(loggerGender)
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe();
+
+                const loggerInterest: TrackAction = {
+                  pageView: this.pageView,
+                  category: 'user_create_avatar',
+                  event: 'click',
+                  label: 'modal:Interesses',
+                  message: userCompletedDataForm.interests,
+                  statusCode: 200,
+                  level: 'info',
+                };
+
+                this.loggerService
+                  .info(loggerInterest)
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe();
+
                 this.router.navigateByUrl('home/user-location');
               },
               error: (error) => {

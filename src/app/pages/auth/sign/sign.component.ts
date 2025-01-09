@@ -53,7 +53,7 @@ const CoreModule = [ReactiveFormsModule, CommonModule];
   styleUrls: ['./sign.component.scss'],
 })
 export class SignComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>(); // Gerenciador de assinaturas
+  private destroy$ = new Subject<void>();
 
   buttonDisalbled: boolean = false;
   userLoginFormGroup!: FormGroup;
