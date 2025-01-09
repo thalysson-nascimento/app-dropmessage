@@ -13,7 +13,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { PluginListenerHandle } from '@capacitor/core';
-import { Subject, concatMap } from 'rxjs';
+import { Subject, concatMap, takeUntil, tap } from 'rxjs';
 import { register } from 'swiper/element/bundle';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
 import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
@@ -62,7 +62,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   backButtonListener!: PluginListenerHandle;
   displayImageUrl: string | null = null;
   imageLoaded = false;
-  pageView: string = 'DatingMatch:Login';
+  pageView: string = 'DatingMatch:PostMessage';
 
   constructor(
     private postMessageService: PostMessageService,
@@ -154,6 +154,26 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
           const updateShowLikeButton = (activeIndex: number) => {
             const activePost = this.posts[activeIndex];
 
+            if (activePost?.id === 'no-matches') {
+              const logger: TrackAction = {
+                pageView: this.pageView,
+                category: 'user_post_message:no_match',
+                event: 'view',
+                message: 'sem novas amizades',
+                statusCode: 200,
+                level: 'info',
+              };
+
+              this.loggerService
+                .info(logger)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                  error: (error) => {
+                    console.log(error);
+                  },
+                });
+            }
+
             if (
               activePost?.id === 'no-matches' ||
               activePost?.id === 'watch-video-reward'
@@ -230,8 +250,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   loadPostMessage() {
     this.postMessageService.listPost().subscribe({
       next: (response) => {
-        console.log('=====>', response);
-
         this.totalPosts += response.data.length;
         this.posts = [...this.posts, ...response.data];
         this.isLoaded = true;
@@ -245,6 +263,21 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: (error) => {
         console.error(error);
+
+        const logger: TrackAction = {
+          pageView: this.pageView,
+          category: 'user_post_message',
+          event: 'view',
+          message: error.message,
+          statusCode: error.status,
+          level: 'error',
+        };
+
+        this.loggerService
+          .info(logger)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe();
+
         this.showSystemUnavailable = true;
         this.isLoaded = false;
       },
@@ -261,14 +294,63 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       next: (response) => {
         if (response.data.length > 0) {
           this.posts = [...this.posts, ...response.data];
+          const logger: TrackAction = {
+            pageView: this.pageView,
+            category: 'user_post_message:load_more_post',
+            event: 'view',
+            message: 'carregar mais posts',
+            statusCode: 200,
+            level: 'info',
+          };
+
+          this.loggerService
+            .info(logger)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              error: (error) => {
+                console.log(error);
+              },
+            });
           this.mySwiper.update();
         } else {
+          const logger: TrackAction = {
+            pageView: this.pageView,
+            category: 'user_post_message:no_posts',
+            event: 'view',
+            message: 'Não há mais posts para carregar',
+            statusCode: 200,
+            level: 'info',
+          };
+
+          this.loggerService
+            .info(logger)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              error: (error) => {
+                console.log(error);
+              },
+            });
           console.log('Não há mais posts para carregar.');
         }
         this.isLoadingMorePosts = false;
       },
       error: (error) => {
         console.error('Erro ao carregar mais posts:', error);
+
+        const logger: TrackAction = {
+          pageView: this.pageView,
+          category: 'user_post_message',
+          event: 'view',
+          message: error.message,
+          statusCode: error.status,
+          level: 'error',
+        };
+
+        this.loggerService
+          .info(logger)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe();
+
         this.isLoadingMorePosts = false;
       },
     });
@@ -306,17 +388,19 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   likePostMessage() {
     console.log('Curtiu o post:', this.likePostMessageWhitHeart);
-    // this.likePostMessageService
-    //   .likePostMessage(this.likePostMessageWhitHeart.id)
-    //   .subscribe({
-    //     next: (response) => {
-    //       console.log(response);
-    //     },
-    //     error: (error) => {
-    //       console.log(error);
-    //     },
-    //   });
     this.likePostMessageQueue.next(this.likePostMessageWhitHeart.id);
+
+    const logger: TrackAction = {
+      pageView: this.pageView,
+      category: 'user_post_message:like_post_message',
+      event: 'click',
+      label: 'button:like',
+      message: `like_post_message:${this.likePostMessageWhitHeart.id}`,
+      statusCode: 200,
+      level: 'info',
+    };
+
+    this.loggerService.info(logger).pipe(takeUntil(this.destroy$)).subscribe();
 
     if (this.mySwiper) {
       this.likeButtonClicked = true;
@@ -337,18 +421,46 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   handleLikePostMessageQueue() {
     this.likePostMessageQueue
       .pipe(
+        tap((postId) => console.log('Post ID recebido na fila:', postId)),
         concatMap((postId) =>
-          this.likePostMessageService.likePostMessage(postId)
+          this.likePostMessageService.likePostMessage(postId).pipe(
+            tap({
+              next: (response) => {
+                console.log('Resposta do likePostMessage:', response);
+                const logger: TrackAction = {
+                  pageView: this.pageView,
+                  category: 'user_post_message',
+                  event: 'click',
+                  message: `like_post_message:${response.postId}`,
+                  statusCode: 200,
+                  level: 'error',
+                };
+
+                this.loggerService
+                  .info(logger)
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe();
+              },
+              error: (error) => {
+                const logger: TrackAction = {
+                  pageView: this.pageView,
+                  category: 'user_post_message',
+                  event: 'view',
+                  message: error.message,
+                  statusCode: error.status,
+                  level: 'error',
+                };
+
+                this.loggerService
+                  .info(logger)
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe();
+              },
+            })
+          )
         )
       )
-      .subscribe({
-        next: (response) => {
-          console.log('Post curtido:', response);
-        },
-        error: (error) => {
-          console.error('Erro ao curtir o post:', error);
-        },
-      });
+      .subscribe();
   }
 
   removePostFromSwiperWithLikeButton(post: Post) {
@@ -368,10 +480,33 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   openBottomSheet(): void {
+    const logger: TrackAction = {
+      pageView: this.pageView,
+      category: 'user_post_message',
+      event: 'click',
+      label: 'button:icon_camera',
+      message: 'Abrir modal camera',
+      statusCode: 200,
+      level: 'info',
+    };
+
+    this.loggerService.info(logger).pipe(takeUntil(this.destroy$)).subscribe();
+
     this.bottomSheet.open(BottomSheetComponent);
   }
 
   goToListSettings() {
+    const logger: TrackAction = {
+      pageView: this.pageView,
+      category: 'user_post_message',
+      event: 'click',
+      label: 'button:icon_avatar',
+      message: 'ir para configurações',
+      statusCode: 200,
+      level: 'info',
+    };
+
+    this.loggerService.info(logger).pipe(takeUntil(this.destroy$)).subscribe();
     this.router.navigateByUrl('home/profile');
   }
 
@@ -399,6 +534,21 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   goToAdMobVideoReward() {
+    const logger: TrackAction = {
+      pageView: this.pageView,
+      category: 'user_post_message:video_reward',
+      event: 'click',
+      message: 'Assitir video recompensa',
+      statusCode: 202,
+      level: 'info',
+    };
+
+    this.loggerService
+      .info(logger)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        error: (error) => console.log(error),
+      });
     this.router.navigateByUrl('home/admob-video-reward');
   }
 
