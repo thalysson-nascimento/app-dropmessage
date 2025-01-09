@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,10 +7,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { debounceTime } from 'rxjs';
+import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
+import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { CompleteDescriptionWithIA } from '../../../shared/service/complete-description-with-ia/complete-description-with-ia.service';
+import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { UserDescriptionService } from '../../../shared/service/user-description/user-description.service';
 import { noOnlySpacesValidator } from '../../../shared/validators/noOnlySpacesValidator.validator';
 
@@ -24,7 +26,7 @@ const CoreModule = [ReactiveFormsModule, CommonModule];
   standalone: true,
   imports: [...SharedComponent, ...CoreModule],
 })
-export class UserDescriptionComponent implements OnInit {
+export class UserDescriptionComponent implements OnInit, OnDestroy {
   userDescriptionFormGroup!: FormGroup;
   showAlertUserDescription: boolean = false;
   showUserDescriptionComplete: boolean = false;
@@ -34,13 +36,21 @@ export class UserDescriptionComponent implements OnInit {
   buttonDisalbled: boolean = false;
   isLoadingButton: boolean = false;
   errorRequest: boolean = false;
+  destroy$: Subject<void> = new Subject<void>();
+  pageView: string = 'DatingMatch:UserDescription';
 
   constructor(
     private formBuilder: FormBuilder,
     private completeDescriptionWithIA: CompleteDescriptionWithIA,
     private userDescriptionService: UserDescriptionService,
-    private router: Router
+    private router: Router,
+    private loggerService: LoggerService
   ) {}
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   ngOnInit() {
     this.createUserDescriptionFormBuilder();
@@ -99,6 +109,18 @@ export class UserDescriptionComponent implements OnInit {
       .get('userDescription')
       ?.setValue(this.userDescriptionCompleted);
     this.aplicationUserDescriptionCompleted = true;
+
+    const logger: TrackAction = {
+      pageView: this.pageView,
+      category: 'user_description',
+      event: 'click',
+      label: 'button:usar descrição',
+      message: 'Usar descrição com IA',
+      statusCode: 200,
+      level: 'info',
+    };
+
+    this.loggerService.info(logger).pipe(takeUntil(this.destroy$)).subscribe();
   }
 
   saveUserDescription() {
@@ -110,13 +132,45 @@ export class UserDescriptionComponent implements OnInit {
 
       this.userDescriptionService.description(userDescription).subscribe({
         next: () => {
-          this.router.navigateByUrl('home/post-messages');
+          const logger: TrackAction = {
+            pageView: this.pageView,
+            category: 'user_description',
+            event: 'click',
+            label: 'button:Salvar descrição',
+            message: 'Salvar descrição',
+            statusCode: 200,
+            level: 'info',
+          };
+
+          this.loggerService
+            .info(logger)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              next: () => {
+                this.router.navigateByUrl('home/post-messages');
+              },
+            });
         },
         error: (error) => {
           console.log(error);
           this.errorRequest = true;
           this.showUserDescriptionComplete = false;
           this.showAlertUserDescription = false;
+
+          const logger: TrackAction = {
+            pageView: this.pageView,
+            category: 'user_description',
+            event: 'click',
+            label: 'button:Salvar descrição',
+            message: error.message,
+            statusCode: 200,
+            level: 'error',
+          };
+
+          this.loggerService
+            .info(logger)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe();
 
           this.buttonDisalbled = false;
           this.isLoadingButton = false;
