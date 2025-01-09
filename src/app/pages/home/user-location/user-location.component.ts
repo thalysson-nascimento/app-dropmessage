@@ -3,16 +3,20 @@ import { HttpErrorResponse } from '@angular/common/http';
 import {
   Component,
   Inject,
+  OnDestroy,
   OnInit,
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
+import { Subject, takeUntil } from 'rxjs';
 import { LoadingComponent } from '../../../shared/component/loading/loading.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
+import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { GeolocationService } from '../../../shared/service/geolocation/geolocation.service';
+import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
 import { UserLocationService } from '../../../shared/service/user-location/user-location.service';
 
@@ -30,7 +34,7 @@ const CoreModule = [CommonModule];
   imports: [...SharedComponents, ...CoreModule],
   standalone: true,
 })
-export class UserLocationComponent implements OnInit {
+export class UserLocationComponent implements OnInit, OnDestroy {
   buttonDisalbled: boolean = true;
   state: string = '';
   stateCode: string = '';
@@ -42,14 +46,22 @@ export class UserLocationComponent implements OnInit {
   @ViewChild('modalErrorUserLocation') modalErrorUserLocation!: ModalComponent;
   @ViewChild('modalConfirmePermissionLocation')
   modalConfirmePermissionLocation!: ModalComponent;
+  pageView: string = 'DatingMatch:UserLocation';
+  destroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private geoLocationService: GeolocationService,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
     private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
-    private userLocationService: UserLocationService
+    private userLocationService: UserLocationService,
+    private loggerService: LoggerService
   ) {}
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   ngOnInit() {
     this.checkLocationPermission();
@@ -145,22 +157,84 @@ export class UserLocationComponent implements OnInit {
                   .savePreferences(updatedData)
                   .subscribe({
                     next: () => {
+                      const logger: TrackAction = {
+                        pageView: this.pageView,
+                        category: 'user_user_location',
+                        event: 'click',
+                        label: 'button:Confirmar Localização',
+                        message: JSON.stringify({
+                          state: this.state,
+                          stateCode: this.stateCode,
+                          city: this.city,
+                        }),
+                        statusCode: 200,
+                        level: 'info',
+                      };
+
+                      this.loggerService
+                        .info(logger)
+                        .pipe(takeUntil(this.destroy$))
+                        .subscribe();
+
                       this.router.navigateByUrl('home/user-description');
                     },
                     error: (saveError) => {
                       console.error('Erro ao salvar token:', saveError);
+                      const logger: TrackAction = {
+                        pageView: this.pageView,
+                        category: 'user_user_location',
+                        event: 'click',
+                        label: 'button:Confirmar Localização',
+                        message: saveError.message,
+                        statusCode: 200,
+                        level: 'error',
+                      };
+
+                      this.loggerService
+                        .info(logger)
+                        .pipe(takeUntil(this.destroy$))
+                        .subscribe();
                     },
                   });
               }
             },
             error: (getTokenError) => {
               console.error('Erro ao obter token:', getTokenError);
+              const logger: TrackAction = {
+                pageView: this.pageView,
+                category: 'user_user_location',
+                event: 'click',
+                label: 'button:Confirmar Localização',
+                message: getTokenError.message,
+                statusCode: 200,
+                level: 'error',
+              };
+
+              this.loggerService
+                .info(logger)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe();
             },
           });
         },
         error: (responseError: HttpErrorResponse) => {
-          console.error(responseError);
           this.errorMessage = responseError.error.message.message;
+
+          const logger: TrackAction = {
+            pageView: this.pageView,
+            category: 'user_user_location',
+            event: 'click',
+            label: 'button:Confirmar Localização',
+            message: this.errorMessage,
+            statusCode: 200,
+            level: 'error',
+          };
+
+          this.loggerService
+            .info(logger)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe();
+
           this.modalErrorUserLocation.openDialog();
         },
         complete: () => {
