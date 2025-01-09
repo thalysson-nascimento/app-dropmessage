@@ -21,8 +21,10 @@ import { SystemUnavailableComponent } from '../../../shared/component/system-una
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
 import { Post } from '../../../shared/interface/post';
+import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { LikePostMessageService } from '../../../shared/service/like-post-message/like-post-message.service';
+import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 import { PostMessageService } from '../../../shared/service/post/post.service';
 
@@ -60,6 +62,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   backButtonListener!: PluginListenerHandle;
   displayImageUrl: string | null = null;
   imageLoaded = false;
+  pageView: string = 'DatingMatch:Login';
 
   constructor(
     private postMessageService: PostMessageService,
@@ -69,7 +72,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     private lottieAnimationIconService: LottieAnimationIconService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private cacheAvatarService: CacheAvatarService,
-    private likePostMessageService: LikePostMessageService
+    private likePostMessageService: LikePostMessageService,
+    private loggerService: LoggerService
   ) {}
 
   ngOnInit(): void {
@@ -396,5 +400,24 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   goToAdMobVideoReward() {
     this.router.navigateByUrl('home/admob-video-reward');
+  }
+
+  sendLogger() {
+    const logger: TrackAction = {
+      pageView: this.pageView,
+      category: 'user_login',
+      event: 'click',
+      message: 'loggin_success',
+      statusCode: 200,
+      level: 'info',
+    };
+    this.loggerService.info(logger).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error(err) {
+        console.log(err);
+      },
+    });
   }
 }
