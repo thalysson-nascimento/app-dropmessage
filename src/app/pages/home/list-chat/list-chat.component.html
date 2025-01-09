@@ -33,10 +33,10 @@
   </div>
 
   <div *ngIf="!showSystemUnavailable && !isLoading">
-    <ul appListStyle>
+    <ul>
       <li *ngFor="let chat of listChat" (click)="goToChat(chat)">
         <img [src]="chat.avatar" class="avatar" alt="" />
-        <div class="contain-description">
+        <div>
           <p class="name">{{ chat.name }}</p>
           <p class="last-message">ainda não iniciaram uma conversa</p>
         </div>

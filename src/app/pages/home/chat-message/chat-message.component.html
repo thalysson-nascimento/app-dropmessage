@@ -64,35 +64,10 @@
         class="message"
       >
         <div class="group-message">
-          <img
-            *ngIf="!getAlignment(message.user.userHashPublic)"
-            [src]="message.user.avatar.image"
-            class="avatar-message"
-            alt=""
-          />
           <div class="message-user">
-            <p
-              [ngClass]="
-                message.user.userHashPublic === userHashPublic
-                  ? 'message-user-name margin-top-user-name'
-                  : 'message-user-name'
-              "
-            >
-              {{
-                message.user.userHashPublic === userHashPublic
-                  ? "Você"
-                  : message.user.name
-              }}
-            </p>
             <p class="message-text">{{ message.content }}</p>
             <p class="message-time">{{ message.createdAt }}</p>
           </div>
-          <img
-            *ngIf="getAlignment(message.user.userHashPublic)"
-            [src]="message.user.avatar.image"
-            class="avatar-message"
-            alt=""
-          />
         </div>
       </div>
     </div>

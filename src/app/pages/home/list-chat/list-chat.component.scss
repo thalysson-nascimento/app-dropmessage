@@ -38,19 +38,18 @@ ul {
     padding-top: 1rem;
     &:not(:last-child) {
       padding-bottom: var(--space-medium);
-      border-bottom: 1px solid #f1f1f1;
     }
   }
 }
 
 .name {
-  font-size: var(--font-size-medium);
+  font-size: 1.2rem;
   font-weight: 700;
 }
 
 .avatar {
-  width: 3rem;
-  height: 3rem;
+  width: 6rem;
+  height: 6rem;
   margin-right: 1rem;
   border-radius: 50%;
   object-fit: cover;

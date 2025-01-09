@@ -23,7 +23,7 @@
   flex-direction: row;
   align-items: center;
   padding: 1rem;
-  border-bottom: 1px solid #e2e2e2;
+  // border-bottom: 1px solid #e2e2e2;
 }
 
 .location {
@@ -45,15 +45,16 @@
   align-items: center;
   gap: 0.5rem;
   padding: 1rem;
+  border-top: 1px solid #e2e2e2;
 }
 
 input {
-  padding: var(--space-medium);
   border: none;
   width: 100%;
   border-radius: 50px;
   flex-grow: 1;
   outline: none;
+  padding-left: 1rem;
 }
 
 .avatar {
@@ -125,7 +126,6 @@ input {
 
 .contain-messages {
   flex: 1;
-  padding: 1rem;
   overflow-y: auto;
   max-height: calc(100vh - 100px);
 }
@@ -143,10 +143,11 @@ input {
     }
 
     .message-text {
-      background-color: #f6f6f6;
+      background-color: #53a7d0;
+      color: #fff;
       margin-left: var(--space-large);
-      border-end-start-radius: var(--space-medium);
-      border-start-end-radius: var(--space-medium);
+      border-radius: 3rem;
+      padding-right: 1.5rem;
     }
 
     .message-time {
@@ -156,11 +157,10 @@ input {
 }
 
 .message-text {
-  background-color: #f6f6f6;
-  color: var(--text-dark);
+  background-color: #89b550;
+  color: #fff;
   padding: var(--space-medium);
-  border-end-start-radius: var(--space-medium);
-  border-start-end-radius: var(--space-medium);
+  border-radius: 1.5rem;
 }
 
 .group-message {
