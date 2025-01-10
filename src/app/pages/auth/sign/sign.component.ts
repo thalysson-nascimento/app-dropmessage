@@ -107,25 +107,7 @@ export class SignComponent implements OnInit, OnDestroy {
   }
 
   navigateToSignup() {
-    const logger: TrackAction = {
-      pageView: this.pageView,
-      category: 'user_login',
-      event: 'click',
-      label: 'link:Ainda nao possui uma conta?',
-      message: 'does not have an account',
-      statusCode: 200,
-      level: 'info',
-    };
-
-    this.loggerService
-      .info(logger)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          this.router.navigate(['auth/signup']);
-        },
-        error: (error) => console.error(error),
-      });
+    this.router.navigate(['auth/signup']);
   }
 
   userSign() {
