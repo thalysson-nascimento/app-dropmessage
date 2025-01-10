@@ -1,7 +1,6 @@
 .contain {
   width: 100%;
   height: 100vh;
-  display: flex;
   flex-direction: column;
 }
 
@@ -12,7 +11,7 @@
 }
 
 .messages-wrapper {
-  height: calc(100vh - 100px);
+  height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -23,7 +22,6 @@
   flex-direction: row;
   align-items: center;
   padding: 1rem;
-  // border-bottom: 1px solid #e2e2e2;
 }
 
 .location {
@@ -40,6 +38,9 @@
 }
 
 .contain-send-message {
+  position: relative;
+  // z-index: 1;
+
   width: 100%;
   display: flex;
   align-items: center;
@@ -126,6 +127,7 @@ input {
 
 .contain-messages {
   flex: 1;
+  position: relative;
   overflow-y: auto;
   max-height: calc(100vh - 100px);
 }
@@ -176,7 +178,7 @@ input {
 
 .message-user-name {
   margin-inline: var(--space-medium);
-  padding-bottom: var(--space-small);
+  // padding-bottom: var(--space-small);
   font-weight: 700;
 }
 
@@ -244,8 +246,8 @@ input[appInputCustom] {
   .shine {
     position: absolute;
     top: 0;
-    left: -150%; /* Ajusta a posição inicial fora da área visível */
-    width: 300%; /* Garante que o gradiente cubra toda a área circular */
+    left: -150%;
+    width: 300%;
     height: 100%;
     background: linear-gradient(
       90deg,
@@ -262,7 +264,7 @@ input[appInputCustom] {
     left: -150%;
   }
   100% {
-    left: 150%; /* O gradiente percorre toda a área do elemento */
+    left: 150%;
   }
 }
 
@@ -286,11 +288,11 @@ input[appInputCustom] {
 .load-shimmer-avatar {
   width: 3rem;
   height: 3rem;
-  border-radius: 50%; /* Torna o elemento um círculo */
+  border-radius: 50%;
   @include loading-effect;
 
   .shine {
-    border-radius: 50%; /* Garante que o gradiente siga o formato circular */
+    border-radius: 50%;
   }
 }
 
@@ -309,3 +311,71 @@ input[appInputCustom] {
   border-radius: 0.8rem;
   @include loading-effect;
 }
+
+.button-option-tips {
+  all: unset;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  background-color: var(--purple);
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+}
+
+.contain-title-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  .title-modal {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: var(--space-large) 0;
+  }
+}
+
+.contain-loading-generate-tips {
+  width: 100%;
+  margin-bottom: var(--space-large);
+}
+
+.contain-alert {
+  padding: var(--space-medium);
+  background-color: #fdfacb;
+  border-radius: 0.5rem;
+  margin-top: var(--space-large);
+
+  p {
+    color: #9b8b55;
+    line-height: 1.5rem;
+  }
+}
+
+// .alert-error-message {
+//   position: absolute;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   bottom: 7rem;
+//   width: 100%;
+//   padding: 10px;
+//   z-index: 10;
+
+//   p {
+//     background-color: #783d59;
+//     color: #fff;
+//     padding: 1rem;
+//     border-radius: 2rem;
+//     font-size: 0.8rem;
+//   }
+// }
