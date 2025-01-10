@@ -100,7 +100,6 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.initializeLottieAnimation();
-    this.initializeScrollEvent();
   }
 
   ngOnDestroy(): void {
@@ -161,6 +160,9 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
+          setTimeout(() => {
+            this.initializeScrollEvent();
+          }, 200);
           this.totalPage = response.pagination.totalPages;
 
           if (response.messages.length === 0) {
