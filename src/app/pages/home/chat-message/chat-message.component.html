@@ -1,4 +1,40 @@
-<div class="contain">
+<div *ngIf="isLoading">
+  <div class="header-load-shimmer">
+    <div class="load-shimmer-avatar">
+      <div class="shine"></div>
+    </div>
+
+    <div class="loading-shimmer-name">
+      <div class="shine"></div>
+    </div>
+  </div>
+
+  <div class="contain-bar">
+    <div class="loading-bar">
+      <div class="shine"></div>
+    </div>
+  </div>
+
+  <div class="contain-bar aling-right">
+    <div class="loading-bar">
+      <div class="shine"></div>
+    </div>
+  </div>
+
+  <div class="contain-bar">
+    <div class="loading-bar">
+      <div class="shine"></div>
+    </div>
+  </div>
+
+  <div class="contain-bar">
+    <div class="loading-bar">
+      <div class="shine"></div>
+    </div>
+  </div>
+</div>
+
+<div class="contain" *ngIf="!isLoading">
   <div class="header">
     <img
       src="assets/icon-static/arrow-left.svg"
@@ -14,12 +50,6 @@
       <span class="location"
         >{{ userMatchLocation.city }}/{{ userMatchLocation.stateCode }}</span
       >
-    </div>
-  </div>
-
-  <div *ngIf="isLoading">
-    <div class="contain-loading">
-      <div id="lottie-icon-is-loading" class="lottie-icon-no-match"></div>
     </div>
   </div>
 
@@ -66,7 +96,9 @@
         <div class="group-message">
           <div class="message-user">
             <p class="message-text">{{ message.content }}</p>
-            <p class="message-time">{{ message.createdAt }}</p>
+            <p class="message-time">
+              {{ formatedCreatedAt(message.createdAt) }}
+            </p>
           </div>
         </div>
       </div>
@@ -86,6 +118,7 @@
           class="input-field"
         />
         <button
+          id="button-send-message"
           class="button-send-message"
           [disabled]="sendMessageFormGroup.invalid"
           type="submit"

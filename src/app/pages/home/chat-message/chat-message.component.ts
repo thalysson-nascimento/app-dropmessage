@@ -16,10 +16,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { format, formatDistanceToNow, isToday } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { Subject, takeUntil } from 'rxjs';
 import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
-import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { Message } from '../../../shared/interface/get-send-message.interface';
 import { DataConnectChatMessageService } from '../../../shared/service/data-connect-chat-message/data-connect-chat-message.service';
 import { GetSendMessageService } from '../../../shared/service/get-send-message/get-send-message.service';
@@ -31,11 +32,7 @@ import { UserHashPublicService } from '../../../shared/service/user-hash-public/
 import { noOnlySpacesValidator } from '../../../shared/validators/noOnlySpacesValidator.validator';
 
 const CoreModule = [CommonModule, FormsModule, ReactiveFormsModule];
-const SharedComponent = [
-  SystemUnavailableComponent,
-  InputCustomDirective,
-  LoadShimmerComponent,
-];
+const SharedComponent = [SystemUnavailableComponent, LoadShimmerComponent];
 
 @Component({
   selector: 'app-chat-message',
@@ -255,21 +252,45 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   sendMessage() {
     if (this.sendMessageFormGroup.valid) {
-      const message = this.sendMessageFormGroup
+      const messageContent = this.sendMessageFormGroup
         .get('sendMessage')
         ?.value.trim();
+      const tempId = crypto.randomUUID(); // Gera um ID temporário para evitar duplicidades
+
+      // Adiciona a mensagem no array com um identificador temporário
+      this.messages.push({
+        id: tempId, // Campo temporário
+        createdAt: new Date(),
+        content: messageContent,
+        user: {
+          userHashPublic: this.userHashPublic,
+          name: 'Você',
+          avatar: {
+            image: 'path/to/default-avatar.png',
+          },
+        },
+      });
+
+      this.scrollToBottom();
+
+      // Envia a mensagem para o backend
       this.sendMessageService
         .sendMessage({
           matchId: this.matchId,
           userHashPublic: this.userHashPublic,
-          content: message,
+          content: messageContent,
         })
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe({
-          next: () => this.scrollToBottom(),
-          error: (error) => console.error(error),
+          next: () => {
+            this.scrollToBottom();
+          },
+          error: () => {
+            this.messages = this.messages.filter((msg) => msg.id !== tempId);
+          },
         });
 
+      // Limpa o campo de mensagem
       this.sendMessageFormGroup.reset();
     }
   }
@@ -281,7 +302,10 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((response) => {
         this.zone.run(() => {
-          this.messages.push(response);
+          // this.messages.push(response);
+          if (response.user.userHashPublic !== this.userHashPublic) {
+            this.messages.push(response);
+          }
           this.scrollToBottom();
         });
       });
@@ -300,5 +324,13 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
         next: () => this.scrollToBottom(),
         error: (error) => console.error(error),
       });
+  }
+
+  formatedCreatedAt(date: Date) {
+    if (isToday(date)) {
+      return format(date, 'HH:mm', { locale: ptBR });
+    } else {
+      return formatDistanceToNow(date, { addSuffix: true, locale: ptBR });
+    }
   }
 }

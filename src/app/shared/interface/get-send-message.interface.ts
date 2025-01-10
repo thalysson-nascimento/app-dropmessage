@@ -4,7 +4,7 @@ export interface GetSendMessage {
 }
 
 export interface Message {
-  id: string;
+  id?: string;
   createdAt: Date;
   content: string;
   user: User;
