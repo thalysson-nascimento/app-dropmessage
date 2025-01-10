@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style } from '@capacitor/status-bar';
 
 import { register } from 'swiper/element/bundle';
@@ -20,8 +21,9 @@ export class AppComponent {
   }
 
   async configureStatusBar() {
-    // Torna a barra de status branca com texto escuro
-    await StatusBar.setBackgroundColor({ color: '#ffffff' });
-    await StatusBar.setStyle({ style: Style.Light }); // Define texto escuro
+    if (Capacitor.isNativePlatform()) {
+      await StatusBar.setBackgroundColor({ color: '#ffffff' });
+      await StatusBar.setStyle({ style: Style.Light });
+    }
   }
 }
