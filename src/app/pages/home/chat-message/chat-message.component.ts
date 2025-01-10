@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   NgZone,
@@ -16,10 +15,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { format, formatDistanceToNow, isToday } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { Subject, takeUntil } from 'rxjs';
 import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
+import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
-import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { Message } from '../../../shared/interface/get-send-message.interface';
 import { DataConnectChatMessageService } from '../../../shared/service/data-connect-chat-message/data-connect-chat-message.service';
 import { GetSendMessageService } from '../../../shared/service/get-send-message/get-send-message.service';
@@ -33,7 +34,7 @@ import { noOnlySpacesValidator } from '../../../shared/validators/noOnlySpacesVa
 const CoreModule = [CommonModule, FormsModule, ReactiveFormsModule];
 const SharedComponent = [
   SystemUnavailableComponent,
-  InputCustomDirective,
+  ModalComponent,
   LoadShimmerComponent,
 ];
 
@@ -44,7 +45,7 @@ const SharedComponent = [
   imports: [...CoreModule, ...SharedComponent],
   standalone: true,
 })
-export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ChatMessageComponent implements OnInit, OnDestroy {
   isLoading: boolean = true;
   showSystemUnavailable: boolean = false;
   isLoadingMore: boolean = false;
@@ -59,11 +60,16 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   tips: string[] = [];
 
   @ViewChild('containMessages') containMessages?: ElementRef;
+  @ViewChild('generateModalTips') generateModalTips!: ModalComponent;
+
   userMatchName!: string;
   userMatchLocation!: { stateCode: string; city: string };
   userMatchAvatar!: string;
   isLoadingTips: boolean = false;
   showOptionTips: boolean = false;
+  showAlertError: boolean = false;
+  responseErrorTips: string = '';
+  errorLoadTips: boolean = false;
 
   constructor(
     private router: Router,
@@ -101,11 +107,6 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  ngAfterViewInit(): void {
-    this.initializeLottieAnimation();
-    this.initializeScrollEvent();
-  }
-
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
@@ -133,15 +134,6 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  initializeLottieAnimation(): void {
-    this.lottieAnimationIconService.loadLottieAnimation({
-      pathIconAnimation: 'loading.json',
-      idElement: 'lottie-icon-is-loading',
-      loop: true,
-      autoplay: true,
-    });
-  }
-
   initializeScrollEvent(): void {
     if (this.containMessages?.nativeElement) {
       const element = this.containMessages.nativeElement;
@@ -164,11 +156,10 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
+          setTimeout(() => {
+            this.initializeScrollEvent();
+          }, 200);
           this.totalPage = response.pagination.totalPages;
-
-          if (response.messages.length === 0) {
-            this.loadTips(this.matchId);
-          }
 
           const newMessages = response.messages.sort(
             (a, b) =>
@@ -193,16 +184,17 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
         },
       });
   }
-  loadTips(matchId: string) {
+  loadTips() {
     this.showOptionTips = true;
     this.isLoadingTips = true;
-    this.generateTipsService.tips(matchId).subscribe({
+    this.generateTipsService.tips(this.matchId).subscribe({
       next: (response) => {
         this.tips = response;
       },
-      error: (error) => {
-        console.log(error);
-        this.showSystemUnavailable = true;
+      error: (errorResponse) => {
+        console.log(errorResponse);
+        this.errorLoadTips = true;
+        this.responseErrorTips = errorResponse.error.message.message;
         this.isLoading = false;
       },
       complete: () => {
@@ -255,19 +247,42 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   sendMessage() {
     if (this.sendMessageFormGroup.valid) {
-      const message = this.sendMessageFormGroup
+      const messageContent = this.sendMessageFormGroup
         .get('sendMessage')
         ?.value.trim();
+      const tempId = crypto.randomUUID();
+
+      this.messages.push({
+        id: tempId,
+        createdAt: new Date(),
+        content: messageContent,
+        user: {
+          userHashPublic: this.userHashPublic,
+          name: 'Você',
+          avatar: {
+            image: 'path/to/default-avatar.png',
+          },
+        },
+      });
+
+      this.scrollToBottom();
+
       this.sendMessageService
         .sendMessage({
           matchId: this.matchId,
           userHashPublic: this.userHashPublic,
-          content: message,
+          content: messageContent,
         })
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe({
-          next: () => this.scrollToBottom(),
-          error: (error) => console.error(error),
+          next: () => {
+            this.scrollToBottom();
+          },
+          error: () => {
+            console.log('erro ao enviar a mensagem');
+            this.showAlertError = true;
+            this.messages = this.messages.filter((msg) => msg.id !== tempId);
+          },
         });
 
       this.sendMessageFormGroup.reset();
@@ -281,7 +296,10 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((response) => {
         this.zone.run(() => {
-          this.messages.push(response);
+          // this.messages.push(response);
+          if (response.user.userHashPublic !== this.userHashPublic) {
+            this.messages.push(response);
+          }
           this.scrollToBottom();
         });
       });
@@ -289,6 +307,22 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   choseTipsSendMessage(tip: string): void {
     this.showOptionTips = false;
+
+    this.messages.push({
+      createdAt: new Date(),
+      content: tip,
+      user: {
+        userHashPublic: this.userHashPublic,
+        name: 'Você',
+        avatar: {
+          image: 'path/to/default-avatar.png',
+        },
+      },
+    });
+
+    this.generateModalTips.closeDialog();
+
+    this.scrollToBottom();
     this.sendMessageService
       .sendMessage({
         matchId: this.matchId,
@@ -297,8 +331,20 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
       })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
-        next: () => this.scrollToBottom(),
         error: (error) => console.error(error),
       });
+  }
+
+  formatedCreatedAt(date: Date) {
+    if (isToday(date)) {
+      return format(date, 'HH:mm', { locale: ptBR });
+    } else {
+      return formatDistanceToNow(date, { addSuffix: true, locale: ptBR });
+    }
+  }
+
+  openModalTips() {
+    this.generateModalTips.openDialog();
+    this.loadTips();
   }
 }

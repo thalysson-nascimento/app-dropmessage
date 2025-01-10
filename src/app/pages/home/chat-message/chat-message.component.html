@@ -1,4 +1,40 @@
-<div class="contain">
+<div *ngIf="isLoading">
+  <div class="header-load-shimmer">
+    <div class="load-shimmer-avatar">
+      <div class="shine"></div>
+    </div>
+
+    <div class="loading-shimmer-name">
+      <div class="shine"></div>
+    </div>
+  </div>
+
+  <div class="contain-bar">
+    <div class="loading-bar">
+      <div class="shine"></div>
+    </div>
+  </div>
+
+  <div class="contain-bar aling-right">
+    <div class="loading-bar">
+      <div class="shine"></div>
+    </div>
+  </div>
+
+  <div class="contain-bar">
+    <div class="loading-bar">
+      <div class="shine"></div>
+    </div>
+  </div>
+
+  <div class="contain-bar">
+    <div class="loading-bar">
+      <div class="shine"></div>
+    </div>
+  </div>
+</div>
+
+<div class="contain" *ngIf="!isLoading">
   <div class="header">
     <img
       src="assets/icon-static/arrow-left.svg"
@@ -17,107 +53,108 @@
     </div>
   </div>
 
-  <div *ngIf="isLoading">
-    <div class="contain-loading">
-      <div id="lottie-icon-is-loading" class="lottie-icon-no-match"></div>
-    </div>
-  </div>
-
-  <!-- <app-system-unavailable
+  <app-system-unavailable
     *ngIf="showSystemUnavailable && !isLoading"
     (clickLoading)="tryAgain()"
     [infoMessage]="
       'No momento estamos com nossos serviço indisponíves, volte novamente mais tarde!'
     "
   >
-  </app-system-unavailable> -->
+  </app-system-unavailable>
 
-  <div class="messages-wrapper" [class.hidden]="isLoading">
-    <div class="contain-tips" *ngIf="showOptionTips">
-      <div class="contain-loading-tips" *ngIf="isLoadingTips">
-        <app-load-shimmer [height]="'40px'"></app-load-shimmer>
-        <app-load-shimmer [height]="'40px'"></app-load-shimmer>
-        <app-load-shimmer [height]="'40px'"></app-load-shimmer>
+  <div>
+    <div class="messages-wrapper">
+      <div class="contain-messages" #containMessages>
+        <div
+          *ngFor="let message of messages"
+          [ngClass]="{
+            'align-chat-right': getAlignment(message.user.userHashPublic)
+          }"
+          class="message"
+        >
+          <div class="group-message">
+            <div class="message-user">
+              <p class="message-text">{{ message.content }}</p>
+              <p class="message-time">
+                {{ formatedCreatedAt(message.createdAt) }}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div *ngIf="!isLoadingTips">
-        <p class="title-tips">
-          Toque em uma das dicas abaixo para iniciar a conversa com
-          {{ userMatchName }}.
-        </p>
+      <!-- <div
+      class="contain-alert-error-message"
+      *ngIf="showAlertError"
+      [class.show]="showAlertError"
+    >
+      <div class="alert-error-message">
+        <p>Erro ao enviar mensagem</p>
       </div>
-      <div class="option-tips">
-        <div *ngFor="let tip of tips">
-          <button class="tip-item" (click)="choseTipsSendMessage(tip)">
-            {{ tip }}
+    </div> -->
+
+      <div class="contain-send-message">
+        <form
+          [formGroup]="sendMessageFormGroup"
+          (submit)="sendMessage()"
+          class="input-container"
+        >
+          <input
+            formControlName="sendMessage"
+            maxlength="500"
+            type="text"
+            placeholder="Digite sua mensagem"
+            class="input-field"
+          />
+          <button
+            id="button-send-message"
+            class="button-send-message"
+            [disabled]="sendMessageFormGroup.invalid"
+            type="submit"
+          >
+            <i class="fi fi-rr-paper-plane"></i>
+          </button>
+        </form>
+
+        <div class="contain-option-tips">
+          <button class="button-option-tips" (click)="openModalTips()">
+            <img src="assets/icon-static/icon-ia-lightbulb.svg" alt="" />
           </button>
         </div>
       </div>
     </div>
-
-    <div class="contain-messages" *ngIf="!showOptionTips" #containMessages>
-      <div
-        *ngFor="let message of messages"
-        [ngClass]="{
-          'align-chat-right': getAlignment(message.user.userHashPublic)
-        }"
-        class="message"
-      >
-        <div class="group-message">
-          <img
-            *ngIf="!getAlignment(message.user.userHashPublic)"
-            [src]="message.user.avatar.image"
-            class="avatar-message"
-            alt=""
-          />
-          <div class="message-user">
-            <p
-              [ngClass]="
-                message.user.userHashPublic === userHashPublic
-                  ? 'message-user-name margin-top-user-name'
-                  : 'message-user-name'
-              "
-            >
-              {{
-                message.user.userHashPublic === userHashPublic
-                  ? "Você"
-                  : message.user.name
-              }}
-            </p>
-            <p class="message-text">{{ message.content }}</p>
-            <p class="message-time">{{ message.createdAt }}</p>
-          </div>
-          <img
-            *ngIf="getAlignment(message.user.userHashPublic)"
-            [src]="message.user.avatar.image"
-            class="avatar-message"
-            alt=""
-          />
-        </div>
-      </div>
-    </div>
-
-    <div class="contain-send-message">
-      <form
-        [formGroup]="sendMessageFormGroup"
-        (submit)="sendMessage()"
-        class="input-container"
-      >
-        <input
-          formControlName="sendMessage"
-          maxlength="500"
-          type="text"
-          placeholder="Digite sua mensagem"
-          class="input-field"
-        />
-        <button
-          class="button-send-message"
-          [disabled]="sendMessageFormGroup.invalid"
-          type="submit"
-        >
-          <i class="fi fi-rr-paper-plane"></i>
-        </button>
-      </form>
-    </div>
   </div>
 </div>
+
+<app-modal #generateModalTips>
+  <div class="contain-button-system-unavailable">
+    <div class="contain-title-modal">
+      <p class="title-modal">Criando novas dicas com novas mensagens</p>
+    </div>
+
+    <div *ngIf="errorLoadTips" class="contain-alert">
+      <p>{{ responseErrorTips }}</p>
+    </div>
+
+    <div
+      class="contain-loading-generate-tips"
+      *ngIf="isLoadingTips && !errorLoadTips"
+    >
+      <app-load-shimmer [height]="'70px'"></app-load-shimmer>
+
+      <app-load-shimmer [height]="'70px'"></app-load-shimmer>
+
+      <app-load-shimmer [height]="'70px'"></app-load-shimmer>
+
+      <app-load-shimmer [height]="'70px'"></app-load-shimmer>
+    </div>
+
+    <div class="option-tips" *ngIf="!isLoadingTips && !errorLoadTips">
+      <div *ngFor="let tip of tips">
+        <button class="tip-item" (click)="choseTipsSendMessage(tip)">
+          {{ tip }}
+        </button>
+      </div>
+    </div>
+  </div>
+</app-modal>
