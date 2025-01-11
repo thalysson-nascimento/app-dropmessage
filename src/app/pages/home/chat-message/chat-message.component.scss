@@ -22,6 +22,18 @@
   flex-direction: row;
   align-items: center;
   padding: 1rem;
+  justify-content: space-between;
+}
+
+i {
+  font-size: var(--font-size-large);
+  color: var(--text-dark-secundary);
+  margin-right: var(--space-medium);
+}
+
+.header-user-data {
+  display: flex;
+  align-items: center;
 }
 
 .location {
