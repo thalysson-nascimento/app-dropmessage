@@ -262,8 +262,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       error: (error) => {
-        console.error(error);
-
         const logger: TrackAction = {
           pageView: this.pageView,
           category: 'user_post_message',

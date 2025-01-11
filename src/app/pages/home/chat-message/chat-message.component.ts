@@ -21,10 +21,13 @@ import { Subject, takeUntil } from 'rxjs';
 import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
+import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { Message } from '../../../shared/interface/get-send-message.interface';
+import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { DataConnectChatMessageService } from '../../../shared/service/data-connect-chat-message/data-connect-chat-message.service';
 import { GetSendMessageService } from '../../../shared/service/get-send-message/get-send-message.service';
-import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
+import { LoggerService } from '../../../shared/service/logger/logger.service';
+import { ReportProblemService } from '../../../shared/service/report-problem/report-problem.service';
 import { SendMessageService } from '../../../shared/service/send-message/send-message.service';
 import { SocketSenMessageService } from '../../../shared/service/socket-send-message/socket-sen-message.service';
 import { GenerateTipsService } from '../../../shared/service/tips/generate-tips.service';
@@ -36,6 +39,7 @@ const SharedComponent = [
   SystemUnavailableComponent,
   ModalComponent,
   LoadShimmerComponent,
+  ButtonStyleDirective,
 ];
 
 @Component({
@@ -61,6 +65,8 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
 
   @ViewChild('containMessages') containMessages?: ElementRef;
   @ViewChild('generateModalTips') generateModalTips!: ModalComponent;
+  @ViewChild('chooseAction') chooseAction!: ModalComponent;
+  @ViewChild('repostProblem') repostProblem!: ModalComponent;
 
   userMatchName!: string;
   userMatchLocation!: { stateCode: string; city: string };
@@ -70,18 +76,24 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
   showAlertError: boolean = false;
   responseErrorTips: string = '';
   errorLoadTips: boolean = false;
+  showReportProblem: boolean = false;
+  errorReportProblem: boolean = false;
+  showSuccessMessageReportProblem: boolean = false;
+  pageView: string = 'DatingMatch:ChatMessage';
+  private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private router: Router,
     private getSendMessageService: GetSendMessageService,
-    private lottieAnimationIconService: LottieAnimationIconService,
     private dataConnectChatMessageService: DataConnectChatMessageService,
     private formBuilder: FormBuilder,
     private sendMessageService: SendMessageService,
     private socketSenMessageService: SocketSenMessageService,
     private userHashPublicService: UserHashPublicService,
     private zone: NgZone,
-    private generateTipsService: GenerateTipsService
+    private generateTipsService: GenerateTipsService,
+    private reportProblemService: ReportProblemService,
+    private loggerService: LoggerService
   ) {}
 
   ngOnInit() {
@@ -110,6 +122,8 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onLoadUserHashPublic() {
@@ -346,5 +360,58 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
   openModalTips() {
     this.generateModalTips.openDialog();
     this.loadTips();
+  }
+
+  openModalChooseAction() {
+    this.chooseAction.openDialog();
+  }
+
+  openModalReportProblem() {
+    this.chooseAction.closeDialog();
+    this.repostProblem.openDialog();
+  }
+
+  reportProblem(typeReportProblem: string) {
+    this.showReportProblem = true;
+    this.reportProblemService
+      .report(this.matchId, typeReportProblem)
+      .subscribe({
+        next: () => {
+          this.showSuccessMessageReportProblem = true;
+          this.repostProblem.closeDialog();
+
+          const logger: TrackAction = {
+            pageView: this.pageView,
+            category: 'user_chat_message:report_problem',
+            event: 'click',
+            message: typeReportProblem,
+            statusCode: 200,
+            level: 'info',
+          };
+
+          this.loggerService
+            .info(logger)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe();
+        },
+        error: (error) => {
+          const logger: TrackAction = {
+            pageView: this.pageView,
+            category: 'user_chat_message:report_problem',
+            event: 'view',
+            message: error.message,
+            statusCode: error.status,
+            level: 'error',
+          };
+
+          this.loggerService
+            .info(logger)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe();
+
+          this.errorReportProblem = true;
+          this.showReportProblem = false;
+        },
+      });
   }
 }
