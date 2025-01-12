@@ -16,7 +16,6 @@ export class SocketMatchService {
 
   onMatchNotification(): Observable<MatchUsers[]> {
     return new Observable((observer) => {
-      console.log('match ===>', observer);
       this.socket.on('match', (data) => observer.next(data));
 
       return () => this.socket.off('match');
