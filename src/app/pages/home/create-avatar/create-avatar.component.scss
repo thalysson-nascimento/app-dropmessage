@@ -241,3 +241,15 @@ i {
   margin-bottom: var(--space-large);
   font-weight: 700;
 }
+
+.contain-buton-loggout {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+
+  button {
+    all: unset;
+    color: #333;
+  }
+}

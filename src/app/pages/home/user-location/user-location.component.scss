@@ -64,3 +64,15 @@
   margin-left: 3rem;
   margin-right: 3rem;
 }
+
+.contain-buton-loggout {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+
+  button {
+    all: unset;
+    color: #333;
+  }
+}

@@ -38,6 +38,8 @@ import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { CreateAvatarService } from '../../../shared/service/create-avatar/create-avatar.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
+import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
+import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 import { dateOfBirthValidator } from '../../../shared/validators/dateOfBirthValidator.validator';
 
 const SharedComponents = [
@@ -88,7 +90,9 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
     private formBuilder: FormBuilder,
     private loggerService: LoggerService,
     private createAvatarService: CreateAvatarService,
-    private cacheAvatarService: CacheAvatarService
+    private cacheAvatarService: CacheAvatarService,
+    private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
+    private userHashPublicService: UserHashPublicService
   ) {}
 
   ngOnInit() {
@@ -361,5 +365,12 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
             });
         });
     }
+  }
+
+  logout() {
+    this.tokenStorageSecurityRequestService.deleteToken();
+    this.cacheAvatarService.resetAvatarCachePreferences();
+    this.userHashPublicService.removeUserHashPublic();
+    this.router.navigateByUrl('auth/sign');
   }
 }

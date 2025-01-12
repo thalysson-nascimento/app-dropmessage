@@ -15,9 +15,12 @@ import { LoadingComponent } from '../../../shared/component/loading/loading.comp
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
+import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { GeolocationService } from '../../../shared/service/geolocation/geolocation.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
+import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
+import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 import { UserLocationService } from '../../../shared/service/user-location/user-location.service';
 
 const SharedComponents = [
@@ -55,7 +58,10 @@ export class UserLocationComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object,
     private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
     private userLocationService: UserLocationService,
-    private loggerService: LoggerService
+    private loggerService: LoggerService,
+    private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
+    private cacheAvatarService: CacheAvatarService,
+    private userHashPublicService: UserHashPublicService
   ) {}
 
   ngOnDestroy(): void {
@@ -242,5 +248,12 @@ export class UserLocationComponent implements OnInit, OnDestroy {
           this.buttonDisalbled = false;
         },
       });
+  }
+
+  logout() {
+    this.tokenStorageSecurityRequestService.deleteToken();
+    this.cacheAvatarService.resetAvatarCachePreferences();
+    this.userHashPublicService.removeUserHashPublic();
+    this.router.navigateByUrl('auth/sign');
   }
 }

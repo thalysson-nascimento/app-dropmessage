@@ -10,7 +10,10 @@ import { Router } from '@angular/router';
 import { LoadingComponent } from '../../../shared/component/loading/loading.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
+import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { CodeConfirmationEmailService } from '../../../shared/service/code-confirmation-email/code-confirmation-email.service';
+import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
+import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 
 const SharedComponents = [
   ButtonStyleDirective,
@@ -36,7 +39,10 @@ export class VerifyTokenEmailComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private codeConfirmationEmailService: CodeConfirmationEmailService,
-    private router: Router
+    private router: Router,
+    private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
+    private cacheAvatarService: CacheAvatarService,
+    private userHashPublicService: UserHashPublicService
   ) {}
 
   ngOnInit() {
@@ -79,5 +85,12 @@ export class VerifyTokenEmailComponent implements OnInit {
           this.invalidCode = true;
         },
       });
+  }
+
+  logout() {
+    this.tokenStorageSecurityRequestService.deleteToken();
+    this.cacheAvatarService.resetAvatarCachePreferences();
+    this.userHashPublicService.removeUserHashPublic();
+    this.router.navigateByUrl('auth/sign');
   }
 }
