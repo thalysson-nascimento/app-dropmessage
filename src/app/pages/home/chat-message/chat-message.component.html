@@ -209,7 +209,9 @@
     </div>
 
     <div>
-      <button [buttonType]="'secondary'" appButtonStyle>Desfazer match</button>
+      <button [buttonType]="'secondary'" appButtonStyle (click)="unmatch()">
+        Desfazer match
+      </button>
     </div>
   </app-modal>
 

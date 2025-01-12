@@ -31,6 +31,7 @@ import { ReportProblemService } from '../../../shared/service/report-problem/rep
 import { SendMessageService } from '../../../shared/service/send-message/send-message.service';
 import { SocketSenMessageService } from '../../../shared/service/socket-send-message/socket-sen-message.service';
 import { GenerateTipsService } from '../../../shared/service/tips/generate-tips.service';
+import { UnmatchService } from '../../../shared/service/unmatch/unmatch.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 import { noOnlySpacesValidator } from '../../../shared/validators/noOnlySpacesValidator.validator';
 
@@ -93,7 +94,8 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
     private zone: NgZone,
     private generateTipsService: GenerateTipsService,
     private reportProblemService: ReportProblemService,
-    private loggerService: LoggerService
+    private loggerService: LoggerService,
+    private unmatchService: UnmatchService
   ) {}
 
   ngOnInit() {
@@ -413,5 +415,13 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
           this.showReportProblem = false;
         },
       });
+  }
+
+  unmatch() {
+    this.unmatchService.report(this.matchId).subscribe({
+      next: () => {
+        this.showSuccessMessageReportProblem = true;
+      },
+    });
   }
 }
