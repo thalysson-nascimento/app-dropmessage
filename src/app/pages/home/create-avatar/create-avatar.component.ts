@@ -38,6 +38,7 @@ import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { CreateAvatarService } from '../../../shared/service/create-avatar/create-avatar.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
+import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 import { dateOfBirthValidator } from '../../../shared/validators/dateOfBirthValidator.validator';
@@ -92,7 +93,8 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
     private createAvatarService: CreateAvatarService,
     private cacheAvatarService: CacheAvatarService,
     private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
-    private userHashPublicService: UserHashPublicService
+    private userHashPublicService: UserHashPublicService,
+    private preferencesUserAuthenticateService: PreferencesUserAuthenticateService
   ) {}
 
   ngOnInit() {
@@ -322,29 +324,68 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
               next: (response) => {
                 this.cacheAvatarService.setAvatarCachePreferences(response);
 
-                const loggerGender: TrackAction = {
-                  pageView: this.pageView,
-                  category: 'user_create_avatar',
-                  event: 'click',
-                  label: 'modal:Como você se identifica',
-                  message: userCompletedDataForm.gender,
-                  statusCode: 200,
-                  level: 'info',
-                };
+                this.preferencesUserAuthenticateService.getToken().subscribe({
+                  next: (response) => {
+                    if (response) {
+                      const updatedData = {
+                        ...response,
+                        userVerificationData: {
+                          ...response.userVerificationData,
+                          isUploadAvatar: true,
+                        },
+                      };
 
-                this.loggerService
-                  .info(loggerGender)
-                  .pipe(takeUntil(this.destroy$))
-                  .subscribe();
+                      this.preferencesUserAuthenticateService
+                        .savePreferences(updatedData)
+                        .subscribe({
+                          next: () => {
+                            this.isLoadingButton = false;
+                            const loggerGender: TrackAction = {
+                              pageView: this.pageView,
+                              category: 'user_create_avatar',
+                              event: 'click',
+                              label: 'modal:Como você se identifica',
+                              message: userCompletedDataForm.gender,
+                              statusCode: 200,
+                              level: 'info',
+                            };
+
+                            this.loggerService
+                              .info(loggerGender)
+                              .pipe(takeUntil(this.destroy$))
+                              .subscribe();
+
+                            const loggerInterest: TrackAction = {
+                              pageView: this.pageView,
+                              category: 'user_create_avatar',
+                              event: 'click',
+                              label: 'modal:Interesses',
+                              message: userCompletedDataForm.interests,
+                              statusCode: 200,
+                              level: 'info',
+                            };
+
+                            this.loggerService
+                              .info(loggerInterest)
+                              .pipe(takeUntil(this.destroy$))
+                              .subscribe();
+                            this.router.navigateByUrl('home/post-messages');
+                          },
+                        });
+                    }
+                  },
+                });
+              },
+              error: (error) => {
+                this.isLoadingButton = false;
 
                 const loggerInterest: TrackAction = {
                   pageView: this.pageView,
                   category: 'user_create_avatar',
-                  event: 'click',
-                  label: 'modal:Interesses',
-                  message: userCompletedDataForm.interests,
-                  statusCode: 200,
-                  level: 'info',
+                  event: 'view',
+                  message: error.message,
+                  statusCode: 402,
+                  level: 'error',
                 };
 
                 this.loggerService
@@ -352,10 +393,6 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
                   .pipe(takeUntil(this.destroy$))
                   .subscribe();
 
-                this.router.navigateByUrl('home/user-location');
-              },
-              error: (error) => {
-                this.isLoadingButton = false;
                 console.log('Erro ao enviar mensagem:', error);
                 this.modalErrorRequest.openDialog();
               },
