@@ -51,6 +51,10 @@ export class UserLocationComponent implements OnInit, OnDestroy {
   modalConfirmePermissionLocation!: ModalComponent;
   pageView: string = 'DatingMatch:UserLocation';
   destroy$: Subject<void> = new Subject<void>();
+  continent: string = '';
+  country: string = '';
+  countryCode: string = '';
+  currency: string = '';
 
   constructor(
     private geoLocationService: GeolocationService,
@@ -111,9 +115,14 @@ export class UserLocationComponent implements OnInit, OnDestroy {
         .getGeolocation(latitude, longitude)
         .subscribe({
           next: (response) => {
+            console.log('===>', response);
             this.state = response.results[0].components.state;
             this.city = response.results[0].components.city;
             this.stateCode = response.results[0].components.state_code;
+            this.continent = response.results[0].components.continent;
+            this.country = response.results[0].components.country;
+            this.countryCode = response.results[0].components.country_code;
+            this.currency = response.results[0].annotations.currency.iso_code;
           },
           error: (responseError) => {
             this.isLoadingButton = false;
@@ -145,6 +154,10 @@ export class UserLocationComponent implements OnInit, OnDestroy {
         state: this.state,
         stateCode: this.stateCode,
         city: this.city,
+        continent: this.continent,
+        country: this.country,
+        countryCode: this.countryCode,
+        currency: this.currency,
       })
       .subscribe({
         next: () => {
