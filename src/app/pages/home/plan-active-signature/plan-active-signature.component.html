@@ -1,0 +1,36 @@
+<div class="content">
+  <div class="header">
+    <img
+      src="assets/icon-static/arrow-left.svg"
+      alt="arrow"
+      (click)="goToProfile()"
+    />
+  </div>
+
+  <div class="main-content">
+    <div class="card-signature">
+      <div>
+        <div class="card-signature-header">
+          <img
+            src="assets/icon-static/logo-with-green.svg"
+            alt="arrow"
+            (click)="goToProfile()"
+          />
+          <div class="plan">
+            <span>Plan</span>
+            <p class="name">Nome do plano</p>
+          </div>
+        </div>
+
+        <p class="description">descrição</p>
+        <p class="price">R$9,99</p>
+        <p class="next-payment">próxima cobrança: 00/00/0000</p>
+      </div>
+      <div class="contain-button">
+        <button appButtonStyle class="button" [buttonType]="'primary'">
+          Cancelar assinatura
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

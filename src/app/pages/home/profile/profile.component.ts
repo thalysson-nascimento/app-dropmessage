@@ -1,19 +1,29 @@
-import { NgIf, isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { Subject, takeUntil } from 'rxjs';
-import { PostLikeStateComponent } from '../../../shared/component/post-like-state/post-like-state.component';
+import { ActiveSignatureComponent } from '../../../shared/component/active-signature/active-signature.component';
+import { CardSubscriptionComponent } from '../../../shared/component/card-subscription/card-subscription.component';
+import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
+import { ActiveSubscription } from '../../../shared/interface/active-subscription.interface';
 import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
+import { ActiveSubscriptionService } from '../../../shared/service/active-subscription/active-subscription.service';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
+import { SignalService } from '../../../shared/service/signal/signal.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 
-const CoreModule = [NgIf];
-const SharedComponent = [PostLikeStateComponent, ButtonStyleDirective];
+const CoreModule = [CommonModule];
+const SharedComponent = [
+  ButtonStyleDirective,
+  CardSubscriptionComponent,
+  LoadShimmerComponent,
+  ActiveSignatureComponent,
+];
 
 @Component({
   selector: 'app-profile',
@@ -26,6 +36,11 @@ export class ProfileComponent implements OnInit {
   avatar!: AvatarSuccess;
   pageView: string = 'DatingMatch:Profile';
   private destroy$: Subject<void> = new Subject<void>();
+  showCardSubscription: boolean = false;
+  planSubscription: boolean = false;
+  isLoadingCardSubscription: boolean = true;
+  dataSubscription!: ActiveSubscription;
+  labelTag: string = '';
 
   constructor(
     private router: Router,
@@ -33,11 +48,14 @@ export class ProfileComponent implements OnInit {
     private cacheAvatarService: CacheAvatarService,
     private userHashPublicService: UserHashPublicService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private loggerService: LoggerService
+    private loggerService: LoggerService,
+    private activeSubscriptionService: ActiveSubscriptionService,
+    private signalService: SignalService<ActiveSubscription>
   ) {}
 
   ngOnInit() {
     this.loadCacheAvatar();
+    this.activeSubscription();
   }
 
   ngOnDestroy(): void {
@@ -191,5 +209,38 @@ export class ProfileComponent implements OnInit {
     this.loggerService.info(logger).pipe(takeUntil(this.destroy$)).subscribe();
 
     this.router.navigateByUrl('home/list-chat');
+  }
+
+  activeSubscription() {
+    this.activeSubscriptionService
+      .active()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          console.log('===', response);
+          this.isLoadingCardSubscription = false;
+          if (!response.activeSubscription) {
+            this.showCardSubscription = true;
+            return console.log('mostrar card');
+          }
+          this.planSubscription = true;
+          this.dataSubscription = response;
+
+          if (!response.data?.cancelAtPeriodEnd) {
+            this.labelTag = 'assinatura ativa';
+          } else {
+            this.labelTag = 'assinatura desativada';
+          }
+        },
+        error: (errorResponse) => {},
+      });
+  }
+
+  goToPlanActiveSignature(activeSubscription?: ActiveSubscription) {
+    if (activeSubscription) {
+      console.log('==>', activeSubscription);
+      this.signalService.set(activeSubscription);
+      this.router.navigate(['home', 'plan-active-signature']);
+    }
   }
 }

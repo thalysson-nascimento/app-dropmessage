@@ -1,0 +1,12 @@
+<div class="contain-card-subscription" (click)="onClick()">
+  <p class="nickname">Plano</p>
+  <p class="name-plan">{{ plan }}</p>
+  <p class="description">{{ description }}</p>
+  <div class="tag">
+    <p>{{ labelTag }}</p>
+  </div>
+  <div class="current-period-end">
+    <p>Período de ativação:</p>
+    {{ currentPeriodEnd | date : "dd/MM/yyyy HH:mm" }}
+  </div>
+</div>
