@@ -10,10 +10,18 @@ import { UserLocation } from '../../interface/user.location.interface';
 export class UserLocationService {
   constructor(private http: HttpClient) {}
 
-  location({ state, stateCode, city }: UserLocation): Observable<UserLocation> {
+  location({
+    state,
+    stateCode,
+    city,
+    continent,
+    country,
+    countryCode,
+    currency,
+  }: UserLocation): Observable<UserLocation> {
     return this.http.post<UserLocation>(
       `${currentEnvironment.baseURL}/user-location`,
-      { state, stateCode, city }
+      { state, stateCode, city, continent, country, countryCode, currency }
     );
   }
 }
