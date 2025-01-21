@@ -17,6 +17,10 @@ export class ActiveSignatureComponent implements OnInit {
   labelTag?: string;
   @Input()
   currentPeriodEnd?: number;
+  @Input()
+  colorTop?: string = '#00b894';
+  @Input()
+  colorBottom?: string = '#03836a';
 
   @Output()
   clickeCardActiveSignature = new EventEmitter<void>();

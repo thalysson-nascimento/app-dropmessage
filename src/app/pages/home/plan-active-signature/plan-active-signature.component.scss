@@ -23,7 +23,7 @@
   height: 100%;
   border-radius: var(--space-medium);
   padding: var(--space-medium);
-  background: linear-gradient(to bottom, #00b894, #03836a);
+  // background: linear-gradient(to bottom, #00b894, #03836a);
   justify-content: space-between;
 }
 
@@ -49,7 +49,7 @@
 
 .price {
   font-size: var(--font-size-xxlarge);
-  margin-bottom: var(--space-small);
+  margin-bottom: var(--space-large);
   font-weight: 700;
 }
 
@@ -58,4 +58,8 @@
   color: #03836a !important;
   position: relative;
   z-index: 2;
+}
+
+.card-signature-content {
+  line-height: 1.5rem;
 }

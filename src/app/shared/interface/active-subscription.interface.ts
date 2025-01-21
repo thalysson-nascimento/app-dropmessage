@@ -4,6 +4,7 @@ export interface ActiveSubscription {
 }
 
 export interface Data {
+  amountPaid: number;
   cancelAt: null;
   cancelAtPeriodEnd: boolean;
   currentPeriodStart: number;
@@ -13,4 +14,8 @@ export interface Data {
   priceId: string;
   plan: string;
   description?: string;
+  colorTop: string;
+  colorBottom: string;
+  currency: string;
+  logoPath: string;
 }

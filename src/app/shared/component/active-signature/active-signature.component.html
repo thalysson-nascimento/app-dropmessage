@@ -1,4 +1,11 @@
-<div class="contain-card-subscription" (click)="onClick()">
+<div
+  class="contain-card-subscription"
+  [ngStyle]="{
+    background:
+      'linear-gradient(to bottom, ' + colorTop + ', ' + colorBottom + ')'
+  }"
+  (click)="onClick()"
+>
   <p class="nickname">Plano</p>
   <p class="name-plan">{{ plan }}</p>
   <p class="description">{{ description }}</p>

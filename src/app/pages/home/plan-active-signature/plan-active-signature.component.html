@@ -8,25 +8,63 @@
   </div>
 
   <div class="main-content">
-    <div class="card-signature">
-      <div>
+    <div
+      class="card-signature"
+      [ngStyle]="{
+        background:
+          'linear-gradient(to bottom, ' +
+          subscription?.data?.colorTop +
+          ', ' +
+          subscription?.data?.colorBottom +
+          ')'
+      }"
+    >
+      <div class="card-signature-content">
         <div class="card-signature-header">
           <img
-            src="assets/icon-static/logo-with-green.svg"
+            [src]="subscription?.data?.logoPath"
             alt="arrow"
             (click)="goToProfile()"
           />
           <div class="plan">
-            <span>Plan</span>
-            <p class="name">Nome do plano</p>
+            <span>Plano</span>
+            <p class="name">{{ subscription?.data?.plan }}</p>
           </div>
         </div>
 
-        <p class="description">descrição</p>
-        <p class="price">R$9,99</p>
-        <p class="next-payment">próxima cobrança: 00/00/0000</p>
+        <p class="description">{{ subscription?.data?.description }}</p>
+        <p class="price">
+          {{
+            subscription?.data?.amountPaid
+              | currency : subscription?.data?.currency : "symbol" : "1.2-2"
+          }}
+        </p>
+
+        @if (subscription?.data?.cancelAtPeriodEnd) {
+        <p>
+          Assinatura cancelada em
+          {{
+            subscription?.data?.cancelAt
+              | date : "dd/MM/yyyy " + "'as'" + " HH:mm"
+          }}.
+          <strong
+            >Seu período de ativação será até
+            {{
+              subscription?.data?.currentPeriodEnd | date : "dd/MM/yyyy HH:mm"
+            }}</strong
+          >
+        </p>
+        }@else {
+        <p class="next-payment">
+          próxima cobrança:
+          {{ subscription?.data?.currentPeriodEnd | date : "dd/MM/yyyy HH:mm" }}
+        </p>
+        }
       </div>
-      <div class="contain-button">
+      <div
+        class="contain-button"
+        *ngIf="!subscription?.data?.cancelAtPeriodEnd"
+      >
         <button appButtonStyle class="button" [buttonType]="'primary'">
           Cancelar assinatura
         </button>

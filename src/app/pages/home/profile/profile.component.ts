@@ -229,7 +229,7 @@ export class ProfileComponent implements OnInit {
           if (!response.data?.cancelAtPeriodEnd) {
             this.labelTag = 'assinatura ativa';
           } else {
-            this.labelTag = 'assinatura desativada';
+            this.labelTag = 'assinatura cancelada';
           }
         },
         error: (errorResponse) => {},
