@@ -5,6 +5,7 @@ import { App } from '@capacitor/app';
 import { Subject, takeUntil } from 'rxjs';
 import { ActiveSignatureComponent } from '../../../shared/component/active-signature/active-signature.component';
 import { CardSubscriptionComponent } from '../../../shared/component/card-subscription/card-subscription.component';
+import { ErrorComponent } from '../../../shared/component/error/error.component';
 import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { ActiveSubscription } from '../../../shared/interface/active-subscription.interface';
@@ -23,6 +24,7 @@ const SharedComponent = [
   CardSubscriptionComponent,
   LoadShimmerComponent,
   ActiveSignatureComponent,
+  ErrorComponent,
 ];
 
 @Component({
@@ -41,6 +43,7 @@ export class ProfileComponent implements OnInit {
   isLoadingCardSubscription: boolean = true;
   dataSubscription!: ActiveSubscription;
   labelTag: string = '';
+  showError: boolean = false;
 
   constructor(
     private router: Router,
@@ -217,9 +220,12 @@ export class ProfileComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
-          console.log('===', response);
+          console.log('---===', response);
           this.isLoadingCardSubscription = false;
-          if (!response.activeSubscription) {
+          if (
+            !response.activeSubscription ||
+            response.data?.status === 'canceled'
+          ) {
             this.showCardSubscription = true;
             return console.log('mostrar card');
           }
@@ -232,13 +238,15 @@ export class ProfileComponent implements OnInit {
             this.labelTag = 'assinatura cancelada';
           }
         },
-        error: (errorResponse) => {},
+        error: (errorResponse) => {
+          this.isLoadingCardSubscription = false;
+          this.showError = true;
+        },
       });
   }
 
   goToPlanActiveSignature(activeSubscription?: ActiveSubscription) {
     if (activeSubscription) {
-      console.log('==>', activeSubscription);
       this.signalService.set(activeSubscription);
       this.router.navigate(['home', 'plan-active-signature']);
     }

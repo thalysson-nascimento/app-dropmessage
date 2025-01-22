@@ -10,10 +10,10 @@
   <p class="name-plan">{{ plan }}</p>
   <p class="description">{{ description }}</p>
   <div class="tag">
-    <p>{{ labelTag }}</p>
+    <p [ngStyle]="{ color: colorBottom }">{{ labelTag }}</p>
   </div>
   <div class="current-period-end">
     <p>Período de ativação:</p>
-    {{ currentPeriodEnd | date : "dd/MM/yyyy HH:mm" }}
+    <p>{{ currentPeriodEnd | date : "dd/MM/yyyy HH:mm" }}</p>
   </div>
 </div>

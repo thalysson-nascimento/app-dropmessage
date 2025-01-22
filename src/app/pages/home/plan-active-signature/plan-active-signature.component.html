@@ -65,10 +65,56 @@
         class="contain-button"
         *ngIf="!subscription?.data?.cancelAtPeriodEnd"
       >
-        <button appButtonStyle class="button" [buttonType]="'primary'">
-          Cancelar assinatura
+        <button
+          appButtonStyle
+          (click)="modalCancelSignature.openDialog()"
+          class="button"
+          [buttonType]="'primary'"
+        >
+          <span [ngStyle]="{ color: subscription?.data?.colorBottom }"
+            >Cancelar assinatura</span
+          >
         </button>
       </div>
     </div>
   </div>
 </div>
+
+<app-modal #modalCancelSignature>
+  <div class="contain-title">
+    <p class="title">Tem certeza que deseja cancelar a assinatura?</p>
+  </div>
+
+  @if (showError) {
+  <app-error></app-error>
+  }@else {
+  <p style="margin-bottom: 1rem">
+    Ao cancelar a assinatura seu plano expira em
+    <strong>
+      {{
+        subscription?.data?.currentPeriodEnd | date : "dd/MM/yyyy HH:mm"
+      }}</strong
+    >
+  </p>
+  }
+
+  <div class="contain-button-system-unavailable">
+    <button
+      appButtonStyle
+      [buttonType]="'secondary'"
+      class="button-delete-signature"
+      (click)="cancelSubscription()"
+      [disabled]="buttonDisalbled"
+      [disabledButton]="buttonDisalbled"
+      type="submit"
+    >
+      <span *ngIf="!buttonDisalbled">Cancelar assinatura</span>
+      <div *ngIf="buttonDisalbled" class="bouncing-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </button>
+  </div>
+</app-modal>
