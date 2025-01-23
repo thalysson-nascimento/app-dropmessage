@@ -220,14 +220,12 @@ export class ProfileComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
-          console.log('---===', response);
           this.isLoadingCardSubscription = false;
           if (
             !response.activeSubscription ||
             response.data?.status === 'canceled'
           ) {
             this.showCardSubscription = true;
-            return console.log('mostrar card');
           }
           this.planSubscription = true;
           this.dataSubscription = response;
@@ -250,5 +248,10 @@ export class ProfileComponent implements OnInit {
       this.signalService.set(activeSubscription);
       this.router.navigate(['home', 'plan-active-signature']);
     }
+  }
+
+  goToListSignature() {
+    console.log('funcionou');
+    this.router.navigateByUrl('home/list-subscription');
   }
 }

@@ -24,7 +24,12 @@
     </ul>
   </div>
   <div class="button-container">
-    <button appButtonStyle class="button" [buttonType]="'primary'">
+    <button
+      appButtonStyle
+      class="button"
+      [buttonType]="'primary'"
+      (click)="handleClickButton()"
+    >
       Assinar plano
     </button>
   </div>

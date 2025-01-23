@@ -132,6 +132,13 @@ export const HomeRouting: Routes = [
             './plan-active-signature/plan-active-signature.component'
           ).then((m) => m.PlanActiveSignatureComponent),
       },
+      {
+        path: 'list-subscription',
+        loadComponent: () =>
+          import('./list-subscription/list-subscription.component').then(
+            (m) => m.ListSubscriptionComponent
+          ),
+      },
     ],
   },
 ];

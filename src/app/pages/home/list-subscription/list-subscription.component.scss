@@ -2,29 +2,50 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  overflow: hidden;
 }
 
 .header {
   display: flex;
   flex-direction: row;
+  align-items: center;
   padding: var(--space-medium);
+  height: 50px;
 }
 
 .main-content {
   flex: 1;
-  padding: var(--space-medium);
-  overflow: auto;
   color: var(--white);
-}
-
-.card-signature {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  overflow: hidden;
+}
+
+.swiper-wrapper {
+  height: 88vh;
+}
+
+.swiper {
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: auto;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.swiper-slide {
+  display: flex;
+  background-color: blueviolet;
+  flex-direction: column;
+  min-height: 100%;
   border-radius: var(--space-medium);
   padding: var(--space-medium);
-  // background: linear-gradient(to bottom, #00b894, #03836a);
   justify-content: space-between;
+}
+
+.card-signature-content {
+  line-height: 1.5rem;
 }
 
 .card-signature-header {
@@ -47,37 +68,13 @@
 }
 
 .description {
-  margin-top: var(--space-large);
-  margin-bottom: var(--space-large);
+  margin-top: var(--space-xlarge);
+  margin-bottom: var(--space-xlarge);
 }
 
 .price {
   font-size: var(--font-size-xxlarge);
   margin-bottom: var(--space-large);
-  font-weight: 700;
-}
-
-.button {
-  background-color: #fff !important;
-  // color: #03836a !important;
-  position: relative;
-  // z-index: 1;
-}
-
-.card-signature-content {
-  line-height: 1.5rem;
-}
-
-.contain-title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.title {
-  font-size: 2rem;
   font-weight: 700;
 }
 
@@ -93,7 +90,7 @@
   .dot {
     width: 0.5rem;
     height: 0.5rem;
-    background-color: #fff;
+    background-color: var(--text-dark);
     border-radius: 50%;
     animation: bounce 0.7s ease-in-out infinite;
 
@@ -120,10 +117,36 @@
   }
 }
 
-.button-delete-signature {
+.button-signature-plan {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   margin-bottom: 1rem;
+  background-color: var(--white) !important;
+}
+
+.allowed-features {
+  margin-top: var(--space-xlarge);
+  list-style: none;
+  padding: 0;
+
+  li {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .item {
+    margin-left: var(--space-small);
+  }
+}
+
+.custumer-shimmer {
+  width: 60%;
+  margin-top: var(--space-large);
+}
+
+.custumer-shimmer-80 {
+  width: 80%;
+  margin-top: var(--space-large);
 }

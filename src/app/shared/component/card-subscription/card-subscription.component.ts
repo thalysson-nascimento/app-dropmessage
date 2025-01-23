@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ButtonStyleDirective } from '../../directives/button-style/button-style.directive';
 
 const SharedComponents = [ButtonStyleDirective];
@@ -11,7 +11,13 @@ const SharedComponents = [ButtonStyleDirective];
   imports: [...SharedComponents],
 })
 export class CardSubscriptionComponent implements OnInit {
+  @Output() onClickButton = new EventEmitter<void>();
+
   constructor() {}
 
   ngOnInit() {}
+
+  handleClickButton() {
+    this.onClickButton.emit();
+  }
 }

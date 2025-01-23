@@ -34,7 +34,10 @@
     <app-load-shimmer [height]="'3rem'"></app-load-shimmer>
   </div>
   } @else if(showCardSubscription) {
-  <app-card-subscription></app-card-subscription>} @else if (showError) {
+  <app-card-subscription
+    (onClickButton)="goToListSignature()"
+  ></app-card-subscription
+  >} @else if (showError) {
   <app-error></app-error>
   } @else if (planSubscription) {
   <app-active-signature
