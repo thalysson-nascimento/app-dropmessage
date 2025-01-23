@@ -25,7 +25,31 @@
     <button appButtonStyle [buttonType]="'secondary'">Atualizar foto</button>
   </div>
 
-  <app-post-like-state></app-post-like-state>
+  @if (isLoadingCardSubscription) {
+  <div class="contain-load-shimmer-card">
+    <app-load-shimmer [height]="'3rem'"></app-load-shimmer>
+
+    <app-load-shimmer [height]="'9rem'"></app-load-shimmer>
+
+    <app-load-shimmer [height]="'3rem'"></app-load-shimmer>
+  </div>
+  } @else if(showCardSubscription) {
+  <app-card-subscription
+    (onClickButton)="goToListSignature()"
+  ></app-card-subscription
+  >} @else if (showError) {
+  <app-error></app-error>
+  } @else if (planSubscription) {
+  <app-active-signature
+    (clickeCardActiveSignature)="goToPlanActiveSignature(dataSubscription)"
+    [plan]="dataSubscription.data?.plan"
+    [description]="dataSubscription.data?.description"
+    [labelTag]="labelTag"
+    [currentPeriodEnd]="dataSubscription.data?.currentPeriodEnd"
+    [colorTop]="dataSubscription.data?.colorTop"
+    [colorBottom]="dataSubscription.data?.colorBottom"
+  ></app-active-signature>
+  }
 
   <ul class="list-action-timer">
     <li class="action-timer" (click)="goToUserData()">

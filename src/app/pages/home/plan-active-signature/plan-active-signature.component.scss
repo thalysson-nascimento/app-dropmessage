@@ -1,0 +1,129 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  padding: var(--space-medium);
+}
+
+.main-content {
+  flex: 1;
+  padding: var(--space-medium);
+  overflow: auto;
+  color: var(--white);
+}
+
+.card-signature {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: var(--space-medium);
+  padding: var(--space-medium);
+  // background: linear-gradient(to bottom, #00b894, #03836a);
+  justify-content: space-between;
+}
+
+.card-signature-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.plan {
+  margin-left: var(--space-small);
+  font-weight: 700;
+}
+
+.nickname {
+  font-size: var(--font-size-small);
+}
+
+.name {
+  font-size: var(--font-size-xlarge);
+}
+
+.description {
+  margin-top: var(--space-large);
+  margin-bottom: var(--space-large);
+}
+
+.price {
+  font-size: var(--font-size-xxlarge);
+  margin-bottom: var(--space-large);
+  font-weight: 700;
+}
+
+.button {
+  background-color: #fff !important;
+  // color: #03836a !important;
+  position: relative;
+  // z-index: 1;
+}
+
+.card-signature-content {
+  line-height: 1.5rem;
+}
+
+.contain-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.bouncing-dots {
+  display: flex;
+  justify-content: space-around;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+  width: 50px;
+  height: 1.2rem;
+
+  .dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #fff;
+    border-radius: 50%;
+    animation: bounce 0.7s ease-in-out infinite;
+
+    &:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    &:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+  }
+
+  @keyframes bounce {
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.4);
+    }
+  }
+}
+
+.button-delete-signature {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+}

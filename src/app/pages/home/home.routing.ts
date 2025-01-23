@@ -125,6 +125,20 @@ export const HomeRouting: Routes = [
             (m) => m.UserDescriptionComponent
           ),
       },
+      {
+        path: 'plan-active-signature',
+        loadComponent: () =>
+          import(
+            './plan-active-signature/plan-active-signature.component'
+          ).then((m) => m.PlanActiveSignatureComponent),
+      },
+      {
+        path: 'list-subscription',
+        loadComponent: () =>
+          import('./list-subscription/list-subscription.component').then(
+            (m) => m.ListSubscriptionComponent
+          ),
+      },
     ],
   },
 ];

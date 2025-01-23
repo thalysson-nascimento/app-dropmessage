@@ -1,0 +1,114 @@
+<div class="content">
+  <div class="header">
+    <img
+      src="assets/icon-static/arrow-left.svg"
+      alt="arrow"
+      (click)="goToProfile()"
+    />
+  </div>
+
+  <div class="main-content">
+    @if (isLoading) {
+    <div class="isloading-space">
+      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+
+      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+
+      <div class="custumer-shimmer">
+        <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+      </div>
+
+      <div class="custumer-shimmer-80">
+        <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+      </div>
+    </div>
+    } @else if (errorRequest) {
+    <div class="contain-error">
+      <app-error></app-error>
+    </div>
+    } @else { }
+
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <div
+          class="swiper-slide"
+          *ngFor="let subscription of listSubscription"
+          [ngStyle]="{
+            background:
+              'linear-gradient(to bottom, ' +
+              subscription.prices[0].backgroundColor.colorTop +
+              ', ' +
+              subscription.prices[0].backgroundColor.colorBottom +
+              ')'
+          }"
+        >
+          <div class="card-signature-content">
+            <div class="card-signature-header">
+              <img
+                [src]="subscription.prices[0].logoPath"
+                alt="arrow"
+                (click)="goToProfile()"
+              />
+              <div class="plan">
+                <p class="nickname">Plano</p>
+                <p class="name">{{ subscription.name }}</p>
+              </div>
+            </div>
+
+            <p class="description">{{ subscription.description }}</p>
+            <p class="price">
+              {{
+                subscription.prices[0].unitAmount
+                  | currency
+                    : subscription.prices[0].currency.toLocaleUpperCase()
+                    : "symbol"
+                    : "1.2-2"
+              }}
+            </p>
+            <p class="timer-expiration">
+              {{
+                timerSubscription(
+                  subscription.prices[0].interval,
+                  subscription.prices[0].intervalCount
+                )
+              }}
+            </p>
+            <ul class="allowed-features">
+              <li>
+                <i class="fi fi-rr-assept-document"></i>
+                <p class="item">Beneficio 1</p>
+              </li>
+            </ul>
+          </div>
+
+          <div class="contain-button">
+            <button
+              appButtonStyle
+              [buttonType]="'secondary'"
+              class="button-signature-plan"
+              (click)="createSessionPayment(subscription.prices[0].priceId)"
+              [disabled]="buttonDisalbled"
+              [disabledButton]="buttonDisalbled"
+              type="submit"
+            >
+              <span
+                *ngIf="!buttonDisalbled"
+                [ngStyle]="{
+                  color: subscription.prices[0].backgroundColor.colorBottom
+                }"
+                >Assinar plano</span
+              >
+              <div *ngIf="buttonDisalbled" class="bouncing-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="swiper-pagination"></div>
+  </div>
+</div>
