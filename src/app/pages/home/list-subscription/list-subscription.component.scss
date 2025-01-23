@@ -15,7 +15,6 @@
 
 .main-content {
   flex: 1;
-  color: var(--white);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -26,6 +25,7 @@
 }
 
 .swiper {
+  color: var(--white);
   width: 100%;
   padding-left: 1rem;
   padding-right: 1rem;
@@ -149,4 +149,12 @@
 .custumer-shimmer-80 {
   width: 80%;
   margin-top: var(--space-large);
+}
+
+.isloading-space {
+  padding: 1rem;
+}
+
+.contain-error {
+  padding: 1rem;
 }

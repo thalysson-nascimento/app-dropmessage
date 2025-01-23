@@ -14,6 +14,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
+import { ErrorComponent } from '../../../shared/component/error/error.component';
 import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { Product } from '../../../shared/interface/product.interface';
@@ -23,7 +24,11 @@ const swiper = new Swiper('.swiper', {
   modules: [Navigation, Pagination],
 });
 
-const SharedComponents = [ButtonStyleDirective, LoadShimmerComponent];
+const SharedComponents = [
+  ButtonStyleDirective,
+  LoadShimmerComponent,
+  ErrorComponent,
+];
 const CoreModule = [CommonModule];
 
 @Component({
@@ -79,13 +84,9 @@ export class ListSubscriptionComponent implements OnInit {
     this.navigateBackUsingApp();
   }
 
-  timerExpiration() {
-    return 'por uma semana';
-  }
-
-  planSignature() {
-    console.log('assinar plano');
-    this.buttonDisalbled = true;
+  createSessionPayment(priceId: string) {
+    console.log('assinar plano', priceId);
+    // this.buttonDisalbled = true;
   }
 
   loadListSubscription() {
@@ -93,11 +94,20 @@ export class ListSubscriptionComponent implements OnInit {
       next: (response) => {
         this.isLoading = false;
         this.listSubscription = response;
-        console.log(this.listSubscription);
       },
-      error: (error) => {
-        console.log(error);
+      error: () => {
+        this.errorRequest = true;
+        this.isLoading = false;
       },
     });
+  }
+
+  timerSubscription(interval: string, invervalCount: number) {
+    if (interval === 'week') {
+      return 'plano de assinatura por 7 dias';
+    } else if (interval === 'month' && invervalCount === 1) {
+      return 'plano de assinatura por um mês';
+    }
+    return 'plano de assinatura por seis meses';
   }
 }
