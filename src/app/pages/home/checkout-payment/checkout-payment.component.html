@@ -1,0 +1,74 @@
+<div class="content">
+  <div class="header">
+    <img
+      src="assets/icon-static/arrow-left.svg"
+      alt="arrow"
+      (click)="goToListSubscription()"
+    />
+  </div>
+  <div class="main-content">
+    @if (isLoading) {
+    <div class="isloading-space">
+      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+
+      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+
+      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+
+      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+    </div>
+    } @else if (errorRequest) {
+    <app-error></app-error>
+    } @else {
+    <div class="main-content-form">
+      <p class="plan">Assinar Plano {{ planSubscription.name }}</p>
+      <div class="contain-price">
+        <span class="price">{{
+          planSubscription.prices[0].unitAmount
+            | currency : planSubscription.prices[0].currency.toUpperCase()
+        }}</span>
+        <strong class="timer-plan">
+          {{
+            timerSubscription(
+              planSubscription.prices[0].interval,
+              planSubscription.prices[0].intervalCount
+            )
+          }}
+        </strong>
+        <p class="description">{{ planSubscription.description }}</p>
+      </div>
+
+      <div class="contain-form">
+        <div id="payment-element"></div>
+
+        <button (click)="handleExpressCheckout()" class="button-payment">
+          Confirmar Pagamento
+        </button>
+      </div>
+
+      <div class="acept-terms">
+        Ao confirmar sua assinatura, você permite que datingmatch cobre você em
+        referência a pagamentos futuros em conformidade com os termos da
+        empresa. Você pode cancelar a assinatura quando quiser.
+      </div>
+      <div class="acept-terms">
+        <p>Power by <strong>Stripe</strong></p>
+        <div>
+          <a
+            href="https://stripe.com/br/legal/consumer"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Termos</a
+          >
+          <a
+            href="https://stripe.com/br/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Privacidade</a
+          >
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+</div>

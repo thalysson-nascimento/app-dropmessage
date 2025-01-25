@@ -19,6 +19,7 @@ import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/loa
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { Product } from '../../../shared/interface/product.interface';
 import { ListSubscriptionService } from '../../../shared/service/list-subscription/list-subscription.service';
+import { SignalService } from '../../../shared/service/signal/signal.service';
 
 const swiper = new Swiper('.swiper', {
   modules: [Navigation, Pagination],
@@ -48,7 +49,8 @@ export class ListSubscriptionComponent implements OnInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
-    private listSubscriptionService: ListSubscriptionService
+    private listSubscriptionService: ListSubscriptionService,
+    private signalService: SignalService<Product>
   ) {}
 
   ngOnInit() {
@@ -84,8 +86,10 @@ export class ListSubscriptionComponent implements OnInit {
     this.navigateBackUsingApp();
   }
 
-  createSessionPayment(priceId: string) {
-    console.log('assinar plano', priceId);
+  createSessionPayment(product: Product) {
+    console.log('assinar plano', product);
+    this.signalService.set(product);
+    this.router.navigateByUrl('home/checkout-payment');
     // this.buttonDisalbled = true;
   }
 
@@ -106,8 +110,8 @@ export class ListSubscriptionComponent implements OnInit {
     if (interval === 'week') {
       return 'plano de assinatura por 7 dias';
     } else if (interval === 'month' && invervalCount === 1) {
-      return 'plano de assinatura por um mês';
+      return 'plano de assinatura por 1 mês';
     }
-    return 'plano de assinatura por seis meses';
+    return 'plano de assinatura por 6 meses';
   }
 }

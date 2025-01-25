@@ -139,6 +139,13 @@ export const HomeRouting: Routes = [
             (m) => m.ListSubscriptionComponent
           ),
       },
+      {
+        path: 'checkout-payment',
+        loadComponent: () =>
+          import('./checkout-payment/checkout-payment.component').then(
+            (m) => m.CheckoutPaymentComponent
+          ),
+      },
     ],
   },
 ];
