@@ -1,0 +1,38 @@
+@if (isLoading) {
+<div class="contain-load-shimmer-card">
+  <app-load-shimmer [height]="'3rem'"></app-load-shimmer>
+
+  <app-load-shimmer [height]="'9rem'"></app-load-shimmer>
+
+  <app-load-shimmer [height]="'3rem'"></app-load-shimmer>
+</div>
+}@else if (errorRequest) {
+<app-error></app-error> }@else {
+<div class="contain-card-like-user">
+  <div class="contain-avatar">
+    <p class="user-name">
+      {{
+        filterFirstUserName(lastLikePostMessage.lastLikePostMessage.user.name)
+      }}
+    </p>
+    <img
+      [src]="lastLikePostMessage.lastLikePostMessage.user.avatar.image"
+      alt=""
+    />
+  </div>
+
+  <p class="description-card">
+    <strong>{{ lastLikePostMessage.praseLikePostMessage }}</strong>
+  </p>
+  <div>
+    <button
+      appButtonStyle
+      [buttonType]="'primary'"
+      class="button-signature-plan"
+      (click)="listSubscription()"
+    >
+      Assinar plano
+    </button>
+  </div>
+</div>
+}

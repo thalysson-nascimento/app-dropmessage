@@ -1,0 +1,46 @@
+.contain-card-like-user {
+  width: 100%;
+  border-radius: var(--space-medium);
+  background: linear-gradient(to top, #03836a, #00b894);
+  color: var(--white);
+  padding: var(--space-medium);
+}
+
+.button-signature-plan {
+  background-color: var(--white) !important;
+  color: #03836a !important;
+}
+
+.description-card {
+  font-size: var(--font-size-large);
+  margin-bottom: var(--space-medium);
+}
+
+.contain-load-shimmer-card {
+  padding: 1rem;
+  background-color: #f1f1f1;
+  border-radius: 1rem;
+}
+
+.contain-avatar {
+  position: relative;
+
+  img {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    border: 3px solid var(--white);
+  }
+
+  .user-name {
+    position: absolute;
+    top: 60%;
+    left: 40%;
+    font-size: 0.8rem;
+    transform: translate(-50%, -50%);
+    padding: 0.8rem;
+    background-color: var(--white);
+    color: #03836a;
+    border-radius: 5rem;
+  }
+}
