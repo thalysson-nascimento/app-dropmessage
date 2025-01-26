@@ -7,6 +7,7 @@ import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/loa
 import { Product } from '../../../shared/interface/product.interface';
 import { SessionPaymentIntentService } from '../../../shared/service/session-payment-intent/session-payment-intent.service';
 import { SignalService } from '../../../shared/service/signal/signal.service';
+import { StripePublicKeyService } from '../../../shared/service/stripe-public-key/stripe-public-key.service';
 
 const CoreModule = [CommonModule];
 const SharedModule = [ErrorComponent, LoadShimmerComponent];
@@ -29,7 +30,8 @@ export class CheckoutPaymentComponent implements OnInit {
   constructor(
     private sessionPaymentIntentService: SessionPaymentIntentService,
     private router: Router,
-    private signalService: SignalService<Product>
+    private signalService: SignalService<Product>,
+    private stripePublicKeyService: StripePublicKeyService
   ) {
     const signal = untracked(() => this.signalService.getValue());
 
@@ -40,13 +42,17 @@ export class CheckoutPaymentComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const publicApi =
-      'pk_test_51QhWD6HDW71UiODSa77i9cwCJdehvbrio4HncEehIj9UJSW5ZElVyiLkKY0vrbvc2AlHp74DEHAKCVfjV3O7dl7B007W6c399T';
-    this.stripe = await loadStripe(publicApi);
-    if (!this.stripe) {
-      console.error('Erro ao carregar Stripe');
-      return;
-    }
+    this.stripePublicKeyService.stripePublicKey().subscribe({
+      next: async (response) => {
+        console.log('public api', response.publicKey);
+        const publicApi = response.publicKey;
+        this.stripe = await loadStripe(publicApi);
+        if (!this.stripe) {
+          console.error('Erro ao carregar Stripe');
+          return;
+        }
+      },
+    });
 
     const price = this.planSubscription?.prices[0].priceId;
 
