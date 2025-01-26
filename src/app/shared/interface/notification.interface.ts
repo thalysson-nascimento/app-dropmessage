@@ -2,7 +2,7 @@ export interface Notification {
   id: string;
   createdAt: Date;
   user: User;
-  post: Post;
+  post?: Post;
 }
 
 export interface Post {

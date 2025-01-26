@@ -568,4 +568,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       },
     });
   }
+
+  goToSubscription() {
+    this.router.navigateByUrl('home/list-subscription');
+  }
 }

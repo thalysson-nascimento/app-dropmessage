@@ -9,18 +9,16 @@
   </div>
 
   <div class="container-title-subtitle">
-    <h1 class="title">Notificação</h1>
-    <p class="subtitle">veja quem curtiu suas postagens</p>
+    <h1 class="title">Notificações</h1>
+    <p>Veja quem curtiu você.</p>
   </div>
 
-  <div class="contain-loading" *ngIf="isLoading">
-    <div class="contain-loading">
-      <div id="lottie-icon-is-loading" class="lottie-icon-no-match"></div>
-    </div>
+  <!-- <div class="contain-loading" *ngIf="isLoading">
+    <div id="lottie-icon-is-loading" class="lottie-icon-no-match"></div>
   </div>
 
   <app-system-unavailable
-    *ngIf="showSystemUnavailable && !isLoading"
+    *ngIf="showSystemUnavailable"
     (clickLoading)="tryAgain()"
     [infoMessage]="
       'No momento estamos com nossos serviços indisponíves, volte novamente mais tarde!'
@@ -28,31 +26,55 @@
   >
   </app-system-unavailable>
 
-  <div
-    *ngIf="notifications.length === 0 && !showSystemUnavailable && !isLoading"
-  >
-    <p class="subtitle">Nenhuma notificação encontrada</p>
-  </div>
+  <section *ngIf="!showSystemUnavailable || !isLoading">
+    <div class="image-container" *ngFor="let notification of notifications">
+      <img [src]="notification.user.avatar" alt="" />
+      <div class="overlay">
+        @if (notification.user.name === null) {
+        <div class="bar"></div>
+        }@else {
+        <p>{{ filterFirstUserName(notification.user.name) }}</p>
+        }
+        <p>curtiu você</p>
+      </div>
+    </div>
+  </section> -->
+  @if (isLoading) {
+  <div>
+    <app-load-shimmer [height]="'50px'"></app-load-shimmer>
 
-  <div *ngIf="!showSystemUnavailable && !isLoading">
-    <ul class="list-notification" *ngFor="let notification of notifications">
-      <li class="notification">
-        <div class="contain-description">
-          <div>
-            <img [src]="notification.user.avatar" class="avatar" alt="" />
-          </div>
-          <div>
-            <p>
-              <span class="text-highlight">{{ notification.user.name }}</span>
-              curtiu sua postagem
-              <span class="text-highlight">{{ notification.createdAt }}</span>
-            </p>
-          </div>
-        </div>
-        <div class="contain-post-message">
-          <img [src]="notification.post.image" class="post-message" alt="" />
-        </div>
-      </li>
-    </ul>
+    <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+
+    <div class="custumer-shimmer">
+      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+    </div>
+
+    <div class="custumer-shimmer-80">
+      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+    </div>
   </div>
+  }@else if (errorRequest) {
+  <app-error></app-error>
+  }@else if (userNotification) {
+  <p>No momento não houve curtidas</p>
+  }@else { @if (showCardSubscription) {
+  <div class="contain-card-like-user">
+    <app-active-signature-like-user></app-active-signature-like-user>
+  </div>
+  }
+
+  <section>
+    <div class="image-container" *ngFor="let notification of notifications">
+      <img [src]="notification.user.avatar" alt="" />
+      <div class="overlay">
+        @if (notification.user.name === null) {
+        <div class="bar"></div>
+        }@else {
+        <p>{{ filterFirstUserName(notification.user.name) }}</p>
+        }
+        <p>curtiu você</p>
+      </div>
+    </div>
+  </section>
+  }
 </div>

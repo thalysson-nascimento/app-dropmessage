@@ -6,6 +6,13 @@
   overflow: auto;
 }
 
+.contain-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
 .header {
   display: flex;
   flex-direction: column;
@@ -21,17 +28,14 @@
   margin-top: var(--space-small);
 }
 
-.contain-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
+.acount-post {
+  margin-bottom: 1rem;
 }
 
 img {
   width: 100%;
   height: 12rem;
-  border-radius: 1rem;
+  border-radius: 3rem;
   margin-bottom: var(--space-small);
   object-fit: cover;
 }
@@ -44,37 +48,50 @@ section {
   position: relative;
 }
 
-.list-notification {
-  flex: 1;
-  overflow: auto;
-  list-style: none;
-
-  &:not(:last-child) {
-    margin-bottom: var(--space-medium);
-    border-bottom: 1px solid var(--color-dp-gray-light);
-  }
-}
-
-.contain-description {
+.overlay {
+  position: absolute;
+  bottom: 2rem;
+  padding-left: 1.5rem;
+  width: 100%;
+  border-end-end-radius: 1rem;
+  border-end-start-radius: 1rem;
+  color: #fff;
+  font-size: 1rem;
   display: flex;
-  color: var(--text-dark-d1);
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  font-weight: 700;
+  justify-content: start;
 }
 
-.avatar {
+.heart-like {
+  width: 1rem;
+  height: 1rem;
+  margin-right: var(--space-small);
+}
+
+.contain-account-post {
+  margin-bottom: var(--space-small);
+  width: 10rem;
+}
+
+.bar {
+  height: 1rem;
+  margin-bottom: 0.5rem;
   width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: var(--space-medium);
+  border-radius: 0.5rem;
+  background-color: #d9d9d9;
 }
 
-.text-highlight {
-  color: var(--text-dark);
+.custumer-shimmer {
+  width: 60%;
+  margin-top: var(--space-large);
 }
 
-.contain-post-message {
-  padding: 1rem;
+.custumer-shimmer-80 {
+  width: 80%;
+  margin-top: var(--space-large);
+}
+
+.contain-card-like-user {
+  margin-bottom: var(--space-medium);
 }

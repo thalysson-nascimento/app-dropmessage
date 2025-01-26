@@ -77,6 +77,16 @@ body {
   font-weight: 700;
 }
 
+.user-location-null {
+  z-index: 1;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+
+  font-weight: 700;
+  background-color: #03836a;
+}
+
 img {
   border-radius: 5px;
   width: 100%;
