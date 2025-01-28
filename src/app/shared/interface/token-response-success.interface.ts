@@ -3,6 +3,10 @@ export interface TokenResponseSuccess {
   expiresIn: string;
   userVerificationData: UserVerificationData;
   avatar: Avatar;
+  goldFreeTrialData: {
+    viewCardFreeTrial: boolean;
+    firstPublicationPostMessage: boolean;
+  };
 }
 
 export interface Avatar {

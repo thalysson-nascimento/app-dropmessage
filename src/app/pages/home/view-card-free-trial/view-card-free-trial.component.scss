@@ -1,0 +1,94 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.icon {
+  color: var(--text-dark);
+  padding-right: var(--space-medium);
+  padding-top: var(--space-medium);
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  padding: var(--space-medium);
+  justify-content: flex-end;
+}
+
+.main-content {
+  flex: 1;
+  padding: var(--space-medium);
+  overflow: auto;
+  color: var(--white);
+}
+
+.custumer-shimmer {
+  width: 60%;
+  margin-top: var(--space-large);
+}
+
+.custumer-shimmer-80 {
+  width: 80%;
+  margin-top: var(--space-large);
+}
+
+.isloading-space {
+  padding: 1rem;
+}
+
+.card-signature {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: var(--space-medium);
+  padding: var(--space-medium);
+  background: linear-gradient(to bottom, #dcc156, #856e14);
+  justify-content: space-between;
+}
+
+.card-signature-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.plan {
+  margin-left: var(--space-small);
+  font-weight: 700;
+}
+
+.nickname {
+  font-size: var(--font-size-small);
+}
+
+.name {
+  font-size: var(--font-size-xlarge);
+  line-height: 2rem;
+}
+
+.description {
+  margin-top: var(--space-large);
+  margin-bottom: var(--space-large);
+}
+
+.button {
+  background-color: #fff !important;
+  color: #856e14 !important;
+}
+
+.margin-title {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.description {
+  margin-bottom: 3rem;
+}
+
+.price {
+  font-size: var(--font-size-xxlarge);
+  margin-top: var(--space-medium);
+  font-weight: 700;
+}

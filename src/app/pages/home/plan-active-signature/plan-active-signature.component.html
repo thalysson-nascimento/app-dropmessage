@@ -21,11 +21,7 @@
     >
       <div class="card-signature-content">
         <div class="card-signature-header">
-          <img
-            [src]="subscription?.data?.logoPath"
-            alt="arrow"
-            (click)="goToProfile()"
-          />
+          <img [src]="subscription?.data?.logoPath" alt="arrow" />
           <div class="plan">
             <span class="nickname">Plano</span>
             <p class="name">{{ subscription?.data?.plan }}</p>
@@ -42,11 +38,12 @@
 
         @if (subscription?.data?.cancelAtPeriodEnd) {
         <p>
-          Assinatura cancelada em
+          @if (subscription?.data?.status !== 'trialing') { Assinatura cancelada
+          em
           {{
             subscription?.data?.cancelAt
               | date : "dd/MM/yyyy " + "'as'" + " HH:mm"
-          }}.
+          }}. }
           <strong
             >Seu período de ativação será até
             {{

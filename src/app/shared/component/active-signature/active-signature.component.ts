@@ -21,6 +21,8 @@ export class ActiveSignatureComponent implements OnInit {
   colorTop?: string = '#00b894';
   @Input()
   colorBottom?: string = '#03836a';
+  @Input()
+  status?: string = '';
 
   @Output()
   clickeCardActiveSignature = new EventEmitter<void>();
