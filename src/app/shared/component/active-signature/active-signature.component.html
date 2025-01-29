@@ -9,11 +9,14 @@
   <p class="nickname">Plano</p>
   <p class="name-plan">{{ plan }}</p>
   <p class="description">{{ description }}</p>
+  @if (status === 'trialing') {} @else {
   <div class="tag">
     <p [ngStyle]="{ color: colorBottom }">{{ labelTag }}</p>
   </div>
+
+  }
   <div class="current-period-end">
-    <p>Período de ativação:</p>
+    <p>Data de expiração:</p>
     <p>{{ currentPeriodEnd | date : "dd/MM/yyyy HH:mm" }}</p>
   </div>
 </div>

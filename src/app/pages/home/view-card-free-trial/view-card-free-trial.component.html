@@ -1,0 +1,55 @@
+<div class="content">
+  <div class="header">
+    <i (click)="goToPostMessages()" class="fi fi-br-x icon"></i>
+  </div>
+  @if (isLoading) {
+  <div class="isloading-space">
+    <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+
+    <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+
+    <div class="custumer-shimmer">
+      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+    </div>
+
+    <div class="custumer-shimmer-80">
+      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+    </div>
+  </div>
+  }@else if (errorRequest) { <app-error></app-error> }@else {
+
+  <div class="main-content">
+    <div class="card-signature">
+      <div class="card-signature-content">
+        <div class="card-signature-header">
+          <img src="assets/icon-static/logo-yeloow.svg" alt="arrow" />
+          <div class="plan">
+            <span class="nickname">Plano</span>
+            <p class="name">Gold Free Trial</p>
+          </div>
+        </div>
+        <h1 class="margin-title"><i>PROMOÇÃO PLANO GOLD</i></h1>
+        <p class="description">
+          Na sua primeira postagem você ganha de forma gratuita uma assinatura
+          do plano Gold válida por 7 dias.
+        </p>
+        <h2>de <s>R$39,99</s></h2>
+        <h2>
+          <strong>por </strong>
+          <span><strong class="price">R$0,00</strong></span>
+        </h2>
+      </div>
+      <div class="contain-button">
+        <button
+          appButtonStyle
+          (click)="openBottomSheet()"
+          class="button"
+          [buttonType]="'primary'"
+        >
+          Compartilhar post
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+</div>

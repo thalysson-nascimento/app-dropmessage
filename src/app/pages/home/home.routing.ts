@@ -146,6 +146,13 @@ export const HomeRouting: Routes = [
             (m) => m.CheckoutPaymentComponent
           ),
       },
+      {
+        path: 'view-card-free-trial',
+        loadComponent: () =>
+          import('./view-card-free-trial/view-card-free-trial.component').then(
+            (m) => m.ViewCardFreeTrialComponent
+          ),
+      },
     ],
   },
 ];
