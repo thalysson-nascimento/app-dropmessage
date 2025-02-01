@@ -153,6 +153,13 @@ export const HomeRouting: Routes = [
             (m) => m.ViewCardFreeTrialComponent
           ),
       },
+      {
+        path: 'user-welcome',
+        loadComponent: () =>
+          import('./user-welcome/user-welcome.component').then(
+            (m) => m.UserWelcomeComponent
+          ),
+      },
     ],
   },
 ];

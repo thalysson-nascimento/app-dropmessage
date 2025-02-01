@@ -82,7 +82,7 @@ export class SignupComponent implements OnInit {
               this.userHashPublicService.setUserHashPublic(
                 response.userVerificationData.userHashPublic
               );
-              this.router.navigateByUrl('home/post-messages');
+              this.router.navigateByUrl('home/user-welcome');
             },
             error: (error) => {
               this.isLoadingButtonGoogleOAuth = false;
