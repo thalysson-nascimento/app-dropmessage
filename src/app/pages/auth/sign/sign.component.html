@@ -5,12 +5,39 @@
 
   <img src="assets/icon-static/dating-user.svg" alt="" />
 
+  <p class="text-login">Login</p>
+
+  <div class="contain-button-google">
+    <button class="button-google" (click)="userAuthenticatorWithGoogle()">
+      @if (isLoadingButtonGoogleOAuth) {
+      <div class="loader">
+        <svg class="circular" viewBox="25 25 50 50">
+          <circle
+            class="path"
+            cx="50"
+            cy="50"
+            r="20"
+            fill="none"
+            stroke-width="3"
+            stroke-miterlimit="10"
+          />
+        </svg>
+      </div>
+
+      }@else {
+      <img src="assets/icon-static/logo-google.svg" alt="" />
+      <span>Acessar com o Google</span>
+      }
+    </button>
+
+    <p>ou</p>
+  </div>
+
   <form
     [formGroup]="userLoginFormGroup"
     (submit)="userSign()"
     class="contain-form-login"
   >
-    <p class="text-login">Login</p>
     <input
       type="email"
       placeholder="login"
@@ -75,3 +102,8 @@
     </button>
   </div>
 </app-modal>
+
+<app-error-modal #modalErrorRequest [type]="typeErrorModal">
+  <p><strong>Ops, ocorreu um erro!</strong></p>
+  <p class="description-error">{{ errorMessage }}</p>
+</app-error-modal>

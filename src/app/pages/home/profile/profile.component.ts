@@ -13,6 +13,7 @@ import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { ActiveSubscriptionService } from '../../../shared/service/active-subscription/active-subscription.service';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
+import { GoogleAuthService } from '../../../shared/service/google-auth/google-auth.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { SignalService } from '../../../shared/service/signal/signal.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
@@ -53,7 +54,8 @@ export class ProfileComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     private loggerService: LoggerService,
     private activeSubscriptionService: ActiveSubscriptionService,
-    private signalService: SignalService<ActiveSubscription>
+    private signalService: SignalService<ActiveSubscription>,
+    private googleAuthService: GoogleAuthService
   ) {}
 
   ngOnInit() {
@@ -129,6 +131,7 @@ export class ProfileComponent implements OnInit {
           this.tokenStorageSecurityRequestService.deleteToken();
           this.cacheAvatarService.resetAvatarCachePreferences();
           this.userHashPublicService.removeUserHashPublic();
+          this.googleAuthService.signOut();
           this.router.navigateByUrl('auth/sign');
         },
       });

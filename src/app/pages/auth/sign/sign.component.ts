@@ -1,13 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import {
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-  PLATFORM_ID,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -21,6 +14,7 @@ import { PluginListenerHandle } from '@capacitor/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
+import { ErrorModalComponent } from '../../../shared/component/error-modal/error-modal.component';
 import { LoadingComponent } from '../../../shared/component/loading/loading.component';
 import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
@@ -29,8 +23,10 @@ import { InputCustomDirective } from '../../../shared/directives/input-custom/in
 import { Sign } from '../../../shared/interface/sign.interface';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
+import { GoogleAuthService } from '../../../shared/service/google-auth/google-auth.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
+import { SignWithGoogleService } from '../../../shared/service/sign-with-google/sign-with-google.service';
 import { LoginService } from '../../../shared/service/sign/sign.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
@@ -41,6 +37,7 @@ const SharedComponents = [
   ButtonStyleDirective,
   LoadingComponent,
   ModalComponent,
+  ErrorModalComponent,
 ];
 
 const CoreModule = [ReactiveFormsModule, CommonModule];
@@ -63,6 +60,9 @@ export class SignComponent implements OnInit, OnDestroy {
   isOpen: boolean = false;
   backButtonListener!: PluginListenerHandle;
   pageView: string = 'DatingMatch:Login';
+  isLoadingButtonGoogleOAuth: boolean = false;
+  @ViewChild('modalErrorRequest') modalErrorRequest!: ErrorModalComponent;
+  typeErrorModal: 'success' | 'warn' | 'error' = 'success';
 
   constructor(
     private router: Router,
@@ -74,7 +74,8 @@ export class SignComponent implements OnInit, OnDestroy {
     private userHashPublicService: UserHashPublicService,
     private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
     private loggerService: LoggerService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    private googleAuthService: GoogleAuthService,
+    private signWithGoogleService: SignWithGoogleService
   ) {}
 
   ngOnInit(): void {
@@ -174,5 +175,33 @@ export class SignComponent implements OnInit, OnDestroy {
 
   navigateToTest() {
     this.router.navigateByUrl('auth/teste');
+  }
+
+  async userAuthenticatorWithGoogle() {
+    try {
+      const token = await this.googleAuthService.signInWithGoogle();
+      if (token.authentication.idToken) {
+        this.isLoadingButtonGoogleOAuth = true;
+        this.signWithGoogleService
+          .sign(token.authentication.idToken)
+          .subscribe({
+            next: (response) => {
+              this.isLoadingButtonGoogleOAuth = false;
+              this.tokenStorageSecurityRequestService.saveToken(response.token);
+              this.preferencesUserAuthenticateService.savePreferences(response);
+              this.userHashPublicService.setUserHashPublic(
+                response.userVerificationData.userHashPublic
+              );
+              this.router.navigateByUrl('home/post-messages');
+            },
+            error: (error: any) => {
+              this.typeErrorModal = 'warn';
+              this.errorMessage = error.message;
+              this.isLoadingButtonGoogleOAuth = false;
+              this.modalErrorRequest.openDialog();
+            },
+          });
+      }
+    } catch (error) {}
   }
 }

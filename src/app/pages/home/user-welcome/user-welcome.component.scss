@@ -1,0 +1,26 @@
+.contain {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+  animation: fadeUp 0.5s ease-out;
+
+  p {
+    margin-top: var(--space-medium);
+    margin-bottom: var(--space-large);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Inicia 20px abaixo */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* Finaliza na posição original */
+  }
+}

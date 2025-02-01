@@ -38,6 +38,7 @@ img {
 
 .text-login {
   font-size: 2rem;
+  margin-top: 2rem;
   margin-bottom: 1rem;
 }
 
@@ -84,4 +85,148 @@ img {
   margin-top: 2rem;
   margin-left: 3rem;
   margin-right: 3rem;
+}
+
+.contain-button-google {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: var(--space-medium);
+  flex-direction: column;
+  align-items: center;
+
+  p {
+    margin-top: var(--space-medium);
+  }
+}
+
+.button-google {
+  width: 100%;
+  text-align: center;
+  border: 1px solid #dbdbdb;
+  border-radius: var(--space-small);
+  background-color: var(--withe);
+  color: var(--text-dark);
+  font-size: var(--font-size-medium);
+  padding: var(--space-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.5rem;
+  }
+}
+
+//loading-circular
+.loader {
+  position: relative;
+  margin: 0px auto;
+  width: 2rem;
+}
+
+.loader:before {
+  content: "";
+  display: block;
+  padding-top: 50%;
+}
+
+.circular {
+  -webkit-animation: rotate 2s linear infinite;
+  animation: rotate 2s linear infinite;
+  height: 2rem;
+  -webkit-transform-origin: center center;
+  -ms-transform-origin: center center;
+  transform-origin: center center;
+  width: 2rem;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.path {
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  -webkit-animation: dash 1.5s ease-in-out infinite,
+    color 6s ease-in-out infinite;
+  animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+  stroke-linecap: round;
+}
+
+@-webkit-keyframes rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124;
+  }
+}
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124;
+  }
+}
+@-webkit-keyframes color {
+  100%,
+  0% {
+    stroke: #d62d20;
+  }
+  40% {
+    stroke: #0057e7;
+  }
+  66% {
+    stroke: #008744;
+  }
+  80%,
+  90% {
+    stroke: #ffa700;
+  }
+}
+@keyframes color {
+  100%,
+  0% {
+    stroke: #d62d20;
+  }
+  40% {
+    stroke: #0057e7;
+  }
+  66% {
+    stroke: #008744;
+  }
+  80%,
+  90% {
+    stroke: #ffa700;
+  }
 }

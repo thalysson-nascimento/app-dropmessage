@@ -1,5 +1,11 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -11,12 +17,22 @@ import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { currentEnvironment } from '../../../../environment.config';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
+import { ErrorModalComponent } from '../../../shared/component/error-modal/error-modal.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { CreateAccount } from '../../../shared/interface/create-account.interface';
+import { CreateAccountWithGoogleOauthService } from '../../../shared/service/create-account-with-google-oauth/create-account-with-google-oauth.service';
 import { CreateAccountService } from '../../../shared/service/create-account/create-account.service';
+import { GoogleAuthService } from '../../../shared/service/google-auth/google-auth.service';
+import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
+import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
+import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 
-const SharedComponents = [InputCustomDirective, ButtonStyleDirective];
+const SharedComponents = [
+  InputCustomDirective,
+  ButtonStyleDirective,
+  ErrorModalComponent,
+];
 
 const CoreModule = [ReactiveFormsModule, CommonModule];
 
@@ -32,13 +48,23 @@ export class SignupComponent implements OnInit {
   buttonDisalbled: boolean = false;
   createAccountFormGroup!: FormGroup;
   isLoadingButton: boolean = false;
+  user: any = null;
+  errorMessage: unknown;
+  isLoadingButtonGoogleOAuth: boolean = false;
+  @ViewChild('modalErrorRequest') modalErrorRequest!: ErrorModalComponent;
+  typeErrorModal: 'success' | 'warn' | 'error' = 'success';
 
   constructor(
     private router: Router,
     private createAccountService: CreateAccountService,
     private formBuilder: FormBuilder,
     private bottomSheet: MatBottomSheet,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private googleAuthService: GoogleAuthService,
+    private createAccountWithGoogleOauthService: CreateAccountWithGoogleOauthService,
+    private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
+    private userHashPublicService: UserHashPublicService,
+    private preferencesUserAuthenticateService: PreferencesUserAuthenticateService
   ) {}
 
   ngOnInit(): void {
@@ -51,6 +77,39 @@ export class SignupComponent implements OnInit {
       App.addListener('backButton', () => {
         this.router.navigateByUrl('auth/sign');
       });
+    }
+  }
+
+  async createAccountWithGoogle() {
+    try {
+      const token = await this.googleAuthService.signInWithGoogle();
+      if (token.authentication.idToken) {
+        this.isLoadingButtonGoogleOAuth = true;
+        this.createAccountWithGoogleOauthService
+          .createAccount(token.authentication.idToken)
+          .subscribe({
+            next: (response) => {
+              this.isLoadingButtonGoogleOAuth = false;
+              this.tokenStorageSecurityRequestService.saveToken(response.token);
+              this.preferencesUserAuthenticateService.savePreferences(response);
+              this.userHashPublicService.setUserHashPublic(
+                response.userVerificationData.userHashPublic
+              );
+              this.router.navigateByUrl('home/user-welcome');
+            },
+            error: (error: any) => {
+              this.typeErrorModal = 'warn';
+              this.errorMessage = error.message;
+              this.isLoadingButtonGoogleOAuth = false;
+              this.modalErrorRequest.openDialog();
+            },
+          });
+      }
+    } catch (error: any) {
+      this.typeErrorModal = 'warn';
+      this.errorMessage = error.message;
+      this.isLoadingButtonGoogleOAuth = false;
+      this.modalErrorRequest.openDialog();
     }
   }
 
@@ -82,8 +141,6 @@ export class SignupComponent implements OnInit {
       this.buttonDisalbled = true;
       const dataCreateAccountUser =
         this.createAccountFormGroup.getRawValue() as CreateAccount;
-
-      console.log(dataCreateAccountUser);
 
       this.createAccountService.createAccount(dataCreateAccountUser).subscribe({
         next: (response) => {
