@@ -1,5 +1,11 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -11,6 +17,7 @@ import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { currentEnvironment } from '../../../../environment.config';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
+import { ErrorModalComponent } from '../../../shared/component/error-modal/error-modal.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { CreateAccount } from '../../../shared/interface/create-account.interface';
@@ -21,7 +28,11 @@ import { PreferencesUserAuthenticateService } from '../../../shared/service/pref
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 
-const SharedComponents = [InputCustomDirective, ButtonStyleDirective];
+const SharedComponents = [
+  InputCustomDirective,
+  ButtonStyleDirective,
+  ErrorModalComponent,
+];
 
 const CoreModule = [ReactiveFormsModule, CommonModule];
 
@@ -40,6 +51,8 @@ export class SignupComponent implements OnInit {
   user: any = null;
   errorMessage: unknown;
   isLoadingButtonGoogleOAuth: boolean = false;
+  @ViewChild('modalErrorRequest') modalErrorRequest!: ErrorModalComponent;
+  typeErrorModal: 'success' | 'warn' | 'error' = 'success';
 
   constructor(
     private router: Router,
@@ -84,14 +97,19 @@ export class SignupComponent implements OnInit {
               );
               this.router.navigateByUrl('home/user-welcome');
             },
-            error: (error) => {
+            error: (error: any) => {
+              this.typeErrorModal = 'warn';
+              this.errorMessage = error.message;
               this.isLoadingButtonGoogleOAuth = false;
+              this.modalErrorRequest.openDialog();
             },
           });
       }
-    } catch (error) {
-      this.errorMessage = error;
-      console.error('Erro ao fazer login:', error);
+    } catch (error: any) {
+      this.typeErrorModal = 'warn';
+      this.errorMessage = error.message;
+      this.isLoadingButtonGoogleOAuth = false;
+      this.modalErrorRequest.openDialog();
     }
   }
 

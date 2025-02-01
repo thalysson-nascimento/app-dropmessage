@@ -102,3 +102,8 @@
     </p>
   </div>
 </div>
+
+<app-error-modal #modalErrorRequest [type]="typeErrorModal">
+  <p><strong>Ops, ocorreu um erro!</strong></p>
+  <p class="description-error">{{ errorMessage }}</p>
+</app-error-modal>
