@@ -24,6 +24,12 @@ const config: CapacitorConfig = {
       tagForChildDirectedTreatment: false, // Direcionado a crianças (false para não)
       tagForUnderAgeOfConsent: false, // Usuários menores de idade
     },
+    GoogleAuth: {
+      scopes: ['profile', 'email'],
+      serverClientId:
+        '999388705991-k8nj0pm920domilt0mtoedfqefgqvf0f.apps.googleusercontent.com', // Web Client ID
+      forceCodeForRefreshToken: true,
+    },
   },
 };
 

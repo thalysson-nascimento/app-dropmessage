@@ -14,13 +14,40 @@
     />
   </div>
 
+  <p class="text-login">Crie sua conta</p>
+
+  <div class="contain-button-google">
+    <button class="button-google" (click)="createAccountWithGoogle()">
+      @if (isLoadingButtonGoogleOAuth) {
+      <div class="loader">
+        <svg class="circular" viewBox="25 25 50 50">
+          <circle
+            class="path"
+            cx="50"
+            cy="50"
+            r="20"
+            fill="none"
+            stroke-width="3"
+            stroke-miterlimit="10"
+          />
+        </svg>
+      </div>
+
+      }@else {
+      <img src="assets/icon-static/logo-google.svg" alt="" />
+      <span>Criar conta com o Google</span>
+      }
+    </button>
+
+    <p>ou</p>
+  </div>
+
   <form
     [formGroup]="createAccountFormGroup"
     (submit)="createAccountUser()"
     class="contain-form-login"
     class="contain-form-login"
   >
-    <p class="text-login">Crie sua conta</p>
     <input
       type="text"
       placeholder="nome"
