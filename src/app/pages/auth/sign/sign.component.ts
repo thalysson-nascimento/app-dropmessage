@@ -194,9 +194,9 @@ export class SignComponent implements OnInit, OnDestroy {
               );
               this.router.navigateByUrl('home/post-messages');
             },
-            error: (error: any) => {
+            error: (errorResponse: any) => {
               this.typeErrorModal = 'warn';
-              this.errorMessage = error.message;
+              this.errorMessage = errorResponse.error.message;
               this.isLoadingButtonGoogleOAuth = false;
               this.modalErrorRequest.openDialog();
             },
