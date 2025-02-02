@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
 import { ErrorComponent } from '../../../shared/component/error/error.component';
 import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
@@ -23,9 +24,11 @@ const CoreModule = [CommonModule];
   standalone: true,
   imports: [...SharedComponents, ...CoreModule],
 })
-export class ViewCardFreeTrialComponent implements OnInit {
+export class ViewCardFreeTrialComponent implements OnInit, OnDestroy {
   isLoading: boolean = true;
   errorRequest: boolean = false;
+  destroy$: Subject<void> = new Subject<void>();
+
   constructor(
     private viewCardFreeTrialService: ViewCardFreeTrialService,
     private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
@@ -37,26 +40,34 @@ export class ViewCardFreeTrialComponent implements OnInit {
     this.userViewCard();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   userViewCard() {
     this.viewCardFreeTrialService.viewCard().subscribe({
       next: () => {
-        this.preferencesUserAuthenticateService.getToken().subscribe({
-          next: (response) => {
-            console.log(response);
-            if (response) {
-              const updatedData = {
-                ...response,
-                goldFreeTrialData: {
-                  ...response.goldFreeTrialData,
-                  viewCardFreeTrial: true,
-                },
-              };
-              this.preferencesUserAuthenticateService
-                .savePreferences(updatedData)
-                .subscribe();
-            }
-          },
-        });
+        this.preferencesUserAuthenticateService
+          .getToken()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: (response) => {
+              console.log(response);
+              if (response) {
+                const updatedData = {
+                  ...response,
+                  goldFreeTrialData: {
+                    ...response.goldFreeTrialData,
+                    viewCardFreeTrial: true,
+                  },
+                };
+                this.preferencesUserAuthenticateService
+                  .savePreferences(updatedData)
+                  .subscribe();
+              }
+            },
+          });
         this.isLoading = false;
       },
       error: (error) => {
