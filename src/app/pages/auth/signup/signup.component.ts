@@ -97,17 +97,17 @@ export class SignupComponent implements OnInit {
               );
               this.router.navigateByUrl('home/user-welcome');
             },
-            error: (error: any) => {
+            error: (errorResponse: any) => {
               this.typeErrorModal = 'warn';
-              this.errorMessage = error.message;
+              this.errorMessage = errorResponse.error.message;
               this.isLoadingButtonGoogleOAuth = false;
               this.modalErrorRequest.openDialog();
             },
           });
       }
-    } catch (error: any) {
+    } catch (errorResponse: any) {
       this.typeErrorModal = 'warn';
-      this.errorMessage = error.message;
+      this.errorMessage = errorResponse.error.message;
       this.isLoadingButtonGoogleOAuth = false;
       this.modalErrorRequest.openDialog();
     }
