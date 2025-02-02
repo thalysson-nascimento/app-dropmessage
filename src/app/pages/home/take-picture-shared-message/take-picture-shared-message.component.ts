@@ -24,6 +24,7 @@ import { ButtonStyleDirective } from '../../../shared/directives/button-style/bu
 import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { ExpirationTimerService } from '../../../shared/service/expiration-timer/expiration-timer.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
+import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
 import { SharedPostMessageService } from '../../../shared/service/shared-post-message/shared-post-message.service';
 
 const SharedComponents = [ButtonStyleDirective];
@@ -58,7 +59,8 @@ export class TakePictureSharedMessageComponent
     private bottomSheet: MatBottomSheet,
     private sharedPostMessageService: SharedPostMessageService,
     private expirationTimerService: ExpirationTimerService,
-    private loggerService: LoggerService
+    private loggerService: LoggerService,
+    private preferencesUserAuthenticateService: PreferencesUserAuthenticateService
   ) {}
 
   ngOnDestroy(): void {
@@ -162,7 +164,6 @@ export class TakePictureSharedMessageComponent
         .then((blob) => {
           const file = new File([blob], 'image.png', { type: 'image/png' });
           const expirationTimer = this.expirationTimer;
-
           this.sharedPostMessageService
             .postMessage({ file, expirationTimer })
             .subscribe({
@@ -176,14 +177,29 @@ export class TakePictureSharedMessageComponent
                   statusCode: 200,
                   level: 'info',
                 };
-
                 this.loggerService
                   .info(logger)
                   .pipe(takeUntil(this.destroy$))
                   .subscribe();
-
                 this.disabledButton = false;
-                this.router.navigate(['/home/send-message-success']);
+                this.preferencesUserAuthenticateService
+                  .getToken()
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe({
+                    next: (response) => {
+                      const firstPublicationPostMessage =
+                        response?.goldFreeTrialData.firstPublicationPostMessage;
+
+                      if (!firstPublicationPostMessage) {
+                        return this.router.navigate([
+                          '/home/user-first-publication-post',
+                        ]);
+                      }
+                      return this.router.navigate([
+                        '/home/send-message-success',
+                      ]);
+                    },
+                  });
               },
               error: (error) => {
                 const logger: TrackAction = {
@@ -194,7 +210,6 @@ export class TakePictureSharedMessageComponent
                   statusCode: 500,
                   level: 'error',
                 };
-
                 this.loggerService
                   .info(logger)
                   .pipe(takeUntil(this.destroy$))
@@ -208,4 +223,27 @@ export class TakePictureSharedMessageComponent
         });
     }
   }
+
+  // postMessage(cameraImage: any) {
+  //   console.log('cameraImage', cameraImage);
+  //   this.preferencesUserAuthenticateService
+  //     .getToken()
+  //     .pipe(takeUntil(this.destroy$))
+  //     .subscribe({
+  //       next: (response) => {
+  //         console.log('=====================>');
+  //         console.log(response);
+
+  //         const firstPublicationPostMessage =
+  //           response?.goldFreeTrialData.firstPublicationPostMessage;
+
+  //         console.log(firstPublicationPostMessage);
+
+  //         if (firstPublicationPostMessage === false) {
+  //           return this.router.navigate(['/home/user-first-publication-post']);
+  //         }
+  //         return this.router.navigate(['/home/send-message-success']);
+  //       },
+  //     });
+  // }
 }

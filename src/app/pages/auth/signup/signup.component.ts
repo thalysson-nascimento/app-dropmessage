@@ -162,7 +162,8 @@ export class SignupComponent implements OnInit {
     }
   }
 
-  goToAuthSign() {
+  async goToAuthSign() {
+    await this.googleAuthService.signOut();
     this.router.navigate(['auth/sign']); // Redireciona para a rota signup
     this.navigateBackUsingApp();
   }

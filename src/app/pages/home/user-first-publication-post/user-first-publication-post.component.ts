@@ -42,37 +42,34 @@ export class UserFirstPublicationPostComponent implements OnInit, OnDestroy {
   }
 
   sendDataUserFirstPublication() {
-    this.firstPublicationRegisterGoldFreeService
-      .firstPublication()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          this.preferencesUserAuthenticateService
-            .getToken()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-              next: (response) => {
-                console.log(response);
-                if (response) {
-                  const updatedData = {
-                    ...response,
-                    goldFreeTrialData: {
-                      ...response.goldFreeTrialData,
-                      firstPublicationPostMessage: true,
-                    },
-                  };
-                  this.preferencesUserAuthenticateService
-                    .savePreferences(updatedData)
-                    .subscribe();
-                }
-              },
-            });
-          this.isLoading = false;
-        },
-        error: (error) => {
-          this.isLoading = false;
-          this.errorRequest = true;
-        },
-      });
+    this.firstPublicationRegisterGoldFreeService.firstPublication().subscribe({
+      next: () => {
+        this.preferencesUserAuthenticateService
+          .getToken()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: (response) => {
+              console.log(response);
+              if (response) {
+                const updatedData = {
+                  ...response,
+                  goldFreeTrialData: {
+                    ...response.goldFreeTrialData,
+                    firstPublicationPostMessage: true,
+                  },
+                };
+                this.preferencesUserAuthenticateService
+                  .savePreferences(updatedData)
+                  .subscribe();
+              }
+            },
+          });
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorRequest = true;
+      },
+    });
   }
 }
