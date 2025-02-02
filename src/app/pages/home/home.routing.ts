@@ -160,6 +160,13 @@ export const HomeRouting: Routes = [
             (m) => m.UserWelcomeComponent
           ),
       },
+      {
+        path: 'user-first-publication-post',
+        loadComponent: () =>
+          import(
+            './user-first-publication-post/user-first-publication-post.component'
+          ).then((m) => m.UserFirstPublicationPostComponent),
+      },
     ],
   },
 ];
