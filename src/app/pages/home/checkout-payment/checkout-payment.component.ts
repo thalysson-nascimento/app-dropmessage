@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, untracked } from '@angular/core';
+import { Component, OnInit, ViewChild, untracked } from '@angular/core';
 import { Router } from '@angular/router';
 import { Stripe, StripeElements, loadStripe } from '@stripe/stripe-js';
+import { ErrorModalComponent } from '../../../shared/component/error-modal/error-modal.component';
 import { ErrorComponent } from '../../../shared/component/error/error.component';
 import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { Product } from '../../../shared/interface/product.interface';
@@ -10,7 +11,11 @@ import { SignalService } from '../../../shared/service/signal/signal.service';
 import { StripePublicKeyService } from '../../../shared/service/stripe-public-key/stripe-public-key.service';
 
 const CoreModule = [CommonModule];
-const SharedModule = [ErrorComponent, LoadShimmerComponent];
+const SharedModule = [
+  ErrorComponent,
+  LoadShimmerComponent,
+  ErrorModalComponent,
+];
 
 @Component({
   selector: 'app-checkout-payment',
@@ -26,6 +31,11 @@ export class CheckoutPaymentComponent implements OnInit {
   isLoading: boolean = true;
   errorRequest: boolean = false;
   clientSecret: string = '';
+  isDisabled: boolean = false;
+  isLoadingButton: boolean = false;
+  @ViewChild('modalErrorRequest') modalErrorRequest!: ErrorModalComponent;
+  typeErrorModal: 'success' | 'warn' | 'error' = 'success';
+  errorRequestMessage: string | undefined;
 
   constructor(
     private sessionPaymentIntentService: SessionPaymentIntentService,
@@ -101,20 +111,33 @@ export class CheckoutPaymentComponent implements OnInit {
     }
 
     try {
-      const { error } = await this.stripe.confirmPayment({
+      this.isDisabled = true;
+      this.isLoadingButton = true;
+
+      const { error, paymentIntent } = await this.stripe.confirmPayment({
         elements: this.elements,
-        confirmParams: {
-          return_url: 'http://localhost:4200/', // URL para redirecionar após o pagamento
-        },
+        confirmParams: {},
+        redirect: 'if_required', // Isso evita redirecionamentos desnecessários
       });
 
       if (error) {
-        console.error('Erro ao confirmar o pagamento:', error.message);
-        alert(`Erro: ${error.message}`);
+        this.isDisabled = false;
+        this.errorRequestMessage = error.message;
+        this.typeErrorModal = 'warn';
+        this.modalErrorRequest.openDialog();
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        this.router.navigateByUrl('/home/payment-success');
       } else {
-        console.log('Pagamento realizado com sucesso!');
+        this.isDisabled = false;
+        this.errorRequestMessage = 'Erro no pagamento';
+        this.typeErrorModal = 'warn';
+        this.modalErrorRequest.openDialog();
       }
     } catch (err) {
+      this.isDisabled = false;
+      this.errorRequestMessage = 'Erro no pagamento';
+      this.typeErrorModal = 'warn';
+      this.modalErrorRequest.openDialog();
       console.error('Erro ao processar pagamento:', err);
     }
   }

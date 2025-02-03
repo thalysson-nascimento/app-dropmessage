@@ -41,8 +41,16 @@
       <div class="contain-form">
         <div id="payment-element"></div>
 
-        <button (click)="handleExpressCheckout()" class="button-payment">
-          Confirmar Pagamento
+        <button
+          [disabled]="isDisabled"
+          (click)="handleExpressCheckout()"
+          class="button-payment"
+        >
+          @if (isLoadingButton) {
+          <p>processando</p>
+          }@else {
+          <span>Confirmar Pagamento</span>
+          }
         </button>
       </div>
 
@@ -72,3 +80,8 @@
     }
   </div>
 </div>
+
+<app-error-modal #modalErrorRequest [type]="typeErrorModal">
+  <p><strong>Ops, ocorreu um erro!</strong></p>
+  <p class="description-error">{{ errorRequestMessage }}</p>
+</app-error-modal>

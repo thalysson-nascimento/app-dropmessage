@@ -167,6 +167,13 @@ export const HomeRouting: Routes = [
             './user-first-publication-post/user-first-publication-post.component'
           ).then((m) => m.UserFirstPublicationPostComponent),
       },
+      {
+        path: 'payment-success',
+        loadComponent: () =>
+          import('./payment-success/payment-success.component').then(
+            (m) => m.PaymentSuccessComponent
+          ),
+      },
     ],
   },
 ];

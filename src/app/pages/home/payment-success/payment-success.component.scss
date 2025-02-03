@@ -1,0 +1,21 @@
+.contain {
+  width: 100%; // Ocupa 100% da largura da tela
+  height: 100vh; // Ocupa 100% da altura da tela
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-medium);
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+img {
+  width: 10rem;
+  height: 10rem;
+  margin-bottom: var(--space-large);
+}
+
+h1,
+p {
+  margin-bottom: var(--space-large);
+}
