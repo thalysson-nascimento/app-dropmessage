@@ -36,31 +36,41 @@
           }}
         </p>
 
-        @if (subscription?.data?.cancelAtPeriodEnd) {
+        @if (subscription?.data?.cancelAtPeriodEnd && subscription?.data?.status
+        !== 'trialing') {
         <p>
-          @if (subscription?.data?.status !== 'trialing') { Assinatura cancelada
-          em
+          Assinatura cancelada em:
           {{
             subscription?.data?.cancelAt
-              | date : "dd/MM/yyyy " + "'as'" + " HH:mm"
-          }}. }
-          <strong
-            >Seu período de ativação será até
+              | date : "dd/MM/yyyy " + "'ás'" + " HH:mm"
+          }}.
+        </p>
+        }
+        <p>
+          Seu período de ativação será até<strong>
             {{
-              subscription?.data?.currentPeriodEnd | date : "dd/MM/yyyy HH:mm"
+              subscription?.data?.currentPeriodEnd
+                | date : "dd/MM/yyyy " + "'ás'" + " HH:mm"
             }}</strong
           >
         </p>
-        }@else {
+        @if (!subscription?.data?.cancelAtPeriodEnd &&
+        subscription?.data?.status !== 'trialing' ) {
         <p class="next-payment">
-          próxima cobrança:
-          {{ subscription?.data?.currentPeriodEnd | date : "dd/MM/yyyy HH:mm" }}
+          Próxima cobrança:
+          {{
+            subscription?.data?.currentPeriodEnd
+              | date : "dd/MM/yyyy " + "'ás'" + " HH:mm"
+          }}
         </p>
         }
       </div>
       <div
         class="contain-button"
-        *ngIf="!subscription?.data?.cancelAtPeriodEnd"
+        *ngIf="
+          !subscription?.data?.cancelAtPeriodEnd &&
+          subscription?.data?.status !== 'trialing'
+        "
       >
         <button
           appButtonStyle

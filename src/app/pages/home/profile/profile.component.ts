@@ -236,6 +236,8 @@ export class ProfileComponent implements OnInit {
           this.planSubscription = true;
           this.dataSubscription = response;
 
+          console.log('=====>', this.dataSubscription);
+
           if (!response.data?.cancelAtPeriodEnd) {
             this.labelTag = 'assinatura ativa';
           } else {
