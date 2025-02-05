@@ -27,6 +27,7 @@ import { LikePostMessageService } from '../../../shared/service/like-post-messag
 import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 import { PostMessageService } from '../../../shared/service/post/post.service';
+import { UnlikePostMessageService } from '../../../shared/service/unlike-post-message/unlike-post-message.service';
 
 register();
 
@@ -58,6 +59,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   private likeButtonClicked: boolean = false;
   private destroy$: Subject<void> = new Subject<void>();
   likePostMessageQueue = new Subject<string>();
+  unlikePostMessageQueue = new Subject<string>();
   dataAvatar!: AvatarSuccess;
   backButtonListener!: PluginListenerHandle;
   displayImageUrl: string | null = null;
@@ -73,11 +75,13 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object,
     private cacheAvatarService: CacheAvatarService,
     private likePostMessageService: LikePostMessageService,
+    private unlikePostMessageService: UnlikePostMessageService,
     private loggerService: LoggerService
   ) {}
 
   ngOnInit(): void {
     this.handleLikePostMessageQueue();
+    this.handleUnlikePostMessageQueue();
     this.navigateBackUsingApp();
 
     this.textInformationSystemUnavailable =
@@ -424,14 +428,13 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
           this.likePostMessageService.likePostMessage(postId).pipe(
             tap({
               next: (response) => {
-                console.log('Resposta do likePostMessage:', response);
                 const logger: TrackAction = {
                   pageView: this.pageView,
                   category: 'user_post_message',
                   event: 'click',
                   message: `like_post_message:${response.postId}`,
                   statusCode: 200,
-                  level: 'error',
+                  level: 'info',
                 };
 
                 this.loggerService
@@ -444,7 +447,51 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
                   pageView: this.pageView,
                   category: 'user_post_message',
                   event: 'view',
-                  message: error.message,
+                  message: `like_post_message:${error.message}`,
+                  statusCode: error.status,
+                  level: 'error',
+                };
+
+                this.loggerService
+                  .info(logger)
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe();
+              },
+            })
+          )
+        )
+      )
+      .subscribe();
+  }
+
+  handleUnlikePostMessageQueue() {
+    this.unlikePostMessageQueue
+      .pipe(
+        tap((postId) => console.log('Post ID recebido na fila:', postId)),
+        concatMap((postId) =>
+          this.unlikePostMessageService.unlikePostMessage(postId).pipe(
+            tap({
+              next: (response) => {
+                const logger: TrackAction = {
+                  pageView: this.pageView,
+                  category: 'user_post_message',
+                  event: 'click',
+                  message: `unlike_post_message:${response.postId}`,
+                  statusCode: 200,
+                  level: 'info',
+                };
+
+                this.loggerService
+                  .info(logger)
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe();
+              },
+              error: (error) => {
+                const logger: TrackAction = {
+                  pageView: this.pageView,
+                  category: 'user_post_message',
+                  event: 'view',
+                  message: `unlike_post_message:${error.message}`,
                   statusCode: error.status,
                   level: 'error',
                 };
@@ -475,6 +522,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   dislikePostMessage(post: Post) {
     console.log('Descurtiu o post:', post);
+    this.unlikePostMessageQueue.next(post.id);
   }
 
   openBottomSheet(): void {
