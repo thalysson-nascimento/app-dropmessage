@@ -30,6 +30,15 @@ const config: CapacitorConfig = {
         '999388705991-k8nj0pm920domilt0mtoedfqefgqvf0f.apps.googleusercontent.com', // Web Client ID
       forceCodeForRefreshToken: true,
     },
+    SplashScreen: {
+      launchShowDuration: 2000, // Evita que a splash screen seja oculta automaticamente
+      backgroundColor: '#ffffff',
+      showSpinner: false,
+      androidSpinnerStyle: 'small',
+      iosSpinnerStyle: 'small',
+      splashFullScreen: true,
+      splashImmersive: true,
+    },
   },
 };
 
