@@ -74,9 +74,33 @@
               }}
             </p>
             <ul class="allowed-features">
-              <li>
+              <li *ngIf="subscription.metadata?.ads">
                 <i class="fi fi-rr-assept-document"></i>
-                <p class="item">Beneficio 1</p>
+                <p class="item">{{ subscription.metadata.ads }}</p>
+              </li>
+              <li *ngIf="subscription.metadata?.likes">
+                <i class="fi fi-rr-assept-document"></i>
+                <p class="item">{{ subscription.metadata.likes }}</p>
+              </li>
+              <li *ngIf="subscription.metadata?.location">
+                <i class="fi fi-rr-assept-document"></i>
+                <p class="item">{{ subscription.metadata.location }}</p>
+              </li>
+              <li *ngIf="subscription.metadata?.view">
+                <i class="fi fi-rr-assept-document"></i>
+                <p class="item">{{ subscription.metadata.view }}</p>
+              </li>
+              <li *ngIf="subscription.metadata?.['location-global']">
+                <i class="fi fi-rr-assept-document"></i>
+                <p class="item">
+                  {{ subscription.metadata["location-global"] }}
+                </p>
+              </li>
+              <li *ngIf="subscription.metadata?.['assistant-ia']">
+                <i class="fi fi-rr-assept-document"></i>
+                <p class="item">
+                  {{ subscription.metadata["assistant-ia"] }}
+                </p>
               </li>
             </ul>
           </div>

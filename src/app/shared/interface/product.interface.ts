@@ -10,8 +10,12 @@ export interface Product {
   livemode: boolean;
   marketing_features: any[];
   metadata: {
-    ads: string;
-    likes: string;
+    ads?: string;
+    likes?: string;
+    location?: string;
+    view?: string;
+    'location-global'?: string;
+    'assistant-ia'?: string;
   };
   name: string;
   package_dimensions: null;

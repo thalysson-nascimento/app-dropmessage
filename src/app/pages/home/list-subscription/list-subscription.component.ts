@@ -96,6 +96,7 @@ export class ListSubscriptionComponent implements OnInit {
   loadListSubscription() {
     this.listSubscriptionService.subscriptions().subscribe({
       next: (response) => {
+        console.log(response);
         this.isLoading = false;
         this.listSubscription = response;
       },
