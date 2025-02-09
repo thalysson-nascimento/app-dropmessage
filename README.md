@@ -61,3 +61,11 @@ Por fim, você pode usar o zipalign (ferramenta do Android SDK) para otimizar o 
 zipalign -v 4 app-release.aab app-release-aligned.aab
 
 sudo kill -9 `sudo lsof -t -i:4200`
+
+executar o emulador
+emulator -avd android -gpu host -memory 1024 -no-snapshot -skin 412x915
+
+npx capacitor-assets generate
+
+verificar a chave interna
+keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android
