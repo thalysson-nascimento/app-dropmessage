@@ -1,13 +1,13 @@
 import { NgFor, NgIf } from '@angular/common';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { UserPostMessageElement } from '../../../shared/interface/user-post-message.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
-import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 import { UserPostMessageService } from '../../../shared/service/user-post-message/user-post-message.service';
 
-const SahredComponents = [SystemUnavailableComponent];
+const SahredComponents = [SystemUnavailableComponent, LoadShimmerComponent];
 
 const CoreModule = [NgIf, NgFor];
 
@@ -18,7 +18,7 @@ const CoreModule = [NgIf, NgFor];
   standalone: true,
   imports: [SahredComponents, CoreModule],
 })
-export class UserPostMessageComponent implements OnInit, AfterViewInit {
+export class UserPostMessageComponent implements OnInit {
   isLoading: boolean = true;
   randomHeights = ['15rem'];
   listPostMessage!: UserPostMessageElement[];
@@ -28,22 +28,12 @@ export class UserPostMessageComponent implements OnInit, AfterViewInit {
   constructor(
     private userPostMessageService: UserPostMessageService,
     private router: Router,
-    private cacheAvatarService: CacheAvatarService,
-    private lottieAnimationIconService: LottieAnimationIconService
+    private cacheAvatarService: CacheAvatarService
   ) {}
 
   ngOnInit() {
     this.loadUserName();
     this.loadUserPostMessage();
-  }
-
-  ngAfterViewInit(): void {
-    this.lottieAnimationIconService.loadLottieAnimation({
-      pathIconAnimation: 'loading.json',
-      idElement: 'lottie-icon-is-loading',
-      loop: true,
-      autoplay: true,
-    });
   }
 
   getRandomHeight(): string {

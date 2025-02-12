@@ -11,6 +11,7 @@ import {
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { Subject, takeUntil } from 'rxjs';
+import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
@@ -30,6 +31,7 @@ const SharedComponents = [
   ListStyleDirective,
   ButtonStyleDirective,
   ModalComponent,
+  LoadShimmerComponent,
 ];
 const CoreModule = [NgIf];
 
@@ -72,12 +74,12 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.lottieAnimationIconService.loadLottieAnimation({
-      pathIconAnimation: 'loading.json',
-      idElement: 'lottie-icon-is-loading',
-      loop: true,
-      autoplay: true,
-    });
+    // this.lottieAnimationIconService.loadLottieAnimation({
+    //   pathIconAnimation: 'loading.json',
+    //   idElement: 'lottie-icon-is-loading',
+    //   loop: true,
+    //   autoplay: true,
+    // });
   }
 
   navigateBackUsingApp() {

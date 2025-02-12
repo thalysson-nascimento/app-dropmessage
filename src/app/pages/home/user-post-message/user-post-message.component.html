@@ -13,8 +13,18 @@
     <p class="subtitle">{{ userName }}</p>
   </div>
 
-  <div class="contain-loading" *ngIf="isLoading">
-    <div id="lottie-icon-is-loading" class="lottie-icon-no-match"></div>
+  <div *ngIf="isLoading">
+    <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+
+    <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+
+    <div class="custumer-shimmer">
+      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+    </div>
+
+    <div class="custumer-shimmer-80">
+      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+    </div>
   </div>
 
   <div class="contain-account-post">
