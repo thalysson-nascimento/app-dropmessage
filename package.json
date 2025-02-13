@@ -1,6 +1,6 @@
 {
   "name": "app-dropmessage",
-  "version": "0.0.0",
+  "version": "1.168.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

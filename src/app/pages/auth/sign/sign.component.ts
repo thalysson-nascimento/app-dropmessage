@@ -181,31 +181,31 @@ export class SignComponent implements OnInit, OnDestroy {
 
   async userAuthenticatorWithGoogle() {
     try {
-      const token = (await this.googleAuthService.signInWithGoogle())
-        .authentication.idToken;
-      // const token =
-      //   'eyJhbGciOiJSUzI1NiIsImtpZCI6ImZhMDcyZjc1Nzg0NjQyNjE1MDg3YzcxODJjMTAxMzQxZTE4ZjdhM2EiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI5OTkzODg3MDU5OTEtcjY4MzZhMDkxbmczZDU3N2ZjbXZkNzA3ZzY1dHVjMWQuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI5OTkzODg3MDU5OTEtazhuajBwbTkyMGRvbWlsdDBtdG9lZGZxZWZncXZmMGYuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTEzODM1MjMwNTA1ODk0ODM0MjIiLCJlbWFpbCI6InRlc3RlYnJ0ZXN0ZTBAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJUZXN0ZSBiciBUZXN0ZSIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NJMm0ybjBqdTBmeDBpbF91NHRxYmxncGFDVjRRR2FvNkdkNmc3ZXRBUk1QR2lBNmc9czk2LWMiLCJnaXZlbl9uYW1lIjoiVGVzdGUgYnIiLCJmYW1pbHlfbmFtZSI6IlRlc3RlIiwiaWF0IjoxNzM4NjczNjgzLCJleHAiOjE3Mzg2NzcyODN9.iKkKcnhyrvsiLqbfAogQ3O8ocH7SeqNqf7Hxb-IrkmOZ5C-hSOi89P3N6fcTbK2Jgb2ApY1hdGkNjvH9jqX_ygUkVBQ9kEtTBec6G50W70AY24o6lTbXc7liWgBWHN4mdeGq_TR9iP8FpygaczVPq5HNIbt2TXPvh_x2lDpWbZ7j8EHhVO0RKSNjsIfJUfqvrQRDSVzr-uJRBr55AQT0Snpw1FrouFvSs_WM1dck7mCO1NOvvJnccSTIY060DZyP_YIuKcG4XIUNsSJ4KnyHPuzyeg7eg38BM2MRf079-DvB2zRMF89FM33YgzkmZkqc5MOf5PzqGp4zCCQbTOVA5A';
-      // this.testeToken = token.authentication.idToken;
-      if (token) {
+      const token = await this.googleAuthService.signInWithGoogle();
+      if (token.authentication.idToken) {
         this.isLoadingButtonGoogleOAuth = true;
-        this.signWithGoogleService.sign(token).subscribe({
-          next: (response) => {
-            this.isLoadingButtonGoogleOAuth = false;
-            this.tokenStorageSecurityRequestService.saveToken(response.token);
-            this.preferencesUserAuthenticateService.savePreferences(response);
-            this.cacheAvatarService.setAvatarCachePreferences(response.avatar);
-            this.userHashPublicService.setUserHashPublic(
-              response.userVerificationData.userHashPublic
-            );
-            this.router.navigateByUrl('home/post-messages');
-          },
-          error: (errorResponse: any) => {
-            this.typeErrorModal = 'warn';
-            this.errorMessage = errorResponse.error.message;
-            this.isLoadingButtonGoogleOAuth = false;
-            this.modalErrorRequest.openDialog();
-          },
-        });
+        this.signWithGoogleService
+          .sign(token.authentication.idToken)
+          .subscribe({
+            next: (response) => {
+              this.isLoadingButtonGoogleOAuth = false;
+              this.tokenStorageSecurityRequestService.saveToken(response.token);
+              this.preferencesUserAuthenticateService.savePreferences(response);
+              this.cacheAvatarService.setAvatarCachePreferences(
+                response.avatar
+              );
+              this.userHashPublicService.setUserHashPublic(
+                response.userVerificationData.userHashPublic
+              );
+              this.router.navigateByUrl('home/post-messages');
+            },
+            error: (errorResponse: any) => {
+              this.typeErrorModal = 'warn';
+              this.errorMessage = errorResponse.error.message;
+              this.isLoadingButtonGoogleOAuth = false;
+              this.modalErrorRequest.openDialog();
+            },
+          });
       }
     } catch (error) {}
   }
