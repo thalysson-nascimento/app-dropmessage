@@ -115,9 +115,8 @@ export class UserLocationComponent implements OnInit, OnDestroy {
         .getGeolocation(latitude, longitude)
         .subscribe({
           next: (response) => {
-            console.log('===>', response);
             this.state = response.results[0].components.state;
-            this.city = response.results[0].components.city;
+            this.city = response.results[0].components._normalized_city;
             this.stateCode = response.results[0].components.state_code;
             this.continent = response.results[0].components.continent;
             this.country = response.results[0].components.country;
