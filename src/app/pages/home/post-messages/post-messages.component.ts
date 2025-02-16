@@ -254,6 +254,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   loadPostMessage() {
     this.postMessageService.listPost().subscribe({
       next: (response) => {
+        console.log('lista de posts', response);
+
         this.totalPosts += response.data.length;
         this.posts = [...this.posts, ...response.data];
         this.isLoaded = true;
@@ -428,11 +430,21 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
           this.likePostMessageService.likePostMessage(postId).pipe(
             tap({
               next: (response) => {
+                if (response.mustVideoWatch) {
+                  this.goToAdMobVideoReward();
+                }
+
+                if (response.awaitLikePostMessage) {
+                  this.router.navigate(['home/limit-like-post-message'], {
+                    queryParams: { message: response.message },
+                  });
+                }
+
                 const logger: TrackAction = {
                   pageView: this.pageView,
                   category: 'user_post_message',
                   event: 'click',
-                  message: `like_post_message:${response.postId}`,
+                  message: `like_post_message:${postId}`,
                   statusCode: 200,
                   level: 'info',
                 };
@@ -557,7 +569,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   tryAgainLoadingPostMessage() {
-    console.log('botão clicado');
     this.showSystemUnavailable = false;
     this.isLoaded = false;
     this.loadPostMessage();
