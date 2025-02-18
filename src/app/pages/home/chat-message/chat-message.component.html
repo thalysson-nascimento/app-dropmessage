@@ -138,6 +138,8 @@
               type="text"
               placeholder="Digite sua mensagem"
               class="input-field"
+              (focus)="isInputFocused = true"
+              (blur)="isInputFocused = false"
             />
             <button
               id="button-send-message"
@@ -149,7 +151,7 @@
             </button>
           </form>
 
-          <div class="contain-option-tips">
+          <div class="contain-option-tips" *ngIf="!isInputFocused">
             <button class="button-option-tips" (click)="openModalTips()">
               <img src="assets/icon-static/icon-ia-lightbulb.svg" alt="" />
             </button>

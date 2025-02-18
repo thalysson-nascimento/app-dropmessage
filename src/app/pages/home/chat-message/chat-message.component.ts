@@ -63,6 +63,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
   sendMessageFormGroup!: FormGroup;
   private unsubscribe$ = new Subject<void>();
   tips: string[] = [];
+  isInputFocused: boolean = false;
 
   @ViewChild('containMessages') containMessages?: ElementRef;
   @ViewChild('generateModalTips') generateModalTips!: ModalComponent;
