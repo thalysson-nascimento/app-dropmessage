@@ -83,20 +83,18 @@ export class TakePictureSharedMessageComponent
   async checkCameraPermission() {
     const permission = await Camera.checkPermissions();
 
-    if (permission.camera === 'granted') {
-      this.cameraAllowed = true;
-      return;
-    }
+    if (permission.camera !== 'granted') {
+      const permissionRequest = await Camera.requestPermissions();
 
-    const permissionRequest = await Camera.requestPermissions({
-      permissions: ['camera'],
-    });
-
-    if (permissionRequest.camera === 'granted') {
-      this.cameraAllowed = true;
+      if (permissionRequest.camera === 'granted') {
+        this.cameraAllowed = true;
+        return;
+      } else {
+        this.cameraAllowed = false;
+        await this.showCameraPermissionModal();
+      }
     } else {
-      this.cameraAllowed = false;
-      await this.showCameraPermissionModal();
+      this.cameraAllowed = true;
     }
   }
 
@@ -135,9 +133,9 @@ export class TakePictureSharedMessageComponent
       this.cameraImage = image.webPath || null;
     }
   }
-  async requestCameraPermissionAgain() {
-    await this.checkCameraPermission();
-  }
+  // async requestCameraPermissionAgain() {
+  //   await this.checkCameraPermission();
+  // }
 
   goToPostList() {
     this.router.navigate(['/home']);
@@ -155,9 +153,16 @@ export class TakePictureSharedMessageComponent
     );
   }
 
-  postMessage(cameraImage: any) {
+  async postMessage(cameraImage: any) {
     this.isLoadingButton = true;
     this.disabledButton = true;
+
+    const permission = await Camera.checkPermissions();
+    if (permission.camera !== 'granted') {
+      await this.checkCameraPermission();
+      return;
+    }
+
     if (cameraImage && this.cameraAllowed) {
       fetch(cameraImage)
         .then((res) => res.blob())
@@ -187,14 +192,16 @@ export class TakePictureSharedMessageComponent
                   .pipe(takeUntil(this.destroy$))
                   .subscribe({
                     next: (response) => {
+                      console.log(response?.goldFreeTrialData);
                       const firstPublicationPostMessage =
                         response?.goldFreeTrialData.firstPublicationPostMessage;
 
-                      if (!firstPublicationPostMessage) {
+                      if (firstPublicationPostMessage === false) {
                         return this.router.navigate([
                           '/home/user-first-publication-post',
                         ]);
                       }
+
                       return this.router.navigate([
                         '/home/send-message-success',
                       ]);
@@ -223,27 +230,4 @@ export class TakePictureSharedMessageComponent
         });
     }
   }
-
-  // postMessage(cameraImage: any) {
-  //   console.log('cameraImage', cameraImage);
-  //   this.preferencesUserAuthenticateService
-  //     .getToken()
-  //     .pipe(takeUntil(this.destroy$))
-  //     .subscribe({
-  //       next: (response) => {
-  //         console.log('=====================>');
-  //         console.log(response);
-
-  //         const firstPublicationPostMessage =
-  //           response?.goldFreeTrialData.firstPublicationPostMessage;
-
-  //         console.log(firstPublicationPostMessage);
-
-  //         if (firstPublicationPostMessage === false) {
-  //           return this.router.navigate(['/home/user-first-publication-post']);
-  //         }
-  //         return this.router.navigate(['/home/send-message-success']);
-  //       },
-  //     });
-  // }
 }
