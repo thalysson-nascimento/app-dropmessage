@@ -124,6 +124,8 @@ export class SignComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$)) // Garante que a assinatura será encerrada
         .subscribe({
           next: (response) => {
+            console.log('===>', response);
+
             this.isLoadingButton = false;
             this.tokenStorageSecurityRequestService.saveToken(response.token);
             this.preferencesUserAuthenticateService.savePreferences(response);
