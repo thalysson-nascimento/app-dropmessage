@@ -181,6 +181,11 @@ export const HomeRouting: Routes = [
             './limit-like-post-message/limit-like-post-message.component'
           ).then((m) => m.LimitLikePostMessageComponent),
       },
+      {
+        path: 'support',
+        loadComponent: () =>
+          import('./support/support.component').then((m) => m.SupportComponent),
+      },
     ],
   },
 ];

@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  padding: 1rem;
+}
+
+.contain-input {
+  margin-top: var(--space-large);
+  flex: 1;
+  padding: 1rem;
+}
+
+.input-custom {
+  height: 200px;
+}

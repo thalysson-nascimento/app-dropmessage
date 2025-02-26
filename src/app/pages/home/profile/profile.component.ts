@@ -7,7 +7,6 @@ import { ActiveSignatureComponent } from '../../../shared/component/active-signa
 import { CardSubscriptionComponent } from '../../../shared/component/card-subscription/card-subscription.component';
 import { ErrorComponent } from '../../../shared/component/error/error.component';
 import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
-import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { ActiveSubscription } from '../../../shared/interface/active-subscription.interface';
 import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
@@ -22,7 +21,6 @@ import { UserHashPublicService } from '../../../shared/service/user-hash-public/
 
 const CoreModule = [CommonModule];
 const SharedComponent = [
-  ButtonStyleDirective,
   CardSubscriptionComponent,
   LoadShimmerComponent,
   ActiveSignatureComponent,
@@ -202,6 +200,22 @@ export class ProfileComponent implements OnInit {
     this.loggerService.info(logger).pipe(takeUntil(this.destroy$)).subscribe();
 
     this.router.navigateByUrl('home/user-data');
+  }
+
+  goToSupport() {
+    const logger: TrackAction = {
+      pageView: this.pageView,
+      category: 'profile:support',
+      event: 'click',
+      label: 'button:support',
+      message: 'navigation support',
+      statusCode: 200,
+      level: 'info',
+    };
+
+    this.loggerService.info(logger).pipe(takeUntil(this.destroy$)).subscribe();
+
+    this.router.navigateByUrl('home/support');
   }
 
   goToListChat() {

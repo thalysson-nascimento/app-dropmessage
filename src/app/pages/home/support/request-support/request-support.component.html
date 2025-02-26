@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="header">
+    <img
+      src="assets/icon-static/arrow-left.svg"
+      style="width: 24px; height: 24px"
+      alt=""
+      (click)="goToSupport()"
+    />
+  </div>
+  <div>
+    <div class="contain-input">
+      <textarea
+        type="text"
+        placeholder="Digite sua descrição aqui"
+        class="input-custom"
+        appInputCustom
+        maxlength="200"
+        oninput="document.getElementById('charCounter').textContent = this.value.length"
+      ></textarea>
+
+      <div class="contain-character-counter">
+        <span class="character-counter">
+          <output id="charCounter">0</output>/200
+        </span>
+      </div>
+    </div>
+
+    <button appButtonStyle [buttonType]="'secondary'" (click)="goToSupport()">
+      Abrir chamado
+    </button>
+  </div>
+</div>

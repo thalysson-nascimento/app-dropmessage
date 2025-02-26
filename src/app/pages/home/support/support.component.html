@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="header">
+    <img
+      src="assets/icon-static/arrow-left.svg"
+      style="width: 24px; height: 24px"
+      alt=""
+      (click)="goToProfile()"
+    />
+  </div>
+  <div>
+    <ul>
+      <li class="action-timer" (click)="goToRequestSupport()">
+        <div class="contain-icon-and-description">
+          <i class="fi fi-tr-user-headset"></i>
+          <div>
+            <p>Solicitar suporte</p>
+            <span class="drescription-timer">para duvidas abra um suporte</span>
+          </div>
+        </div>
+        <img src="assets/icon-static/arrow-right.svg" alt="" />
+      </li>
+      <li class="action-timer" (click)="goToListSupport()">
+        <div class="contain-icon-and-description">
+          <i class="fi fi-tr-list-check"></i>
+          <div>
+            <p>Suportes registrados</p>
+            <span class="drescription-timer"
+              >veja todos os suportes solicitados por você</span
+            >
+          </div>
+        </div>
+        <img src="assets/icon-static/arrow-right.svg" alt="" />
+      </li>
+    </ul>
+  </div>
+</div>
