@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
+import { Device } from '@capacitor/device';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar, Style } from '@capacitor/status-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 import { register } from 'swiper/element/bundle';
+import { getTranslation } from './app.config';
 register();
 
 @Component({
@@ -17,9 +20,18 @@ register();
 export class AppComponent implements OnInit {
   title = 'DatingMatch';
 
-  constructor() {
+  constructor(private translate: TranslateService) {
     // this.showSplashscree();
     this.configureStatusBar();
+    this.initializationTranslateApp();
+  }
+
+  async initializationTranslateApp() {
+    const info = await Device.getLanguageCode();
+    const deviceLang = info.value.split('-')[0];
+    const defaultLang = deviceLang.match(/en|pt/) ? deviceLang : 'pt';
+    this.translate.setTranslation(defaultLang, getTranslation(defaultLang));
+    this.translate.use(defaultLang);
   }
 
   async ngOnInit() {

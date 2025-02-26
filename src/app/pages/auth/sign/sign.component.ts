@@ -12,8 +12,10 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { PluginListenerHandle } from '@capacitor/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { I18nTranslationsBase } from '../../../../assets/i18n/i18n-translations.base.interface';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
 import { ErrorModalComponent } from '../../../shared/component/error-modal/error-modal.component';
 import { LoadingComponent } from '../../../shared/component/loading/loading.component';
@@ -41,7 +43,12 @@ const SharedComponents = [
   ErrorModalComponent,
 ];
 
-const CoreModule = [ReactiveFormsModule, CommonModule, FormsModule];
+const CoreModule = [
+  ReactiveFormsModule,
+  CommonModule,
+  FormsModule,
+  TranslateModule,
+];
 
 @Component({
   selector: 'app-sign',
@@ -65,6 +72,7 @@ export class SignComponent implements OnInit, OnDestroy {
   @ViewChild('modalErrorRequest') modalErrorRequest!: ErrorModalComponent;
   typeErrorModal: 'success' | 'warn' | 'error' = 'success';
   testeToken: string = '';
+  elementTranslation!: I18nTranslationsBase;
 
   constructor(
     private router: Router,
