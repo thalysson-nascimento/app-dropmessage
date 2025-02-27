@@ -15,6 +15,7 @@ import {
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
+import { TranslateModule } from '@ngx-translate/core';
 import { currentEnvironment } from '../../../../environment.config';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
 import { ErrorModalComponent } from '../../../shared/component/error-modal/error-modal.component';
@@ -34,7 +35,7 @@ const SharedComponents = [
   ErrorModalComponent,
 ];
 
-const CoreModule = [ReactiveFormsModule, CommonModule];
+const CoreModule = [ReactiveFormsModule, CommonModule, TranslateModule];
 
 @Component({
   selector: 'app-signup',
@@ -68,7 +69,6 @@ export class SignupComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.baseUrl);
     this.createAccountFormBuilder();
   }
 
@@ -144,7 +144,6 @@ export class SignupComponent implements OnInit {
 
       this.createAccountService.createAccount(dataCreateAccountUser).subscribe({
         next: (response) => {
-          console.log(response);
           this.isLoadingButton = false;
           this.buttonDisalbled = false;
           this.router.navigateByUrl('auth/information-user-registred');
@@ -156,7 +155,6 @@ export class SignupComponent implements OnInit {
             'Ops, ocorreu um erro.',
             responseError.error.message.message
           );
-          console.log(responseError);
         },
       });
     }

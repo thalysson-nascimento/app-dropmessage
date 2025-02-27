@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { ButtonStyleDirective } from '../../directives/button-style/button-style.directive';
 
 const SharedComponents = [ButtonStyleDirective];
@@ -8,7 +9,7 @@ const SharedComponents = [ButtonStyleDirective];
   templateUrl: './card-subscription.component.html',
   styleUrls: ['./card-subscription.component.scss'],
   standalone: true,
-  imports: [...SharedComponents],
+  imports: [...SharedComponents, TranslateModule],
 })
 export class CardSubscriptionComponent implements OnInit {
   @Output() onClickButton = new EventEmitter<void>();

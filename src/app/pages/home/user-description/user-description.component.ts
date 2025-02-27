@@ -152,7 +152,6 @@ export class UserDescriptionComponent implements OnInit, OnDestroy {
             });
         },
         error: (error) => {
-          console.log(error);
           this.errorRequest = true;
           this.showUserDescriptionComplete = false;
           this.showAlertUserDescription = false;

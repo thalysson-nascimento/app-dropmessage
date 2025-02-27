@@ -49,7 +49,6 @@ export class UserFirstPublicationPostComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: (response) => {
-              console.log(response);
               if (response) {
                 const updatedData = {
                   ...response,

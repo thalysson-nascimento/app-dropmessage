@@ -21,10 +21,6 @@
     </div>
   </div>
 
-  <!-- <div class="contain-button">
-    <button appButtonStyle [buttonType]="'secondary'">Atualizar foto</button>
-  </div> -->
-
   @if (isLoadingCardSubscription) {
   <div class="contain-load-shimmer-card">
     <app-load-shimmer [height]="'3rem'"></app-load-shimmer>
@@ -57,8 +53,10 @@
       <div class="contain-icon-and-description">
         <i class="fi fi-tr-circle-user"></i>
         <div>
-          <p>Perfil</p>
-          <span class="drescription-timer">veja os dados do seu perfil.</span>
+          <p>{{ "text.profile" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionProfile" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
@@ -67,10 +65,10 @@
       <div class="contain-icon-and-description">
         <i class="fi fi-tr-copy-image"></i>
         <div>
-          <p>Posts compartilhados</p>
-          <span class="drescription-timer"
-            >veja todos os seus posts compartilhados.</span
-          >
+          <p>{{ "text.sharedPosts" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionSharedPosts" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
@@ -79,8 +77,10 @@
       <div class="contain-icon-and-description">
         <i class="fi fi-tr-bell-ring"></i>
         <div>
-          <p>Notificação</p>
-          <span class="drescription-timer">acompanhe suas notificações</span>
+          <p>{{ "text.notifications" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionNotifications" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
@@ -89,10 +89,10 @@
       <div class="contain-icon-and-description">
         <i class="fi fi-tr-comment-dots"></i>
         <div>
-          <p>Chat</p>
-          <span class="drescription-timer"
-            >faça novas amizades com os matches</span
-          >
+          <p>{{ "text.chat" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionChat" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
@@ -101,10 +101,10 @@
       <div class="contain-icon-and-description">
         <i class="fi fi-tr-password-email"></i>
         <div>
-          <p>Politica de privacidade</p>
-          <span class="drescription-timer"
-            >veja como a gente protege as suas informações.</span
-          >
+          <p>{{ "text.privacyPolices" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionPrivacyPolices" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
@@ -113,8 +113,10 @@
       <div class="contain-icon-and-description">
         <i class="fi fi-ts-sign-out-alt"></i>
         <div>
-          <p>Sair</p>
-          <span class="drescription-timer">encerrar sessão</span>
+          <p>{{ "text.logout" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionLogout" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />

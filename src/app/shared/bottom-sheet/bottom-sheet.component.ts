@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { TrackAction } from '../interface/track-action.interface';
 import { ExpirationTimerService } from '../service/expiration-timer/expiration-timer.service';
@@ -17,6 +18,7 @@ import { LoggerService } from '../service/logger/logger.service';
   standalone: true,
   styleUrl: './bottom-sheet.component.scss',
   templateUrl: './bottom-sheet.component.html',
+  imports: [TranslateModule],
 })
 export class BottomSheetComponent {
   private destroy$: Subject<void> = new Subject<void>();

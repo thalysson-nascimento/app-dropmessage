@@ -1,0 +1,75 @@
+export interface I18nTranslationsBase {
+  button: {
+    accessWithGoogle: string;
+    tryAgain: string;
+    signIn: string;
+    createAccountWithGoogle: string;
+    buttonCreateAccount: string;
+    touchWhatch: string;
+    subscribePlan: string;
+    deleteAccount: string;
+    takePhoto: string;
+    sharedPost: string;
+    selectFromGallery: string;
+  };
+  input: {
+    placeholder: {
+      login: string;
+      password: string;
+      name: string;
+      email: string;
+    };
+  };
+  text: {
+    titleSign: string;
+    or: string;
+    linkDoNotAccount: string;
+    titleErro: string;
+    descriptionError: string;
+    titleCreateAccount: string;
+    registrationAgree: string;
+    politicsPrivacy: string;
+    noNewFriends: string;
+    tryAgainLater: string;
+    likeMoreLikes: string;
+    watchVideoReward: string;
+    becomeSubscriber: string;
+    personalizedBenefits: string;
+    explorePremium: string;
+    expandExperience: string;
+    unlockNewFeatures: string;
+    profile: string;
+    sharedPosts: string;
+    notifications: string;
+    chat: string;
+    privacyPolices: string;
+    logout: string;
+    descriptionProfile: string;
+    descriptionSharedPosts: string;
+    descriptionNotifications: string;
+    descriptionChat: string;
+    descriptionPrivacyPolices: string;
+    descriptionLogout: string;
+    personalData: string;
+    name: string;
+    email: string;
+    dateOfBirth: string;
+    gender: string;
+    interests: string;
+    city: string;
+    state: string;
+    titleConfirmDeleteAccount: string;
+    descriptionConfirmDeleteAccount: string;
+    noNotifications: string;
+    noChat: string;
+    chooseTimer: string;
+    thirtyMinutes: string;
+    sixtyMinutes: string;
+    oneDay: string;
+    descriptionThirtyMinutes: string;
+    descriptionSixtyMinutes: string;
+    descriptionOneDay: string;
+    descriptionTakePhoto: string;
+    descriptionFromGrallery: string;
+  };
+}

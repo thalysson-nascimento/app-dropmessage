@@ -65,7 +65,6 @@ export class TesteComponent implements OnInit, OnDestroy, AfterViewInit {
       .onNewPostMessage()
       .subscribe({
         next: (data) => {
-          console.log(data);
           this.posts.push(data);
           this.cdRef.detectChanges();
           // this.posts = [...this.posts, data];
@@ -79,7 +78,6 @@ export class TesteComponent implements OnInit, OnDestroy, AfterViewInit {
       .onPostExpired()
       .subscribe({
         next: (expiredPostId: string) => {
-          console.log('removendo port com o ID: ', expiredPostId);
           this.posts = this.posts.filter(
             (post: Post) => post.id !== expiredPostId
           );

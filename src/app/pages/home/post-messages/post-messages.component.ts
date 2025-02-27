@@ -13,6 +13,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { PluginListenerHandle } from '@capacitor/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject, concatMap, takeUntil, tap } from 'rxjs';
 import { register } from 'swiper/element/bundle';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
@@ -40,7 +41,7 @@ const SharedComponent = [
 @Component({
   selector: 'app-post-messages',
   standalone: true,
-  imports: [NgFor, NgIf, ...SharedComponent],
+  imports: [NgFor, NgIf, ...SharedComponent, TranslateModule],
   templateUrl: './post-messages.component.html',
   styleUrl: './post-messages.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -130,7 +131,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       this.mySwiper.off('reachEnd');
       this.mySwiper.destroy(true, true);
       this.mySwiper = null;
-      console.log('Swiper destruído');
     }
   }
 
@@ -232,7 +232,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
           // Evento: chegou no último slide
           this.mySwiper.on('reachEnd', () => {
             const activeIndex = this.mySwiper.activeIndex;
-            console.log('Chegou no último slide:', activeIndex);
             if (activeIndex === 0) {
               this.showLikeButton = false;
             }
@@ -254,8 +253,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   loadPostMessage() {
     this.postMessageService.listPost().subscribe({
       next: (response) => {
-        console.log('lista de posts', response);
-
         this.totalPosts += response.data.length;
         this.posts = [...this.posts, ...response.data];
         this.isLoaded = true;
@@ -334,7 +331,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
                 console.log(error);
               },
             });
-          console.log('Não há mais posts para carregar.');
         }
         this.isLoadingMorePosts = false;
       },
@@ -391,7 +387,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   likePostMessage() {
-    console.log('Curtiu o post:', this.likePostMessageWhitHeart);
     this.likePostMessageQueue.next(this.likePostMessageWhitHeart.id);
 
     const logger: TrackAction = {
@@ -527,13 +522,10 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       this.posts.splice(postIndex, 1);
       this.mySwiper.removeSlide(postIndex);
       this.mySwiper.update();
-    } else {
-      console.log('Post não encontrado ou é o "no-matches"');
     }
   }
 
   dislikePostMessage(post: Post) {
-    console.log('Descurtiu o post:', post);
     this.unlikePostMessageQueue.next(post.id);
   }
 
@@ -580,8 +572,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
         if (response) {
           this.dataAvatar = response;
           this.preloadImage(this.dataAvatar.image);
-        } else {
-          console.log('Avatar não encontrado no cache.');
         }
       },
       error: (error) => {

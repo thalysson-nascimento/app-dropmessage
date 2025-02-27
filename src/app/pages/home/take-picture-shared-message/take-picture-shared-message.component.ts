@@ -18,6 +18,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { Dialog } from '@capacitor/dialog';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ChoosePhotoGalleryOrCameraComponent } from '../../../shared/component/choose-photo-gallery-or-camera/choose-photo-gallery-or-camera.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
@@ -31,7 +32,7 @@ const SharedComponents = [ButtonStyleDirective];
 
 @Component({
   standalone: true,
-  imports: [...SharedComponents, CommonModule],
+  imports: [...SharedComponents, CommonModule, TranslateModule],
   selector: 'app-take-picture-shared-message',
   templateUrl: './take-picture-shared-message.component.html',
   styleUrls: ['./take-picture-shared-message.component.scss'],
@@ -192,7 +193,6 @@ export class TakePictureSharedMessageComponent
                   .pipe(takeUntil(this.destroy$))
                   .subscribe({
                     next: (response) => {
-                      console.log(response?.goldFreeTrialData);
                       const firstPublicationPostMessage =
                         response?.goldFreeTrialData.firstPublicationPostMessage;
 

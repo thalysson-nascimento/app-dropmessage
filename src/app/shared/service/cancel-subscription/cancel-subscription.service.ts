@@ -12,7 +12,6 @@ export class CancelSubscriptionService {
   constructor(private httpClient: HttpClient) {}
 
   cancel(subscription: string): Observable<{ canceled: boolean }> {
-    console.log('===>', subscription);
     return this.httpClient.post<{ canceled: boolean }>(
       `${this.baseURL}/stripe/cancel-subscripton`,
       {

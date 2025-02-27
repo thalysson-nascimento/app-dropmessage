@@ -12,6 +12,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { PluginListenerHandle } from '@capacitor/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
@@ -41,7 +42,12 @@ const SharedComponents = [
   ErrorModalComponent,
 ];
 
-const CoreModule = [ReactiveFormsModule, CommonModule, FormsModule];
+const CoreModule = [
+  ReactiveFormsModule,
+  CommonModule,
+  FormsModule,
+  TranslateModule,
+];
 
 @Component({
   selector: 'app-sign',
@@ -124,8 +130,6 @@ export class SignComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$)) // Garante que a assinatura será encerrada
         .subscribe({
           next: (response) => {
-            console.log('===>', response);
-
             this.isLoadingButton = false;
             this.tokenStorageSecurityRequestService.saveToken(response.token);
             this.preferencesUserAuthenticateService.savePreferences(response);

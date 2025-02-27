@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
@@ -33,7 +34,7 @@ const SharedComponents = [
   ModalComponent,
   LoadShimmerComponent,
 ];
-const CoreModule = [NgIf];
+const CoreModule = [NgIf, TranslateModule];
 
 @Component({
   selector: 'app-user-data',
@@ -115,11 +116,9 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
   loadMyProfile() {
     this.myProfileService.myProfile().subscribe({
       next: (response) => {
-        console.log('===>', response);
         this.myProfile = response;
       },
-      error: (error) => {
-        console.log(error);
+      error: () => {
         this.showSystemUnavailable = true;
         this.isLoading = false;
       },
@@ -185,8 +184,6 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
           .info(logger)
           .pipe(takeUntil(this.destroy$))
           .subscribe();
-
-        console.log(error);
       },
     });
   }

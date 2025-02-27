@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { BottomSheetComponent } from '../../bottom-sheet/bottom-sheet.component';
 import { TrackAction } from '../../interface/track-action.interface';
@@ -17,6 +18,8 @@ import { LoggerService } from '../../service/logger/logger.service';
   selector: 'app-choose-photo-gallery-or-camera',
   templateUrl: './choose-photo-gallery-or-camera.component.html',
   styleUrls: ['./choose-photo-gallery-or-camera.component.scss'],
+  imports: [TranslateModule],
+  standalone: true,
 })
 export class ChoosePhotoGalleryOrCameraComponent implements OnDestroy {
   cameraImage!: string | null;

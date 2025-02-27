@@ -87,7 +87,6 @@ export class ListSubscriptionComponent implements OnInit {
   }
 
   createSessionPayment(product: Product) {
-    console.log('assinar plano', product);
     this.signalService.set(product);
     this.router.navigateByUrl('home/checkout-payment');
     // this.buttonDisalbled = true;
@@ -96,7 +95,6 @@ export class ListSubscriptionComponent implements OnInit {
   loadListSubscription() {
     this.listSubscriptionService.subscriptions().subscribe({
       next: (response) => {
-        console.log(response);
         this.isLoading = false;
         this.listSubscription = response;
       },

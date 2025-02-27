@@ -1,16 +1,4 @@
 <div class="contain-bottomsheet">
-  <!-- <div class="contain-header-bottomsheet">
-    <div class="contain-arrow-down">
-      <button aria-label="fechar modal" class="button-down" (click)="dismiss()">
-        <img
-          aria-hidden="true"
-          src="assets/icon-static/arrow-down.svg"
-          alt=""
-        />
-      </button>
-    </div>
-  </div> -->
-
   <ul class="list-action-timer">
     <li class="action-timer" (click)="takePhoto()">
       <div class="contain-icon-and-description">
@@ -20,10 +8,10 @@
           alt=""
         />
         <div>
-          <p>Tirar foto</p>
-          <span class="drescription-timer"
-            >Tire sua melhor foto para compartilhar.</span
-          >
+          <p>{{ "button.takePhoto" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionTakePhoto" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
@@ -37,10 +25,10 @@
           alt=""
         />
         <div>
-          <p>Selecionar da galeria</p>
-          <span class="drescription-timer"
-            >Escolha sua melhor foto da galeria para compartilhar.</span
-          >
+          <p>{{ "button.selectFromGallery" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionFromGrallery" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />

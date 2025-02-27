@@ -26,11 +26,11 @@
 
       }@else {
       <img src="assets/icon-static/logo-google.svg" alt="" />
-      <span>Acessar com o Google</span>
+      <span>{{ "button.accessWithGoogle" | translate }}</span>
       }
     </button>
 
-    <p>ou</p>
+    <p>{{ "text.or" | translate }}</p>
   </div>
 
   <form
@@ -48,7 +48,7 @@
     />
     <input
       type="password"
-      placeholder="senha"
+      [placeholder]="'input.placeholder.password' | translate"
       appInputCustom
       class="input-custom"
       formControlName="password"
@@ -61,7 +61,7 @@
       [disabled]="buttonDisalbled || userLoginFormGroup.invalid"
       [disabledButton]="buttonDisalbled || userLoginFormGroup.invalid"
     >
-      <span *ngIf="!isLoadingButton">entrar</span>
+      <span *ngIf="!isLoadingButton">{{ "button.signIn" | translate }}</span>
       <app-loading
         *ngIf="isLoadingButton"
         width="22px"
@@ -70,14 +70,16 @@
       ></app-loading>
     </button>
     <div class="regiter-acount">
-      <p (click)="navigateToSignup()">Ainda nao possui uma conta?</p>
+      <p (click)="navigateToSignup()">
+        {{ "text.linkDoNotAccount" | translate }}
+      </p>
     </div>
   </form>
 </div>
 
 <app-modal #dialog>
   <div class="contain-title">
-    <p class="title-error">Ops, ocorreu um erro!</p>
+    <p class="title-error">{{ "titleErro" | translate }}</p>
   </div>
 
   <div class="contain-image">
@@ -98,12 +100,14 @@
       [buttonType]="'secondary'"
       (click)="dialog.closeDialog()"
     >
-      Tentar novamente
+      {{ "button.tryAgain" | translate }}
     </button>
   </div>
 </app-modal>
 
 <app-error-modal #modalErrorRequest [type]="typeErrorModal">
-  <p><strong>Ops, ocorreu um erro!</strong></p>
+  <p>
+    <strong>{{ "titleErro" | translate }}</strong>
+  </p>
   <p class="description-error">{{ errorMessage }}</p>
 </app-error-modal>

@@ -23,7 +23,6 @@ export const tokenStorageSecurityInterceptor: HttpInterceptorFn = (
         });
         return next(authReq);
       } else {
-        console.log('Token não existe');
         return next(request);
       }
     })

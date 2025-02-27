@@ -7,8 +7,8 @@
       (click)="goToProfile()"
     />
     <div class="container-title-subtitle">
-      <h1 class="title">Perfil</h1>
-      <p class="subtitle">Dados pessoais</p>
+      <h1 class="title">{{ "text.profile" | translate }}</h1>
+      <p class="subtitle">{{ "text.personalData" | translate }}</p>
     </div>
   </div>
 
@@ -38,37 +38,37 @@
   <section *ngIf="!showSystemUnavailable && !isLoading">
     <ul appListStyle>
       <li>
-        <span label>nome</span>
+        <span label>{{ "text.name" | translate }}</span>
         <p>{{ myProfile.name }}</p>
       </li>
       <li>
-        <span label>email</span>
+        <span label>{{ "text.email" | translate }}</span>
         <p>{{ myProfile.email }}</p>
       </li>
       <li>
-        <span label>cidade</span>
+        <span label>{{ "text.city" | translate }}</span>
         <p>{{ myProfile.UserLocation.city }}</p>
       </li>
       <li>
-        <span label>estado</span>
+        <span label>{{ "text.state" | translate }}</span>
         <p>{{ myProfile.UserLocation.state }}</p>
       </li>
       <li>
-        <span label>gênero</span>
+        <span label>{{ "text.gender" | translate }}</span>
         <p>{{ myProfile.About.gender }}</p>
       </li>
       <li>
-        <span label>interesses</span>
+        <span label>{{ "text.interests" | translate }}</span>
         <p>{{ myProfile.About.interests }}</p>
       </li>
       <li>
-        <span label>data de nascimento</span>
+        <span label>{{ "text.dateOfBirth" | translate }}</span>
         <p>{{ myProfile.About.dateOfBirth }}</p>
       </li>
     </ul>
     <div class="contain-button">
       <button appButtonStyle [buttonType]="'secondary'" (click)="openModal()">
-        Deletar conta
+        {{ "button.deleteAccount" | translate }}
       </button>
     </div>
   </section>
@@ -76,13 +76,14 @@
 
 <app-modal #dialog>
   <div class="contain-title">
-    <p class="title-error">Ops, realmente deseja deletar sua conta?</p>
+    <p class="title-error">
+      {{ "text.titleConfirmDeleteAccount" | translate }}
+    </p>
   </div>
 
   <div class="contain-description-error">
     <p class="description-error-message">
-      Após deletar sua conta você perderá todos os dados, seus posts e as
-      amizadas realizadas.
+      {{ "text.descriptionConfirmDeleteAccount" | translate }}
     </p>
   </div>
 
@@ -93,7 +94,9 @@
       [buttonType]="'secondary'"
       (click)="deleteAccount()"
     >
-      <span *ngIf="!buttonDisalbled">Deletar conta</span>
+      <span *ngIf="!buttonDisalbled">{{
+        "button.deleteAccount" | translate
+      }}</span>
       <div *ngIf="buttonDisalbled" class="bouncing-dots">
         <div class="dot"></div>
         <div class="dot"></div>

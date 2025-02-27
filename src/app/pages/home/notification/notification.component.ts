@@ -2,6 +2,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
+import { TranslateModule } from '@ngx-translate/core';
 import { ActiveSignatureLikeUserComponent } from '../../../shared/component/active-signature-like-user/active-signature-like-user.component';
 import { ErrorComponent } from '../../../shared/component/error/error.component';
 import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
@@ -9,7 +10,7 @@ import { Notification } from '../../../shared/interface/notification.interface';
 import { ActiveSubscriptionService } from '../../../shared/service/active-subscription/active-subscription.service';
 import { NotificationService } from '../../../shared/service/notification/notification.service';
 
-const CoreModule = [CommonModule];
+const CoreModule = [CommonModule, TranslateModule];
 const SharedComponent = [
   ErrorComponent,
   LoadShimmerComponent,
@@ -58,7 +59,6 @@ export class NotificationComponent implements OnInit {
   loadNotification() {
     this.notificationService.notification().subscribe({
       next: (response) => {
-        console.log(response);
         if (response.length === 0) {
           this.userNotification = true;
         }

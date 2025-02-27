@@ -14,7 +14,7 @@
     />
   </div>
 
-  <p class="text-login">Crie sua conta</p>
+  <p class="text-login">{{ "text.titleCreateAccount" | translate }}</p>
 
   <div class="contain-button-google">
     <button class="button-google" (click)="createAccountWithGoogle()">
@@ -35,11 +35,11 @@
 
       }@else {
       <img src="assets/icon-static/logo-google.svg" alt="" />
-      <span>Criar com o Google</span>
+      <span>{{ "button.createAccountWithGoogle" | translate }}</span>
       }
     </button>
 
-    <p>ou</p>
+    <p>{{ "or" | translate }}</p>
   </div>
 
   <form
@@ -50,7 +50,7 @@
   >
     <input
       type="text"
-      placeholder="nome"
+      [placeholder]="'input.placeholder.name' | translate"
       id="name"
       appInputCustom
       formControlName="name"
@@ -59,7 +59,7 @@
     />
     <input
       type="email"
-      placeholder="email"
+      [placeholder]="'input.placeholder.email' | translate"
       id="email"
       appInputCustom
       formControlName="email"
@@ -68,7 +68,7 @@
     />
     <input
       type="password"
-      placeholder="senha"
+      [placeholder]="'input.placeholder.password' | translate"
       id=""
       appInputCustom
       formControlName="password"
@@ -83,7 +83,9 @@
       [disabledButton]="buttonDisalbled || createAccountFormGroup.invalid"
       aria-label="criar conta"
     >
-      <span *ngIf="!buttonDisalbled">criar conta</span>
+      <span *ngIf="!buttonDisalbled">{{
+        "button.buttonCreateAccount" | translate
+      }}</span>
       <div *ngIf="buttonDisalbled" class="bouncing-dots">
         <div class="dot"></div>
         <div class="dot"></div>
@@ -95,15 +97,17 @@
 
   <div class="contain-privece-police">
     <p class="privece-police">
-      Ao realizar o seu cadastro você concorda com os nossas
-      <span class="privece-police-hilite" (click)="goToPrivecePolice()"
-        >políticas de privacidade</span
-      >
+      {{ "text.registrationAgree" | translate }}
+      <span class="privece-police-hilite" (click)="goToPrivecePolice()">{{
+        "text.politicsPrivacy" | translate
+      }}</span>
     </p>
   </div>
 </div>
 
 <app-error-modal #modalErrorRequest [type]="typeErrorModal">
-  <p><strong>Ops, ocorreu um erro!</strong></p>
+  <p>
+    <strong>{{ "text.titleErro" | translate }}</strong>
+  </p>
   <p class="description-error">{{ errorMessage }}</p>
 </app-error-modal>

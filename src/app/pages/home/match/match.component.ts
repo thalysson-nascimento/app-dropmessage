@@ -41,7 +41,6 @@ export class MatchComponent implements OnInit {
       next: (token) => {
         if (token) {
           const decoded = jwtDecode(token);
-          console.log('decoded ===>', decoded);
           this.loadMatchDetails(decoded.sub);
         }
       },
@@ -83,7 +82,6 @@ export class MatchComponent implements OnInit {
           city: this.matchUser?.UserLocation?.city,
         },
       };
-      console.log(userMatch);
       this.dataConnectChatMessageService.setDataConnectChatMessage(userMatch);
       this.router.navigateByUrl('home/chat-message');
     }

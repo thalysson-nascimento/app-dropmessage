@@ -10,8 +10,7 @@
     </div>
 
     <div class="container-title-subtitle">
-      <h1 class="title">Chat</h1>
-      <p class="subtitle">Converse com os matches do seu perfil</p>
+      <h1 class="title">{{ "text.chat" | translate }}</h1>
     </div>
   </div>
 
@@ -39,7 +38,7 @@
   </app-system-unavailable>
 
   <div *ngIf="listChat.length === 0 && !showSystemUnavailable && !isLoading">
-    <p class="subtitle">No momento ainda não há matches.</p>
+    <p class="subtitle">{{ "text.noChat" | translate }}</p>
   </div>
 
   <div *ngIf="!showSystemUnavailable && !isLoading">
@@ -48,7 +47,6 @@
         <img [src]="chat.avatar" class="avatar" alt="" />
         <div>
           <p class="name">{{ chat.name }}</p>
-          <p class="last-message">ainda não iniciaram uma conversa</p>
         </div>
       </li>
     </ul>

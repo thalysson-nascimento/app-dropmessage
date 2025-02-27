@@ -129,7 +129,6 @@ export class UserLocationComponent implements OnInit, OnDestroy {
             this.buttonDisalbled = false;
             this.errorMessage = responseError.error.message.message;
             this.modalErrorUserLocation.openDialog();
-            console.log(responseError);
           },
           complete: () => {
             this.isLoadingButton = false;
