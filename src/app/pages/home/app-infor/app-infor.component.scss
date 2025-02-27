@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh; // Garante que o container ocupa 100% da tela
+  padding: var(--space-medium);
+}
+
+.container-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-small);
+  flex-shrink: 0; // Evita que o header encolha
+  margin-bottom: var(--space-medium);
+}
+
+.container-body {
+  flex-grow: 1; // Faz com que o body ocupe todo o espaço restante
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: var(--space-medium);
+
+  img {
+    width: 10rem;
+    height: 10rem;
+    margin-top: var(--space-medium);
+    margin-bottom: var(--space-medium);
+  }
+
+  .text-light {
+    color: var(--text-dark-secundary);
+  }
+}

@@ -153,6 +153,21 @@ export class ProfileComponent implements OnInit {
     this.router.navigateByUrl('home/privacy-police');
   }
 
+  goToAppInfor() {
+    const logger: TrackAction = {
+      pageView: this.pageView,
+      category: 'profile:app_infor',
+      event: 'click',
+      label: 'button:app_infor',
+      message: 'Informações do app',
+      statusCode: 200,
+      level: 'info',
+    };
+
+    this.loggerService.info(logger).pipe(takeUntil(this.destroy$)).subscribe();
+    this.router.navigateByUrl('home/app-infor');
+  }
+
   goToNotification() {
     const logger: TrackAction = {
       pageView: this.pageView,

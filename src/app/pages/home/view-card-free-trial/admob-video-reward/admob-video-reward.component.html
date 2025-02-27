@@ -1,0 +1,33 @@
+<div class="container">
+  @if (erroLoadVideoReward) {
+  <div class="header">
+    <img
+      src="assets/icon-static/arrow-left.svg"
+      style="width: 24px; height: 24px"
+      alt=""
+      (click)="goToCardFreeTrial()"
+    />
+  </div>
+  } @if (isLoading) {
+  <div>
+    <div class="contain-loading">
+      <div id="lottie-icon-is-loading" class="lottie-icon-no-match"></div>
+    </div>
+  </div>
+  } @if (erroLoadVideoReward) {
+  <div>
+    <p>Ops, houve um erro ao carregar o video, tente novamente mais ttarde</p>
+  </div>
+  }@else {
+  <ng-template #videoContent>
+    <ins
+      class="adsbygoogle"
+      style="display: block"
+      data-ad-client="ca-pub-8691674404508428"
+      data-ad-slot="9624971551"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    ></ins>
+  </ng-template>
+  }
+</div>

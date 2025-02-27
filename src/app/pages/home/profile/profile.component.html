@@ -97,6 +97,18 @@
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
     </li>
+    <li class="action-timer" (click)="goToAppInfor()">
+      <div class="contain-icon-and-description">
+        <i class="fi fi-tr-comment-info"></i>
+        <div>
+          <p>{{ "text.appInfor" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionAppInfor" | translate
+          }}</span>
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
     <li class="action-timer" (click)="goToPrivecePolice()">
       <div class="contain-icon-and-description">
         <i class="fi fi-tr-password-email"></i>

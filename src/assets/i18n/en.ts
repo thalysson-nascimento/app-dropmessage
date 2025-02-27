@@ -75,5 +75,8 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     descriptionSixtyMinutes: 'Your post will be visible for 60 minutes',
     descriptionTakePhoto: 'Share your best photo',
     descriptionFromGrallery: 'Choose your best photo from gallery',
+    appInfor: 'App infor',
+    descriptionAppInfor: 'Application version',
+    version: 'Version',
   },
 };
