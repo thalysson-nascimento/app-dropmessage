@@ -34,7 +34,8 @@ export class VerifyUserPermissionResolver implements Resolve<boolean> {
           userData?.goldFreeTrialData !== null &&
           !userData?.goldFreeTrialData?.viewCardFreeTrial
         ) {
-          this.router.navigateByUrl('home/view-card-free-trial');
+          // this.router.navigateByUrl('home/view-card-free-trial');
+          this.router.navigateByUrl('home/admob-video-reward-free-trial');
           return false;
         }
 

@@ -76,5 +76,8 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     descriptionTakePhoto: 'Compartilhe sua melhor foto',
     descriptionFromGrallery:
       'Escolha sua melhor foto da galeria para compartilhar',
+    appInfor: 'Informações do app',
+    descriptionAppInfor: 'Versão do app',
+    version: 'Versão',
   },
 };

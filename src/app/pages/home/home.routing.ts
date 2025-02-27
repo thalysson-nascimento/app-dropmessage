@@ -181,6 +181,20 @@ export const HomeRouting: Routes = [
             './limit-like-post-message/limit-like-post-message.component'
           ).then((m) => m.LimitLikePostMessageComponent),
       },
+      {
+        path: 'admob-video-reward-free-trial',
+        loadComponent: () =>
+          import(
+            './view-card-free-trial/admob-video-reward/admob-video-reward.component'
+          ).then((m) => m.AdmobVideoRewardCardFreeTrialComponent),
+      },
+      {
+        path: 'app-infor',
+        loadComponent: () =>
+          import('./app-infor/app-infor.component').then(
+            (m) => m.AppInforComponent
+          ),
+      },
     ],
   },
 ];

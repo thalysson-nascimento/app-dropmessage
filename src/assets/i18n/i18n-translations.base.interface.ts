@@ -71,5 +71,8 @@ export interface I18nTranslationsBase {
     descriptionOneDay: string;
     descriptionTakePhoto: string;
     descriptionFromGrallery: string;
+    appInfor: string;
+    descriptionAppInfor: string;
+    version: string;
   };
 }
