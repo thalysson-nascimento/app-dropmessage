@@ -2,24 +2,24 @@
   <div>
     <div class="card-text-description">
       <i class="fi fi-sr-membership" aria-hidden="true"></i>
-      <p>Seja um assinante</p>
+      <p>{{ "text.becomeSubscriber" | translate }}</p>
     </div>
     <ul>
       <li>
         <i class="fi fi-sr-check" aria-hidden="true"></i>
-        <p>Acesse benefícios personalizados</p>
+        <p>{{ "text.personalizedBenefits" | translate }}</p>
       </li>
       <li>
         <i class="fi fi-sr-check" aria-hidden="true"></i>
-        <p>Explore recursos premium</p>
+        <p>{{ "text.explorePremium" | translate }}</p>
       </li>
       <li>
         <i class="fi fi-sr-check" aria-hidden="true"></i>
-        <p>Amplie sua experiência</p>
+        <p>{{ "text.expandExperience" | translate }}</p>
       </li>
       <li>
         <i class="fi fi-sr-check" aria-hidden="true"></i>
-        <p>Desbloqueie novas funcionalidades</p>
+        <p>{{ "text.unlockNewFeatures" | translate }}</p>
       </li>
     </ul>
   </div>
@@ -30,7 +30,7 @@
       [buttonType]="'primary'"
       (click)="handleClickButton()"
     >
-      Assinar plano
+      {{ "button.subscribePlan" | translate }}
     </button>
   </div>
 </div>

@@ -209,7 +209,6 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
         this.tips = response;
       },
       error: (errorResponse) => {
-        console.log(errorResponse);
         this.errorLoadTips = true;
         this.responseErrorTips = errorResponse.error.message.message;
         this.isLoading = false;
@@ -296,7 +295,6 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
             this.scrollToBottom();
           },
           error: () => {
-            console.log('erro ao enviar a mensagem');
             this.showAlertError = true;
             this.messages = this.messages.filter((msg) => msg.id !== tempId);
           },

@@ -28,7 +28,6 @@ import { Dialog } from '@capacitor/dialog';
 import DOMPurify from 'dompurify';
 import { NgxMaskDirective } from 'ngx-mask';
 import { Subject, delay, takeUntil, timer } from 'rxjs';
-import { currentEnvironment } from '../../../../environment.config';
 import { ChoosePhotoGalleryOrCameraComponent } from '../../../shared/component/choose-photo-gallery-or-camera/choose-photo-gallery-or-camera.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
@@ -98,7 +97,6 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    console.log(currentEnvironment.baseURL);
     this.loadSvgUrl();
     this.checkCameraPermission();
     this.avatarAndComlpetedDataFormBuilder();
@@ -129,7 +127,6 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   selectGender(selectedTypeGender: string) {
-    console.log(selectedTypeGender);
     this.typeGender = selectedTypeGender;
     this.avatarAndCompletedFormGroup
       .get('gender')
@@ -139,7 +136,6 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   selectInterests(selectedInterests: string) {
-    console.log(selectedInterests);
     this.typeInterests = selectedInterests;
     this.avatarAndCompletedFormGroup
       .get('interests')
@@ -393,7 +389,6 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
                   .pipe(takeUntil(this.destroy$))
                   .subscribe();
 
-                console.log('Erro ao enviar mensagem:', error);
                 this.modalErrorRequest.openDialog();
               },
               complete: () => {

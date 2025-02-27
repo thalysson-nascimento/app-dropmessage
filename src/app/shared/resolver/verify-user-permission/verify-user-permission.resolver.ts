@@ -34,7 +34,6 @@ export class VerifyUserPermissionResolver implements Resolve<boolean> {
           userData?.goldFreeTrialData !== null &&
           !userData?.goldFreeTrialData?.viewCardFreeTrial
         ) {
-          console.log('===>', userData?.goldFreeTrialData?.viewCardFreeTrial);
           this.router.navigateByUrl('home/view-card-free-trial');
           return false;
         }

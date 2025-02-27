@@ -32,7 +32,6 @@ export class GoogleAuthService {
   async signOut() {
     try {
       await GoogleAuth.signOut();
-      console.log('Usuário deslogado');
     } catch (error) {
       console.error('Erro ao deslogar:', error);
     }

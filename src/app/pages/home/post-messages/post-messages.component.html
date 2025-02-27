@@ -24,10 +24,6 @@
     </div>
   </div>
 
-  <!-- <div>
-    <button (click)="likePostMessage()">testar</button>
-  </div> -->
-
   <app-system-unavailable
     *ngIf="showSystemUnavailable"
     (clickLoading)="tryAgainLoadingPostMessage()"
@@ -64,9 +60,6 @@
               >
               }
             </div>
-            <!-- <button class="button-report">
-              <i class="fi fi-br-menu-dots-vertical"></i>
-            </button> -->
           </div>
           <img [src]="post.image" alt="" />
         </ng-container>
@@ -75,15 +68,16 @@
           class="watch-video-reward"
           *ngIf="post.id === 'watch-video-reward'"
         >
-          <p class="title-no-users-nearby">Gostaria de mais curtidas?</p>
+          <p class="title-no-users-nearby">
+            {{ "text.likeMoreLikes" | translate }}
+          </p>
           <img
             class="no-users-nearby"
             src="assets/icon-static/find-more-match.svg"
             alt=""
           />
           <p>
-            Assista o vídeo publicitário abaixo para continuar com mais
-            curtidas.
+            {{ "text.watchVideoReward" | translate }}
           </p>
 
           <div class="contain-button-video-reward">
@@ -92,19 +86,21 @@
               [buttonType]="'secondary'"
               (click)="goToAdMobVideoReward()"
             >
-              Toque para assistir
+              {{ "text.touchWhatch" | translate }}
             </button>
           </div>
         </div>
 
         <div class="no-matches-message" *ngIf="post.id === 'no-matches'">
-          <p class="title-no-users-nearby">Ops, sem novas amizades!</p>
+          <p class="title-no-users-nearby">
+            {{ "text.noNewFriends" | translate }}
+          </p>
           <img
             class="no-users-nearby"
             src="assets/icon-static/image-home.svg"
             alt=""
           />
-          <p>Que tal tentar novamente mais tarde?</p>
+          <p>{{ "text.tryAgainLater" | translate }}</p>
         </div>
       </swiper-slide>
     </swiper-container>

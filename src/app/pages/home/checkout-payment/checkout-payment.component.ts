@@ -48,13 +48,11 @@ export class CheckoutPaymentComponent implements OnInit {
     if (signal) {
       this.planSubscription = signal;
     }
-    console.log(signal);
   }
 
   async ngOnInit() {
     this.stripePublicKeyService.stripePublicKey().subscribe({
       next: async (response) => {
-        console.log('public api', response.publicKey);
         const publicApi = response.publicKey;
         this.stripe = await loadStripe(publicApi);
         if (!this.stripe) {
@@ -73,7 +71,6 @@ export class CheckoutPaymentComponent implements OnInit {
 
     this.sessionPaymentIntentService.createSession(price).subscribe({
       next: (response) => {
-        console.log(response);
         this.isLoading = false;
         this.clientSecret = response.client_secret;
 

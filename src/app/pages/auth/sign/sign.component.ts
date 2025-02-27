@@ -15,7 +15,6 @@ import { PluginListenerHandle } from '@capacitor/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { I18nTranslationsBase } from '../../../../assets/i18n/i18n-translations.base.interface';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
 import { ErrorModalComponent } from '../../../shared/component/error-modal/error-modal.component';
 import { LoadingComponent } from '../../../shared/component/loading/loading.component';
@@ -72,7 +71,6 @@ export class SignComponent implements OnInit, OnDestroy {
   @ViewChild('modalErrorRequest') modalErrorRequest!: ErrorModalComponent;
   typeErrorModal: 'success' | 'warn' | 'error' = 'success';
   testeToken: string = '';
-  elementTranslation!: I18nTranslationsBase;
 
   constructor(
     private router: Router,
@@ -132,8 +130,6 @@ export class SignComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$)) // Garante que a assinatura será encerrada
         .subscribe({
           next: (response) => {
-            console.log('===>', response);
-
             this.isLoadingButton = false;
             this.tokenStorageSecurityRequestService.saveToken(response.token);
             this.preferencesUserAuthenticateService.savePreferences(response);

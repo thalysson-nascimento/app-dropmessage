@@ -35,7 +35,9 @@
         [disabled]="disabledButton"
         [disabledButton]="disabledButton"
       >
-        <span *ngIf="!disabledButton">Compartilhar post</span>
+        <span *ngIf="!disabledButton">{{
+          "button.sharedPost" | translate
+        }}</span>
         <div *ngIf="disabledButton" class="bouncing-dots">
           <div class="dot"></div>
           <div class="dot"></div>
@@ -50,7 +52,7 @@
         (click)="openBottomSheet()"
         [buttonType]="'primary'"
       >
-        tirar foto
+        {{ "button.takePhoto" | translate }}
       </button>
     </div>
   </div>

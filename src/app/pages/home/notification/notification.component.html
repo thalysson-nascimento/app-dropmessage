@@ -9,36 +9,9 @@
   </div>
 
   <div class="container-title-subtitle">
-    <h1 class="title">Notificações</h1>
-    <p>Veja quem curtiu você.</p>
+    <h1 class="title">{{ "text.notifications" | translate }}</h1>
   </div>
 
-  <!-- <div class="contain-loading" *ngIf="isLoading">
-    <div id="lottie-icon-is-loading" class="lottie-icon-no-match"></div>
-  </div>
-
-  <app-system-unavailable
-    *ngIf="showSystemUnavailable"
-    (clickLoading)="tryAgain()"
-    [infoMessage]="
-      'No momento estamos com nossos serviços indisponíves, volte novamente mais tarde!'
-    "
-  >
-  </app-system-unavailable>
-
-  <section *ngIf="!showSystemUnavailable || !isLoading">
-    <div class="image-container" *ngFor="let notification of notifications">
-      <img [src]="notification.user.avatar" alt="" />
-      <div class="overlay">
-        @if (notification.user.name === null) {
-        <div class="bar"></div>
-        }@else {
-        <p>{{ filterFirstUserName(notification.user.name) }}</p>
-        }
-        <p>curtiu você</p>
-      </div>
-    </div>
-  </section> -->
   @if (isLoading) {
   <div>
     <app-load-shimmer [height]="'50px'"></app-load-shimmer>
@@ -56,7 +29,7 @@
   }@else if (errorRequest) {
   <app-error></app-error>
   }@else if (userNotification) {
-  <p>No momento não houve curtidas</p>
+  <p>{{ "text.noNotifications" | translate }}</p>
   }@else { @if (showCardSubscription) {
   <div class="contain-card-like-user">
     <app-active-signature-like-user></app-active-signature-like-user>

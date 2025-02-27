@@ -9,7 +9,7 @@
   </div>
 
   <div class="container-title-subtitle">
-    <h1 class="title">Posts Compartilhados</h1>
+    <h1 class="title">{{ "text.sharedPosts" | translate }}</h1>
     <p class="subtitle">{{ userName }}</p>
   </div>
 
@@ -27,11 +27,11 @@
     </div>
   </div>
 
-  <div class="contain-account-post">
+  <!-- <div class="contain-account-post">
     <p class="acount-post" *ngIf="!isLoading">
       meus posts({{ listPostMessage.length }})
     </p>
-  </div>
+  </div> -->
 
   <app-system-unavailable
     *ngIf="showSystemUnavailable"

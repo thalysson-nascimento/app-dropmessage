@@ -42,7 +42,6 @@ export class PlanActiveSignatureComponent implements OnInit {
 
   ngOnInit() {
     this.subscription;
-    console.log('Subscription:', this.subscription);
   }
 
   navigateBackUsingApp() {

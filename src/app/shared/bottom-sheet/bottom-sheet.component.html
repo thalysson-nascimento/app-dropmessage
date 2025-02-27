@@ -1,7 +1,7 @@
 <div class="contain-bottomsheet">
   <div class="contain-header-bottomsheet">
     <span class="bottomsheet-text-header">
-      Escolha o tempo que o seu post ficará visível.
+      {{ "text.chooseTimer" | translate }}
     </span>
     <div class="contain-arrow-down">
       <button aria-label="fechar modal" class="button-down" (click)="dismiss()">
@@ -23,10 +23,10 @@
           alt=""
         />
         <div>
-          <p>30 minutos</p>
-          <span class="drescription-timer"
-            >compartilhar e deixar seu post visível por pouco tempo.</span
-          >
+          <p>{{ "text.thirtyMinutes" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionThirtyMinutes" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
@@ -40,10 +40,10 @@
           alt=""
         />
         <div>
-          <p>60 minutos</p>
-          <span class="drescription-timer"
-            >compartilhar e deixar seu post visível por mais tempo.</span
-          >
+          <p>{{ "text.sixtyMinutes" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionSixtyMinutes" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
@@ -57,10 +57,10 @@
           alt=""
         />
         <div>
-          <p>24 horas</p>
-          <span class="drescription-timer"
-            >compartilhar e deixar seu post visível por um dia.</span
-          >
+          <p>{{ "text.oneDay" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionOneDay" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />

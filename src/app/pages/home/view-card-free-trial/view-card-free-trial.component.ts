@@ -53,7 +53,6 @@ export class ViewCardFreeTrialComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: (response) => {
-              console.log(response);
               if (response) {
                 const updatedData = {
                   ...response,
@@ -71,7 +70,6 @@ export class ViewCardFreeTrialComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       error: (error) => {
-        console.log(error);
         this.errorRequest = true;
         this.isLoading = false;
       },

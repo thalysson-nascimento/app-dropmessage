@@ -2,12 +2,12 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ActiveSignatureComponent } from '../../../shared/component/active-signature/active-signature.component';
 import { CardSubscriptionComponent } from '../../../shared/component/card-subscription/card-subscription.component';
 import { ErrorComponent } from '../../../shared/component/error/error.component';
 import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
-import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { ActiveSubscription } from '../../../shared/interface/active-subscription.interface';
 import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
@@ -20,9 +20,8 @@ import { SignalService } from '../../../shared/service/signal/signal.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 
-const CoreModule = [CommonModule];
+const CoreModule = [CommonModule, TranslateModule];
 const SharedComponent = [
-  ButtonStyleDirective,
   CardSubscriptionComponent,
   LoadShimmerComponent,
   ActiveSignatureComponent,
@@ -98,8 +97,6 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         if (response) {
           this.avatar = response;
-        } else {
-          console.log('Avatar não encontrado no cache.');
         }
       },
 
@@ -236,8 +233,6 @@ export class ProfileComponent implements OnInit {
           this.planSubscription = true;
           this.dataSubscription = response;
 
-          console.log('=====>', this.dataSubscription);
-
           if (!response.data?.cancelAtPeriodEnd) {
             this.labelTag = 'assinatura ativa';
           } else {
@@ -259,7 +254,6 @@ export class ProfileComponent implements OnInit {
   }
 
   goToListSignature() {
-    console.log('funcionou');
     this.router.navigateByUrl('home/list-subscription');
   }
 }

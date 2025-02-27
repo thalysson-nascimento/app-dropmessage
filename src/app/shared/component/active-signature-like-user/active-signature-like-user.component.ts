@@ -40,7 +40,6 @@ export class ActiveSignatureLikeUserComponent implements OnInit {
   loadLoastLikePostMessage() {
     this.lastLikePostMessageService.lastLike().subscribe({
       next: (response) => {
-        console.log(response);
         this.lastLikePostMessage = response;
       },
       error: (error) => {

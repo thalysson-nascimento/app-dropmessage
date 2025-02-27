@@ -37,7 +37,6 @@ export class AdmobService {
     ]);
 
     if (trackingInfo.status === 'notDetermined') {
-      console.log('Waiting for TrackingAuthorization...');
       /**
        * If you want to explain TrackingAuthorization before showing the iOS dialog,
        * you can show the modal here.
@@ -66,15 +65,12 @@ export class AdmobService {
     return new Promise<void>(async (resolve, reject) => {
       try {
         AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
-          console.log('Vídeo com recompensa carregado:', info);
           resolve();
         });
 
         AdMob.addListener(
           RewardAdPluginEvents.Rewarded,
-          (rewardItem: AdMobRewardItem) => {
-            console.log(rewardItem);
-          }
+          (rewardItem: AdMobRewardItem) => {}
         );
 
         this.preferencesUserAuthenticateService
@@ -122,9 +118,6 @@ export class AdmobService {
                 const isPrepared = await AdMob.prepareRewardVideoAd(options);
 
                 if (isPrepared) {
-                  console.log(
-                    'O vídeo com recompensa foi carregado com sucesso.'
-                  );
                   await AdMob.showRewardVideoAd();
                 } else {
                   console.error('Erro ao carregar o vídeo com recompensa.');

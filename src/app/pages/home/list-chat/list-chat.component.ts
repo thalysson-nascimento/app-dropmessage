@@ -2,6 +2,7 @@ import { NgFor, NgIf, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
+import { TranslateModule } from '@ngx-translate/core';
 import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { DataConnectChatMessage } from '../../../shared/interface/data-connect-chat-message.interface';
@@ -10,7 +11,7 @@ import { DataConnectChatMessageService } from '../../../shared/service/data-conn
 import { ListChatService } from '../../../shared/service/list-chat/list-chat.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 
-const CoreModule = [NgIf, NgFor];
+const CoreModule = [NgIf, NgFor, TranslateModule];
 const SharedComponent = [SystemUnavailableComponent, LoadShimmerComponent];
 
 @Component({
@@ -46,7 +47,6 @@ export class ListChatComponent implements OnInit {
   loadListChat() {
     this.listChatService.listChat().subscribe({
       next: (response) => {
-        console.log('-->>>>', response);
         this.listChat = response;
       },
       error: () => {
@@ -74,7 +74,6 @@ export class ListChatComponent implements OnInit {
   }
 
   goToChat(userSelectForChat: DataConnectChatMessage) {
-    console.log('===>', userSelectForChat);
     this.dataConnectChatMessageService.setDataConnectChatMessage(
       userSelectForChat
     );

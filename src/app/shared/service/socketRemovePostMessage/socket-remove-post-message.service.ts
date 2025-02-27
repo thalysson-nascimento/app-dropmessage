@@ -10,7 +10,6 @@ export class SocketRemovePostMessageService {
 
   onPostExpired(): Observable<string> {
     return new Observable((observer) => {
-      console.log('post expirado');
       this.socket.on('post-expired', (data) => observer.next(data));
       return () => this.socket.off('post-expired');
     });

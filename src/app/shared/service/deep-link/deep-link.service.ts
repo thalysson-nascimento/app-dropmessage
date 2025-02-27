@@ -13,8 +13,6 @@ export class DeepLinkService {
   setupDeepLinkListener() {
     App.addListener('appUrlOpen', (event: any) => {
       try {
-        console.log('Deep link received:', event.url);
-
         const url = new URL(event.url);
         const pathname = url.pathname;
         const searchParams = url.searchParams;
