@@ -49,6 +49,8 @@ const CoreModule = [
   TranslateModule,
 ];
 
+declare let gtag: Function;
+
 @Component({
   selector: 'app-sign',
   standalone: true,
@@ -89,6 +91,12 @@ export class SignComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.userLoginFormBuilder();
     this.navigateBackUsingApp();
+
+    gtag('event', 'page_view', {
+      page_title: 'Tela de Login', // Título que você quer identificar
+      page_location: window.location.href,
+      page_path: '/login', // Defina o caminho conforme sua rota
+    });
   }
 
   ngOnDestroy(): void {
@@ -188,6 +196,9 @@ export class SignComponent implements OnInit, OnDestroy {
   async userAuthenticatorWithGoogle() {
     try {
       const token = await this.googleAuthService.signInWithGoogle();
+
+      console.log(token);
+
       if (token.authentication.idToken) {
         this.isLoadingButtonGoogleOAuth = true;
         this.signWithGoogleService
@@ -213,6 +224,13 @@ export class SignComponent implements OnInit, OnDestroy {
             },
           });
       }
-    } catch (error) {}
+    } catch (error) {
+      gtag('event', 'error', {
+        page_title: 'Tela de Login - google auth', // Título que você quer identificar
+        page_location: window.location.href,
+        page_path: '/login', // Defina o caminho conforme sua rota
+        message: error,
+      });
+    }
   }
 }

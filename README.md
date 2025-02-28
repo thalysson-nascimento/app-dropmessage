@@ -45,7 +45,7 @@ colocar no angular.json
 ./gradlew assembleDebug
 
 para gerar a release .aab
-../gradlew bundleRelease
+./gradlew bundleRelease
 
 assinar o app
 ng build --configuration production
