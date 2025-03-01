@@ -15,6 +15,7 @@ import {
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
+import { Device } from '@capacitor/device';
 import { TranslateModule } from '@ngx-translate/core';
 import { currentEnvironment } from '../../../../environment.config';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
@@ -25,9 +26,12 @@ import { CreateAccount } from '../../../shared/interface/create-account.interfac
 import { CreateAccountWithGoogleOauthService } from '../../../shared/service/create-account-with-google-oauth/create-account-with-google-oauth.service';
 import { CreateAccountService } from '../../../shared/service/create-account/create-account.service';
 import { GoogleAuthService } from '../../../shared/service/google-auth/google-auth.service';
+import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
+
+declare let gtag: Function;
 
 const SharedComponents = [
   InputCustomDirective,
@@ -65,7 +69,8 @@ export class SignupComponent implements OnInit {
     private createAccountWithGoogleOauthService: CreateAccountWithGoogleOauthService,
     private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
     private userHashPublicService: UserHashPublicService,
-    private preferencesUserAuthenticateService: PreferencesUserAuthenticateService
+    private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
+    private loggerService: LoggerService
   ) {}
 
   ngOnInit(): void {
@@ -85,10 +90,20 @@ export class SignupComponent implements OnInit {
       const token = await this.googleAuthService.signInWithGoogle();
       if (token.authentication.idToken) {
         this.isLoadingButtonGoogleOAuth = true;
+        const device = await this.deviceInfor();
+
         this.createAccountWithGoogleOauthService
           .createAccount(token.authentication.idToken)
           .subscribe({
             next: (response) => {
+              gtag('event', 'click', {
+                page_title: 'Tela de Cadastro com Google', // Título que você quer identificar
+                page_location: window.location.href,
+                page_path: '/cadastro', // Defina o caminho conforme sua rota
+                create_account: 'create_account_with_google',
+              });
+              gtag('device_infor', 'create_account', device);
+
               this.isLoadingButtonGoogleOAuth = false;
               this.tokenStorageSecurityRequestService.saveToken(response.token);
               this.preferencesUserAuthenticateService.savePreferences(response);
@@ -98,6 +113,15 @@ export class SignupComponent implements OnInit {
               this.router.navigateByUrl('home/user-welcome');
             },
             error: (errorResponse: any) => {
+              gtag('event', 'error_create_account_with_google', {
+                page_title: 'Tela de Cadastro',
+                page_location: window.location.href,
+                page_path: '/cadastro',
+                error_message:
+                  errorResponse.error.message?.message || 'Erro desconhecido',
+                error_code: errorResponse.status || 'sem código',
+              });
+
               this.typeErrorModal = 'warn';
               this.errorMessage = errorResponse.error.message;
               this.isLoadingButtonGoogleOAuth = false;
@@ -135,15 +159,25 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  createAccountUser() {
+  async createAccountUser() {
     if (this.createAccountFormGroup.valid) {
       this.isLoadingButton = true;
       this.buttonDisalbled = true;
+      const device = await this.deviceInfor();
       const dataCreateAccountUser =
         this.createAccountFormGroup.getRawValue() as CreateAccount;
 
       this.createAccountService.createAccount(dataCreateAccountUser).subscribe({
-        next: (response) => {
+        next: () => {
+          gtag('event', 'click', {
+            page_title: 'Tela de Cadastro', // Título que você quer identificar
+            page_location: window.location.href,
+            page_path: '/cadastro', // Defina o caminho conforme sua rota
+            create_account: 'create_account',
+          });
+
+          gtag('device_infor', 'create_account', device);
+
           this.isLoadingButton = false;
           this.buttonDisalbled = false;
           this.router.navigateByUrl('auth/information-user-registred');
@@ -151,6 +185,16 @@ export class SignupComponent implements OnInit {
         error: (responseError) => {
           this.isLoadingButton = false;
           this.buttonDisalbled = false;
+
+          gtag('event', 'error_create_account', {
+            page_title: 'Tela de Cadastro',
+            page_location: window.location.href,
+            page_path: '/cadastro',
+            error_message:
+              responseError.error.message?.message || 'Erro desconhecido',
+            error_code: responseError.status || 'sem código',
+          });
+
           this.openBottomSheet(
             'Ops, ocorreu um erro.',
             responseError.error.message.message
@@ -158,6 +202,17 @@ export class SignupComponent implements OnInit {
         },
       });
     }
+  }
+
+  async deviceInfor() {
+    const deviceInfor = await Device.getInfo();
+    return {
+      system_version: deviceInfor.operatingSystem,
+      os_version: deviceInfor.osVersion,
+      language: Device.getLanguageTag(),
+      manufacturer: deviceInfor.manufacturer,
+      model: deviceInfor.model,
+    };
   }
 
   async goToAuthSign() {
