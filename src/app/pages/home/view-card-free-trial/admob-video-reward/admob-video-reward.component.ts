@@ -55,6 +55,17 @@ export class AdmobVideoRewardCardFreeTrialComponent
       this.isLoading = false;
 
       this.router.navigateByUrl('home/view-card-free-trial');
+      // this.updateAdmobVideoRewardService.updateVideoReward().subscribe({
+      //   next: () => {
+      //     this.isLoading = false;
+
+      //     this.router.navigateByUrl('home/view-card-free-trial');
+      //   },
+      //   error: (error) => {
+      //     this.erroLoadVideoReward = true;
+      //     this.isLoading = false;
+      //   },
+      // });
     }
   }
 

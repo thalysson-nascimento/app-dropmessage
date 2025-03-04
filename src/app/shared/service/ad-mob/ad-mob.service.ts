@@ -106,13 +106,6 @@ export class AdmobService {
               if (data) {
                 const { admobResponse, userHashPublic, userEmail } = data;
 
-                console.log(
-                  'Ad ===>',
-                  admobResponse,
-                  userHashPublic,
-                  userEmail
-                );
-
                 const options: RewardAdOptions = {
                   adId: admobResponse.admob.adId,
                   isTesting: admobResponse.admob.adIsTest,
