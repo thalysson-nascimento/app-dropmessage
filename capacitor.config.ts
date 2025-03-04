@@ -19,7 +19,7 @@ const config: CapacitorConfig = {
       ],
     },
     AdMob: {
-      androidAppId: 'ca-app-pub-8691674404508428~8935039558',
+      androidAppId: 'ca-app-pub-8691674404508428/6895932094',
       maxAdContentRating: 'G', // (G, PG, T, MA) -> Altere conforme necessário
       tagForChildDirectedTreatment: false, // Direcionado a crianças (false para não)
       tagForUnderAgeOfConsent: false, // Usuários menores de idade

@@ -57,6 +57,8 @@ export class UserFirstPublicationPostComponent implements OnInit, OnDestroy {
                     firstPublicationPostMessage: true,
                   },
                 };
+
+                console.log('updatedData -->>>', updatedData);
                 this.preferencesUserAuthenticateService
                   .savePreferences(updatedData)
                   .subscribe();
@@ -66,6 +68,7 @@ export class UserFirstPublicationPostComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       error: (error) => {
+        console.log('first publication: ==>', error);
         this.isLoading = false;
         this.errorRequest = true;
       },

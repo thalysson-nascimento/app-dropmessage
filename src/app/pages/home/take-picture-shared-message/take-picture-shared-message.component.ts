@@ -193,6 +193,8 @@ export class TakePictureSharedMessageComponent
                   .pipe(takeUntil(this.destroy$))
                   .subscribe({
                     next: (response) => {
+                      console.log('take pricture -->', response);
+
                       const firstPublicationPostMessage =
                         response?.goldFreeTrialData.firstPublicationPostMessage;
 
