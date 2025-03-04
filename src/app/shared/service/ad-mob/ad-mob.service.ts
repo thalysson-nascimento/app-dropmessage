@@ -1,16 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-  AdLoadInfo,
   AdMob,
   AdMobRewardItem,
   AdmobConsentStatus,
   RewardAdOptions,
   RewardAdPluginEvents,
 } from '@capacitor-community/admob';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { lastValueFrom, map } from 'rxjs';
 import { currentEnvironment } from '../../../../environment.config';
-import { AdmobAdID } from '../../interface/admob-ad-id.interface';
 import { PreferencesUserAuthenticateService } from '../preferences-user-authenticate/preferences-user-authenticate.service';
 
 @Injectable({
@@ -28,7 +26,7 @@ export class AdmobService {
 
   async initializeAdmob(): Promise<void> {
     await AdMob.initialize({
-      initializeForTesting: false,
+      initializeForTesting: true, // Ativar modo de teste
     });
 
     const [trackingInfo, consentInfo] = await Promise.all([
@@ -64,68 +62,57 @@ export class AdmobService {
   async rewardVideo(): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
-          resolve();
-        });
-
-        AdMob.addListener(
-          RewardAdPluginEvents.Rewarded,
-          (rewardItem: AdMobRewardItem) => {}
+        const adLoadListener = await AdMob.addListener(
+          RewardAdPluginEvents.Loaded,
+          () => {
+            console.log('Anúncio carregado com sucesso.');
+            resolve();
+          }
         );
 
-        this.preferencesUserAuthenticateService
-          .getToken()
-          .pipe(
+        const adRewardListener = await AdMob.addListener(
+          RewardAdPluginEvents.Rewarded,
+          (rewardItem: AdMobRewardItem) => {
+            console.log('Usuário recompensado:', rewardItem);
+          }
+        );
+
+        const userData = await lastValueFrom(
+          this.preferencesUserAuthenticateService.getToken().pipe(
             map((response) => {
               if (response) {
-                const userHashPublic =
-                  response.userVerificationData.userHashPublic;
-                const userEmail = response.avatar.user.email;
-                return { userHashPublic, userEmail };
+                return {
+                  userHashPublic: response.userVerificationData.userHashPublic,
+                  userEmail: response.avatar.user.email,
+                };
               }
               throw new Error('Token inválido ou não encontrado.');
-            }),
-            switchMap(({ userHashPublic, userEmail }) => {
-              return this.httpClient
-                .get<AdmobAdID>(`${this.baseURL}/admob/public-key/`)
-                .pipe(
-                  map((admobResponse) => ({
-                    admobResponse,
-                    userHashPublic,
-                    userEmail,
-                  })),
-                  catchError((error) => {
-                    console.error('Erro durante a execução:', error);
-                    return of(null);
-                  })
-                );
             })
           )
-          .subscribe({
-            next: async (data) => {
-              if (data) {
-                const { admobResponse, userHashPublic, userEmail } = data;
+        );
 
-                const options: RewardAdOptions = {
-                  adId: admobResponse.admob.adId,
-                  isTesting: admobResponse.admob.adIsTest,
-                  ssv: {
-                    userId: userHashPublic,
-                    customData: JSON.stringify({ email: userEmail }),
-                  },
-                };
+        // Configuração do anúncio
+        const options: RewardAdOptions = {
+          adId: 'ca-app-pub-8691674404508428/7187041674',
+          isTesting: false,
+          ssv: {
+            userId: userData.userHashPublic,
+            customData: JSON.stringify({ email: userData.userEmail }),
+          },
+        };
 
-                const isPrepared = await AdMob.prepareRewardVideoAd(options);
+        // Prepara e exibe o anúncio
+        const isPrepared = await AdMob.prepareRewardVideoAd(options);
 
-                if (isPrepared) {
-                  await AdMob.showRewardVideoAd();
-                } else {
-                  console.error('Erro ao carregar o vídeo com recompensa.');
-                  reject('Erro ao carregar o vídeo com recompensa.');
-                }
-              }
-            },
-          });
+        if (isPrepared) {
+          await AdMob.showRewardVideoAd();
+        } else {
+          console.error('Erro ao carregar o vídeo com recompensa.');
+          reject('Erro ao carregar o vídeo com recompensa.');
+        }
+
+        await adLoadListener.remove();
+        await adRewardListener.remove();
       } catch (error) {
         console.error('Erro ao preparar/exibir o vídeo de recompensa:', error);
         reject(error);

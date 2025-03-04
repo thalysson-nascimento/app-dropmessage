@@ -59,6 +59,7 @@ export class AdmobVideoRewardComponent
           this.router.navigateByUrl('home/post-messages');
         },
         error: (error) => {
+          console.log(error);
           this.erroLoadVideoReward = true;
           this.isLoading = false;
         },

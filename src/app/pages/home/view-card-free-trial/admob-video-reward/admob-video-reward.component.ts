@@ -46,27 +46,18 @@ export class AdmobVideoRewardCardFreeTrialComponent
   }
 
   async onShowRewardAd() {
-    try {
-      await this.admobService.rewardVideo();
-    } catch (error) {
-      this.erroLoadVideoReward = true;
-      this.isLoading = false;
-    } finally {
-      this.isLoading = false;
+    await this.admobService
+      .rewardVideo()
+      .catch((error) => {
+        console.log(error);
+        this.erroLoadVideoReward = true;
+        this.isLoading = false;
+      })
+      .finally(() => {
+        this.isLoading = false;
 
-      this.router.navigateByUrl('home/view-card-free-trial');
-      // this.updateAdmobVideoRewardService.updateVideoReward().subscribe({
-      //   next: () => {
-      //     this.isLoading = false;
-
-      //     this.router.navigateByUrl('home/view-card-free-trial');
-      //   },
-      //   error: (error) => {
-      //     this.erroLoadVideoReward = true;
-      //     this.isLoading = false;
-      //   },
-      // });
-    }
+        this.router.navigateByUrl('home/view-card-free-trial');
+      });
   }
 
   goToCardFreeTrial() {
