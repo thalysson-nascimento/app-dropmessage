@@ -10,7 +10,9 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
+import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { LoadingComponent } from '../../../shared/component/loading/loading.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
@@ -26,9 +28,9 @@ import { UserLocationService } from '../../../shared/service/user-location/user-
 const SharedComponents = [
   ButtonStyleDirective,
   LoadingComponent,
-  ModalComponent,
+  LoadShimmerComponent,
 ];
-const CoreModule = [CommonModule];
+const CoreModule = [CommonModule, TranslateModule];
 
 @Component({
   selector: 'app-user-location',
@@ -46,7 +48,6 @@ export class UserLocationComponent implements OnInit, OnDestroy {
   isLoadingLocation: boolean = true;
   errorMessage: string = 'error';
 
-  @ViewChild('modalErrorUserLocation') modalErrorUserLocation!: ModalComponent;
   @ViewChild('modalConfirmePermissionLocation')
   modalConfirmePermissionLocation!: ModalComponent;
   pageView: string = 'DatingMatch:UserLocation';
@@ -55,6 +56,9 @@ export class UserLocationComponent implements OnInit, OnDestroy {
   country: string = '';
   countryCode: string = '';
   currency: string = '';
+  permissionDeniedLocation: boolean = false;
+  showDescriptionLocation: boolean = false;
+  errorRequestLocation: boolean = false;
 
   constructor(
     private geoLocationService: GeolocationService,
@@ -81,23 +85,26 @@ export class UserLocationComponent implements OnInit, OnDestroy {
     const permissionStatus = await Geolocation.checkPermissions();
 
     if (permissionStatus.location === 'granted') {
+      this.permissionDeniedLocation = false;
+
       if (isPlatformBrowser(this.platformId)) {
         this.loadGeoLocation();
       }
     } else {
-      this.modalConfirmePermissionLocation.openDialog();
+      this.requestLocationPermission();
     }
   }
 
-  async handlePermissionRequest() {
-    const permissionStatus = await Geolocation.requestPermissions();
+  async requestLocationPermission() {
+    const requestStatus = await Geolocation.requestPermissions();
 
-    if (permissionStatus.location === 'granted') {
-      this.modalConfirmePermissionLocation.closeDialog();
+    if (requestStatus.location === 'granted') {
+      this.permissionDeniedLocation = false;
       this.loadGeoLocation();
     } else {
-      this.errorMessage = 'Permissão de localização negada.';
-      this.modalErrorUserLocation.openDialog();
+      this.permissionDeniedLocation = true;
+      this.isLoadingButton = false;
+      this.isLoadingLocation = false;
     }
   }
 
@@ -105,6 +112,7 @@ export class UserLocationComponent implements OnInit, OnDestroy {
     this.isLoadingButton = true;
     this.isLoadingLocation = true;
     this.buttonDisalbled = true;
+    this.errorRequestLocation = false;
 
     try {
       const position = await Geolocation.getCurrentPosition();
@@ -115,6 +123,7 @@ export class UserLocationComponent implements OnInit, OnDestroy {
         .getGeolocation(latitude, longitude)
         .subscribe({
           next: (response) => {
+            this.showDescriptionLocation = true;
             this.state = response.results[0].components.state;
             this.city = response.results[0].components._normalized_city;
             this.stateCode = response.results[0].components.state_code;
@@ -127,8 +136,8 @@ export class UserLocationComponent implements OnInit, OnDestroy {
             this.isLoadingButton = false;
             this.isLoadingLocation = false;
             this.buttonDisalbled = false;
-            this.errorMessage = responseError.error.message.message;
-            this.modalErrorUserLocation.openDialog();
+            this.errorMessage = responseError.error.message;
+            this.errorRequestLocation = true;
           },
           complete: () => {
             this.isLoadingButton = false;
@@ -137,8 +146,8 @@ export class UserLocationComponent implements OnInit, OnDestroy {
           },
         });
     } catch (responseError: any) {
+      this.errorRequestLocation = true;
       this.errorMessage = `error do try cacth: ${responseError}`;
-      this.modalErrorUserLocation.openDialog();
       return `${responseError}: erro ao obter a localização do usuário.`;
     }
   }
@@ -235,14 +244,16 @@ export class UserLocationComponent implements OnInit, OnDestroy {
           });
         },
         error: (responseError: HttpErrorResponse) => {
-          this.errorMessage = responseError.error.message.message;
+          this.isLoadingButton = false;
+          this.errorRequestLocation = true;
+          this.showDescriptionLocation = false;
 
           const logger: TrackAction = {
             pageView: this.pageView,
             category: 'user_user_location',
             event: 'click',
             label: 'button:Confirmar Localização',
-            message: this.errorMessage,
+            message: responseError.error.message,
             statusCode: 200,
             level: 'error',
           };
@@ -251,8 +262,6 @@ export class UserLocationComponent implements OnInit, OnDestroy {
             .info(logger)
             .pipe(takeUntil(this.destroy$))
             .subscribe();
-
-          this.modalErrorUserLocation.openDialog();
         },
         complete: () => {
           this.isLoadingButton = false;

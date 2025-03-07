@@ -13,6 +13,9 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     takePhoto: 'Tirar foto',
     sharedPost: 'Postar foto',
     selectFromGallery: 'Selecionar da galeria',
+    allowLocation: 'Permitir localização',
+    confirmeLocation: 'Confirmar localização',
+    logout: 'Sair',
   },
   input: {
     placeholder: {
@@ -26,7 +29,7 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     titleSign: 'Entrar',
     or: 'ou',
     linkDoNotAccount: `Ainda não tem uma conta?`,
-    titleErro: 'Opa, ocorreu um erro!',
+    titleErro: 'Ops, erro de requisição!',
     descriptionError: '',
     titleCreateAccount: 'Crie sua conta',
     registrationAgree: 'Ao realizar o seu cadastro você concorda com os nossas',
@@ -79,5 +82,10 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     appInfor: 'Informações do app',
     descriptionAppInfor: 'Versão do app',
     version: 'Versão',
+    titleErrorLocation: 'Ops, erro de localização',
+    descriptionErrorLocation:
+      ' Não foi possível obter sua localização, para continuar clique no botão abaixo, ou acesse as configurações doseu disposivo.',
+    errorRequestLocation:
+      'Houve um erro de requisição, tente novamente mais tarde.',
   },
 };

@@ -13,6 +13,9 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     takePhoto: 'Take photo',
     sharedPost: 'Shared post',
     selectFromGallery: 'Select from gallery',
+    allowLocation: 'Allow location',
+    confirmeLocation: 'Confirm location',
+    logout: 'Logout',
   },
   input: {
     placeholder: {
@@ -78,5 +81,9 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     appInfor: 'App infor',
     descriptionAppInfor: 'Application version',
     version: 'Version',
+    titleErrorLocation: 'Oops, location error',
+    descriptionErrorLocation:
+      'Unable to obtain your location, to continue click the button below, or access your device settings.',
+    errorRequestLocation: 'There was a request error, try again later.',
   },
 };
