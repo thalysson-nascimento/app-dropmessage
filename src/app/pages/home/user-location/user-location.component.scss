@@ -1,15 +1,207 @@
+// .contain {
+//   display: flex;
+//   height: 100dvh;
+//   flex-direction: column;
+//   align-items: center;
+//   padding: 1rem;
+// }
+
+// .contain-body {
+//   flex-grow: 1; // Ocupa todo o espaço restante
+//   width: 100%; // Garante que ele ocupe toda a largura disponível
+// }
+
+// .contain-button {
+//   width: 100%;
+//   display: flex;
+//   justify-content: center;
+//   align-self: flex-end; // Mantém o botão no final
+//   padding: 1rem;
+
+//   button {
+//     all: unset;
+//     background-color: #007bff;
+//     color: white;
+//     padding: 0.5rem 1rem;
+//     border-radius: 5px;
+//     cursor: pointer;
+//   }
+// }
+
+// .image-location {
+//   width: 100%;
+//   object-fit: cover;
+//   padding-top: 2rem;
+// }
+
+// .contain-description-location {
+//   display: flex;
+//   margin-top: 1rem;
+//   flex-direction: column;
+//   text-align: center;
+//   line-height: 2rem;
+// }
+
+// .contain-button {
+//   margin-top: 2rem;
+// }
+
+// .contain-title {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   text-align: center;
+//   margin-bottom: 2rem;
+// }
+
+// .title-error {
+//   font-size: 2rem;
+//   font-weight: 700;
+// }
+
+// .contain-description-error {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   text-align: center;
+// }
+
+// .description-error-message {
+//   font-size: 1rem;
+//   margin-left: 1rem;
+//   margin-right: 1rem;
+//   color: #7b7b7b;
+//   margin-top: 1rem;
+//   margin-bottom: 1rem;
+// }
+
+// .contain-image {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
+
+// .contain-button-system-unavailable {
+//   margin-top: 2rem;
+//   margin-left: 3rem;
+//   margin-right: 3rem;
+// }
+
+// .contain-buton-loggout {
+//   width: 100%;
+//   display: flex;
+//   justify-content: flex-end;
+//   padding: 1rem;
+
+//   button {
+//     all: unset;
+//     color: #333;
+//   }
+// }
+
+// * {
+//   margin: 0;
+//   padding: 0;
+//   box-sizing: border-box;
+// }
+
+.wrapper {
+  display: flex;
+  width: 100%;
+  height: 100dvh; // Garante que ocupe toda a altura da tela
+}
+
 .contain {
   display: flex;
-  height: 100dvh;
   flex-direction: column;
-  align-items: center;
+  width: 100%;
+  height: 100%;
+  flex: 1; // Permite que a div ocupe todo o espaço disponível
   padding: 1rem;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 1rem;
+
+  .logout-button {
+    all: unset;
+    color: #333;
+    cursor: pointer;
+  }
+}
+
+.content {
+  flex: 1; // Ocupa todo o espaço disponível entre header e footer
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem;
+
+  .location-button {
+    all: unset;
+    background-color: #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 }
 
 .image-location {
   width: 100%;
   object-fit: cover;
-  padding-top: 2rem;
+  padding: 1rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .contain {
+    padding: 0.5rem;
+  }
+
+  .header,
+  .footer {
+    padding: 0.5rem;
+  }
+
+  .location-button {
+    width: 100%; // Ocupa toda a largura em telas menores
+  }
+}
+
+.location-denied {
+  padding: 1rem;
+  background-color: #f5f5f5;
+  margin: 1rem;
+  border-radius: 1rem;
+
+  h2 {
+    margin-bottom: var(--space-medium);
+  }
+
+  p {
+    line-height: 1.5;
+  }
+}
+
+.contain-shimmer {
+  width: 100%;
+  padding: 1rem;
+}
+
+.shimmer-80 {
+  width: 80%;
 }
 
 .contain-description-location {
@@ -20,59 +212,24 @@
   line-height: 2rem;
 }
 
-.contain-button {
-  margin-top: 2rem;
-}
-
-.contain-title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.title-error {
-  font-size: 2rem;
-  font-weight: 700;
-}
-
-.contain-description-error {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.description-error-message {
-  font-size: 1rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  color: #7b7b7b;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-
-.contain-image {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.contain-button-system-unavailable {
-  margin-top: 2rem;
-  margin-left: 3rem;
-  margin-right: 3rem;
-}
-
-.contain-buton-loggout {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
+.error-request-location {
   padding: 1rem;
+  background-color: #ffedd9;
+  margin: 1rem;
+  border-radius: 1rem;
 
-  button {
-    all: unset;
-    color: #333;
+  h2 {
+    margin-bottom: var(--space-medium);
   }
+
+  p {
+    line-height: 1.5;
+  }
+}
+
+.button-confirme-location {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
 }

@@ -1,104 +1,90 @@
-<div class="contain-buton-loggout">
-  <button (click)="logout()">Sair</button>
+<div class="wrapper">
+  <div class="contain">
+    <header class="header">
+      <button class="logout-button" (click)="logout()">
+        {{ "button.logout" | translate }}
+      </button>
+    </header>
+
+    <main class="content">
+      <div class="image-location">
+        <img
+          class="image-location"
+          src="assets/icon-static/new-user-location.svg"
+          alt="Localização"
+        />
+      </div>
+
+      @if(permissionDeniedLocation) {
+      <div class="location-denied">
+        <h2>{{ "text.titleErrorLocation" | translate }}</h2>
+        <p>
+          {{ "text.descriptionErrorLocation" | translate }}
+        </p>
+      </div>
+      } @else if (isLoadingLocation) {
+      <div class="contain-shimmer">
+        <app-load-shimmer [height]="'40px'"></app-load-shimmer>
+        <div class="shimmer-80">
+          <app-load-shimmer [height]="'40px'"></app-load-shimmer>
+        </div>
+      </div>
+      } @else if (errorRequestLocation) {
+      <div class="error-request-location">
+        <h2>{{ "text.titleErro" | translate }}</h2>
+        <p>{{ "text.errorRequestLocation" | translate }}</p>
+      </div>
+      } @else if (showDescriptionLocation) {
+      <div class="contain-description-location">
+        <h1>
+          {{ state }} <span>{{ stateCode }}</span>
+        </h1>
+        <p>{{ city }}</p>
+      </div>
+      }
+    </main>
+
+    <footer class="footer">
+      @if(permissionDeniedLocation) {
+      <button
+        appButtonStyle
+        [buttonType]="'secondary'"
+        (click)="checkLocationPermission()"
+      >
+        {{ "button.allowLocation" | translate }}
+      </button>
+      } @else if (errorRequestLocation) {
+      <button
+        appButtonStyle
+        [buttonType]="'secondary'"
+        (click)="checkLocationPermission()"
+      >
+        {{ "button.tryAgain" | translate }}
+      </button>
+      } @else {
+      <button
+        class="button-confirme-location"
+        type="submit"
+        appButtonStyle
+        [buttonType]="'secondary'"
+        [disabled]="buttonDisalbled"
+        [disabledButton]="buttonDisalbled"
+        (click)="confirmUserLocation()"
+      >
+        <app-loading
+          *ngIf="isLoadingButton; else titleButtonConfirmeLocation"
+          width="22px"
+          height="22px"
+          lineHeight="2px"
+        ></app-loading>
+
+        <ng-template #titleButtonConfirmeLocation>
+          <span *ngIf="!isLoadingButton">{{
+            "button.confirmeLocation" | translate
+          }}</span>
+        </ng-template>
+      </button>
+      }
+    </footer>
+  </div>
 </div>
-
-<div class="contain">
-  <div class="image-location">
-    <img src="assets/icon-static/user-location.svg" alt="Localização" />
-  </div>
-
-  <div *ngIf="isLoadingLocation; else showCidades">
-    <app-loading width="22px" height="22px" lineHeight="2px"></app-loading>
-  </div>
-
-  <ng-template #showCidades>
-    <div class="contain-description-location">
-      <h1>
-        {{ state }} <span>{{ stateCode }}</span>
-      </h1>
-      <p>{{ city }}</p>
-    </div>
-  </ng-template>
-  <div></div>
-
-  <div class="contain-button">
-    <button
-      class="button-login"
-      type="submit"
-      appButtonStyle
-      [buttonType]="'secondary'"
-      [disabled]="buttonDisalbled"
-      [disabledButton]="buttonDisalbled"
-      (click)="confirmUserLocation()"
-    >
-      <app-loading
-        *ngIf="isLoadingButton; else titleButtonConfirmeLocation"
-        width="22px"
-        height="22px"
-        lineHeight="2px"
-      ></app-loading>
-
-      <ng-template #titleButtonConfirmeLocation>
-        <span *ngIf="!isLoadingButton">Confirmar localização</span>
-      </ng-template>
-    </button>
-  </div>
-</div>
-
-<app-modal #modalErrorUserLocation>
-  <div class="contain-title">
-    <p class="title-error">Ops, ocorreu um erro!</p>
-  </div>
-
-  <div class="contain-image">
-    <img
-      src="assets/icon-static/error-request.svg"
-      class="image-error-request"
-      alt=""
-    />
-  </div>
-
-  <div class="contain-description-error">
-    <p class="description-error">{{ errorMessage }}</p>
-  </div>
-
-  <div class="contain-button-system-unavailable">
-    <button
-      appButtonStyle
-      [buttonType]="'secondary'"
-      (click)="modalErrorUserLocation.closeDialog()"
-    >
-      Tentar novamente
-    </button>
-  </div>
-</app-modal>
-
-<app-modal #modalConfirmePermissionLocation>
-  <div class="contain-title">
-    <p class="title-error">Ops, error de permissão de localização!</p>
-  </div>
-
-  <div class="contain-image">
-    <img
-      src="assets/icon-static/error-request.svg"
-      class="image-error-request"
-      alt=""
-    />
-  </div>
-
-  <div class="contain-description-error">
-    <p class="description-error">
-      Para continuar você precisa conceder permissão de localização.
-    </p>
-  </div>
-
-  <div class="contain-button-system-unavailable">
-    <button
-      appButtonStyle
-      [buttonType]="'secondary'"
-      (click)="handlePermissionRequest()"
-    >
-      Conceder permissão
-    </button>
-  </div>
-</app-modal>

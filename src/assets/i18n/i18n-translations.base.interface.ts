@@ -11,6 +11,9 @@ export interface I18nTranslationsBase {
     takePhoto: string;
     sharedPost: string;
     selectFromGallery: string;
+    allowLocation: string;
+    confirmeLocation: string;
+    logout: string;
   };
   input: {
     placeholder: {
@@ -74,5 +77,8 @@ export interface I18nTranslationsBase {
     appInfor: string;
     descriptionAppInfor: string;
     version: string;
+    titleErrorLocation: string;
+    descriptionErrorLocation: string;
+    errorRequestLocation: string;
   };
 }
