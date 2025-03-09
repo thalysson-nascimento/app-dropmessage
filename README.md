@@ -69,3 +69,6 @@ npx capacitor-assets generate
 
 verificar a chave interna
 keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android
+
+assinar
+jarsigner -verbose -keystore release-key.keystore ./app/app-release.aab DatingMatchSignature
