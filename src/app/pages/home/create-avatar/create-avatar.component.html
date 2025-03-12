@@ -1,5 +1,5 @@
 <div class="contain-buton-loggout">
-  <button (click)="logout()">Sair</button>
+  <button (click)="logout()">{{ "button.logout" | translate }}</button>
 </div>
 
 <div class="container">
@@ -8,7 +8,9 @@
     [@fadeInOut]="showSnapshot ? 'in' : 'out'"
   >
     <div>
-      <p class="text-complete-perfil">Completar perfil</p>
+      <p class="text-complete-perfil">
+        {{ "text.completeProfile" | translate }}
+      </p>
       <div *ngIf="!cameraImage; else takePhoto">
         <div class="contain-permission">
           <div class="contain-svg">
@@ -21,7 +23,7 @@
               [buttonType]="'primary'"
               (click)="openBottomSheet()"
             >
-              Tirar foto para perfil.
+              {{ "button.takePicture" | translate }}
             </button>
           </div>
         </div>
@@ -46,7 +48,7 @@
               [buttonType]="'primary'"
               (click)="openBottomSheet()"
             >
-              Tirar foto para perfil
+              {{ "button.takePicture" | translate }}
             </button>
           </div>
         </div>
@@ -65,7 +67,7 @@
               [buttonType]="'primary'"
               (click)="requestCameraPermissionAgain()"
             >
-              Permitir uso de câmera
+              {{ "button.allowCamera" | translate }}
             </button>
           </div>
         </div>
@@ -79,7 +81,7 @@
     >
       <input
         type="text"
-        placeholder="data de nascimento"
+        [placeholder]="'input.placeholder.dateOfBirth' | translate"
         appInputCustom
         class="input-custom"
         maxlength="10"
@@ -93,7 +95,7 @@
         avatarAndCompletedFormGroup.get('dateOfBirth')?.errors?.['invalidDate']
       "
       >
-        <p class="data-invalid">Data inválida</p>
+        <p class="data-invalid">{{ "text.invalidDate" | translate }}</p>
       </div>
       <div
         class="contain-data-invalid"
@@ -101,7 +103,7 @@
         avatarAndCompletedFormGroup.get('dateOfBirth')?.errors?.['underage']
       "
       >
-        <p class="data-invalid">O usuário deve ter pelo menos 18 anos</p>
+        <p class="data-invalid">{{ "text.underageUser" | translate }}</p>
       </div>
       <div
         class="contain-data-invalid"
@@ -109,12 +111,14 @@
         avatarAndCompletedFormGroup.get('dateOfBirth')?.errors?.['futureDate']
       "
       >
-        <p class="data-invalid">A data não pode ser maior que a data atual</p>
+        <p class="data-invalid">
+          {{ "text.dateGreaterThanCurrent" | translate }}
+        </p>
       </div>
       <input
         (click)="openModalGender()"
         type="text"
-        placeholder="como você se identifica?"
+        [placeholder]="'input.placeholder.identifyYourSelf' | translate"
         id=""
         [value]="typeGender"
         readonly
@@ -125,7 +129,7 @@
       <input
         (click)="openModalInterests()"
         type="text"
-        placeholder="interesses"
+        [placeholder]="'input.placeholder.interest' | translate"
         id=""
         appInputCustom
         class="input-custom"
@@ -140,7 +144,9 @@
         [disabled]="avatarAndCompletedFormGroup.invalid"
         [disabledButton]="avatarAndCompletedFormGroup.invalid"
       >
-        <span *ngIf="!isLoadingButton">completar perfil</span>
+        <span *ngIf="!isLoadingButton">
+          {{ "button.completeProfile" | translate }}</span
+        >
         <div *ngIf="isLoadingButton" class="bouncing-dots">
           <div class="dot"></div>
           <div class="dot"></div>
@@ -155,17 +161,17 @@
 <app-modal #genderModal>
   <ul class="list-action-timer">
     <div class="contain-title-modal">
-      <p>Como você se identifica?</p>
+      <p>{{ "input.placeholder.identifyYourSelf" | translate }}</p>
     </div>
 
     <li class="action-timer" (click)="selectGender('homem')">
       <div class="contain-icon-and-description">
         <i class="fi fi-tr-mars"></i>
         <div>
-          <p>Homem</p>
-          <span class="drescription-timer"
-            >Se identifica com o genero atribuido.</span
-          >
+          <p>{{ "text.man" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.describeGender" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
@@ -174,10 +180,10 @@
       <div class="contain-icon-and-description">
         <i class="fi fi-tr-venus"></i>
         <div>
-          <p>Mulher</p>
-          <span class="drescription-timer"
-            >Se identifica com o genero atribuido.</span
-          >
+          <p>{{ "text.woman" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.describeGender" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
@@ -186,10 +192,10 @@
       <div class="contain-icon-and-description">
         <i class="fi fi-tr-transgender"></i>
         <div>
-          <p>Não binario</p>
-          <span class="drescription-timer"
-            >Identidade além do binário tradicional.</span
-          >
+          <p>{{ "text.nonBinary" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.describeBinary" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
@@ -200,17 +206,17 @@
 <app-modal #interestsModal>
   <ul class="list-action-timer">
     <div class="contain-title-modal">
-      <p>Qual o seu interesse?</p>
+      <p>{{ "text.whatYourInterest" | translate }}</p>
     </div>
 
     <li class="action-timer" (click)="selectInterests('homem')">
       <div class="contain-icon-and-description">
         <i class="fi fi-tr-mars"></i>
         <div>
-          <p>Homem</p>
-          <span class="drescription-timer"
-            >Afinidade com o genero masculino.</span
-          >
+          <p>{{ "text.man" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.describeInterestMan" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
@@ -219,10 +225,10 @@
       <div class="contain-icon-and-description">
         <i class="fi fi-tr-venus"></i>
         <div>
-          <p>Mulher</p>
-          <span class="drescription-timer"
-            >Afinidade com o genero feminino.</span
-          >
+          <p>{{ "text.woman" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.describeInterestWoman" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
@@ -231,10 +237,10 @@
       <div class="contain-icon-and-description">
         <i class="fi fi-tr-transgender"></i>
         <div>
-          <p>Ambos</p>
-          <span class="drescription-timer"
-            >Afinidade com ambos os generos.</span
-          >
+          <p>{{ "text.both" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.describeInterestBoth" | translate
+          }}</span>
         </div>
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
@@ -244,7 +250,7 @@
 
 <app-modal #modalPhotoNotFound>
   <div class="contain-title">
-    <p class="title-error">Ops, foto do perfil!</p>
+    <p class="title-error">{{ "text.photoForProfile" | translate }}</p>
   </div>
 
   <div class="contain-image">
@@ -257,8 +263,7 @@
 
   <div class="contain-description-error">
     <p class="description-error">
-      Para concluir o seu cadastro você precisa tirar ou selecionar uma foto
-      para o seu perfil.
+      {{ "text.describePhotoForProfile" | translate }}
     </p>
   </div>
 
@@ -268,14 +273,16 @@
       [buttonType]="'secondary'"
       (click)="modalPhotoNotFound.closeDialog(); openBottomSheet()"
     >
-      Tirar foto
+      {{ "button.takePhoto" | translate }}
     </button>
   </div>
 </app-modal>
 
 <app-modal #modalErrorRequest>
   <div class="contain-title">
-    <p class="title-error">Ops, error de requisição!</p>
+    <p class="title-error">
+      {{ "text.titleError" | translate }}
+    </p>
   </div>
 
   <div class="contain-image">
@@ -288,7 +295,7 @@
 
   <div class="contain-description-error">
     <p class="description-error">
-      Ops no momento houve um erro de requisição. Tente novamente mais tarde.
+      {{ "text.describeErrorTryAgain" | translate }}
     </p>
   </div>
 
@@ -298,7 +305,7 @@
       [buttonType]="'secondary'"
       (click)="modalErrorRequest.closeDialog()"
     >
-      Tentar novamente
+      {{ "button.tryAgain" | translate }}
     </button>
   </div>
 </app-modal>

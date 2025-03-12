@@ -1,23 +1,23 @@
 <div class="contain-buton-loggout">
-  <button (click)="logout()">Sair</button>
+  <button (click)="logout()">{{ "button.logout" | translate }}</button>
 </div>
 <div class="contain">
   <div class="contain-description-location">
-    <h1>Verifique seu e-mail</h1>
+    <h1>{{ "text.titleVerifyEmail" | translate }}</h1>
   </div>
 
   <div class="contain-svg">
     <img
       class="svg"
       src="assets/icon-static/verify-email.svg"
-      alt="Localização"
+      aria-hidden="true"
     />
   </div>
 
-  <p>Verfique o código que foi enviado para o seu e-mail.</p>
+  <p>{{ "text.subtitleVerifyEmail" | translate }}></p>
 
   <div class="contain-alert" *ngIf="invalidCode">
-    <p>Ops, código inválido!</p>
+    <p>{{ "text.invalidCode" | translate }}</p>
   </div>
 
   <div class="contain-form">
@@ -27,7 +27,7 @@
     >
       <input
         appInputCustom
-        placeholder="digite o código"
+        [placeholder]="'input.placeholder.codeConfirmation' | translate"
         class="input-send-code"
         formControlName="codeConfirmationEmail"
         pattern="\d*"
@@ -51,7 +51,7 @@
         ></app-loading>
 
         <ng-template #titleButtonConfirmeLocation>
-          <span>Confirmar código</span>
+          <span>{{ "button.codeConfirmation" | translate }}</span>
         </ng-template>
       </button>
     </form>

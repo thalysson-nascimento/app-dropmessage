@@ -14,6 +14,12 @@ export interface I18nTranslationsBase {
     allowLocation: string;
     confirmeLocation: string;
     logout: string;
+    codeConfirmation: string;
+    processing: string;
+    confirmPayment: string;
+    takePicture: string;
+    allowCamera: string;
+    completeProfile: string;
   };
   input: {
     placeholder: {
@@ -21,13 +27,18 @@ export interface I18nTranslationsBase {
       password: string;
       name: string;
       email: string;
+      codeConfirmation: string;
+      dateOfBirth: string;
+      maskDateOfBirth: string;
+      identifyYourSelf: string;
+      interest: string;
     };
   };
   text: {
     titleSign: string;
     or: string;
     linkDoNotAccount: string;
-    titleErro: string;
+    titleError: string;
     descriptionError: string;
     titleCreateAccount: string;
     registrationAgree: string;
@@ -80,5 +91,36 @@ export interface I18nTranslationsBase {
     titleErrorLocation: string;
     descriptionErrorLocation: string;
     errorRequestLocation: string;
+    titleVerifyEmail: string;
+    subtitleVerifyEmail: string;
+    invalidCode: string;
+    plan: string;
+    goldPlanPromotion: string;
+    describeGoldPlanPromotion: string;
+    from: string;
+    for: string;
+    priceGoldFreeTrial: string;
+    freePriceGoldFreeTrial: string;
+    subscribeToPlan: string;
+    describePayment: string;
+    term: string;
+    privacy: string;
+    completeProfile: string;
+    invalidDate: string;
+    underageUser: string;
+    dateGreaterThanCurrent: string;
+    man: string;
+    woman: string;
+    both: string;
+    nonBinary: string;
+    describeGender: string;
+    describeBinary: string;
+    describeInterestMan: string;
+    describeInterestWoman: string;
+    describeInterestBoth: string;
+    whatYourInterest: string;
+    photoForProfile: string;
+    describePhotoForProfile: string;
+    describeErrorTryAgain: string;
   };
 }

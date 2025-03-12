@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild, untracked } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Stripe, StripeElements, loadStripe } from '@stripe/stripe-js';
 import { ErrorModalComponent } from '../../../shared/component/error-modal/error-modal.component';
 import { ErrorComponent } from '../../../shared/component/error/error.component';
@@ -10,7 +11,7 @@ import { SessionPaymentIntentService } from '../../../shared/service/session-pay
 import { SignalService } from '../../../shared/service/signal/signal.service';
 import { StripePublicKeyService } from '../../../shared/service/stripe-public-key/stripe-public-key.service';
 
-const CoreModule = [CommonModule];
+const CoreModule = [CommonModule, TranslateModule];
 const SharedModule = [
   ErrorComponent,
   LoadShimmerComponent,

@@ -24,19 +24,27 @@
         <div class="card-signature-header">
           <img src="assets/icon-static/logo-yeloow.svg" alt="arrow" />
           <div class="plan">
-            <span class="nickname">Plano</span>
+            <span class="nickname">{{ "text.plan" | translate }}</span>
             <p class="name">Gold Free Trial</p>
           </div>
         </div>
-        <h1 class="margin-title"><i>PROMOÇÃO PLANO GOLD</i></h1>
+        <h1 class="margin-title">
+          <i>{{ "text.goldPlanPromotion" | translate }}</i>
+        </h1>
         <p class="description">
-          Na sua primeira postagem você ganha de forma gratuita uma assinatura
-          do plano Gold válida por 7 dias.
+          {{ "text.describeGoldPlanPromotion" | translate }}
         </p>
-        <h2>de <s>R$29,99</s></h2>
         <h2>
-          <strong>por </strong>
-          <span><strong class="price">R$0,00</strong></span>
+          {{ "text.from" | translate }}
+          <s>{{ "text.priceGoldFreeTrial" | translate }}</s>
+        </h2>
+        <h2>
+          <strong>{{ "text.for" | translate }} </strong>
+          <span
+            ><strong class="price">{{
+              "text.freePriceGoldFreeTrial" | translate
+            }}</strong></span
+          >
         </h2>
       </div>
       <div class="contain-button">
@@ -46,7 +54,7 @@
           class="button"
           [buttonType]="'primary'"
         >
-          Compartilhar post
+          {{ "button.sharedPost" | translate }}
         </button>
       </div>
     </div>

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
 import { ErrorComponent } from '../../../shared/component/error/error.component';
@@ -15,7 +16,7 @@ const SharedComponents = [
   LoadShimmerComponent,
   ButtonStyleDirective,
 ];
-const CoreModule = [CommonModule];
+const CoreModule = [CommonModule, TranslateModule];
 
 @Component({
   selector: 'app-view-card-free-trial',

@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { LoadingComponent } from '../../../shared/component/loading/loading.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
@@ -25,7 +26,7 @@ const SharedComponents = [
   InputCustomDirective,
 ];
 
-const CoreModule = [CommonModule, ReactiveFormsModule];
+const CoreModule = [CommonModule, ReactiveFormsModule, TranslateModule];
 
 @Component({
   selector: 'app-verify-token-email',

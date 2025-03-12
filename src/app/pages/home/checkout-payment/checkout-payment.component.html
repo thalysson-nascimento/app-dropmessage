@@ -21,7 +21,9 @@
     <app-error></app-error>
     } @else {
     <div class="main-content-form">
-      <p class="plan">Assinar Plano {{ planSubscription.name }}</p>
+      <p class="plan">
+        {{ "text.subscribeToPlan" | translate }} {{ planSubscription.name }}
+      </p>
       <div class="contain-price">
         <span class="price">{{
           planSubscription.prices[0].unitAmount
@@ -47,17 +49,15 @@
           class="button-payment"
         >
           @if (isLoadingButton) {
-          <p>processando</p>
+          <p>{{ "button.processing" | translate }}</p>
           }@else {
-          <span>Confirmar Pagamento</span>
+          <span>{{ "button.confirmPayment" | translate }}</span>
           }
         </button>
       </div>
 
       <div class="acept-terms">
-        Ao confirmar sua assinatura, você permite que datingmatch cobre você em
-        referência a pagamentos futuros em conformidade com os termos da
-        empresa. Você pode cancelar a assinatura quando quiser.
+        {{ "text.describePayment" | translate }}
       </div>
       <div class="acept-terms">
         <p>Power by <strong>Stripe</strong></p>
@@ -66,13 +66,13 @@
             href="https://stripe.com/br/legal/consumer"
             target="_blank"
             rel="noopener noreferrer"
-            >Termos</a
+            >{{ "text.term" | translate }}</a
           >
           <a
             href="https://stripe.com/br/privacy"
             target="_blank"
             rel="noopener noreferrer"
-            >Privacidade</a
+            >{{ "text.privacy" | translate }}</a
           >
         </div>
       </div>
@@ -82,6 +82,8 @@
 </div>
 
 <app-error-modal #modalErrorRequest [type]="typeErrorModal">
-  <p><strong>Ops, ocorreu um erro!</strong></p>
+  <p>
+    <strong>{{ "text.titleError" | translate }}</strong>
+  </p>
   <p class="description-error">{{ errorRequestMessage }}</p>
 </app-error-modal>

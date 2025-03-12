@@ -25,6 +25,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { Dialog } from '@capacitor/dialog';
+import { TranslateModule } from '@ngx-translate/core';
 import DOMPurify from 'dompurify';
 import { NgxMaskDirective } from 'ngx-mask';
 import { Subject, delay, takeUntil, timer } from 'rxjs';
@@ -49,7 +50,7 @@ const SharedComponents = [
   NgxMaskDirective,
 ];
 
-const CoreModules = [CommonModule, ReactiveFormsModule];
+const CoreModules = [CommonModule, ReactiveFormsModule, TranslateModule];
 
 @Component({
   selector: 'app-create-avatar',
