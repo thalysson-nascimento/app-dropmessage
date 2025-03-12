@@ -235,3 +235,29 @@ img {
   padding: 1rem;
   width: 100%;
 }
+
+.password-container {
+  position: relative;
+  display: flex;
+
+  .input-custom {
+    flex: 1;
+    padding-right: 40px;
+  }
+
+  .eye-button {
+    position: absolute;
+    right: 1.2rem;
+    margin-top: 0.8rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  .size-icon-eye {
+    width: 20px;
+    height: 20px;
+    color: #666;
+    transition: opacity 0.3s ease-in-out;
+  }
+}

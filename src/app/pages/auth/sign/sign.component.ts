@@ -73,6 +73,7 @@ export class SignComponent implements OnInit, OnDestroy {
   @ViewChild('modalErrorRequest') modalErrorRequest!: ErrorModalComponent;
   typeErrorModal: 'success' | 'warn' | 'error' = 'success';
   testeToken: string = '';
+  showPassword: boolean = false;
 
   constructor(
     private router: Router,
@@ -108,6 +109,10 @@ export class SignComponent implements OnInit, OnDestroy {
     // Emite um valor para encerrar todas as assinaturas
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
   async navigateBackUsingApp() {

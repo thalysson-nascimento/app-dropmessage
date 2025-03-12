@@ -46,13 +46,30 @@
       formControlName="email"
       style="text-transform: lowercase"
     />
-    <input
-      type="password"
-      [placeholder]="'input.placeholder.password' | translate"
-      appInputCustom
-      class="input-custom"
-      formControlName="password"
-    />
+    <div class="password-container">
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        [placeholder]="'input.placeholder.password' | translate"
+        appInputCustom
+        class="input-custom"
+        formControlName="password"
+      />
+      <button
+        type="button"
+        class="eye-button"
+        (click)="togglePasswordVisibility()"
+      >
+        <img
+          class="size-icon-eye"
+          [src]="
+            showPassword
+              ? 'assets/icon-static/icon_eye.svg'
+              : 'assets/icon-static/icon_eye_close.svg'
+          "
+          alt="password"
+        />
+      </button>
+    </div>
     <button
       class="button-login"
       type="submit"
@@ -79,7 +96,7 @@
 
 <app-modal #dialog>
   <div class="contain-title">
-    <p class="title-error">{{ "titleErro" | translate }}</p>
+    <p class="title-error">{{ "text.titleErro" | translate }}</p>
   </div>
 
   <div class="contain-image">
