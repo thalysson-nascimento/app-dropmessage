@@ -168,12 +168,18 @@ export class TakePictureSharedMessageComponent
       fetch(cameraImage)
         .then((res) => res.blob())
         .then((blob) => {
-          const file = new File([blob], 'image.png', { type: 'image/png' });
+          const fileType =
+            blob.type === 'image/jpeg' ? 'image/jpeg' : 'image/png';
+          const fileExtension = fileType === 'image/jpeg' ? 'jpg' : 'png';
+          const file = new File([blob], `image.${fileExtension}`, {
+            type: fileType,
+          });
           const expirationTimer = this.expirationTimer;
+
           this.sharedPostMessageService
             .postMessage({ file, expirationTimer })
             .subscribe({
-              next: () => {
+              next: (response) => {
                 const logger: TrackAction = {
                   pageView: this.pageView,
                   category: 'take_picture_shared_message:shared_post',
@@ -187,26 +193,21 @@ export class TakePictureSharedMessageComponent
                   .info(logger)
                   .pipe(takeUntil(this.destroy$))
                   .subscribe();
-                this.disabledButton = false;
-                this.preferencesUserAuthenticateService
-                  .getToken()
-                  .pipe(takeUntil(this.destroy$))
-                  .subscribe({
-                    next: (response) => {
-                      const firstPublicationPostMessage =
-                        response?.goldFreeTrialData.firstPublicationPostMessage;
 
-                      if (firstPublicationPostMessage === false) {
-                        return this.router.navigate([
-                          '/home/user-first-publication-post',
-                        ]);
-                      }
+                if (response.post.user.StripeSignature.length === 0) {
+                  this.isLoadingButton = false;
+                  this.disabledButton = false;
+                  this.router.navigate(['/home/admob-video-reward-free-trial']);
+                }
 
-                      return this.router.navigate([
-                        '/home/send-message-success',
-                      ]);
-                    },
-                  });
+                if (
+                  response.post.user.StripeSignature?.[0].status === 'active' ||
+                  response.post.user.StripeSignature?.[0].status === 'trialing'
+                ) {
+                  this.isLoadingButton = false;
+                  this.disabledButton = false;
+                  this.router.navigate(['/home/send-message-success']);
+                }
               },
               error: (error) => {
                 const logger: TrackAction = {
@@ -221,13 +222,80 @@ export class TakePictureSharedMessageComponent
                   .info(logger)
                   .pipe(takeUntil(this.destroy$))
                   .subscribe();
+
+                this.isLoadingButton = false;
                 this.disabledButton = false;
-              },
-              complete: () => {
-                this.disabledButton = false;
+                alert(error);
               },
             });
         });
     }
+
+    //   if (cameraImage && this.cameraAllowed) {
+    //     fetch(cameraImage)
+    //       .then((res) => res.blob())
+    //       .then((blob) => {
+    //         const file = new File([blob], 'image.png', { type: 'image/png' });
+    //         const expirationTimer = this.expirationTimer;
+    //         this.sharedPostMessageService
+    //           .postMessage({ file, expirationTimer })
+    //           .subscribe({
+    //             next: () => {
+    //               const logger: TrackAction = {
+    //                 pageView: this.pageView,
+    //                 category: 'take_picture_shared_message:shared_post',
+    //                 event: 'click',
+    //                 label: 'button:compartilhar_post',
+    //                 message: 'Compartilhar post',
+    //                 statusCode: 200,
+    //                 level: 'info',
+    //               };
+    //               this.loggerService
+    //                 .info(logger)
+    //                 .pipe(takeUntil(this.destroy$))
+    //                 .subscribe();
+    //               this.disabledButton = false;
+    //               this.preferencesUserAuthenticateService
+    //                 .getToken()
+    //                 .pipe(takeUntil(this.destroy$))
+    //                 .subscribe({
+    //                   next: (response) => {
+    //                     const firstPublicationPostMessage =
+    //                       response?.goldFreeTrialData.firstPublicationPostMessage;
+
+    //                     if (firstPublicationPostMessage === false) {
+    //                       return this.router.navigate([
+    //                         '/home/user-first-publication-post',
+    //                       ]);
+    //                     }
+
+    //                     return this.router.navigate([
+    //                       '/home/send-message-success',
+    //                     ]);
+    //                   },
+    //                 });
+    //             },
+    //             error: (error) => {
+    //               const logger: TrackAction = {
+    //                 pageView: this.pageView,
+    //                 category: 'take_picture_shared_message:erro_shared_post',
+    //                 event: 'view',
+    //                 message: error.message,
+    //                 statusCode: 500,
+    //                 level: 'error',
+    //               };
+    //               this.loggerService
+    //                 .info(logger)
+    //                 .pipe(takeUntil(this.destroy$))
+    //                 .subscribe();
+    //               this.disabledButton = false;
+    //             },
+    //             complete: () => {
+    //               this.disabledButton = false;
+    //             },
+    //           });
+    //       });
+    //   }
+    // }
   }
 }

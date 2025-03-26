@@ -94,7 +94,7 @@ export class AdmobService {
         // Configuração do anúncio
         const options: RewardAdOptions = {
           adId: 'ca-app-pub-8691674404508428/7187041674',
-          isTesting: false,
+          // isTesting: true,
           ssv: {
             userId: userData.userHashPublic,
             customData: JSON.stringify({ email: userData.userEmail }),

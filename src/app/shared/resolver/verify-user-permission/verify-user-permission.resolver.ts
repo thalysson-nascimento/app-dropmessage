@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve, Router } from '@angular/router';
+import { Preferences } from '@capacitor/preferences';
 import { Observable, map } from 'rxjs';
 import { PreferencesUserAuthenticateService } from '../../service/preferences-user-authenticate/preferences-user-authenticate.service';
 
@@ -7,12 +8,29 @@ import { PreferencesUserAuthenticateService } from '../../service/preferences-us
   providedIn: 'root',
 })
 export class VerifyUserPermissionResolver implements Resolve<boolean> {
+  watchVideoRewardAdmob = false;
   constructor(
     private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
     private router: Router
   ) {}
 
   resolve(): Observable<boolean> {
+    Preferences.get({ key: 'preferencesWatchedVideoRewardAdmob' }).then(
+      (result) => {
+        console.log('result.value ==>', result.value);
+        if (result.value) {
+          return (this.watchVideoRewardAdmob = JSON.parse(result.value));
+        }
+
+        Preferences.set({
+          key: 'preferencesWatchedVideoRewardAdmob',
+          value: JSON.stringify(false),
+        });
+
+        this.watchVideoRewardAdmob = false;
+      }
+    );
+
     return this.preferencesUserAuthenticateService.getToken().pipe(
       map((userData) => {
         if (!userData?.userVerificationData.verificationTokenEmail) {
@@ -35,6 +53,16 @@ export class VerifyUserPermissionResolver implements Resolve<boolean> {
           !userData?.goldFreeTrialData?.viewCardFreeTrial
         ) {
           // this.router.navigateByUrl('home/view-card-free-trial');
+          this.router.navigateByUrl('home/admob-video-reward-free-trial');
+          return false;
+        }
+
+        // Verificar se statusSignature false e watchVideoRewardAdmob false
+        if (
+          (userData.statusSignature === false &&
+            this.watchVideoRewardAdmob === false) ||
+          this.watchVideoRewardAdmob === null
+        ) {
           this.router.navigateByUrl('home/admob-video-reward-free-trial');
           return false;
         }

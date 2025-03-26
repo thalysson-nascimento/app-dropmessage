@@ -29,7 +29,7 @@ export class SharedPostMessageService extends SharedPostMessageBase {
     formData.append('expirationTimer', expirationTimer);
 
     return this.httpClient
-      .post<SharedPostMessage>(`${this.baseURL}/post-message`, formData) // Enviando FormData diretamente
+      .post<SharedPostMessage>(`${this.baseURL}/post-message`, formData)
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           return throwError(() => errorResponse);

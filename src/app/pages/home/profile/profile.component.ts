@@ -2,6 +2,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
+import { Preferences } from '@capacitor/preferences';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ActiveSignatureComponent } from '../../../shared/component/active-signature/active-signature.component';
@@ -121,6 +122,11 @@ export class ProfileComponent implements OnInit {
       statusCode: 200,
       level: 'info',
     };
+
+    Preferences.set({
+      key: 'preferencesWatchedVideoRewardAdmob',
+      value: JSON.stringify(false),
+    });
 
     this.loggerService
       .info(logger)
