@@ -18,8 +18,8 @@ export class VerifyUserPermissionResolver implements Resolve<boolean> {
     Preferences.get({ key: 'preferencesWatchedVideoRewardAdmob' }).then(
       (result) => {
         console.log('result.value ==>', result.value);
-        if (result.value) {
-          return (this.watchVideoRewardAdmob = JSON.parse(result.value));
+        if (result.value === 'true') {
+          return (this.watchVideoRewardAdmob = true);
         }
 
         Preferences.set({
@@ -27,7 +27,7 @@ export class VerifyUserPermissionResolver implements Resolve<boolean> {
           value: JSON.stringify(false),
         });
 
-        this.watchVideoRewardAdmob = false;
+        return (this.watchVideoRewardAdmob = false);
       }
     );
 

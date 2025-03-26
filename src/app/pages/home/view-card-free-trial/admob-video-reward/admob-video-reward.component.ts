@@ -52,10 +52,10 @@ export class AdmobVideoRewardCardFreeTrialComponent
         this.erroLoadVideoReward = true;
         this.isLoading = false;
       })
-      .finally(() => {
+      .finally(async () => {
         this.isLoading = false;
 
-        Preferences.set({
+        await Preferences.set({
           key: 'preferencesWatchedVideoRewardAdmob',
           value: JSON.stringify(true),
         });
