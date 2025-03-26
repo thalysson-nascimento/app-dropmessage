@@ -63,7 +63,7 @@ zipalign -v 4 app-release.aab app-release-aligned.aab
 sudo kill -9 `sudo lsof -t -i:4200`
 
 executar o emulador
-emulator -avd android -gpu host -memory 1024 -no-snapshot -skin 412x915
+emulator -avd android -gpu host -memory 1500 -no-snapshot -skin 412x915
 
 npx capacitor-assets generate
 

@@ -1,6 +1,7 @@
 export interface TokenResponseSuccess {
   token: string;
   expiresIn: string;
+  statusSignature?: boolean;
   userVerificationData: UserVerificationData;
   avatar: Avatar;
   goldFreeTrialData: {

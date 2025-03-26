@@ -7,9 +7,9 @@ import {
   OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { Preferences } from '@capacitor/preferences';
 import { AdmobService } from '../../../../shared/service/ad-mob/ad-mob.service';
 import { LottieAnimationIconService } from '../../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
-import { UpdateAdmobVideoRewardService } from '../../../../shared/service/update-admob-video-reward/update-admob-video-reward.service';
 
 const CoreModule = [CommonModule];
 
@@ -30,8 +30,7 @@ export class AdmobVideoRewardCardFreeTrialComponent
   constructor(
     private admobService: AdmobService,
     private router: Router,
-    private lottieAnimationIconService: LottieAnimationIconService,
-    private updateAdmobVideoRewardService: UpdateAdmobVideoRewardService
+    private lottieAnimationIconService: LottieAnimationIconService
   ) {}
   ngAfterViewInit(): void {
     this.initializeLottieAnimation();
@@ -56,12 +55,19 @@ export class AdmobVideoRewardCardFreeTrialComponent
       .finally(() => {
         this.isLoading = false;
 
-        this.router.navigateByUrl('home/view-card-free-trial');
+        Preferences.set({
+          key: 'preferencesWatchedVideoRewardAdmob',
+          value: JSON.stringify(true),
+        });
+
+        // this.router.navigateByUrl('home/view-card-free-trial');
+        this.router.navigateByUrl('home/post-messages');
       });
   }
 
   goToCardFreeTrial() {
-    this.router.navigateByUrl('home/view-card-free-trial');
+    this.router.navigateByUrl('home/post-messages');
+    // this.router.navigateByUrl('home/view-card-free-trial');
   }
 
   initializeLottieAnimation(): void {
