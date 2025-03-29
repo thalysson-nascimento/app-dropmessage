@@ -1,0 +1,50 @@
+<div>
+  <div
+    class="card"
+    [style]="
+      gender === 'male'
+        ? 'background-color: #8ED1A5'
+        : 'background-color: #FFD7D7'
+    "
+  >
+    <div class="card-contain-icon">
+      @if (gender === 'male') {
+      <img
+        src="assets/icon-static/icon-home-card-green.svg"
+        aria-hidden="true"
+        alt=""
+      />
+      }@else {
+      <img
+        src="assets/icon-static/icon-home-card-pink.svg"
+        aria-hidden="true"
+        alt=""
+      />
+      }
+    </div>
+    <button class="card-button" (click)="goToSharedPostMessage()">
+      <div class="card-button-icon">
+        @if (gender === 'male') {
+        <img
+          src="assets/icon-static/fire-green.svg"
+          aria-hidden="true"
+          alt=""
+        />
+        } @else {
+        <img src="assets/icon-static/fire-pink.svg" aria-hidden="true" alt="" />
+        }
+      </div>
+      <div class="card-button-text">
+        <p class="title">
+          {{ "button.titleCard" | translate }}
+        </p>
+        <p
+          class="subtitle"
+          [style]="gender === 'male' ? 'color: #78C291' : 'color: #FFD7D7'"
+        >
+          {{ "button.sibtitleCard" | translate }}
+        </p>
+      </div>
+    </button>
+  </div>
+</div>

@@ -22,6 +22,8 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     takePicture: 'Take photo ',
     allowCamera: 'Allow camera',
     completeProfile: 'Complete Profile',
+    titleCard: 'Make your first post and try to connect with new people.',
+    sibtitleCard: 'Share post',
   },
   input: {
     placeholder: {

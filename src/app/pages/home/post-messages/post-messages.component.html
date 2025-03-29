@@ -91,7 +91,7 @@
           </div>
         </div>
 
-        <div class="no-matches-message" *ngIf="post.id === 'no-matches'">
+        <!-- <div class="no-matches-message" *ngIf="post.id === 'no-matches'">
           <p class="title-no-users-nearby">
             {{ "text.noNewFriends" | translate }}
           </p>
@@ -101,6 +101,9 @@
             alt=""
           />
           <p>{{ "text.tryAgainLater" | translate }}</p>
+        </div> -->
+        <div *ngIf="post.id === 'no-matches'">
+          <app-last-active-users></app-last-active-users>
         </div>
       </swiper-slide>
     </swiper-container>

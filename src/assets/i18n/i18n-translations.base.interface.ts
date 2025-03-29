@@ -20,6 +20,8 @@ export interface I18nTranslationsBase {
     takePicture: string;
     allowCamera: string;
     completeProfile: string;
+    titleCard: string;
+    sibtitleCard: string;
   };
   input: {
     placeholder: {

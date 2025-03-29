@@ -17,6 +17,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Subject, concatMap, takeUntil, tap } from 'rxjs';
 import { register } from 'swiper/element/bundle';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
+import { LastActiveUsersComponent } from '../../../shared/component/last-active-users/last-active-users.component';
 import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
@@ -36,6 +37,7 @@ const SharedComponent = [
   LogoDropmessageComponent,
   SystemUnavailableComponent,
   ButtonStyleDirective,
+  LastActiveUsersComponent,
 ];
 
 @Component({
