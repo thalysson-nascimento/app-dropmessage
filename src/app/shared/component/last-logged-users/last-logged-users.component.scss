@@ -1,0 +1,28 @@
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+  gap: 1rem;
+}
+
+.image-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  img {
+    height: 8rem;
+    width: 100%;
+    border-radius: 1rem;
+    object-fit: cover;
+  }
+
+  .user-info {
+    display: flex;
+    // justify-content: center;
+    gap: 0.5rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+    font-size: var(--font-size-small);
+  }
+}

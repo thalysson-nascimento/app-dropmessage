@@ -124,5 +124,7 @@ export interface I18nTranslationsBase {
     photoForProfile: string;
     describePhotoForProfile: string;
     describeErrorTryAgain: string;
+    onlineRecently: string;
+    userNotOnline: string;
   };
 }

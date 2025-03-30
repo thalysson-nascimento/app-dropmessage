@@ -136,5 +136,7 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
       'Para concluir o seu cadastro você precisa tirar ou selecionar uma foto para o seu perfil.',
     describeErrorTryAgain:
       'Ops no momento houve um erro de requisição. Tente novamente mais tarde',
+    onlineRecently: 'online recentemente',
+    userNotOnline: 'Ops, não encontramos nenhum usuário online',
   },
 };

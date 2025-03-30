@@ -133,5 +133,7 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
       'To complete your registration you need to take or select a photo for your profile.',
     describeErrorTryAgain:
       'Oops, there was a request error at this time. Please try again later.',
+    onlineRecently: 'online recently',
+    userNotOnline: `Oops, we couldn't find any users online`,
   },
 };
