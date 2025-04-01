@@ -4,12 +4,14 @@
       <app-logo-dropmessage [fontSize]="'1rem'"></app-logo-dropmessage>
     </div>
     <div class="actions">
-      <div
-        (click)="openBottomSheet()"
-        id="lottie-icon-camera"
-        class="lottie-icon-camera"
-        style="width: 67px; height: 67px"
-      ></div>
+      <div>
+        <img
+          src="assets/icon-static/new-icon-camera.svg"
+          style="width: 2rem; height: 2rem"
+          alt=""
+          (click)="openBottomSheet()"
+        />
+      </div>
       <div *ngIf="imageLoaded; else loading">
         <img
           (click)="goToListSettings()"
@@ -61,7 +63,7 @@
               }
             </div>
           </div>
-          <img [src]="post.image" alt="" />
+          <img class="user-post" [src]="post.image" alt="" />
         </ng-container>
 
         <div
@@ -91,16 +93,34 @@
           </div>
         </div>
 
-        <div class="no-matches-message" *ngIf="post.id === 'no-matches'">
-          <p class="title-no-users-nearby">
-            {{ "text.noNewFriends" | translate }}
-          </p>
-          <img
-            class="no-users-nearby"
-            src="assets/icon-static/image-home.svg"
-            alt=""
-          />
-          <p>{{ "text.tryAgainLater" | translate }}</p>
+        <div *ngIf="post.id === 'no-matches'">
+          @if(isLoadingLoggedUser) {
+          <div class="contain-loading-shimmer">
+            <app-load-shimmer height="50px"></app-load-shimmer>
+            <app-load-shimmer height="50px"></app-load-shimmer>
+            <div class="max-shimmer">
+              <app-load-shimmer height="50px"></app-load-shimmer>
+            </div>
+          </div>
+          } @else { @if (!lastUserLogged.isUserFirsPublication) {
+          <app-card-first-publication
+            [gender]="lastUserLogged.gender"
+          ></app-card-first-publication>
+          } @else {
+          <div class="banner-container">
+            <img src="assets/images/banner-party.png" alt="Banner" />
+            <h2>Novas conexões, novas experiências</h2>
+          </div>
+          }
+          <div class="contain-last-logged-users">
+            <p class="title-last-logged-users">
+              {{ "text.onlineRecently" | translate }}
+            </p>
+            <app-last-logged-users
+              [userList]="lastUserLogged.data"
+            ></app-last-logged-users>
+          </div>
+          }
         </div>
       </swiper-slide>
     </swiper-container>

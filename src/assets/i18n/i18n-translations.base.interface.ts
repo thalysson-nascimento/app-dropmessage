@@ -20,6 +20,8 @@ export interface I18nTranslationsBase {
     takePicture: string;
     allowCamera: string;
     completeProfile: string;
+    titleCard: string;
+    sibtitleCard: string;
   };
   input: {
     placeholder: {
@@ -122,5 +124,7 @@ export interface I18nTranslationsBase {
     photoForProfile: string;
     describePhotoForProfile: string;
     describeErrorTryAgain: string;
+    onlineRecently: string;
+    userNotOnline: string;
   };
 }

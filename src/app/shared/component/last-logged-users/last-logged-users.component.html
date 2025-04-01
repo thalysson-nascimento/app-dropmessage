@@ -1,0 +1,14 @@
+@if (userList.length === 0) {
+<p>{{ "text.userNotOnline" | translate }}</p>
+}@else {
+<div class="image-grid">
+  <div class="image-card" *ngFor="let user of userList">
+    <!-- <div class="image-card"> -->
+    <img [src]="user.avatar" alt="Avatar" />
+    <div class="user-info">
+      <span class="user-name">{{ user.name.split(" ")[0] }},</span>
+      <span class="user-age">{{ user.age }} </span>
+    </div>
+  </div>
+</div>
+}

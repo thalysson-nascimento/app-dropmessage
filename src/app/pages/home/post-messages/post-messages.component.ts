@@ -2,6 +2,7 @@ import { NgFor, NgIf, isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
   CUSTOM_ELEMENTS_SCHEMA,
+  ChangeDetectorRef,
   Component,
   NgZone,
   OnDestroy,
@@ -17,13 +18,18 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Subject, concatMap, takeUntil, tap } from 'rxjs';
 import { register } from 'swiper/element/bundle';
 import { BottomSheetComponent } from '../../../shared/bottom-sheet/bottom-sheet.component';
+import { CardFirstPublicationComponent } from '../../../shared/component/card-first-publication/card-first-publication.component';
+import { LastLoggedUsersComponent } from '../../../shared/component/last-logged-users/last-logged-users.component';
+import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
+import { LastLoggedUsers } from '../../../shared/interface/last-logged-users.interface';
 import { Post } from '../../../shared/interface/post';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
+import { LastLoggedUsersService } from '../../../shared/service/last-logged-users/last-logged-users.service';
 import { LikePostMessageService } from '../../../shared/service/like-post-message/like-post-message.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { LottieAnimationIconService } from '../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
@@ -36,6 +42,9 @@ const SharedComponent = [
   LogoDropmessageComponent,
   SystemUnavailableComponent,
   ButtonStyleDirective,
+  CardFirstPublicationComponent,
+  LastLoggedUsersComponent,
+  LoadShimmerComponent,
 ];
 
 @Component({
@@ -66,7 +75,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   displayImageUrl: string | null = null;
   imageLoaded = false;
   pageView: string = 'DatingMatch:PostMessage';
-
+  lastUserLogged!: LastLoggedUsers;
+  isLoadingLoggedUser: boolean = true;
   constructor(
     private postMessageService: PostMessageService,
     private zone: NgZone,
@@ -77,7 +87,9 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     private cacheAvatarService: CacheAvatarService,
     private likePostMessageService: LikePostMessageService,
     private unlikePostMessageService: UnlikePostMessageService,
-    private loggerService: LoggerService
+    private loggerService: LoggerService,
+    private lastLoggedUsersService: LastLoggedUsersService,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -102,13 +114,6 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.zone.runOutsideAngular(() => {
-      this.lottieAnimationIconService.loadLottieAnimation({
-        pathIconAnimation: 'camera.json',
-        idElement: 'lottie-icon-camera',
-        loop: false,
-        autoplay: true,
-      });
-
       this.lottieAnimationIconService.loadLottieAnimation({
         pathIconAnimation: 'loading.json',
         idElement: 'lottie-icon-is-loading',
@@ -159,6 +164,15 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
             const activePost = this.posts[activeIndex];
 
             if (activePost?.id === 'no-matches') {
+              this.lastLoggedUsersService.lastLoggedUsers().subscribe({
+                next: (response) => {
+                  this.isLoadingLoggedUser = false;
+                  this.lastUserLogged = response;
+                  console.log(response);
+                  this.cd.detectChanges();
+                },
+              });
+
               const logger: TrackAction = {
                 pageView: this.pageView,
                 category: 'user_post_message:no_match',

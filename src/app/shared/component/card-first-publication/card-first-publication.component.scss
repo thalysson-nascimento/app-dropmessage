@@ -1,0 +1,37 @@
+.card {
+  padding: var(--space-medium);
+
+  .card-contain-icon {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-right: var(--space-medium);
+  }
+
+  .card-button {
+    display: flex;
+    background-color: var(--white);
+    border: none;
+    padding: var(--space-medium);
+    border-radius: var(--space-medium);
+
+    .card-button-text {
+      text-align: left;
+      margin-left: var(--space-medium);
+      color: var(--text-dark);
+
+      .title {
+        margin-bottom: var(--space-medium);
+        font-size: var(--font-size-medium);
+      }
+      .subtitle {
+        color: var(--text-dark-secundary);
+        font-size: var(--font-size-large);
+      }
+    }
+  }
+
+  .contain-last-logged-users {
+    margin-top: var(--space-medium);
+  }
+}
