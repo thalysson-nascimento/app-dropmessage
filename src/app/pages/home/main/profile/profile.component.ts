@@ -5,21 +5,21 @@ import { App } from '@capacitor/app';
 import { Preferences } from '@capacitor/preferences';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
-import { ActiveSignatureComponent } from '../../../shared/component/active-signature/active-signature.component';
-import { CardSubscriptionComponent } from '../../../shared/component/card-subscription/card-subscription.component';
-import { ErrorComponent } from '../../../shared/component/error/error.component';
-import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
-import { ActiveSubscription } from '../../../shared/interface/active-subscription.interface';
-import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
-import { TrackAction } from '../../../shared/interface/track-action.interface';
-import { ActiveSubscriptionService } from '../../../shared/service/active-subscription/active-subscription.service';
-import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
-import { GoogleAuthService } from '../../../shared/service/google-auth/google-auth.service';
-import { LoggerService } from '../../../shared/service/logger/logger.service';
-import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
-import { SignalService } from '../../../shared/service/signal/signal.service';
-import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
-import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
+import { ActiveSignatureComponent } from '../../../../shared/component/active-signature/active-signature.component';
+import { CardSubscriptionComponent } from '../../../../shared/component/card-subscription/card-subscription.component';
+import { ErrorComponent } from '../../../../shared/component/error/error.component';
+import { LoadShimmerComponent } from '../../../../shared/component/load-shimmer/load-shimmer.component';
+import { ActiveSubscription } from '../../../../shared/interface/active-subscription.interface';
+import { AvatarSuccess } from '../../../../shared/interface/avatar.interface';
+import { TrackAction } from '../../../../shared/interface/track-action.interface';
+import { ActiveSubscriptionService } from '../../../../shared/service/active-subscription/active-subscription.service';
+import { CacheAvatarService } from '../../../../shared/service/cache-avatar/cache-avatar.service';
+import { GoogleAuthService } from '../../../../shared/service/google-auth/google-auth.service';
+import { LoggerService } from '../../../../shared/service/logger/logger.service';
+import { PreferencesUserAuthenticateService } from '../../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
+import { SignalService } from '../../../../shared/service/signal/signal.service';
+import { TokenStorageSecurityRequestService } from '../../../../shared/service/token-storage-security-request/token-storage-security-request.service';
+import { UserHashPublicService } from '../../../../shared/service/user-hash-public/user-hash-public.service';
 
 const CoreModule = [CommonModule, TranslateModule];
 const SharedComponent = [
@@ -33,8 +33,8 @@ const SharedComponent = [
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
-  standalone: true,
   imports: [...SharedComponent, ...CoreModule],
+  standalone: true,
 })
 export class ProfileComponent implements OnInit {
   avatar!: AvatarSuccess;

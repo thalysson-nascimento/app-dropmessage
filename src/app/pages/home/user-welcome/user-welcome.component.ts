@@ -17,6 +17,6 @@ export class UserWelcomeComponent implements OnInit {
   ngOnInit() {}
 
   toGoPostMessage() {
-    this.router.navigateByUrl('/home/post-messages');
+    this.router.navigateByUrl('/home/main/post-message');
   }
 }

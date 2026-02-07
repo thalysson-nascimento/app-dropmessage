@@ -11,18 +11,56 @@ export const HomeRouting: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'post-messages',
+        redirectTo: 'main',
         pathMatch: 'full',
       },
       {
-        path: 'post-messages',
+        path: 'main',
         resolve: {
           verify: VerifyUserPermissionResolver,
         },
         loadComponent: () =>
-          import('./post-messages/post-messages.component').then(
-            (m) => m.PostMessagesComponent
-          ),
+          import('./main/main.component').then((m) => m.MainComponent),
+        children: [
+          {
+            path: '',
+            redirectTo: 'post-message', // sua tela principal de cards
+            pathMatch: 'full',
+          },
+          {
+            path: 'post-message',
+            loadComponent: () =>
+              import('./main/post-message/post-message.component').then(
+                (m) => m.PostMessageComponent
+              ),
+          },
+          {
+            path: 'chat',
+            loadComponent: () =>
+              import('./main/chat/chat.component').then((m) => m.ChatComponent),
+          },
+          {
+            path: 'favorites',
+            loadComponent: () =>
+              import('./main/favorites/favorites.component').then(
+                (m) => m.FavoritesComponent
+              ),
+          },
+          {
+            path: 'ia-profile',
+            loadComponent: () =>
+              import('./main/ia-profile/ia-profile.component').then(
+                (m) => m.IaProfileComponent
+              ),
+          },
+          {
+            path: 'profile',
+            loadComponent: () =>
+              import('./main/profile/profile.component').then(
+                (m) => m.ProfileComponent
+              ),
+          },
+        ],
       },
       {
         path: 'take-picture-shared-message',

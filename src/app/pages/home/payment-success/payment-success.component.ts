@@ -17,6 +17,6 @@ export class PaymentSuccessComponent implements OnInit {
   ngOnInit() {}
 
   goToHome() {
-    this.router.navigateByUrl('home/post-messages');
+    this.router.navigateByUrl('home/main/post-message');
   }
 }

@@ -56,7 +56,7 @@ export class AdmobVideoRewardComponent
         next: () => {
           this.isLoading = false;
 
-          this.router.navigateByUrl('home/post-messages');
+          this.router.navigateByUrl('home/main/post-message');
         },
         error: (error) => {
           console.log(error);
@@ -68,7 +68,7 @@ export class AdmobVideoRewardComponent
   }
 
   goToPostMessage() {
-    this.router.navigateByUrl('home/post-messages');
+    this.router.navigateByUrl('home/main/post-message');
   }
 
   initializeLottieAnimation(): void {

@@ -1,0 +1,128 @@
+<div class="container">
+  <div *ngIf="avatar">
+    <div class="contain-avatar">
+      <div>
+        <img [src]="avatar.image" class="avatar" alt="" />
+      </div>
+    </div>
+
+    <div class="contain-name-email">
+      <p class="name">{{ avatar.user.name }}</p>
+      <p class="email">{{ avatar.user.email }}</p>
+    </div>
+  </div>
+
+  @if (isLoadingCardSubscription) {
+  <div class="contain-load-shimmer-card">
+    <app-load-shimmer [height]="'3rem'"></app-load-shimmer>
+
+    <app-load-shimmer [height]="'9rem'"></app-load-shimmer>
+
+    <app-load-shimmer [height]="'3rem'"></app-load-shimmer>
+  </div>
+  } @else if(showCardSubscription) {
+  <app-card-subscription
+    (onClickButton)="goToListSignature()"
+  ></app-card-subscription
+  >} @else if (showError) {
+  <app-error></app-error>
+  } @else if (planSubscription) {
+  <app-active-signature
+    (clickeCardActiveSignature)="goToPlanActiveSignature(dataSubscription)"
+    [plan]="dataSubscription.data?.plan"
+    [description]="dataSubscription.data?.description"
+    [labelTag]="labelTag"
+    [currentPeriodEnd]="dataSubscription.data?.currentPeriodEnd"
+    [colorTop]="dataSubscription.data?.colorTop"
+    [colorBottom]="dataSubscription.data?.colorBottom"
+    [status]="dataSubscription.data?.status"
+  ></app-active-signature>
+  }
+
+  <ul class="list-action-timer">
+    <li class="action-timer" (click)="goToUserData()">
+      <div class="contain-icon-and-description">
+        <i class="fi fi-tr-circle-user"></i>
+        <div>
+          <p>{{ "text.profile" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionProfile" | translate
+          }}</span>
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+    <li class="action-timer" (click)="goToUserPosts()">
+      <div class="contain-icon-and-description">
+        <i class="fi fi-tr-copy-image"></i>
+        <div>
+          <p>{{ "text.sharedPosts" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionSharedPosts" | translate
+          }}</span>
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+    <li class="action-timer" (click)="goToNotification()">
+      <div class="contain-icon-and-description">
+        <i class="fi fi-tr-bell-ring"></i>
+        <div>
+          <p>{{ "text.notifications" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionNotifications" | translate
+          }}</span>
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+    <li class="action-timer" (click)="goToListChat()">
+      <div class="contain-icon-and-description">
+        <i class="fi fi-tr-comment-dots"></i>
+        <div>
+          <p>{{ "text.chat" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionChat" | translate
+          }}</span>
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+    <li class="action-timer" (click)="goToAppInfor()">
+      <div class="contain-icon-and-description">
+        <i class="fi fi-tr-comment-info"></i>
+        <div>
+          <p>{{ "text.appInfor" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionAppInfor" | translate
+          }}</span>
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+    <li class="action-timer" (click)="goToPrivecePolice()">
+      <div class="contain-icon-and-description">
+        <i class="fi fi-tr-password-email"></i>
+        <div>
+          <p>{{ "text.privacyPolices" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionPrivacyPolices" | translate
+          }}</span>
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+    <li class="action-timer" (click)="logout()">
+      <div class="contain-icon-and-description">
+        <i class="fi fi-ts-sign-out-alt"></i>
+        <div>
+          <p>{{ "text.logout" | translate }}</p>
+          <span class="drescription-timer">{{
+            "text.descriptionLogout" | translate
+          }}</span>
+        </div>
+      </div>
+      <img src="assets/icon-static/arrow-right.svg" alt="" />
+    </li>
+  </ul>
+</div>

@@ -61,12 +61,12 @@ export class AdmobVideoRewardCardFreeTrialComponent
         });
 
         // this.router.navigateByUrl('home/view-card-free-trial');
-        this.router.navigateByUrl('home/post-messages');
+        this.router.navigateByUrl('home/main/post-message');
       });
   }
 
   goToCardFreeTrial() {
-    this.router.navigateByUrl('home/post-messages');
+    this.router.navigateByUrl('home/main/post-message');
     // this.router.navigateByUrl('home/view-card-free-trial');
   }
 

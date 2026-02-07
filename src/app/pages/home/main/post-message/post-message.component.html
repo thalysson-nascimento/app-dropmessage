@@ -1,0 +1,36 @@
+<div class="content">
+  <div class="header">
+    <app-logo-dropmessage [fontSize]="'1rem'"></app-logo-dropmessage>
+    <div>
+      <img
+        src="assets/icon-static/camera-bottomsheet.svg"
+        class="icon-camera"
+        alt="camera"
+        (click)="openBottomSheet()"
+      />
+    </div>
+  </div>
+  <div class="main-content">
+    <app-cards
+      name="Vanessa"
+      userProfile="Ousada"
+      image="assets/images/ia-vanessa.png"
+      badge=".IA"
+    ></app-cards>
+
+    <div class="card-explorer-ia">
+      <div class="contain-description">
+        <p class="contain-description-title">
+          Não encontramos novos perfis agora.
+        </p>
+        <span
+          >Aproveite os perfis de IA criados para conversas de experiências.
+          únicas.</span
+        >
+      </div>
+      <div class="contain-button">
+        <button appButtonIa>Explorar perfil de IA</button>
+      </div>
+    </div>
+  </div>
+</div>

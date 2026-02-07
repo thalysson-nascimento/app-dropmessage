@@ -1,0 +1,18 @@
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+app-main-header {
+  flex: 0 0 auto;
+}
+
+.content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+app-main-menu {
+  flex: 0 0 auto;
+}

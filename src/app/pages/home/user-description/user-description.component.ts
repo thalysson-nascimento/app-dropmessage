@@ -147,7 +147,7 @@ export class UserDescriptionComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
               next: () => {
-                this.router.navigateByUrl('home/post-messages');
+                this.router.navigateByUrl('home/main/post-message');
               },
             });
         },

@@ -168,7 +168,7 @@ export class SignComponent implements OnInit, OnDestroy {
               .pipe(takeUntil(this.destroy$))
               .subscribe();
 
-            this.router.navigateByUrl('home/post-messages');
+            this.router.navigateByUrl('home/main/post-message');
           },
           error: (responseError: HttpErrorResponse) => {
             this.isLoadingButton = false;
@@ -219,7 +219,7 @@ export class SignComponent implements OnInit, OnDestroy {
               this.userHashPublicService.setUserHashPublic(
                 response.userVerificationData.userHashPublic
               );
-              this.router.navigateByUrl('home/post-messages');
+              this.router.navigateByUrl('home/main/post-message');
             },
             error: (errorResponse: any) => {
               this.typeErrorModal = 'warn';
