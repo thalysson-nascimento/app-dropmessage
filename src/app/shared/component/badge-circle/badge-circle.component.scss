@@ -1,3 +1,6 @@
+$green-active: #22c55e;
+$border-color: rgba(255, 255, 255, 0.2);
+
 .badge-circle {
   width: 2rem;
   height: 2rem;
@@ -11,4 +14,33 @@
   font-size: var(--font-size-small);
   font-weight: bold;
   color: #ffffff;
+}
+
+.ai-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1.2rem;
+  gap: 8px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15),
+    rgba(0, 0, 0, 0.05)
+  );
+  backdrop-filter: blur(8px);
+  border: 1px solid $border-color;
+  border-radius: 100px;
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: $green-active;
+    border-radius: 50%;
+    box-shadow: 0 0 8px $green-active;
+  }
+  .ai-title {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: "Inter", sans-serif;
+    letter-spacing: 0.5px;
+  }
 }

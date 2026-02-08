@@ -8,6 +8,8 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class LoadShimmerComponent implements OnInit {
   @Input() height?: string = '5.5rem';
+  @Input() width?: string = '100%';
+
   constructor() {}
 
   ngOnInit() {}

@@ -77,6 +77,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   pageView: string = 'DatingMatch:PostMessage';
   lastUserLogged!: LastLoggedUsers;
   isLoadingLoggedUser: boolean = true;
+
   constructor(
     private postMessageService: PostMessageService,
     private zone: NgZone,

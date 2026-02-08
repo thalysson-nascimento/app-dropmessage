@@ -1,3 +1,38 @@
-<p>
-  ia-profile works!
-</p>
+<div class="content">
+  <div class="header">
+    <app-logo-dropmessage [fontSize]="'1rem'"></app-logo-dropmessage>
+  </div>
+
+  @if(true) {
+  <div class="loading-container">
+    <app-card-loading-shimmer>
+      <app-load-shimmer height="50px"></app-load-shimmer>
+
+      <div class="bottom-loadd-shimmer">
+        <app-load-shimmer height="50px" width="50%"></app-load-shimmer>
+        <app-load-shimmer height="50px"></app-load-shimmer>
+      </div>
+    </app-card-loading-shimmer>
+  </div>
+  } @else {
+  <div class="swiper-container">
+    <swiper-container slides-per-view="1" space-between="16" class="mySwiper">
+      <swiper-slide *ngFor="let img of images">
+        <div class="slide-content">
+          <app-cards [image]="img" badge="IA ativa">
+            <div class="card-footer">
+              <div class="card-footer-infor">
+                <p class="ia-name">Vanessa</p>
+                <span>Ousada</span>
+              </div>
+              <card-footer-action>
+                <button appButtonIa>Saiba mais sobre Vanessa</button>
+              </card-footer-action>
+            </div>
+          </app-cards>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+  </div>
+  }
+</div>
