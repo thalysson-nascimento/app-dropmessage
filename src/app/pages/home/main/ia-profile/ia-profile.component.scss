@@ -68,6 +68,17 @@
   font-size: var(--font-size-large);
 }
 
+.header-loading-shimmer {
+  display: flex;
+  width: 100%;
+}
+
+.header-loading-shimmer app-load-shimmer {
+  width: auto !important;
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+
 .bottom-loadd-shimmer {
   margin-top: auto;
   display: flex;

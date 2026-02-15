@@ -227,6 +227,13 @@ export const HomeRouting: Routes = [
           ).then((m) => m.AdmobVideoRewardCardFreeTrialComponent),
       },
       {
+        path: 'ia-profile-details',
+        loadComponent: () =>
+          import('./ia-profile-details/ia-profile-details.component').then(
+            (m) => m.IaProfileDetailsComponent
+          ),
+      },
+      {
         path: 'app-infor',
         loadComponent: () =>
           import('./app-infor/app-infor.component').then(

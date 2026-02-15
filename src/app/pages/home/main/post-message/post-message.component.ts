@@ -16,7 +16,9 @@ export class PostMessageComponent implements OnInit {
 
   ngOnInit() {}
 
-  openBottomSheet(): void {}
+  goToTakePicture(): void {
+    this.router.navigateByUrl('home/take-picture-shared-message');
+  }
 
   goToIAProfile() {
     this.router.navigate(['home/main/ia-profile']);

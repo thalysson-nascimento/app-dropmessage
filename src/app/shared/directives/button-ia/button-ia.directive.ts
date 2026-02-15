@@ -11,7 +11,7 @@ export class ButtonIaDirective implements AfterViewInit {
     const btn = this.el.nativeElement;
 
     this.renderer.setStyle(btn, 'width', '100%');
-    this.renderer.setStyle(btn, 'padding', '1.7rem');
+    this.renderer.setStyle(btn, 'padding', '1.5rem');
     this.renderer.setStyle(btn, 'border', 'none');
     this.renderer.setStyle(btn, 'border-radius', '50px');
     this.renderer.setStyle(

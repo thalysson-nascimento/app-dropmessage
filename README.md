@@ -72,3 +72,5 @@ keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -sto
 
 assinar
 jarsigner -verbose -keystore release-key.keystore ./app/app-release.aab DatingMatchSignature
+
+observação se atentar quando estiver dando error de cors se esta rodando o start:dev se nao ele vai ficar apontando para a url mock

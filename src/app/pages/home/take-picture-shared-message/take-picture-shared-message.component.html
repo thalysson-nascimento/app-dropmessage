@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container">
   <div class="header">
     <img
       src="assets/icon-static/arrow-left.svg"
@@ -56,4 +56,50 @@
       </button>
     </div>
   </div>
+</div> -->
+<div class="content">
+  <header class="header header--position-right">
+    <button class="icon-button" (click)="goBack()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </header>
+
+  <div class="container-title-subtitle">
+    <h1 class="title">Create Timed Post</h1>
+    <p class="subtitle">Share a moment that lasts for a limited time</p>
+  </div>
+
+  <section class="upload">
+    <div class="upload__box">
+      <div class="upload__icon-wrapper">
+        <span class="material-symbols-outlined">add_a_photo</span>
+      </div>
+      <span class="upload__title">Upload Photo</span>
+      <span class="upload__subtitle">Tap to select from gallery</span>
+    </div>
+
+    <div class="upload__badge">Expira em {{ selectedDuration }}</div>
+  </section>
+
+  <section class="duration">
+    <h3>
+      <span class="material-symbols-outlined">timer</span>
+      Visibility Duration
+    </h3>
+
+    <div class="duration-list">
+      @for (item of durations; track item.value) {
+      <app-duration-option
+        [option]="item"
+        [selected]="selectedDuration === item.value"
+        (select)="selectDuration($event)"
+      >
+      </app-duration-option>
+      }
+    </div>
+  </section>
+
+  <button appButtonIa (click)="post()">
+    <span>Post Now</span>
+  </button>
 </div>

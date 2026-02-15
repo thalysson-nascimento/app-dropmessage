@@ -1,0 +1,20 @@
+<div
+  class="duration-option"
+  [class.duration-option--selected]="selected"
+  (click)="onSelect()"
+>
+  <span class="material-symbols-outlined icon">
+    {{ option.icon }}
+  </span>
+
+  <div class="text">
+    <p class="label">{{ option.label }}</p>
+    <span class="description">{{ option.description }}</span>
+  </div>
+
+  @if (selected) {
+  <div class="check">
+    <span class="material-symbols-outlined">check</span>
+  </div>
+  }
+</div>

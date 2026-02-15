@@ -21,6 +21,8 @@ import { Dialog } from '@capacitor/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ChoosePhotoGalleryOrCameraComponent } from '../../../shared/component/choose-photo-gallery-or-camera/choose-photo-gallery-or-camera.component';
+import { DurationOptionComponent } from '../../../shared/component/duration-option/duration-option.component';
+import { ButtonIaDirective } from '../../../shared/directives/button-ia/button-ia.directive';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { ExpirationTimerService } from '../../../shared/service/expiration-timer/expiration-timer.service';
@@ -28,7 +30,18 @@ import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
 import { SharedPostMessageService } from '../../../shared/service/shared-post-message/shared-post-message.service';
 
-const SharedComponents = [ButtonStyleDirective];
+const SharedComponents = [
+  ButtonStyleDirective,
+  DurationOptionComponent,
+  ButtonIaDirective,
+];
+
+interface DurationOption {
+  value: string;
+  label: string;
+  description: string;
+  icon: string;
+}
 
 @Component({
   standalone: true,
@@ -53,6 +66,34 @@ export class TakePictureSharedMessageComponent
   expirationTimer: string = '';
   destroy$: Subject<void> = new Subject<void>();
   pageView: string = 'DatingMatch:TakePictureSharedMessage';
+  selectedDuration = '30m';
+
+  durations: DurationOption[] = [
+    {
+      value: '30m',
+      label: '30m',
+      description: 'Quick',
+      icon: 'bolt',
+    },
+    {
+      value: '1h',
+      label: '1 Hour',
+      description: 'Casual',
+      icon: 'hourglass_top',
+    },
+    {
+      value: '1d',
+      label: '1 Day',
+      description: 'Story',
+      icon: 'history_toggle_off',
+    },
+    {
+      value: '1w',
+      label: '1 week',
+      description: 'Destaque',
+      icon: 'auto_awesome',
+    },
+  ];
 
   constructor(
     private router: Router,
@@ -230,72 +271,18 @@ export class TakePictureSharedMessageComponent
             });
         });
     }
+  }
 
-    //   if (cameraImage && this.cameraAllowed) {
-    //     fetch(cameraImage)
-    //       .then((res) => res.blob())
-    //       .then((blob) => {
-    //         const file = new File([blob], 'image.png', { type: 'image/png' });
-    //         const expirationTimer = this.expirationTimer;
-    //         this.sharedPostMessageService
-    //           .postMessage({ file, expirationTimer })
-    //           .subscribe({
-    //             next: () => {
-    //               const logger: TrackAction = {
-    //                 pageView: this.pageView,
-    //                 category: 'take_picture_shared_message:shared_post',
-    //                 event: 'click',
-    //                 label: 'button:compartilhar_post',
-    //                 message: 'Compartilhar post',
-    //                 statusCode: 200,
-    //                 level: 'info',
-    //               };
-    //               this.loggerService
-    //                 .info(logger)
-    //                 .pipe(takeUntil(this.destroy$))
-    //                 .subscribe();
-    //               this.disabledButton = false;
-    //               this.preferencesUserAuthenticateService
-    //                 .getToken()
-    //                 .pipe(takeUntil(this.destroy$))
-    //                 .subscribe({
-    //                   next: (response) => {
-    //                     const firstPublicationPostMessage =
-    //                       response?.goldFreeTrialData.firstPublicationPostMessage;
+  // Começando o novo componente a partir daqui
+  goBack() {
+    this.router.navigateByUrl('home/main/post-message');
+  }
 
-    //                     if (firstPublicationPostMessage === false) {
-    //                       return this.router.navigate([
-    //                         '/home/user-first-publication-post',
-    //                       ]);
-    //                     }
+  selectDuration(value: string) {
+    this.selectedDuration = value;
+  }
 
-    //                     return this.router.navigate([
-    //                       '/home/send-message-success',
-    //                     ]);
-    //                   },
-    //                 });
-    //             },
-    //             error: (error) => {
-    //               const logger: TrackAction = {
-    //                 pageView: this.pageView,
-    //                 category: 'take_picture_shared_message:erro_shared_post',
-    //                 event: 'view',
-    //                 message: error.message,
-    //                 statusCode: 500,
-    //                 level: 'error',
-    //               };
-    //               this.loggerService
-    //                 .info(logger)
-    //                 .pipe(takeUntil(this.destroy$))
-    //                 .subscribe();
-    //               this.disabledButton = false;
-    //             },
-    //             complete: () => {
-    //               this.disabledButton = false;
-    //             },
-    //           });
-    //       });
-    //   }
-    // }
+  post() {
+    console.log('Post duration:', this.selectedDuration);
   }
 }

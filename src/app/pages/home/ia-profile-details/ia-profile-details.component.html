@@ -1,0 +1,75 @@
+<div class="ia-details">
+  <div class="ia-details__background">
+    <img
+      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOYx8ycAVnEx4bte1bafJ4L_js04ccE3gKi60RvHYgEvUb5q-EJxW6c695ibmvKa2ABlwPKwMl6qEPfoCAfl7GCixQ_hLE3IMjLUVVmEifWmpcf4Fj8PZ_pkxkE9CZBypVmJJHK1GL6v8vk8vdDf--92BmkRe0SAUsaQX2VweF04UzSfbryf9FmOGZPT47UGcTyp8wYhoFwoHfIRzUUdefnlh5UFGpgg0FWIHQdLnn-J5berurtw7ilfkN8uKB7PsPdE7tf9KuJV4"
+      alt="Perfil IA"
+    />
+    <div class="ia-details__overlay"></div>
+  </div>
+
+  <div class="swiper-container">
+    <swiper-container
+      #swiperRef
+      slides-per-view="1"
+      space-between="16"
+      class="mySwiper"
+    >
+      <swiper-slide>
+        <div class="ia-details__content">
+          <header class="ia-details__header">
+            <button class="back-button" (click)="goBack()">
+              <img
+                class="back-icon"
+                src="assets/icon-static/arrow-white-left .svg"
+                alt="back"
+              />
+            </button>
+
+            <div class="ia-details__title">
+              <h1>Vanessa</h1>
+              <p>Ousada</p>
+            </div>
+          </header>
+
+          <footer class="ia-details__footer">
+            <div class="section-about">
+              <h2>Sobre</h2>
+
+              <app-card-glass>
+                <ng-container cardContent>
+                  <p class="about-text">
+                    Às vezes, tudo o que a gente precisa é conversar.
+                  </p>
+
+                  <div class="tags">
+                    <span>Conversa leve</span>
+                    <span>Boa para madrugadas</span>
+                    <span>Perfil de IA</span>
+                    <span>Sem julgamentos</span>
+                  </div>
+
+                  <div class="info-wrapper">
+                    <span
+                      class="material-symbols-outlined"
+                      (click)="slideNext()"
+                      >info</span
+                    >
+                    <!-- <button class="info-button">
+                    </button> -->
+                  </div>
+                </ng-container>
+              </app-card-glass>
+            </div>
+
+            <button class="subscribe-button">Continuar para assinar</button>
+          </footer>
+        </div>
+      </swiper-slide>
+      <swiper-slide>
+        <app-ia-profile-details-info
+          ($goBack)="slidePrev()"
+        ></app-ia-profile-details-info>
+      </swiper-slide>
+    </swiper-container>
+  </div>
+</div>

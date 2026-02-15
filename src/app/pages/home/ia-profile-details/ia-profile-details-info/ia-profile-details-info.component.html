@@ -1,0 +1,90 @@
+<div class="ia-details__blur ia-details__blur--active"></div>
+<div class="ia-details__content ia-details__content--second">
+  <header class="ia-details__header ia-details__header--position-right">
+    <button class="back-button" (click)="goBack()">✕</button>
+  </header>
+
+  <div class="ia-details__title">
+    <h1>Vanessa, 24</h1>
+    <p>Ousada</p>
+  </div>
+
+  <div class="section-about">
+    <app-card-glass>
+      <ng-container cardContent>
+        <h2 class="section-about__label">BIOGRAFIA</h2>
+        <p>
+          Sou uma alma livre que adora conversas profundas na madrugada.
+          Acredito que a conexão verdadeira acontece quando nos permitimos ser
+          vulneráveis. Gosto de rir das coisas simples e estou sempre pronta
+          para ouvir suas histórias, sem julgamentos. Vamos descobrir o mundo
+          juntos?
+        </p>
+      </ng-container>
+    </app-card-glass>
+
+    <div class="profile-row">
+      <div class="profile-item">
+        <app-card-glass>
+          <ng-container cardContent>
+            <span class="material-symbols-outlined text-white/70 text-2xl"
+              >height</span
+            >
+            <div>
+              <label class="profile-row__label">ALTURA</label>
+              <p class="profile-row__text">1,70m</p>
+            </div>
+          </ng-container>
+        </app-card-glass>
+      </div>
+
+      <div class="profile-item">
+        <app-card-glass>
+          <ng-container cardContent>
+            <span class="material-symbols-outlined"> wb_sunny </span>
+            <div>
+              <label class="profile-row__label">SIGUINO</label>
+              <p class="profile-row__text">Libra</p>
+            </div>
+          </ng-container>
+        </app-card-glass>
+      </div>
+    </div>
+
+    <div class="section-interesting">
+      <h2 class="section-about__label">PERSONALIDADE</h2>
+      <div class="interesses">
+        @for (item of person; track item) {
+        <div class="tags">
+          <span>{{ item }}</span>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="section-interesting">
+      <h2 class="section-about__label">INTERESSES</h2>
+      <div class="interesses">
+        @for (item of interesses; track item.label) {
+        <div class="interesse-chip">
+          <span class="material-symbols-outlined">{{ item.icon }}</span>
+          <span class="interesse-chip__label">{{ item.label }}</span>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="section-interesting">
+      <h2 class="section-about__label">ESTILO</h2>
+      <div class="interesses">
+        @for (item of estiloCompanhia; track item.label) {
+        <div class="interesse-chip">
+          <span class="material-symbols-outlined">{{ item.icon }}</span>
+          <span class="interesse-chip__label">{{ item.label }}</span>
+        </div>
+        }
+      </div>
+    </div>
+    <button class="subscribe-button">Continuar para assinar</button>
+  </div>
+</div>
