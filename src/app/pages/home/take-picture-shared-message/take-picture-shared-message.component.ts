@@ -22,8 +22,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ChoosePhotoGalleryOrCameraComponent } from '../../../shared/component/choose-photo-gallery-or-camera/choose-photo-gallery-or-camera.component';
 import { DurationOptionComponent } from '../../../shared/component/duration-option/duration-option.component';
-import { ButtonIaDirective } from '../../../shared/directives/button-ia/button-ia.directive';
-import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
+import { SpinnerComponent } from '../../../shared/component/spinner/spinner.component';
+import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { ExpirationTimerService } from '../../../shared/service/expiration-timer/expiration-timer.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
@@ -31,9 +31,9 @@ import { PreferencesUserAuthenticateService } from '../../../shared/service/pref
 import { SharedPostMessageService } from '../../../shared/service/shared-post-message/shared-post-message.service';
 
 const SharedComponents = [
-  ButtonStyleDirective,
   DurationOptionComponent,
-  ButtonIaDirective,
+  ButtonDirective,
+  SpinnerComponent,
 ];
 
 interface DurationOption {
@@ -283,6 +283,6 @@ export class TakePictureSharedMessageComponent
   }
 
   post() {
-    console.log('Post duration:', this.selectedDuration);
+    this.router.navigate(['/home/send-message-success']);
   }
 }

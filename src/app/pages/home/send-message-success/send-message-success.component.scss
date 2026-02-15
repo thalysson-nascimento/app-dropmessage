@@ -1,33 +1,240 @@
-.container {
-  width: 100%;
-  height: 100dvh;
-  display: flex;
+.content {
+  padding: 1.5rem;
   flex-direction: column;
+  min-height: 100vh;
+
+  background-color: #ffffff;
+  background-image: radial-gradient(
+      at 0% 0%,
+      hsla(338, 100%, 90%, 1) 0px,
+      transparent 50%
+    ),
+    radial-gradient(at 100% 100%, hsla(20, 100%, 90%, 1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(338, 100%, 95%, 1) 0px, transparent 50%);
 }
 
 .header {
-  padding: 1rem;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.contain-body {
+.icon-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+
+  .material-symbols-outlined {
+    font-size: 22px;
+    color: #6b7280;
+  }
+}
+
+.center-wrapper {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: var(--space-xlarge);
 }
 
-.send-message {
-  margin-bottom: 3rem;
+/* EMOJIS */
+.emoji-wrapper {
+  position: relative;
+  margin-bottom: -40px;
+  z-index: 2;
 }
 
-h1 {
+.emoji-main {
+  font-size: 64px;
+  transition: transform 0.4s ease;
+}
+
+.emoji-sparkle {
+  position: absolute;
+  top: -10px;
+  right: -15px;
+  font-size: 28px;
+  animation: bounce 1.5s infinite;
+}
+
+.emoji-heart {
+  position: absolute;
+  bottom: -5px;
+  left: -20px;
+  font-size: 20px;
+}
+
+/* CARD */
+.success-card {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  padding: 3rem 2rem;
+  border-radius: 32px;
+  text-align: center;
+  margin-top: var(--space-small);
+
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+
+  &--not-aligned {
+    text-align: start;
+  }
+}
+
+.card-glow {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 150px;
+  height: 150px;
+  background: rgba(233, 64, 122, 0.15);
+  border-radius: 50%;
+  filter: blur(60px);
+}
+
+.card-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.card-description {
+  font-size: 0.9rem;
+  color: #6b7280;
   margin-bottom: 2rem;
-  padding: 1rem;
-  text-align: center;
 }
 
-.contain-subtitle {
-  text-align: center;
+/* POSTS */
+.posts-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.posts-list {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+}
+
+.post-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.65rem;
+  color: #6b7280;
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  padding: 2px;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar.dashed {
+  border: 2px dashed #d1d5db;
+  background: transparent;
+}
+
+.post-item.active .avatar {
+  background: conic-gradient(#e9407a 75%, transparent 0%);
+}
+
+/* BOTÕES */
+.actions {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #ff4d88 0%, #ffa07a 100%);
+  color: white;
+  border: none;
   padding: 1rem;
+  border-radius: 20px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid #e5e7eb;
+  padding: 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+/* ANIMAÇÃO */
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.content-text {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+
+  .material-symbols-outlined {
+    font-size: 25px;
+    color: rgb(251 146 60);
+    font-variation-settings: "FILL" 1;
+  }
+
+  .text {
+    font-weight: 800;
+    margin-left: var(--space-small);
+  }
+}
+
+.description {
+  margin-top: var(--space-medium);
+  font-size: var(--font-size-small);
+}
+
+.highlight {
+  font-weight: 800;
 }

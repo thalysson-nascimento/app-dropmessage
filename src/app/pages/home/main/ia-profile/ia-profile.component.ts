@@ -6,7 +6,7 @@ import { CardLoadingShimmerComponent } from '../../../../shared/component/card-l
 import { CardsComponent } from '../../../../shared/component/cards/cards.component';
 import { LoadShimmerComponent } from '../../../../shared/component/load-shimmer/load-shimmer.component';
 import { LogoDropmessageComponent } from '../../../../shared/component/logo-dropmessage/logo-dropmessage.component';
-import { ButtonIaDirective } from '../../../../shared/directives/button-ia/button-ia.directive';
+import { ButtonDirective } from '../../../../shared/directives/button-ia/button-ia.directive';
 
 register();
 
@@ -19,7 +19,7 @@ register();
     LogoDropmessageComponent,
     CardsComponent,
     NgFor,
-    ButtonIaDirective,
+    ButtonDirective,
     CardLoadingShimmerComponent,
     LoadShimmerComponent,
   ],

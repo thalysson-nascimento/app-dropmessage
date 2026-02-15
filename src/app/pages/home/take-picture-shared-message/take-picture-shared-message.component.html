@@ -99,7 +99,11 @@
     </div>
   </section>
 
-  <button appButtonIa (click)="post()">
-    <span>Post Now</span>
+  <button appButton (click)="post()" [disabled]="isLoadingButton">
+    @if (isLoadingButton) {
+    <app-spinner></app-spinner>
+    } @else {
+    <ng-container> Enviar </ng-container>
+    }
   </button>
 </div>
