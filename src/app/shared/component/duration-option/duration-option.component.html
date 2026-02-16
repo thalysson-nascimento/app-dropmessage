@@ -3,7 +3,10 @@
   [class.duration-option--selected]="selected"
   (click)="onSelect()"
 >
-  <span class="material-symbols-outlined icon">
+  <span
+    class="material-symbols-outlined icon"
+    [style.color]="selected ? option.color : '#9ca3af'"
+  >
     {{ option.icon }}
   </span>
 

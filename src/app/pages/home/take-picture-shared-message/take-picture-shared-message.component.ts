@@ -41,6 +41,7 @@ interface DurationOption {
   label: string;
   description: string;
   icon: string;
+  color: string;
 }
 
 @Component({
@@ -74,24 +75,28 @@ export class TakePictureSharedMessageComponent
       label: '30m',
       description: 'Quick',
       icon: 'bolt',
+      color: '#facc15', // amarelo
     },
     {
       value: '1h',
       label: '1 Hour',
       description: 'Casual',
       icon: 'hourglass_top',
+      color: '#3b82f6', // azul
     },
     {
       value: '1d',
       label: '1 Day',
       description: 'Story',
       icon: 'history_toggle_off',
+      color: '#8b5cf6', // roxo
     },
     {
       value: '1w',
       label: '1 week',
       description: 'Destaque',
       icon: 'auto_awesome',
+      color: '#f59e0b', // dourado
     },
   ];
 
