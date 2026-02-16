@@ -1,0 +1,79 @@
+<div class="content">
+  <header class="header">
+    <button class="icon-button" (click)="goBack()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </header>
+
+  <div class="center-wrapper">
+    <div class="emoji-wrapper">
+      <div class="emoji-main">
+        <div class="content-crown">
+          <img src="assets/icon-static/crown.svg" alt="crown" />
+        </div>
+      </div>
+    </div>
+
+    <div class="success-card">
+      <div class="card-glow"></div>
+
+      <h2 class="card-title">Parabéns!</h2>
+
+      <p class="card-description">
+        Você ganhou 7 dias de assinatura DatingMatch Gold por publicar seu
+        primeiro Post.
+      </p>
+
+      <div class="actions">
+        <button appButton (click)="goBack()">
+          Ir para o Feed
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+
+        <button appButton="secondary" (click)="takePicture()">
+          <span class="material-symbols-outlined">add_box</span>
+          Criar outro Post
+        </button>
+      </div>
+    </div>
+
+    <div class="success-card success-card--not-aligned">
+      <div class="content-text">
+        <span class="material-symbols-outlined"> local_fire_department </span>
+        <span class="text">Seu Post está no ar!</span>
+      </div>
+      <div class="description">
+        <p>
+          Ele ficará visível por
+          <span class="highlight">30 minutos</span> para todos os seus matches.
+          Aproveite enquanto dura!
+        </p>
+      </div>
+    </div>
+
+    <div class="success-card success-card--not-aligned">
+      <div class="content-text">
+        <span class="text text--no-margin">Desbloqueados para 7 dias!</span>
+      </div>
+
+      <div class="content-feature-item">
+        <div class="feature-list">
+          @for (item of features; track item.title) {
+          <div class="feature-item">
+            <div class="icon-wrapper">
+              <span class="material-symbols-outlined">
+                {{ item.icon }}
+              </span>
+            </div>
+
+            <div class="text">
+              <span class="title">{{ item.title }}</span>
+              <span class="subtitle">{{ item.subtitle }}</span>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

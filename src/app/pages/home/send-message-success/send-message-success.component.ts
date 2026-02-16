@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CardsComponent } from '../../../shared/component/cards/cards.component';
 import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
 
-const SharedComponents = [ButtonDirective, CardsComponent];
+const SharedComponents = [ButtonDirective];
 
 @Component({
   selector: 'app-send-message-success',

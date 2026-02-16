@@ -240,6 +240,13 @@ export const HomeRouting: Routes = [
             (m) => m.AppInforComponent
           ),
       },
+      {
+        path: 'plan-gold-free-trial',
+        loadComponent: () =>
+          import('./plan-gold-free-trial/plan-gold-free-trial.component').then(
+            (m) => m.PlanGoldFreeTrialComponent
+          ),
+      },
     ],
   },
 ];

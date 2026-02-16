@@ -288,6 +288,10 @@ export class TakePictureSharedMessageComponent
   }
 
   post() {
-    this.router.navigate(['/home/send-message-success']);
+    if (true) {
+      return this.router.navigate(['/home/plan-gold-free-trial']);
+    }
+
+    return this.router.navigate(['/home/send-message-success']);
   }
 }
