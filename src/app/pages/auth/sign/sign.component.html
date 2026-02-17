@@ -112,11 +112,7 @@
   </div>
 
   <div class="contain-button-system-unavailable">
-    <button
-      appButtonStyle
-      [buttonType]="'secondary'"
-      (click)="dialog.closeDialog()"
-    >
+    <button appButtonStyle [buttonType]="'secondary'" (click)="dialog.close()">
       {{ "button.tryAgain" | translate }}
     </button>
   </div>

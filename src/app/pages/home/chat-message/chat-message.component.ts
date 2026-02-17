@@ -335,7 +335,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
       },
     });
 
-    this.generateModalTips.closeDialog();
+    this.generateModalTips.close();
 
     this.scrollToBottom();
     this.sendMessageService
@@ -359,17 +359,17 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
   }
 
   openModalTips() {
-    this.generateModalTips.openDialog();
+    this.generateModalTips.open();
     this.loadTips();
   }
 
   openModalChooseAction() {
-    this.chooseAction.openDialog();
+    this.chooseAction.open();
   }
 
   openModalReportProblem() {
-    this.chooseAction.closeDialog();
-    this.repostProblem.openDialog();
+    this.chooseAction.close();
+    this.repostProblem.open();
   }
 
   reportProblem(typeReportProblem: string) {
@@ -379,7 +379,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.showSuccessMessageReportProblem = true;
-          this.repostProblem.closeDialog();
+          this.repostProblem.close();
 
           const logger: TrackAction = {
             pageView: this.pageView,

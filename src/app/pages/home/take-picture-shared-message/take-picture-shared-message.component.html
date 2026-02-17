@@ -70,3 +70,12 @@
     }
   </button>
 </div>
+
+<app-modal #modal>
+  <app-feedback-overlay
+    variant="error"
+    title="Ops, Algo deu errado!"
+    description="Não foi possível conectar ao servidor para compartilhar seu post. Verifique sua conexão e tente novamente."
+  ></app-feedback-overlay>
+  <button appButton (click)="tryAgain()">Tentar novamente</button>
+</app-modal>

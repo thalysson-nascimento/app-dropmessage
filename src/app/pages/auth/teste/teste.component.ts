@@ -50,7 +50,7 @@ export class TesteComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openDialog() {
-    this.dialog.openDialog();
+    this.dialog.open();
   }
 
   ngOnInit(): void {

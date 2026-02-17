@@ -122,20 +122,20 @@ export class CheckoutPaymentComponent implements OnInit {
         this.isDisabled = false;
         this.errorRequestMessage = error.message;
         this.typeErrorModal = 'warn';
-        this.modalErrorRequest.openDialog();
+        this.modalErrorRequest.open();
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
         this.router.navigateByUrl('/home/payment-success');
       } else {
         this.isDisabled = false;
         this.errorRequestMessage = 'Erro no pagamento';
         this.typeErrorModal = 'warn';
-        this.modalErrorRequest.openDialog();
+        this.modalErrorRequest.open();
       }
     } catch (err) {
       this.isDisabled = false;
       this.errorRequestMessage = 'Erro no pagamento';
       this.typeErrorModal = 'warn';
-      this.modalErrorRequest.openDialog();
+      this.modalErrorRequest.open();
       console.error('Erro ao processar pagamento:', err);
     }
   }

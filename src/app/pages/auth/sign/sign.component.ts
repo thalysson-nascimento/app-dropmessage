@@ -175,7 +175,7 @@ export class SignComponent implements OnInit, OnDestroy {
             this.tokenStorageSecurityRequestService.deleteToken();
             this.errorMessage = responseError.error.message.message;
 
-            this.modal.openDialog();
+            this.modal.open();
           },
         });
     }
@@ -225,7 +225,7 @@ export class SignComponent implements OnInit, OnDestroy {
               this.typeErrorModal = 'warn';
               this.errorMessage = errorResponse.error.message;
               this.isLoadingButtonGoogleOAuth = false;
-              this.modalErrorRequest.openDialog();
+              this.modalErrorRequest.open();
             },
           });
       }

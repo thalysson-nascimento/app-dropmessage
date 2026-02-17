@@ -1,0 +1,81 @@
+.feedback {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  &__icon-wrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__icon {
+    font-variation-settings: "FILL" 1, "wght" 700, "GRAD" 0, "opsz" 48;
+
+    font-size: 40px;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  &__description {
+    font-size: 0.95rem;
+    color: #6b7280;
+    line-height: 1.5;
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+/* ===== Variants ===== */
+
+.feedback--error {
+  .feedback__icon-wrapper {
+    background: #fee2e2;
+  }
+
+  .feedback__icon {
+    color: #cc5555;
+  }
+}
+
+.feedback--warning {
+  .feedback__icon-wrapper {
+    background: #fef3c7;
+  }
+
+  .feedback__icon {
+    color: #d97706;
+  }
+}
+
+.feedback--success {
+  .feedback__icon-wrapper {
+    background: #dcfce7;
+  }
+
+  .feedback__icon {
+    color: #16a34a;
+  }
+}
+
+.feedback--info {
+  .feedback__icon-wrapper {
+    background: #dbeafe;
+  }
+
+  .feedback__icon {
+    color: #2563eb;
+  }
+}

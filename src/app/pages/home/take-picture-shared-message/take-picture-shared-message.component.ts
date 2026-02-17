@@ -6,7 +6,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { Camera } from '@capacitor/camera';
@@ -21,6 +21,8 @@ import {
 import { Subject, takeUntil } from 'rxjs';
 import { ChoosePhotoGalleryOrCameraComponent } from '../../../shared/component/choose-photo-gallery-or-camera/choose-photo-gallery-or-camera.component';
 import { DurationOptionComponent } from '../../../shared/component/duration-option/duration-option.component';
+import { FeedbackOverlayComponent } from '../../../shared/component/feedback-overlay/feedback-overlay.component';
+import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { SpinnerComponent } from '../../../shared/component/spinner/spinner.component';
 import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
 import { AppPlatform } from '../../../shared/enums/app-platform.enum';
@@ -31,6 +33,8 @@ const SharedComponents = [
   DurationOptionComponent,
   ButtonDirective,
   SpinnerComponent,
+  ModalComponent,
+  FeedbackOverlayComponent,
 ];
 
 interface DurationOption {
@@ -95,6 +99,8 @@ export class TakePictureSharedMessageComponent implements OnInit, OnDestroy {
       color: '#f59e0b',
     },
   ];
+
+  @ViewChild('modal') modal!: ModalComponent;
 
   constructor(
     private router: Router,
@@ -184,9 +190,7 @@ export class TakePictureSharedMessageComponent implements OnInit, OnDestroy {
   async sharedPost(imagePath: any) {
     this.isLoadingButton = true;
     this.disabledButton = true;
-
     const file = await this._webPathToFile(imagePath);
-
     this.sharedPostMessageService
       .postMessage({ file, expirationTimer: this.selectedDuration })
       .subscribe({
@@ -195,10 +199,10 @@ export class TakePictureSharedMessageComponent implements OnInit, OnDestroy {
           this.disabledButton = false;
           this.router.navigate(['/home/send-message-success']);
         },
-        error: (error) => {
+        error: () => {
           this.isLoadingButton = false;
           this.disabledButton = false;
-          alert(error);
+          this.modal.open();
         },
       });
   }
@@ -233,5 +237,10 @@ export class TakePictureSharedMessageComponent implements OnInit, OnDestroy {
     } else {
       alert('Open your browser settings to allow camera access.');
     }
+  }
+
+  tryAgain() {
+    this.modal.close();
+    this.sharedPost(this.cameraImage);
   }
 }

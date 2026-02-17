@@ -142,7 +142,7 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.loggerService.info(logger).pipe(takeUntil(this.destroy$)).subscribe();
 
-    this.modal.openDialog();
+    this.modal.open();
   }
 
   deleteAccount() {

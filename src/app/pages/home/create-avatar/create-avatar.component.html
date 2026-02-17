@@ -271,7 +271,7 @@
     <button
       appButtonStyle
       [buttonType]="'secondary'"
-      (click)="modalPhotoNotFound.closeDialog(); openBottomSheet()"
+      (click)="modalPhotoNotFound.close(); openBottomSheet()"
     >
       {{ "button.takePhoto" | translate }}
     </button>
@@ -303,7 +303,7 @@
     <button
       appButtonStyle
       [buttonType]="'secondary'"
-      (click)="modalErrorRequest.closeDialog()"
+      (click)="modalErrorRequest.close()"
     >
       {{ "button.tryAgain" | translate }}
     </button>

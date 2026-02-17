@@ -125,7 +125,7 @@ export class SignupComponent implements OnInit {
               this.typeErrorModal = 'warn';
               this.errorMessage = errorResponse.error.message;
               this.isLoadingButtonGoogleOAuth = false;
-              this.modalErrorRequest.openDialog();
+              this.modalErrorRequest.open();
             },
           });
       }
@@ -133,7 +133,7 @@ export class SignupComponent implements OnInit {
       this.typeErrorModal = 'warn';
       this.errorMessage = errorResponse.error.message;
       this.isLoadingButtonGoogleOAuth = false;
-      this.modalErrorRequest.openDialog();
+      this.modalErrorRequest.open();
     }
   }
 
