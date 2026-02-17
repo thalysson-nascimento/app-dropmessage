@@ -33,13 +33,13 @@ export class AppInforComponent implements OnInit {
   navigateBackUsingApp() {
     if (isPlatformBrowser(this.platformId)) {
       App.addListener('backButton', () => {
-        this.router.navigateByUrl('home/profile');
+        this.router.navigateByUrl('home/main/profile');
       });
     }
   }
 
   goToProfile() {
-    this.router.navigateByUrl('home/profile');
+    this.router.navigateByUrl('home/main/profile');
     this.navigateBackUsingApp();
   }
 }

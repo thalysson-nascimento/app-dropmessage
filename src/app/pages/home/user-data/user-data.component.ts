@@ -101,13 +101,13 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
           .pipe(takeUntil(this.destroy$))
           .subscribe();
 
-        this.router.navigateByUrl('home/profile');
+        this.router.navigateByUrl('home/main/profile');
       });
     }
   }
 
   goToProfile() {
-    this.router.navigateByUrl('home/profile');
+    this.router.navigateByUrl('home/main/profile');
     this.navigateBackUsingApp();
   }
 

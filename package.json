@@ -43,6 +43,7 @@
     "@ngx-translate/http-loader": "^16.0.1",
     "@stripe/stripe-js": "^5.5.0",
     "@types/swiper": "^5.4.3",
+    "capacitor-native-settings": "^6.0.6",
     "date-fns": "^4.1.0",
     "dompurify": "^3.1.7",
     "jsonwebtoken": "^9.0.2",

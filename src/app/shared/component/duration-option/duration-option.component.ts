@@ -13,6 +13,6 @@ export class DurationOptionComponent {
   @Output() select = new EventEmitter<string>();
 
   onSelect() {
-    this.select.emit(this.option.value);
+    this.select.emit(this.option);
   }
 }

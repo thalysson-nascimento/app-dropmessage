@@ -74,6 +74,6 @@ export class UserPostMessageComponent implements OnInit {
   }
 
   goToProfile() {
-    this.router.navigateByUrl('home/profile');
+    this.router.navigateByUrl('home/main/profile');
   }
 }

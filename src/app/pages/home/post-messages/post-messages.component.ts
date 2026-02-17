@@ -572,7 +572,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     };
 
     this.loggerService.info(logger).pipe(takeUntil(this.destroy$)).subscribe();
-    this.router.navigateByUrl('home/profile');
+    this.router.navigateByUrl('home/main/profile');
   }
 
   tryAgainLoadingPostMessage() {

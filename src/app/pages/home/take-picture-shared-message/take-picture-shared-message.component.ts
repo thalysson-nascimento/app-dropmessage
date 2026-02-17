@@ -6,28 +6,25 @@ import {
   trigger,
 } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-  PLATFORM_ID,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
-import { Camera, CameraResultType } from '@capacitor/camera';
+import { Camera } from '@capacitor/camera';
+import { Capacitor } from '@capacitor/core';
 import { Dialog } from '@capacitor/dialog';
 import { TranslateModule } from '@ngx-translate/core';
+import {
+  AndroidSettings,
+  IOSSettings,
+  NativeSettings,
+} from 'capacitor-native-settings';
 import { Subject, takeUntil } from 'rxjs';
 import { ChoosePhotoGalleryOrCameraComponent } from '../../../shared/component/choose-photo-gallery-or-camera/choose-photo-gallery-or-camera.component';
 import { DurationOptionComponent } from '../../../shared/component/duration-option/duration-option.component';
 import { SpinnerComponent } from '../../../shared/component/spinner/spinner.component';
 import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
-import { TrackAction } from '../../../shared/interface/track-action.interface';
+import { AppPlatform } from '../../../shared/enums/app-platform.enum';
 import { ExpirationTimerService } from '../../../shared/service/expiration-timer/expiration-timer.service';
-import { LoggerService } from '../../../shared/service/logger/logger.service';
-import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
 import { SharedPostMessageService } from '../../../shared/service/shared-post-message/shared-post-message.service';
 
 const SharedComponents = [
@@ -57,9 +54,7 @@ interface DurationOption {
     ]),
   ],
 })
-export class TakePictureSharedMessageComponent
-  implements OnInit, AfterViewInit, OnDestroy
-{
+export class TakePictureSharedMessageComponent implements OnInit, OnDestroy {
   cameraAllowed: boolean = false;
   cameraImage: string | null = null;
   isLoadingButton: boolean = false;
@@ -67,47 +62,45 @@ export class TakePictureSharedMessageComponent
   expirationTimer: string = '';
   destroy$: Subject<void> = new Subject<void>();
   pageView: string = 'DatingMatch:TakePictureSharedMessage';
-  selectedDuration = '30m';
+  selectedDuration = 'addThirtyMin';
+  showTimerSelected = '30m';
 
   durations: DurationOption[] = [
     {
-      value: '30m',
+      value: 'addThirtyMin',
       label: '30m',
       description: 'Quick',
       icon: 'bolt',
-      color: '#facc15', // amarelo
+      color: '#facc15',
     },
     {
-      value: '1h',
+      value: 'addOneHour',
       label: '1 Hour',
       description: 'Casual',
       icon: 'hourglass_top',
-      color: '#3b82f6', // azul
+      color: '#3b82f6',
     },
     {
-      value: '1d',
+      value: 'addOneday',
       label: '1 Day',
       description: 'Story',
       icon: 'history_toggle_off',
-      color: '#8b5cf6', // roxo
+      color: '#8b5cf6',
     },
     {
-      value: '1w',
+      value: 'addOneWeek',
       label: '1 week',
       description: 'Destaque',
       icon: 'auto_awesome',
-      color: '#f59e0b', // dourado
+      color: '#f59e0b',
     },
   ];
 
   constructor(
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object,
     private bottomSheet: MatBottomSheet,
     private sharedPostMessageService: SharedPostMessageService,
-    private expirationTimerService: ExpirationTimerService,
-    private loggerService: LoggerService,
-    private preferencesUserAuthenticateService: PreferencesUserAuthenticateService
+    private expirationTimerService: ExpirationTimerService
   ) {}
 
   ngOnDestroy(): void {
@@ -124,8 +117,6 @@ export class TakePictureSharedMessageComponent
         this.expirationTimer = expirationTimer;
       });
   }
-
-  ngAfterViewInit(): void {}
 
   async checkCameraPermission() {
     const permission = await Camera.checkPermissions();
@@ -169,25 +160,6 @@ export class TakePictureSharedMessageComponent
     }
   }
 
-  async takePhoto() {
-    if (this.cameraAllowed) {
-      const image = await Camera.getPhoto({
-        quality: 90,
-        allowEditing: false,
-        resultType: CameraResultType.Uri,
-      });
-
-      this.cameraImage = image.webPath || null;
-    }
-  }
-  // async requestCameraPermissionAgain() {
-  //   await this.checkCameraPermission();
-  // }
-
-  goToPostList() {
-    this.router.navigate(['/home']);
-  }
-
   openBottomSheet(): void {
     const bottomSheetRef = this.bottomSheet.open(
       ChoosePhotoGalleryOrCameraComponent
@@ -200,98 +172,66 @@ export class TakePictureSharedMessageComponent
     );
   }
 
-  async postMessage(cameraImage: any) {
-    this.isLoadingButton = true;
-    this.disabledButton = true;
-
-    const permission = await Camera.checkPermissions();
-    if (permission.camera !== 'granted') {
-      await this.checkCameraPermission();
-      return;
-    }
-
-    if (cameraImage && this.cameraAllowed) {
-      fetch(cameraImage)
-        .then((res) => res.blob())
-        .then((blob) => {
-          const fileType =
-            blob.type === 'image/jpeg' ? 'image/jpeg' : 'image/png';
-          const fileExtension = fileType === 'image/jpeg' ? 'jpg' : 'png';
-          const file = new File([blob], `image.${fileExtension}`, {
-            type: fileType,
-          });
-          const expirationTimer = this.expirationTimer;
-
-          this.sharedPostMessageService
-            .postMessage({ file, expirationTimer })
-            .subscribe({
-              next: (response) => {
-                const logger: TrackAction = {
-                  pageView: this.pageView,
-                  category: 'take_picture_shared_message:shared_post',
-                  event: 'click',
-                  label: 'button:compartilhar_post',
-                  message: 'Compartilhar post',
-                  statusCode: 200,
-                  level: 'info',
-                };
-                this.loggerService
-                  .info(logger)
-                  .pipe(takeUntil(this.destroy$))
-                  .subscribe();
-
-                if (response.post.user.StripeSignature.length === 0) {
-                  this.isLoadingButton = false;
-                  this.disabledButton = false;
-                  this.router.navigate(['/home/admob-video-reward-free-trial']);
-                }
-
-                if (
-                  response.post.user.StripeSignature?.[0].status === 'active' ||
-                  response.post.user.StripeSignature?.[0].status === 'trialing'
-                ) {
-                  this.isLoadingButton = false;
-                  this.disabledButton = false;
-                  this.router.navigate(['/home/send-message-success']);
-                }
-              },
-              error: (error) => {
-                const logger: TrackAction = {
-                  pageView: this.pageView,
-                  category: 'take_picture_shared_message:erro_shared_post',
-                  event: 'view',
-                  message: error.message,
-                  statusCode: 500,
-                  level: 'error',
-                };
-                this.loggerService
-                  .info(logger)
-                  .pipe(takeUntil(this.destroy$))
-                  .subscribe();
-
-                this.isLoadingButton = false;
-                this.disabledButton = false;
-                alert(error);
-              },
-            });
-        });
-    }
-  }
-
-  // Começando o novo componente a partir daqui
   goBack() {
     this.router.navigateByUrl('home/main/post-message');
   }
 
-  selectDuration(value: string) {
-    this.selectedDuration = value;
+  selectDuration(item: DurationOption) {
+    this.showTimerSelected = item.label;
+    this.selectedDuration = item.value;
   }
 
-  post() {
-    if (true) {
-      return this.router.navigate(['/home/plan-gold-free-trial']);
+  async sharedPost(imagePath: any) {
+    this.isLoadingButton = true;
+    this.disabledButton = true;
+
+    const file = await this._webPathToFile(imagePath);
+
+    this.sharedPostMessageService
+      .postMessage({ file, expirationTimer: this.selectedDuration })
+      .subscribe({
+        next: () => {
+          this.isLoadingButton = false;
+          this.disabledButton = false;
+          this.router.navigate(['/home/send-message-success']);
+        },
+        error: (error) => {
+          this.isLoadingButton = false;
+          this.disabledButton = false;
+          alert(error);
+        },
+      });
+  }
+
+  private async _webPathToFile(path: string): Promise<File> {
+    const response = await fetch(path);
+
+    if (!response.ok) {
+      throw new Error('Erro ao converter imagem');
     }
 
-    return this.router.navigate(['/home/send-message-success']);
+    const blob = await response.blob();
+
+    const extension = blob.type.split('/')[1] || 'jpeg';
+
+    return new File([blob], `image.${extension}`, {
+      type: blob.type,
+    });
+  }
+
+  async openAppSettings() {
+    if (Capacitor.isNativePlatform()) {
+      if (Capacitor.getPlatform() === AppPlatform.ANDROID) {
+        await NativeSettings.openAndroid({
+          option: AndroidSettings.ApplicationDetails,
+        });
+      } else if (Capacitor.getPlatform() === AppPlatform.IOS) {
+        await NativeSettings.openIOS({
+          option: IOSSettings.App,
+        });
+      }
+    } else {
+      alert('Open your browser settings to allow camera access.');
+    }
   }
 }
