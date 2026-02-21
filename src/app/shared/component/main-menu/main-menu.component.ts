@@ -7,6 +7,8 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   standalone: true,
 })
 export class MainMenuComponent implements OnInit {
+  activeMenu: string = 'likes';
+
   @Output() select = new EventEmitter<
     'profile' | 'ai-profiles' | 'likes' | 'favorites' | 'chat'
   >();
@@ -17,5 +19,6 @@ export class MainMenuComponent implements OnInit {
 
   onClick(option: 'profile' | 'ai-profiles' | 'likes' | 'favorites' | 'chat') {
     this.select.emit(option);
+    this.activeMenu = option;
   }
 }

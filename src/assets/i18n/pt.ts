@@ -138,5 +138,13 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
       'Ops no momento houve um erro de requisição. Tente novamente mais tarde',
     onlineRecently: 'online recentemente',
     userNotOnline: 'Ops, não encontramos nenhum usuário online',
+    post_visible_for:
+      'Ele ficará visível por {{amount}} {{unit}} para todos os seus matches. Aproveite enquanto dura!',
+    minute_one: 'minuto',
+    minute_other: 'minutos',
+    hour_one: 'hora',
+    hour_other: 'horas',
+    day_one: 'dia',
+    day_other: 'dias',
   },
 };

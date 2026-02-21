@@ -126,5 +126,12 @@ export interface I18nTranslationsBase {
     describeErrorTryAgain: string;
     onlineRecently: string;
     userNotOnline: string;
+    post_visible_for: string;
+    minute_one: string;
+    minute_other: string;
+    hour_one: string;
+    hour_other: string;
+    day_one: string;
+    day_other: string;
   };
 }

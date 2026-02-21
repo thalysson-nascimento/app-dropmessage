@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
+import { SharedPostMessage } from '../../../shared/interface/shared-post-message.interface';
 
 export interface FeatureItem {
   icon: string;
@@ -8,7 +10,7 @@ export interface FeatureItem {
   subtitle: string;
 }
 
-const SharedComponents = [ButtonDirective];
+const SharedComponents = [ButtonDirective, TranslateModule];
 
 @Component({
   selector: 'app-plan-gold-free-trial',
@@ -18,6 +20,7 @@ const SharedComponents = [ButtonDirective];
   standalone: true,
 })
 export class PlanGoldFreeTrialComponent implements OnInit {
+  public sharedPost?: SharedPostMessage;
   features: FeatureItem[] = [
     {
       icon: 'block',
@@ -41,12 +44,22 @@ export class PlanGoldFreeTrialComponent implements OnInit {
     },
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private translate: TranslateService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    const state = window.history.state as { response?: SharedPostMessage };
+
+    if (!state?.response) return;
+
+    this.sharedPost = state.response;
+  }
 
   goBack() {
-    this.router.navigateByUrl('home/main/post-message');
+    if (this.sharedPost?.showADS) {
+      return this.router.navigateByUrl('home/admob-video-reward-free-trial');
+    }
+
+    return this.router.navigateByUrl('home/main/post-message');
   }
 
   takePicture() {

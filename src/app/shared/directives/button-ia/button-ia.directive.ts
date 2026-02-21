@@ -3,79 +3,128 @@ import {
   Directive,
   ElementRef,
   Input,
-  OnChanges,
+  OnDestroy,
   Renderer2,
-  SimpleChanges,
 } from '@angular/core';
 
 @Directive({
   selector: '[appButton]',
   standalone: true,
 })
-export class ButtonDirective implements AfterViewInit, OnChanges {
-  @Input('appButton') variant: 'primary' | 'secondary' | '' = 'primary';
-  @Input() disabled = false;
-  @Input() loading = false;
-
+export class ButtonDirective implements AfterViewInit, OnDestroy {
   private btn!: HTMLElement;
-  private spinner!: HTMLElement;
+
+  private _variant: 'primary' | 'secondary' | 'ghost' = 'primary';
+  private _disabled = false;
+  private _loading = false;
+
+  private removeListeners: (() => void)[] = [];
+
+  @Input('appButton')
+  set variant(value: 'primary' | 'secondary' | 'ghost' | '') {
+    this._variant = (value as any) || 'primary';
+    this.updateStyles();
+  }
+
+  @Input()
+  set disabled(value: boolean) {
+    this._disabled = value;
+    this.updateState();
+  }
+
+  @Input()
+  set loading(value: boolean) {
+    this._loading = value;
+    this.updateState();
+  }
 
   constructor(private el: ElementRef, private renderer: Renderer2) {}
 
   ngAfterViewInit(): void {
     this.btn = this.el.nativeElement;
+
     this.applyBaseStyles();
-    this.applyVariant();
-    this.applyState();
+    this.registerEvents();
+    this.updateStyles();
+    this.updateState();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.btn) {
-      this.applyVariant();
-      this.applyState();
-    }
+  ngOnDestroy(): void {
+    this.removeListeners.forEach((remove) => remove());
   }
+
+  // ========================
+  // BASE STYLES
+  // ========================
 
   private applyBaseStyles() {
-    this.renderer.setStyle(this.btn, 'width', '100%');
-    this.renderer.setStyle(this.btn, 'padding', '1.2rem');
-    this.renderer.setStyle(this.btn, 'border-radius', '50px');
-    this.renderer.setStyle(this.btn, 'font-weight', 'bold');
-    this.renderer.setStyle(this.btn, 'font-size', '1rem');
-    this.renderer.setStyle(this.btn, 'cursor', 'pointer');
-    this.renderer.setStyle(this.btn, 'text-align', 'center');
-    this.renderer.setStyle(this.btn, 'transition', 'all 0.2s ease');
-    this.renderer.setStyle(this.btn, 'position', 'relative');
-    this.renderer.setStyle(this.btn, 'overflow', 'hidden');
-    this.renderer.setStyle(this.btn, 'display', 'flex');
-    this.renderer.setStyle(this.btn, 'align-items', 'center');
-    this.renderer.setStyle(this.btn, 'justify-content', 'center');
-    this.renderer.setStyle(this.btn, 'gap', '0.5rem');
-    this.renderer.setStyle(this.btn, 'transition', 'all 0.2s ease');
-    this.renderer.setStyle(this.btn, 'position', 'relative');
-    this.renderer.setStyle(this.btn, 'overflow', 'hidden');
+    const styles: Record<string, string> = {
+      width: '100%',
+      padding: '1.2rem',
+      borderRadius: '50px',
+      fontWeight: 'bold',
+      fontSize: '1rem',
+      cursor: 'pointer',
+      textAlign: 'center',
+      transition: 'background 0.15s ease, opacity 0.2s ease',
+      position: 'relative',
+      overflow: 'hidden',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '0.5rem',
+      border: 'none',
+      outline: 'none',
+    };
+
+    Object.entries(styles).forEach(([key, value]) => {
+      this.renderer.setStyle(this.btn, key, value);
+    });
   }
 
-  private applyVariant() {
-    const finalVariant = this.variant === 'secondary' ? 'secondary' : 'primary';
+  // ========================
+  // VARIANT CONTROL
+  // ========================
 
-    if (finalVariant === 'secondary') {
-      this.renderer.setStyle(this.btn, 'background', '#ffffff');
-      this.renderer.setStyle(this.btn, 'border', '1px solid #e5e7eb');
-      this.renderer.setStyle(this.btn, 'color', '#111827');
-    } else {
-      this.renderer.setStyle(this.btn, 'border', 'none');
-      this.renderer.setStyle(
-        this.btn,
-        'background',
-        'linear-gradient(90deg, #FF3781 0%, #FF9D76 100%)'
-      );
-      this.renderer.setStyle(this.btn, 'color', '#ffffff');
+  private updateStyles() {
+    if (!this.btn) return;
+
+    // Reset visual styles
+    this.renderer.removeStyle(this.btn, 'background');
+    this.renderer.removeStyle(this.btn, 'color');
+    // this.renderer.removeStyle(this.btn, 'border');
+
+    switch (this._variant) {
+      case 'secondary':
+        this.renderer.setStyle(this.btn, 'background', '#ffffff');
+        this.renderer.setStyle(this.btn, 'border', '1px solid #e5e7eb');
+        this.renderer.setStyle(this.btn, 'color', '#111827');
+        break;
+
+      case 'ghost':
+        this.renderer.setStyle(this.btn, 'background', 'transparent');
+        this.renderer.setStyle(this.btn, 'border', 'none');
+        this.renderer.setStyle(this.btn, 'color', '#374151');
+        break;
+
+      default:
+        this.renderer.setStyle(
+          this.btn,
+          'background',
+          'linear-gradient(90deg, #FF3781 0%, #FF9D76 100%)'
+        );
+        this.renderer.setStyle(this.btn, 'color', '#ffffff');
     }
   }
 
-  private applyState() {
-    const isDisabled = this.disabled || this.loading;
+  // ========================
+  // STATE CONTROL
+  // ========================
+
+  private updateState() {
+    if (!this.btn) return;
+
+    const isDisabled = this._disabled || this._loading;
 
     if (isDisabled) {
       this.renderer.setStyle(this.btn, 'opacity', '0.6');
@@ -86,5 +135,31 @@ export class ButtonDirective implements AfterViewInit, OnChanges {
       this.renderer.setStyle(this.btn, 'cursor', 'pointer');
       this.renderer.removeStyle(this.btn, 'pointer-events');
     }
+  }
+
+  // ========================
+  // MOBILE CLICK EFFECT
+  // ========================
+
+  private registerEvents() {
+    const press = this.renderer.listen(this.btn, 'pointerdown', () => {
+      if (this._variant === 'ghost' && !this._disabled && !this._loading) {
+        this.renderer.setStyle(this.btn, 'background', '#e5e7eb');
+      }
+    });
+
+    const release = this.renderer.listen(this.btn, 'pointerup', () => {
+      if (this._variant === 'ghost' && !this._disabled && !this._loading) {
+        this.renderer.setStyle(this.btn, 'background', 'transparent');
+      }
+    });
+
+    const cancel = this.renderer.listen(this.btn, 'pointerleave', () => {
+      if (this._variant === 'ghost') {
+        this.renderer.setStyle(this.btn, 'background', 'transparent');
+      }
+    });
+
+    this.removeListeners.push(press, release, cancel);
   }
 }

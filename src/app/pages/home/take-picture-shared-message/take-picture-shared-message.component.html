@@ -50,6 +50,7 @@
       @for (item of durations; track item.value) {
       <app-duration-option
         [option]="item"
+        [disabled]="isLoadingButton"
         [selected]="selectedDuration === item.value"
         (select)="selectDuration(item)"
       >
@@ -60,8 +61,8 @@
 
   <button
     appButton
-    (click)="sharedPost(cameraImage)"
     [disabled]="!cameraImage || isLoadingButton"
+    (click)="sharedPost(cameraImage)"
   >
     @if (isLoadingButton) {
     <app-spinner></app-spinner>
@@ -78,4 +79,12 @@
     description="Não foi possível conectar ao servidor para compartilhar seu post. Verifique sua conexão e tente novamente."
   ></app-feedback-overlay>
   <button appButton (click)="tryAgain()">Tentar novamente</button>
+  <button
+    appButton="ghost"
+    class="btn-ghost"
+    variant="ghost"
+    (click)="closeModal()"
+  >
+    Cancelar
+  </button>
 </app-modal>

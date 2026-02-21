@@ -25,33 +25,16 @@
         <p class="posts-label">Posts Ativos</p>
 
         <div class="posts-list">
-          <div class="post-item active">
-            <div class="avatar countdown">
-              <img src="https://i.pravatar.cc/150?img=12" />
-            </div>
-            <span>22m</span>
-          </div>
-
+          @for(item of sharedPost?.listActivePost; track item) {
           <div class="post-item">
             <div class="avatar">
-              <img src="https://i.pravatar.cc/150?img=32" />
+              <img [src]="item.image" />
             </div>
-            <span>4h</span>
-          </div>
-
-          <div class="post-item">
-            <div class="avatar">
-              <img src="https://i.pravatar.cc/150?img=45" />
+            <div class="time-ago">
+              <span>{{ formatTimeLeft(item.expirationTimer) }}</span>
             </div>
-            <span>18h</span>
           </div>
-
-          <div class="post-item new">
-            <div class="avatar dashed">
-              <span class="material-symbols-outlined">add</span>
-            </div>
-            <span>Novo</span>
-          </div>
+          }
         </div>
       </div>
 
@@ -79,9 +62,18 @@
       </div>
       <div class="description">
         <p>
-          Ele ficará visível por
-          <span class="highlight">30 minutos</span> para todos os seus matches.
-          Aproveite enquanto dura!
+          {{
+            "text.post_visible_for"
+              | translate
+                : {
+                    amount: sharedPost?.expirationAmount,
+                    unit:
+                      "text." +
+                        (sharedPost?.expirationAmount === 1
+                          ? sharedPost?.expirationUnit + "_one"
+                          : sharedPost?.expirationUnit + "_other") | translate
+                  }
+          }}
         </p>
       </div>
     </div>

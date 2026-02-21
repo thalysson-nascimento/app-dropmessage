@@ -135,5 +135,13 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
       'Oops, there was a request error at this time. Please try again later.',
     onlineRecently: 'online recently',
     userNotOnline: `Oops, we couldn't find any users online`,
+    post_visible_for:
+      'It will be visible for {{amount}} {{unit}} to all your matches. Enjoy while it lasts!',
+    minute_one: 'minute',
+    minute_other: 'minutes',
+    hour_one: 'hour',
+    hour_other: 'hours',
+    day_one: 'day',
+    day_other: 'days',
   },
 };

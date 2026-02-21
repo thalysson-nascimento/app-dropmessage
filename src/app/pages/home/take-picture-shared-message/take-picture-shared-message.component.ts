@@ -167,15 +167,17 @@ export class TakePictureSharedMessageComponent implements OnInit, OnDestroy {
   }
 
   openBottomSheet(): void {
-    const bottomSheetRef = this.bottomSheet.open(
-      ChoosePhotoGalleryOrCameraComponent
-    );
+    if (!this.isLoadingButton) {
+      const bottomSheetRef = this.bottomSheet.open(
+        ChoosePhotoGalleryOrCameraComponent
+      );
 
-    bottomSheetRef.instance.imageSelected.subscribe(
-      (imagePath: string | null) => {
-        this.cameraImage = imagePath;
-      }
-    );
+      bottomSheetRef.instance.imageSelected.subscribe(
+        (imagePath: string | null) => {
+          this.cameraImage = imagePath;
+        }
+      );
+    }
   }
 
   goBack() {
@@ -194,10 +196,21 @@ export class TakePictureSharedMessageComponent implements OnInit, OnDestroy {
     this.sharedPostMessageService
       .postMessage({ file, expirationTimer: this.selectedDuration })
       .subscribe({
-        next: () => {
+        next: (response) => {
           this.isLoadingButton = false;
           this.disabledButton = false;
-          this.router.navigate(['/home/send-message-success']);
+
+          if (response?.planGoldFreeTrialCongratulations) {
+            return this.router.navigate(['/home/plan-gold-free-trial'], {
+              replaceUrl: true,
+              state: { response },
+            });
+          }
+
+          return this.router.navigate(['/home/send-message-success'], {
+            replaceUrl: true,
+            state: { response },
+          });
         },
         error: () => {
           this.isLoadingButton = false;
@@ -242,5 +255,9 @@ export class TakePictureSharedMessageComponent implements OnInit, OnDestroy {
   tryAgain() {
     this.modal.close();
     this.sharedPost(this.cameraImage);
+  }
+
+  closeModal() {
+    this.modal.close();
   }
 }

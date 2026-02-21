@@ -1,11 +1,12 @@
 <div
   class="duration-option"
-  [class.duration-option--selected]="selected"
+  [class.duration-option--selected]="selected && !disabled"
+  [class.duration-option--disabled]="disabled"
   (click)="onSelect()"
 >
   <span
     class="material-symbols-outlined icon"
-    [style.color]="selected ? option.color : '#9ca3af'"
+    [style.color]="disabled ? '#9ca3af' : selected ? option.color : '#9ca3af'"
   >
     {{ option.icon }}
   </span>
@@ -15,7 +16,7 @@
     <span class="description">{{ option.description }}</span>
   </div>
 
-  @if (selected) {
+  @if (selected && !disabled) {
   <div class="check">
     <span class="material-symbols-outlined">check</span>
   </div>

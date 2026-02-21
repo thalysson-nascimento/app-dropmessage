@@ -44,9 +44,18 @@
       </div>
       <div class="description">
         <p>
-          Ele ficará visível por
-          <span class="highlight">30 minutos</span> para todos os seus matches.
-          Aproveite enquanto dura!
+          {{
+            "text.post_visible_for"
+              | translate
+                : {
+                    amount: sharedPost?.expirationAmount,
+                    unit:
+                      "text." +
+                        (sharedPost?.expirationAmount === 1
+                          ? sharedPost?.expirationUnit + "_one"
+                          : sharedPost?.expirationUnit + "_other") | translate
+                  }
+          }}
         </p>
       </div>
     </div>
