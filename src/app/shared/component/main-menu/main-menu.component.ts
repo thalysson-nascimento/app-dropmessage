@@ -10,14 +10,16 @@ export class MainMenuComponent implements OnInit {
   activeMenu: string = 'likes';
 
   @Output() select = new EventEmitter<
-    'profile' | 'ai-profiles' | 'likes' | 'favorites' | 'chat'
+    'profile' | 'ai-profiles' | 'likes' | 'notification' | 'chat'
   >();
 
   constructor() {}
 
   ngOnInit() {}
 
-  onClick(option: 'profile' | 'ai-profiles' | 'likes' | 'favorites' | 'chat') {
+  onClick(
+    option: 'profile' | 'ai-profiles' | 'likes' | 'notification' | 'chat'
+  ) {
     this.select.emit(option);
     this.activeMenu = option;
   }

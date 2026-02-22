@@ -40,10 +40,10 @@ export const HomeRouting: Routes = [
               import('./main/chat/chat.component').then((m) => m.ChatComponent),
           },
           {
-            path: 'favorites',
+            path: 'notification',
             loadComponent: () =>
-              import('./main/favorites/favorites.component').then(
-                (m) => m.FavoritesComponent
+              import('./main/notification/notification.component').then(
+                (m) => m.NotificationComponent
               ),
           },
           {

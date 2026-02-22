@@ -10,6 +10,33 @@
       />
     </div>
   </div>
+
+  @if (loading) {
+  <div class="loading-container">
+    <app-card-loading-shimmer>
+      <div class="header-loading-shimmer">
+        <app-load-shimmer
+          duration="0.7s"
+          height="30px"
+          width="60px"
+        ></app-load-shimmer>
+      </div>
+
+      <div class="bottom-loadd-shimmer">
+        <app-load-shimmer
+          duration="1s"
+          height="50px"
+          width="50%"
+        ></app-load-shimmer>
+        <app-load-shimmer duration="1.3s" height="50px"></app-load-shimmer>
+      </div>
+    </app-card-loading-shimmer>
+  </div>
+  }@else if(error) {
+  <app-error-request>
+    <button appButton="info" (click)="goToIAProfile()">Tentar novamente</button>
+  </app-error-request>
+  } @else {
   <div class="main-content">
     <app-cards
       name="Vanessa"
@@ -35,4 +62,5 @@
       </div>
     </div>
   </div>
+  }
 </div>

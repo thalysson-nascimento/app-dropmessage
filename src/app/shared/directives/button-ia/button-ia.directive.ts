@@ -14,14 +14,14 @@ import {
 export class ButtonDirective implements AfterViewInit, OnDestroy {
   private btn!: HTMLElement;
 
-  private _variant: 'primary' | 'secondary' | 'ghost' = 'primary';
+  private _variant: 'primary' | 'secondary' | 'ghost' | 'info' = 'primary';
   private _disabled = false;
   private _loading = false;
 
   private removeListeners: (() => void)[] = [];
 
   @Input('appButton')
-  set variant(value: 'primary' | 'secondary' | 'ghost' | '') {
+  set variant(value: 'primary' | 'secondary' | 'ghost' | 'info' | '') {
     this._variant = (value as any) || 'primary';
     this.updateStyles();
   }
@@ -105,6 +105,12 @@ export class ButtonDirective implements AfterViewInit, OnDestroy {
         this.renderer.setStyle(this.btn, 'background', 'transparent');
         this.renderer.setStyle(this.btn, 'border', 'none');
         this.renderer.setStyle(this.btn, 'color', '#374151');
+        break;
+
+      case 'info':
+        this.renderer.setStyle(this.btn, 'background', '#3b82f6');
+        this.renderer.setStyle(this.btn, 'border', 'none');
+        this.renderer.setStyle(this.btn, 'color', '#fff');
         break;
 
       default:

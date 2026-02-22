@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { Device } from '@capacitor/device';
@@ -6,6 +6,7 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { TranslateService } from '@ngx-translate/core';
 
+import { isPlatformBrowser } from '@angular/common';
 import { register } from 'swiper/element/bundle';
 import { getTranslation } from './app.config';
 register();
@@ -18,33 +19,28 @@ register();
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-  title = 'DatingMatch';
+  private platformId = inject(PLATFORM_ID);
 
-  constructor(private translate: TranslateService) {
-    // this.showSplashscree();
-    this.configureStatusBar();
-    this.initializationTranslateApp();
+  constructor(private translate: TranslateService) {}
+
+  async ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      await this.configureStatusBar();
+      await this.initializationTranslateApp();
+
+      setTimeout(async () => {
+        await SplashScreen.hide();
+      }, 3000);
+    }
   }
 
   async initializationTranslateApp() {
     const info = await Device.getLanguageCode();
     const deviceLang = info.value.split('-')[0];
     const defaultLang = deviceLang.match(/en|pt/) ? deviceLang : 'pt';
+
     this.translate.setTranslation(defaultLang, getTranslation(defaultLang));
     this.translate.use(defaultLang);
-  }
-
-  async ngOnInit() {
-    setTimeout(async () => {
-      await SplashScreen.hide(); // Oculta a splash screen após 3 segundos
-    }, 3000);
-  }
-
-  async showSplashscree() {
-    await SplashScreen.show({
-      autoHide: true,
-      showDuration: 3000,
-    });
   }
 
   async configureStatusBar() {

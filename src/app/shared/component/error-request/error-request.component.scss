@@ -1,0 +1,56 @@
+:host {
+  display: flex;
+  flex: 1;
+}
+
+.error-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.error-content {
+  max-width: 320px;
+  text-align: center;
+}
+
+.icon-wrapper {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.main-icon {
+  font-size: 84px;
+  color: #cbd5e1;
+  display: block;
+}
+
+.badge-icon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 28px;
+  color: #3b82f6;
+  background: white;
+  border-radius: 50%;
+}
+
+.title {
+  font-size: var(--font-size-large);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
+}
+
+.description {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #64748b;
+  margin-bottom: 2rem;
+  margin-bottom: var(--space-medium);
+}

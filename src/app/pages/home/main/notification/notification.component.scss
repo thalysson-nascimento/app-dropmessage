@@ -1,0 +1,137 @@
+.content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  padding: 1.5rem;
+}
+
+.header {
+  flex: 0 0 auto;
+  height: 4rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.container-title-subtitle {
+  margin-bottom: var(--space-xlarge);
+}
+
+.subtitle {
+  color: var(--text-dark-secundary);
+  margin-top: var(--space-small);
+}
+
+.loading-container {
+  flex: 1;
+  width: 100%;
+}
+
+.notification {
+  width: 100%;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  &__card {
+    height: 15rem;
+    width: 100%;
+  }
+
+  &__card app-load-shimmer {
+    height: 100%;
+    display: block;
+  }
+}
+
+.notification-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+
+  &__illustration {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: radial-gradient(
+      circle,
+      rgba(59, 130, 246, 0.08) 0%,
+      rgba(59, 130, 246, 0) 70%
+    );
+    border-radius: 50%;
+  }
+
+  &__icon-wrapper {
+    position: relative;
+  }
+
+  &__icon-main {
+    font-size: 7.5rem;
+    font-variation-settings: "FILL" 0, "wght" 200;
+    color: var(--color-neutral-300, #d1d5db);
+  }
+
+  &__icon-badge {
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    background: var(--color-background, #ffffff);
+    border-radius: 50%;
+    padding: 0.25rem;
+  }
+
+  &__icon-cancel {
+    font-size: 2.5rem;
+    font-variation-settings: "FILL" 1, "wght" 400;
+    color: var(--color-primary, #3b82f6);
+  }
+
+  &__content {
+    max-width: 20rem;
+  }
+
+  &__title {
+    font-size: var(--font-size-large);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1e293b;
+  }
+
+  &__description {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #64748b;
+    margin-bottom: 2rem;
+    margin-bottom: var(--space-medium);
+  }
+}
+
+.notifications-page {
+  padding-bottom: 80px;
+
+  &__section {
+    margin-top: 16px;
+  }
+
+  &__title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    padding: 0 16px;
+    margin-bottom: 8px;
+  }
+}
