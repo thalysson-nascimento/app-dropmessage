@@ -9,22 +9,31 @@
   </div>
 
   @if(loading) {
-  <div class="loading-container">
-    <section class="notification">
-      <div class="notification__grid">
-        @for (item of skeletonItems; track $index) {
-        <div class="notification__card">
-          <app-load-shimmer
-            height="15rem"
-            class="notification__shimmer"
-            duration="1s"
-          >
-          </app-load-shimmer>
+  <section class="notifications-loading">
+    <!-- <h2 class="notifications-loading__title">Hoje</h2> -->
+
+    @for (item of [1, 2, 3, 4, 5]; track $index) {
+    <div class="notifications-loading__list">
+      <div class="notifications-loading__item">
+        <div class="notifications-loading__avatar-wrapper">
+          <div class="notifications-loading__avatar skeleton"></div>
+          <div class="notifications-loading__badge skeleton"></div>
         </div>
-        }
+
+        <div class="notifications-loading__content">
+          <div
+            class="notifications-loading__line notifications-loading__line--primary skeleton"
+          ></div>
+          <div
+            class="notifications-loading__line notifications-loading__line--secondary skeleton"
+          ></div>
+        </div>
+
+        <div class="notifications-loading__preview skeleton"></div>
       </div>
-    </section>
-  </div>
+    </div>
+    }
+  </section>
   } @else if(error) {
   <app-error-request>
     <button appButton="info">Tentar novamente</button>

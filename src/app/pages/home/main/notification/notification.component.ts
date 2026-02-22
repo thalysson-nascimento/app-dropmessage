@@ -28,7 +28,7 @@ export class NotificationComponent implements OnInit {
   protected readonly skeletonItems = Array.from({ length: 6 });
   selectedFilter: NotificationFilter = 'ALL';
   notifications: NotificationModel[] = notificationMock;
-  public loading = false;
+  public loading = true;
   public error = false;
 
   get filtered(): NotificationModel[] {
