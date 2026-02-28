@@ -1,17 +1,15 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-main-menu',
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.scss'],
+  imports: [RouterModule],
   standalone: true,
 })
 export class MainMenuComponent implements OnInit {
   activeMenu: string = 'likes';
-
-  @Output() select = new EventEmitter<
-    'profile' | 'ai-profiles' | 'likes' | 'notification' | 'chat'
-  >();
 
   constructor() {}
 
@@ -20,7 +18,6 @@ export class MainMenuComponent implements OnInit {
   onClick(
     option: 'profile' | 'ai-profiles' | 'likes' | 'notification' | 'chat'
   ) {
-    this.select.emit(option);
     this.activeMenu = option;
   }
 }

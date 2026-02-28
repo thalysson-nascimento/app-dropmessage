@@ -1,8 +1,5 @@
 <nav class="main-menu">
-  <button
-    (click)="onClick('profile')"
-    [class.active]="activeMenu === 'profile'"
-  >
+  <button routerLink="/home/main/profile" routerLinkActive="active">
     <svg
       class="icon-main-menu"
       viewBox="0 0 24 24"
@@ -47,10 +44,7 @@
       />
     </svg>
   </button>
-  <button
-    (click)="onClick('ai-profiles')"
-    [class.active]="activeMenu === 'ai-profiles'"
-  >
+  <button routerLink="/home/main/ia-profile" routerLinkActive="active">
     <svg
       class="icon-main-menu"
       viewBox="0 0 24 24"
@@ -69,7 +63,11 @@
       />
     </svg>
   </button>
-  <button (click)="onClick('likes')" [class.active]="activeMenu === 'likes'">
+  <button
+    routerLink="/home/main/post-message"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
     <svg
       class="icon-main-menu"
       viewBox="0 0 24 24"
@@ -116,10 +114,7 @@
       />
     </svg>
   </button>
-  <button
-    (click)="onClick('notification')"
-    [class.active]="activeMenu === 'notification'"
-  >
+  <button routerLink="/home/main/notification" routerLinkActive="active">
     <svg
       class="icon-main-menu"
       viewBox="0 0 24 24"
@@ -143,7 +138,7 @@
       />
     </svg>
   </button>
-  <button (click)="onClick('chat')" [class.active]="activeMenu === 'chat'">
+  <button routerLink="/home/main/chat" routerLinkActive="active">
     <svg
       class="icon-main-menu"
       viewBox="0 0 24 24"
