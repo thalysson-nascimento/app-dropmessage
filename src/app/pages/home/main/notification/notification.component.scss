@@ -64,6 +64,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: var(--space-medium);
 
     background: radial-gradient(
       circle,
@@ -184,6 +185,7 @@
 
   &__badge {
     position: absolute;
+    border: 2px solid #fff;
     bottom: -4px;
     right: -4px;
     width: 1.5rem;

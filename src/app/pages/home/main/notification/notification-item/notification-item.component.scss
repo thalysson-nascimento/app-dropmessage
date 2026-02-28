@@ -1,7 +1,7 @@
 .notification {
   display: flex;
   gap: 12px;
-  padding: 12px 16px;
+  padding: var(--space-medium) 0;
   border-radius: 16px;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.08s ease;

@@ -28,7 +28,7 @@ register();
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class IaProfileComponent implements OnInit {
-  public loading = true;
+  public loading = false;
   public error = false;
   images: string[] = [
     'https://picsum.photos/500/700?random=1',

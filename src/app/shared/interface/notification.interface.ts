@@ -1,9 +1,9 @@
-export interface Notification {
-  id: string;
-  createdAt: Date;
-  user: User;
-  post?: Post;
-}
+// export interface Notification {
+//   id: string;
+//   createdAt: Date;
+//   user: User;
+//   post?: Post;
+// }
 
 export interface Post {
   id: string;

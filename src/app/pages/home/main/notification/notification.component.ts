@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ErrorRequestComponent } from '../../../../shared/component/error-request/error-request.component';
-import { LoadShimmerComponent } from '../../../../shared/component/load-shimmer/load-shimmer.component';
 import { LogoDropmessageComponent } from '../../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { ButtonDirective } from '../../../../shared/directives/button-ia/button-ia.directive';
 import {
   NotificationFilter,
   NotificationModel,
 } from '../../../../shared/interface/notification.interface';
-import { notificationMock } from '../../../../shared/mock/notification.mock';
+import { NotificationService } from '../../../../shared/service/notification/notification.service';
 import { NotificationListComponent } from './notification-list/notification-list.component';
 
 @Component({
@@ -19,16 +18,16 @@ import { NotificationListComponent } from './notification-list/notification-list
     LogoDropmessageComponent,
     ErrorRequestComponent,
     ButtonDirective,
-    LoadShimmerComponent,
     NotificationListComponent,
   ],
   standalone: true,
 })
 export class NotificationComponent implements OnInit {
   protected readonly skeletonItems = Array.from({ length: 6 });
-  selectedFilter: NotificationFilter = 'ALL';
-  notifications: NotificationModel[] = notificationMock;
-  public loading = true;
+
+  public selectedFilter: NotificationFilter = 'ALL';
+  public notifications: NotificationModel[] = [];
+  public loading = false;
   public error = false;
 
   get filtered(): NotificationModel[] {
@@ -39,9 +38,29 @@ export class NotificationComponent implements OnInit {
     );
   }
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private notificationService: NotificationService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadNotifications();
+  }
+
+  loadNotifications(): void {
+    this.loading = true;
+    this.notificationService.notification().subscribe({
+      next: (data) => {
+        this.notifications = data;
+        this.loading = false;
+        this.error = false;
+      },
+      error: () => {
+        this.loading = false;
+        this.error = true;
+      },
+    });
+  }
 
   goToTakePicture(): void {
     this.router.navigateByUrl('home/take-picture-shared-message');

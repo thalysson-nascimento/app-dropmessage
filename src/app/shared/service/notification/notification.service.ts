@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { currentEnvironment } from '../../../../environment.config';
-import { Notification } from '../../interface/notification.interface';
+import { NotificationModel } from '../../interface/notification.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -12,9 +12,9 @@ export class NotificationService {
 
   constructor(private httpClient: HttpClient) {}
 
-  notification(): Observable<Notification[]> {
+  notification(): Observable<NotificationModel[]> {
     return this.httpClient
-      .get<Notification[]>(`${this.baseURL}/notification`)
+      .get<NotificationModel[]>(`${this.baseURL}/notification`)
       .pipe(
         catchError((error) => {
           return throwError(() => error);
