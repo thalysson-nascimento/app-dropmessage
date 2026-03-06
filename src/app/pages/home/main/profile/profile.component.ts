@@ -5,8 +5,6 @@ import { App } from '@capacitor/app';
 import { Preferences } from '@capacitor/preferences';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
-import { ActiveSignatureComponent } from '../../../../shared/component/active-signature/active-signature.component';
-import { CardSubscriptionComponent } from '../../../../shared/component/card-subscription/card-subscription.component';
 import { ErrorComponent } from '../../../../shared/component/error/error.component';
 import { LoadShimmerComponent } from '../../../../shared/component/load-shimmer/load-shimmer.component';
 import { ActiveSubscription } from '../../../../shared/interface/active-subscription.interface';
@@ -22,12 +20,7 @@ import { TokenStorageSecurityRequestService } from '../../../../shared/service/t
 import { UserHashPublicService } from '../../../../shared/service/user-hash-public/user-hash-public.service';
 
 const CoreModule = [CommonModule, TranslateModule];
-const SharedComponent = [
-  CardSubscriptionComponent,
-  LoadShimmerComponent,
-  ActiveSignatureComponent,
-  ErrorComponent,
-];
+const SharedComponent = [LoadShimmerComponent, ErrorComponent];
 
 @Component({
   selector: 'app-profile',
@@ -46,6 +39,60 @@ export class ProfileComponent implements OnInit {
   dataSubscription!: ActiveSubscription;
   labelTag: string = '';
   showError: boolean = false;
+
+  menuSections = [
+    {
+      title: 'Account',
+      items: [
+        {
+          label: 'Profile',
+          description: 'See your profile data',
+          icon: 'person_outline',
+          route: 'home/user-data',
+        },
+        {
+          label: 'Shared posts',
+          description: 'See all your shared posts',
+          icon: 'grid_view',
+          route: 'home/user-post-message',
+        },
+      ],
+    },
+    {
+      title: 'Interaction',
+      items: [
+        {
+          label: 'Notifications',
+          description: 'Keep track of your notifications',
+          icon: 'notifications_none',
+          route: 'home/main/notification',
+        },
+        {
+          label: 'Chat',
+          description: 'Make new friends with your matches',
+          icon: 'chat_bubble_outline',
+          route: 'home/list-chat',
+        },
+      ],
+    },
+    {
+      title: 'Info',
+      items: [
+        {
+          label: 'App Info',
+          description: 'Application version',
+          icon: 'info',
+          route: 'home/app-infor',
+        },
+        {
+          label: 'Privacy policies',
+          description: 'See how we protect your information',
+          icon: 'security',
+          route: 'home/privacy-police',
+        },
+      ],
+    },
+  ];
 
   constructor(
     private router: Router,
@@ -97,7 +144,7 @@ export class ProfileComponent implements OnInit {
     this.cacheAvatarService.getAvatarCachePreferences().subscribe({
       next: (response) => {
         if (response) {
-          debugger;
+          // debugger;
           this.avatar = response;
         }
       },
@@ -276,6 +323,11 @@ export class ProfileComponent implements OnInit {
   }
 
   goToListSignature() {
+    console.log('goToListSignature');
     this.router.navigateByUrl('home/list-subscription');
+  }
+
+  navigate(item: any) {
+    this.router.navigateByUrl(item.route);
   }
 }

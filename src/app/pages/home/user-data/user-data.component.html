@@ -1,108 +1,199 @@
-<div class="container">
-  <div class="header">
+<section class="user-data">
+  <div class="user-data__cover">
+    @if (avatar) {
     <img
-      src="assets/icon-static/arrow-left.svg"
-      style="width: 24px; height: 24px"
-      alt=""
-      (click)="goToProfile()"
+      class="user-data__cover-image"
+      [src]="avatar.image"
+      alt="User avatar"
     />
-    <div class="container-title-subtitle">
-      <h1 class="title">{{ "text.profile" | translate }}</h1>
-      <p class="subtitle">{{ "text.personalData" | translate }}</p>
-    </div>
-  </div>
+    }
 
-  <div *ngIf="isLoading">
-    <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+    <div class="user-data__cover-overlay"></div>
 
-    <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+    <div class="user-data__actions">
+      <button
+        class="user-data__action user-data__action--back"
+        (click)="goToProfile()"
+        aria-label="Back"
+      >
+        <span class="material-symbols-outlined">chevron_left</span>
+      </button>
 
-    <div class="custumer-shimmer">
-      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
-    </div>
-
-    <div class="custumer-shimmer-80">
-      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
-    </div>
-  </div>
-
-  <app-system-unavailable
-    *ngIf="showSystemUnavailable && !isLoading"
-    (clickLoading)="tryAgain()"
-    [infoMessage]="
-      'No momento estamos com nossos serviços indisponíves, volte novamente mais tarde!'
-    "
-  >
-  </app-system-unavailable>
-
-  <section *ngIf="!showSystemUnavailable && !isLoading">
-    <ul appListStyle>
-      <li>
-        <span label>{{ "text.name" | translate }}</span>
-        <p>{{ myProfile.name }}</p>
-      </li>
-      <li>
-        <span label>{{ "text.email" | translate }}</span>
-        <p>{{ myProfile.email }}</p>
-      </li>
-      <li>
-        <span label>{{ "text.city" | translate }}</span>
-        <p>{{ myProfile.UserLocation.city }}</p>
-      </li>
-      <li>
-        <span label>{{ "text.state" | translate }}</span>
-        <p>{{ myProfile.UserLocation.state }}</p>
-      </li>
-      <li>
-        <span label>{{ "text.gender" | translate }}</span>
-        <p>{{ myProfile.About.gender }}</p>
-      </li>
-      <li>
-        <span label>{{ "text.interests" | translate }}</span>
-        <p>{{ myProfile.About.interests }}</p>
-      </li>
-      <li>
-        <span label>{{ "text.dateOfBirth" | translate }}</span>
-        <p>{{ myProfile.About.dateOfBirth }}</p>
-      </li>
-    </ul>
-    <div class="contain-button">
-      <button appButtonStyle [buttonType]="'secondary'" (click)="openModal()">
-        {{ "button.deleteAccount" | translate }}
+      <button
+        class="user-data__action user-data__action--more"
+        aria-label="More options"
+      >
+        <span class="material-symbols-outlined">add_a_photo</span>
       </button>
     </div>
-  </section>
-</div>
-
-<app-modal #dialog>
-  <div class="contain-title">
-    <p class="title-error">
-      {{ "text.titleConfirmDeleteAccount" | translate }}
-    </p>
   </div>
+  <div class="user-data__card">
+    @if(isLoading) {
+    <app-user-data-loading></app-user-data-loading>
+    }@else if(error) {
+    <app-error-request>
+      <button appButton="info" (click)="loadUserData()">Try again</button>
+    </app-error-request>
+    }@else {
 
-  <div class="contain-description-error">
-    <p class="description-error-message">
-      {{ "text.descriptionConfirmDeleteAccount" | translate }}
-    </p>
-  </div>
+    <div class="user-data__info">
+      <div class="user-data__name-wrapper">
+        <h1 class="user-data__name">
+          {{ avatar.user.name }}, {{ user.details.age }}
+        </h1>
 
-  <div class="contain-button-system-unavailable">
-    <button
-      appButtonStyle
-      class="button-delete-acount"
-      [buttonType]="'secondary'"
-      (click)="deleteAccount()"
-    >
-      <span *ngIf="!buttonDisalbled">{{
-        "button.deleteAccount" | translate
-      }}</span>
-      <div *ngIf="buttonDisalbled" class="bouncing-dots">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+        <span class="material-symbols-outlined user-data__verified">
+          verified
+        </span>
       </div>
+
+      <div class="user-data__location">
+        <span class="material-symbols-outlined user-data__location-icon">
+          location_on
+        </span>
+        <span>{{ user.location.city }}, {{ user.location.country }}</span>
+      </div>
+    </div>
+
+    <section class="user-data__section">
+      <h3 class="user-data__section-title">About</h3>
+      <p class="user-data__about-text">
+        {{ user.details.userDescription }}
+      </p>
+    </section>
+
+    @if (user.hobbies.length !== 0) {
+    <section class="user-data__section">
+      <h3 class="user-data__section-title">Hobbies</h3>
+
+      <div class="user-data__hobbies">
+        @for (hobby of user.hobbies; track hobby.label) {
+        <div class="user-data__hobby">
+          <span class="material-symbols-outlined">
+            {{ hobby.icon }}
+          </span>
+          <span>{{ hobby.label }}</span>
+        </div>
+        }
+      </div>
+    </section>
+    }
+
+    <hr class="user-data__divider" />
+
+    <!-- DETAILS -->
+    <section class="user-data__section">
+      <h3 class="user-data__section-title">Details</h3>
+
+      <div class="user-data__details">
+        <div class="user-data__detail-row">
+          <div class="user-data__detail-left">
+            <span class="material-symbols-outlined">public</span>
+            <span>Country</span>
+          </div>
+          <span class="user-data__detail-value">
+            {{ user.location.country }}
+          </span>
+        </div>
+
+        <div class="user-data__detail-row">
+          <div class="user-data__detail-left">
+            <span class="material-symbols-outlined">location_on</span>
+            <span>City</span>
+          </div>
+          <span class="user-data__detail-value">
+            {{ user.location.city }}
+          </span>
+        </div>
+
+        <div class="user-data__detail-row">
+          <div class="user-data__detail-left">
+            <span class="material-symbols-outlined">cake</span>
+            <span>Age</span>
+          </div>
+          <span class="user-data__detail-value">
+            {{ user.details.age }}
+          </span>
+        </div>
+
+        <div class="user-data__detail-row">
+          <div class="user-data__detail-left">
+            <span class="material-symbols-outlined">language</span>
+            <span>Language</span>
+          </div>
+          <span class="user-data__detail-value">
+            {{ user.details.language }}
+          </span>
+        </div>
+
+        <div class="user-data__detail-row">
+          <div class="user-data__detail-left">
+            <span class="material-symbols-outlined">work</span>
+            <span>Profession</span>
+          </div>
+          <span class="user-data__detail-value">
+            {{ user.details.profession }}
+          </span>
+        </div>
+      </div>
+    </section>
+    }
+  </div>
+  <div class="action-button">
+    <button
+      appButton="ghost"
+      class="action-button__space-bttom"
+      (click)="logout()"
+    >
+      Loggout
+    </button>
+    <button
+      appButton="ghost"
+      class="button-delete-acount"
+      (click)="openModal()"
+    >
+      Delete account
     </button>
   </div>
+</section>
+
+<app-modal #modalDeleteAccount>
+  <app-feedback-overlay
+    variant="warning"
+    [title]="'text.titleConfirmDeleteAccount' | translate"
+    [description]="'text.descriptionConfirmDeleteAccount' | translate"
+  ></app-feedback-overlay>
+
+  <div>
+    <button appButton [disabled]="buttonDisalbled" (click)="deleteAccount()">
+      {{ "button.deleteAccount" | translate }}
+    </button>
+
+    <button
+      appButton="ghost"
+      class="btn-ghost"
+      (click)="closeModalDeleteAccount()"
+    >
+      Close
+    </button>
+  </div>
+</app-modal>
+
+<app-modal #modalRequesteError>
+  <app-feedback-overlay
+    variant="error"
+    title="Ops, Algo deu errado!"
+    description="Não foi possível conectar ao servidor para compartilhar seu post. Verifique sua conexão e tente novamente."
+  ></app-feedback-overlay>
+  <button appButton (click)="deleteAccount()">Try again</button>
+
+  <button
+    appButton="ghost"
+    class="btn-ghost"
+    variant="ghost"
+    [disabled]="buttonDisalbled"
+    (click)="closeModalRequesteError()"
+  >
+    Close
+  </button>
 </app-modal>
