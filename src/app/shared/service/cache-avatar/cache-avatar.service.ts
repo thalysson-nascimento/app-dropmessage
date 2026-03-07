@@ -29,4 +29,27 @@ export class CacheAvatarService {
   resetAvatarCachePreferences(): Observable<void> {
     return from(Preferences.remove({ key: 'avatarCachePreferences' }));
   }
+
+  updateAvatarCachePreferences(
+    partialAvatar: Partial<AvatarSuccess>
+  ): Observable<void> {
+    return this.getAvatarCachePreferences().pipe(
+      map((currentAvatar) => {
+        if (!currentAvatar) return null;
+
+        return {
+          ...currentAvatar,
+          ...partialAvatar,
+        };
+      }),
+      map((updatedAvatar) => {
+        if (!updatedAvatar) return;
+
+        Preferences.set({
+          key: 'avatarCachePreferences',
+          value: JSON.stringify(updatedAvatar),
+        });
+      })
+    );
+  }
 }

@@ -43,6 +43,7 @@ import { UserDataLoadingComponent } from './user-data-loading/user-data-loading.
     FeedbackOverlayComponent,
     CommonModule,
     ErrorRequestComponent,
+    CommonModule,
   ],
 })
 export class UserDataComponent implements OnInit, OnDestroy {
@@ -231,6 +232,10 @@ export class UserDataComponent implements OnInit, OnDestroy {
           this.router.navigateByUrl('auth/sign');
         },
       });
+  }
+
+  navigateUpdateAvatar() {
+    this.router.navigateByUrl('home/update-avatar');
   }
 
   closeModalRequesteError() {

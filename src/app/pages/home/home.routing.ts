@@ -247,6 +247,13 @@ export const HomeRouting: Routes = [
             (m) => m.PlanGoldFreeTrialComponent
           ),
       },
+      {
+        path: 'update-avatar',
+        loadComponent: () =>
+          import('./update-avatar/update-avatar.component').then(
+            (m) => m.UpdateAvatarComponent
+          ),
+      },
     ],
   },
 ];
