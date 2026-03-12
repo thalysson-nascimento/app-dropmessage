@@ -1,5 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CardGlassComponent } from '../../../../shared/component/card-glass/card-glass.component';
+import { AIProfileInterface } from '../../../../shared/interface/ai-profile.interface';
 
 export interface Interesse {
   label: string;
@@ -14,6 +15,7 @@ export interface Interesse {
   standalone: true,
 })
 export class IaProfileDetailsInfoComponent implements OnInit {
+  @Input() aiProfiles!: AIProfileInterface;
   @Output() $goBack = new EventEmitter<void>();
 
   person = ['Ousada', 'carinhosa', 'curiosa'];

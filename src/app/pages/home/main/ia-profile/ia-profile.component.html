@@ -31,17 +31,17 @@
   } @else {
   <div class="swiper-container">
     <swiper-container slides-per-view="1" space-between="16" class="mySwiper">
-      <swiper-slide *ngFor="let img of images">
+      <swiper-slide *ngFor="let ai of aiProfiles">
         <div class="slide-content">
-          <app-cards [image]="img" badge="IA ativa">
+          <app-cards [image]="ai.avatarUrl" badge="IA ativa">
             <div class="card-footer">
               <div class="card-footer-infor">
-                <p class="ia-name">Vanessa</p>
-                <span>Ousada</span>
+                <p class="ia-name">{{ ai.name }}</p>
+                <span>{{ ai.personality }}</span>
               </div>
               <card-footer-action>
-                <button appButton (click)="goToIAProfileDetails()">
-                  Saiba mais sobre Vanessa
+                <button appButton (click)="goToIAProfileDetails(ai)">
+                  Saiba mais sobre {{ ai.name }}
                 </button>
               </card-footer-action>
             </div>

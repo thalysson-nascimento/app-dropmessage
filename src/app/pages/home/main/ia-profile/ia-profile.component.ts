@@ -8,6 +8,8 @@ import { ErrorRequestComponent } from '../../../../shared/component/error-reques
 import { LoadShimmerComponent } from '../../../../shared/component/load-shimmer/load-shimmer.component';
 import { LogoDropmessageComponent } from '../../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { ButtonDirective } from '../../../../shared/directives/button-ia/button-ia.directive';
+import { AIProfileInterface } from '../../../../shared/interface/ai-profile.interface';
+import { AiProfilesService } from '../../../../shared/service/ai-profiles/ai-profiles.service';
 
 register();
 
@@ -30,17 +32,35 @@ register();
 export class IaProfileComponent implements OnInit {
   public loading = false;
   public error = false;
-  images: string[] = [
-    'https://picsum.photos/500/700?random=1',
-    'https://picsum.photos/500/700?random=2',
-    'https://picsum.photos/500/700?random=3',
-  ];
+  public aiProfiles!: AIProfileInterface[];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private aiProfilesService: AiProfilesService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadAiProfile();
+  }
 
-  goToIAProfileDetails() {
-    this.router.navigateByUrl('/home/ia-profile-details');
+  loadAiProfile() {
+    this.loading = true;
+    this.aiProfilesService.profiles().subscribe({
+      next: (response) => {
+        this.aiProfiles = response;
+        this.loading = false;
+        this.error = false;
+      },
+      error: () => {
+        this.loading = false;
+        this.error = true;
+      },
+    });
+  }
+
+  goToIAProfileDetails(ai: AIProfileInterface) {
+    this.router.navigate(['/home/ia-profile-details'], {
+      state: { aiProfile: ai },
+    });
   }
 }

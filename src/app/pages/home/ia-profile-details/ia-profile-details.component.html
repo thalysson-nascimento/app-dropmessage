@@ -1,9 +1,6 @@
 <div class="ia-details">
   <div class="ia-details__background">
-    <img
-      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOYx8ycAVnEx4bte1bafJ4L_js04ccE3gKi60RvHYgEvUb5q-EJxW6c695ibmvKa2ABlwPKwMl6qEPfoCAfl7GCixQ_hLE3IMjLUVVmEifWmpcf4Fj8PZ_pkxkE9CZBypVmJJHK1GL6v8vk8vdDf--92BmkRe0SAUsaQX2VweF04UzSfbryf9FmOGZPT47UGcTyp8wYhoFwoHfIRzUUdefnlh5UFGpgg0FWIHQdLnn-J5berurtw7ilfkN8uKB7PsPdE7tf9KuJV4"
-      alt="Perfil IA"
-    />
+    <video [src]="movieAI" autoplay muted loop playsinline></video>
     <div class="ia-details__overlay"></div>
   </div>
 
@@ -26,8 +23,8 @@
             </button>
 
             <div class="ia-details__title">
-              <h1>Vanessa</h1>
-              <p>Ousada</p>
+              <h1>{{ aiProfiles.name }}</h1>
+              <p>{{ aiProfiles.personality }}</p>
             </div>
           </header>
 
@@ -38,14 +35,13 @@
               <app-card-glass>
                 <ng-container cardContent>
                   <p class="about-text">
-                    Às vezes, tudo o que a gente precisa é conversar.
+                    {{ aiProfiles.description }}
                   </p>
 
                   <div class="tags">
-                    <span>Conversa leve</span>
-                    <span>Boa para madrugadas</span>
-                    <span>Perfil de IA</span>
-                    <span>Sem julgamentos</span>
+                    @for(trait of aiProfiles.traits; track trait) {
+                    <span>{{ trait.name }}</span>
+                    }
                   </div>
 
                   <div class="info-wrapper">
@@ -54,8 +50,6 @@
                       (click)="slideNext()"
                       >info</span
                     >
-                    <!-- <button class="info-button">
-                    </button> -->
                   </div>
                 </ng-container>
               </app-card-glass>
@@ -67,6 +61,7 @@
       </swiper-slide>
       <swiper-slide>
         <app-ia-profile-details-info
+          [aiProfiles]="aiProfiles"
           ($goBack)="slidePrev()"
         ></app-ia-profile-details-info>
       </swiper-slide>

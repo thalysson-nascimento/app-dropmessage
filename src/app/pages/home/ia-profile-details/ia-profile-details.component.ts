@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CardGlassComponent } from '../../../shared/component/card-glass/card-glass.component';
+import { AIProfileInterface } from '../../../shared/interface/ai-profile.interface';
 import { IaProfileDetailsInfoComponent } from './ia-profile-details-info/ia-profile-details-info.component';
 
 @Component({
@@ -18,6 +19,9 @@ import { IaProfileDetailsInfoComponent } from './ia-profile-details-info/ia-prof
   standalone: true,
 })
 export class IaProfileDetailsComponent implements OnInit {
+  public aiProfiles!: AIProfileInterface;
+  public movieAI!: string;
+
   @ViewChild('swiperRef') swiperRef!: ElementRef;
 
   get swiper() {
@@ -26,10 +30,25 @@ export class IaProfileDetailsComponent implements OnInit {
 
   constructor(private router: Router) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    const state = window.history.state as { aiProfile?: AIProfileInterface };
+
+    if (!state?.aiProfile) return;
+
+    this.aiProfiles = state.aiProfile;
+    this.loadMoviesAI();
+  }
 
   goBack() {
     this.router.navigate(['home/main/ia-profile']);
+  }
+
+  public loadMoviesAI() {
+    if (this.aiProfiles.name === 'Sophia') {
+      this.movieAI = 'assets/movie/sophia-movie.mp4';
+    } else if (this.aiProfiles.name === 'David') {
+      this.movieAI = 'assets/movie/david-movie.mp4';
+    }
   }
 
   async slidePrev() {
