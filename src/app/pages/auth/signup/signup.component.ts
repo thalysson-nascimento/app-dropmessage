@@ -25,6 +25,7 @@ import { InputCustomDirective } from '../../../shared/directives/input-custom/in
 import { CreateAccount } from '../../../shared/interface/create-account.interface';
 import { CreateAccountWithGoogleOauthService } from '../../../shared/service/create-account-with-google-oauth/create-account-with-google-oauth.service';
 import { CreateAccountService } from '../../../shared/service/create-account/create-account.service';
+import { DeviceLanguageService } from '../../../shared/service/device-language/device-language.service';
 import { GoogleAuthService } from '../../../shared/service/google-auth/google-auth.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
@@ -70,7 +71,8 @@ export class SignupComponent implements OnInit {
     private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
     private userHashPublicService: UserHashPublicService,
     private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
-    private loggerService: LoggerService
+    private loggerService: LoggerService,
+    private deviceLanguageService: DeviceLanguageService
   ) {}
 
   ngOnInit(): void {
@@ -160,47 +162,41 @@ export class SignupComponent implements OnInit {
   }
 
   async createAccountUser() {
-    if (this.createAccountFormGroup.valid) {
-      this.isLoadingButton = true;
-      this.buttonDisalbled = true;
-      const device = await this.deviceInfor();
-      const dataCreateAccountUser =
-        this.createAccountFormGroup.getRawValue() as CreateAccount;
+    if (!this.createAccountFormGroup.valid) return;
 
-      this.createAccountService.createAccount(dataCreateAccountUser).subscribe({
+    this.isLoadingButton = true;
+    this.buttonDisalbled = true;
+
+    try {
+      const formData = this.createAccountFormGroup.getRawValue();
+
+      const languageInfo = await this.deviceLanguageService.getLanguage();
+
+      const payload: CreateAccount = {
+        ...formData,
+        ...languageInfo,
+      };
+
+      this.createAccountService.createAccount(payload).subscribe({
         next: () => {
-          gtag('event', 'click', {
-            page_title: 'Tela de Cadastro', // Título que você quer identificar
-            page_location: window.location.href,
-            page_path: '/cadastro', // Defina o caminho conforme sua rota
-            create_account: 'create_account',
+          gtag('event', 'create_account', {
+            page_path: '/cadastro',
           });
 
-          gtag('device_infor', 'create_account', device);
-
-          this.isLoadingButton = false;
-          this.buttonDisalbled = false;
           this.router.navigateByUrl('auth/information-user-registred');
         },
-        error: (responseError) => {
+
+        error: (error) => {
+          this.openBottomSheet('Ops, ocorreu um erro.', error.error.message);
+        },
+
+        complete: () => {
           this.isLoadingButton = false;
           this.buttonDisalbled = false;
-
-          gtag('event', 'error_create_account', {
-            page_title: 'Tela de Cadastro',
-            page_location: window.location.href,
-            page_path: '/cadastro',
-            error_message:
-              responseError.error.message?.message || 'Erro desconhecido',
-            error_code: responseError.status || 'sem código',
-          });
-
-          this.openBottomSheet(
-            'Ops, ocorreu um erro.',
-            responseError.error.message.message
-          );
         },
       });
+    } catch (error) {
+      console.error(error);
     }
   }
 

@@ -2,7 +2,10 @@ export interface CreateAccount {
   name: string;
   email: string;
   password: string;
-  dateOfBirth?: string;
+
+  language: string;
+  codeLanguage: string;
+  countryLanguage: string;
 }
 
 export interface CreateAccountSuccess {
