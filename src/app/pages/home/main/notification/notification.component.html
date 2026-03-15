@@ -4,8 +4,8 @@
   </div>
 
   <div class="container-title-subtitle">
-    <h1 class="title">Notificações</h1>
-    <p class="subtitle">Share a moment that lasts for a limited time</p>
+    <h1 class="title">{{ "text.notifications" | translate }}</h1>
+    <p class="subtitle">{{ "text.shareMomentLimitedTime" | translate }}</p>
   </div>
 
   @if(loading) {
@@ -36,7 +36,7 @@
   </section>
   } @else if(error) {
   <app-error-request>
-    <button appButton="info">Tentar novamente</button>
+    <button appButton="info">{{ "button.tryAgain" | translate }}</button>
   </app-error-request>
   } @else { @if (notifications.length === 0) {
   <section class="notification-empty">
@@ -57,15 +57,16 @@
     </div>
 
     <div class="notification-empty__content">
-      <h2 class="notification-empty__title">Ainda não há notificações</h2>
+      <h2 class="notification-empty__title">
+        {{ "text.noNotifications" | translate }}
+      </h2>
 
       <p class="notification-empty__description">
-        Suas notificações, curtidas e comentários aparecerão aqui quando as
-        pessoas interagirem com você.
+        {{ "text.notificationsEmptyDescription" | translate }}
       </p>
     </div>
     <button appButton="info" (click)="goToTakePicture()">
-      Fazer uma postagem
+      {{ "button.createPost" | translate }}
     </button>
   </section>
   }@else {

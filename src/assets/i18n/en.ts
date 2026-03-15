@@ -1,4 +1,5 @@
 import { I18nTranslationsBase } from './i18n-translations.base.interface';
+import { PRIVACY_POLICY_EN } from './privacy-policy.en';
 
 export const EN_TRANSLATIONS: I18nTranslationsBase = {
   button: {
@@ -15,6 +16,7 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     selectFromGallery: 'Select from gallery',
     allowLocation: 'Allow location',
     confirmeLocation: 'Confirm location',
+    goToLogin: 'Go to login',
     logout: 'Logout',
     codeConfirmation: 'Confirm code',
     processing: 'Processing',
@@ -22,8 +24,14 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     takePicture: 'Take photo ',
     allowCamera: 'Allow camera',
     completeProfile: 'Complete Profile',
+    learnMoreAbout: 'Learn more about',
     titleCard: 'Make your first post and try to connect with new people.',
     sibtitleCard: 'Share post',
+    uploadPhoto: 'Upload photo',
+    changePhoto: 'Change photo',
+    share: 'Share',
+    cancel: 'Cancel',
+    exploreIaProfile: 'Explore AI profiles',
   },
   input: {
     placeholder: {
@@ -45,9 +53,14 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     titleError: 'Oops, an error occurred!',
     descriptionError: '',
     titleCreateAccount: 'Create your account',
+    profileCreatedSuccess: 'Profile created successfully',
+    backToLogin: 'Go back to the login screen and continue your registration',
     registrationAgree: 'By creating an account, you agree to our',
     politicsPrivacy: 'Politic Privacy',
     noNewFriends: 'Oops, no new friends!',
+    noProfilesFound: 'We did not find new profiles right now.',
+    iaProfileDescription:
+      'Enjoy the AI profiles created for unique conversations and experiences.',
     tryAgainLater: 'How about trying again later?',
     likeMoreLikes: 'Would you like more likes?',
     watchVideoReward: 'Watch the commercial to continue with more likes.',
@@ -81,6 +94,10 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     descriptionConfirmDeleteAccount:
       'After deleting your account you will lose all data, your posts and friendships made.',
     noNotifications: `Oops, you don't have any notifications yet.`,
+    notificationsEmptyDescription:
+      'Your notifications, likes, and comments will appear here when people interact with you.',
+    shareMomentLimitedTime: 'Share a moment that lasts for a limited time',
+    createPost: 'Create a post',
     noChat: "Oops, you don't have any chat yet.",
     chooseTimer: 'Choose the time your post will be visible',
     thirtyMinutes: '30 minutes',
@@ -98,6 +115,19 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     descriptionErrorLocation:
       'Unable to obtain your location, to continue click the button below, or access your device settings.',
     errorRequestLocation: 'There was a request error, try again later.',
+    errorSomethingWentWrong: 'Oops, something went wrong!',
+    couldNotConnectToServerSharePost:
+      'Could not connect to server to share your post. Check your connection and try again.',
+    createTimedPost: 'Create Timed Post',
+    updateProfilePhoto: 'Update profile photo',
+    chooseNewPhotoToUpdateProfile:
+      'Choose a new photo to update your profile picture.',
+    expiresIn: 'Expires in',
+    visibilityDuration: 'Visibility Duration',
+    cameraAccessDenied: 'Camera access denied',
+    enableCameraPermissionInSettings:
+      'Enable camera permission in settings to upload a photo.',
+    tapToSelectFromGallery: 'Tap to select from gallery',
     titleVerifyEmail: 'Check your email',
     subtitleVerifyEmail: 'Check the code that was sent to your email',
     invalidCode: 'Invalid code',
@@ -133,8 +163,20 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
       'To complete your registration you need to take or select a photo for your profile.',
     describeErrorTryAgain:
       'Oops, there was a request error at this time. Please try again later.',
+    errorOccurred: 'Oops, an error occurred!',
+    errorRequestTryAgainLater:
+      'A request error occurred, please try again later.',
+    systemUnavailable: 'Oops, service unavailable!',
+    errorStatsCouldNotLoad: 'Could not load statistics data.',
+    totalPosts: 'Total posts',
+    totalReceivedLikes: 'Received likes',
+    totalGivenLikes: 'Given likes',
     onlineRecently: 'online recently',
     userNotOnline: `Oops, we couldn't find any users online`,
+    welcomeDatingMatch: 'Welcome to DatingMatch',
+    accountCreatedContinueProfile:
+      'Your account has been created successfully, let us continue with your profile.',
+    continueToProfile: 'Continue to profile',
     post_visible_for:
       'It will be visible for {{amount}} {{unit}} to all your matches. Enjoy while it lasts!',
     minute_one: 'minute',
@@ -143,5 +185,6 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     hour_other: 'hours',
     day_one: 'day',
     day_other: 'days',
+    privacyPolicy: PRIVACY_POLICY_EN,
   },
 };

@@ -1,6 +1,7 @@
 import { NgFor } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { register } from 'swiper/element/bundle';
 import { CardLoadingShimmerComponent } from '../../../../shared/component/card-loading-shimmer/card-loading-shimmer.component';
 import { CardsComponent } from '../../../../shared/component/cards/cards.component';
@@ -26,6 +27,7 @@ register();
     CardLoadingShimmerComponent,
     LoadShimmerComponent,
     ErrorRequestComponent,
+    TranslateModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

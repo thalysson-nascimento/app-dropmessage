@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Camera } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
 import { Dialog } from '@capacitor/dialog';
+import { TranslateModule } from '@ngx-translate/core';
 import {
   AndroidSettings,
   IOSSettings,
@@ -24,6 +25,7 @@ const SharedComponents = [
   SpinnerComponent,
   ModalComponent,
   FeedbackOverlayComponent,
+  TranslateModule,
 ];
 
 @Component({

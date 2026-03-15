@@ -4,15 +4,15 @@
   </div>
 
   <div class="container-title-subtitle">
-    <h1 class="title">Chat</h1>
-    <p class="subtitle">Share a moment that lasts for a limited time</p>
+    <h1 class="title">{{ "text.chat" | translate }}</h1>
+    <p class="subtitle">{{ "text.shareMomentLimitedTime" | translate }}</p>
   </div>
 
   @if(loading) {
   <div class="loading-container"></div>
   } @else if(error) {
   <app-error-request>
-    <button appButton="info">Tentar novamente</button>
+    <button appButton="info">{{ "button.tryAgain" | translate }}</button>
   </app-error-request>
   } @else { }
 </div>

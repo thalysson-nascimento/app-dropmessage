@@ -6,8 +6,10 @@
   </header>
 
   <div class="container-title-subtitle">
-    <h1 class="title">Update profile photo</h1>
-    <p class="subtitle">Choose a new photo to update your profile picture.</p>
+    <h1 class="title">{{ "text.updateProfilePhoto" | translate }}</h1>
+    <p class="subtitle">
+      {{ "text.chooseNewPhotoToUpdateProfile" | translate }}
+    </p>
   </div>
 
   @if (!cameraAllowed) {
@@ -16,10 +18,12 @@
       <div class="upload__icon-wrapper">
         <span class="material-symbols-outlined">photo_camera_front</span>
       </div>
-      <span class="upload__title">Camera access denied</span>
-      <span class="upload__subtitle"
-        >Enable camera permission in settings to upload a photo</span
-      >
+      <span class="upload__title">{{
+        "text.cameraAccessDenied" | translate
+      }}</span>
+      <span class="upload__subtitle">{{
+        "text.enableCameraPermissionInSettings" | translate
+      }}</span>
     </div>
   </section>
   }@else {
@@ -29,8 +33,10 @@
       <div class="upload__icon-wrapper">
         <span class="material-symbols-outlined">add_a_photo</span>
       </div>
-      <span class="upload__title">Upload Photo</span>
-      <span class="upload__subtitle">Tap to select from gallery</span>
+      <span class="upload__title">{{ "button.uploadPhoto" | translate }}</span>
+      <span class="upload__subtitle">{{
+        "text.tapToSelectFromGallery" | translate
+      }}</span>
       } @else if(cameraAllowed && cameraImage) {
       <img class="upload__image" [src]="cameraImage" />
       }
@@ -46,7 +52,7 @@
     @if (isLoadingButton) {
     <app-spinner></app-spinner>
     } @else {
-    <ng-container> Change Photo </ng-container>
+    <ng-container>{{ "button.changePhoto" | translate }}</ng-container>
     }
   </button>
 </div>
@@ -54,16 +60,18 @@
 <app-modal #modal>
   <app-feedback-overlay
     variant="error"
-    title="Ops, Algo deu errado!"
-    description="Não foi possível conectar ao servidor para compartilhar seu post. Verifique sua conexão e tente novamente."
+    [title]="'text.errorSomethingWentWrong' | translate"
+    [description]="'text.couldNotConnectToServerSharePost' | translate"
   ></app-feedback-overlay>
-  <button appButton (click)="tryAgain()">Try again</button>
+  <button appButton (click)="tryAgain()">
+    {{ "button.tryAgain" | translate }}
+  </button>
   <button
     appButton="ghost"
     class="btn-ghost"
     variant="ghost"
     (click)="closeModal()"
   >
-    Cancel
+    {{ "button.cancel" | translate }}
   </button>
 </app-modal>

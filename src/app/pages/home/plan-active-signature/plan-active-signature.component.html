@@ -23,7 +23,7 @@
         <div class="card-signature-header">
           <img [src]="subscription?.data?.logoPath" alt="arrow" />
           <div class="plan">
-            <span class="nickname">Plano</span>
+            <span class="nickname">{{ "text.plan" | translate }}</span>
             <p class="name">{{ subscription?.data?.plan }}</p>
           </div>
         </div>
@@ -39,7 +39,7 @@
         @if (subscription?.data?.cancelAtPeriodEnd && subscription?.data?.status
         !== 'trialing') {
         <p>
-          Assinatura cancelada em:
+          {{ "text.subscriptionCancelledAt" | translate }}
           {{
             subscription?.data?.cancelAt
               | date : "dd/MM/yyyy " + "'ás'" + " HH:mm"
@@ -47,17 +47,19 @@
         </p>
         }
         <p>
-          Seu período de ativação será até<strong>
+          {{ "text.yourActivationPeriodUntil" | translate
+          }}<strong>
             {{
               subscription?.data?.currentPeriodEnd
                 | date : "dd/MM/yyyy " + "'ás'" + " HH:mm"
             }}</strong
           >
+          >
         </p>
         @if (!subscription?.data?.cancelAtPeriodEnd &&
         subscription?.data?.status !== 'trialing' ) {
         <p class="next-payment">
-          Próxima cobrança:
+          {{ "text.nextCharge" | translate }}
           {{
             subscription?.data?.currentPeriodEnd
               | date : "dd/MM/yyyy " + "'ás'" + " HH:mm"
@@ -78,9 +80,9 @@
           class="button"
           [buttonType]="'primary'"
         >
-          <span [ngStyle]="{ color: subscription?.data?.colorBottom }"
-            >Cancelar assinatura</span
-          >
+          <span [ngStyle]="{ color: subscription?.data?.colorBottom }">{{
+            "button.cancelSubscription" | translate
+          }}</span>
         </button>
       </div>
     </div>
@@ -89,7 +91,7 @@
 
 <app-modal #modalCancelSignature>
   <div class="contain-title">
-    <p class="title">Tem certeza que deseja cancelar a assinatura?</p>
+    <p class="title">{{ "text.confirmCancelSubscription" | translate }}</p>
   </div>
 
   @if (showError) {
@@ -115,7 +117,9 @@
       [disabledButton]="buttonDisalbled"
       type="submit"
     >
-      <span *ngIf="!buttonDisalbled">Cancelar assinatura</span>
+      <span *ngIf="!buttonDisalbled">{{
+        "button.cancelSubscription" | translate
+      }}</span>
       <div *ngIf="buttonDisalbled" class="bouncing-dots">
         <div class="dot"></div>
         <div class="dot"></div>

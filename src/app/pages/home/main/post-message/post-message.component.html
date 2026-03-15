@@ -34,7 +34,9 @@
   </div>
   }@else if(error) {
   <app-error-request>
-    <button appButton="info" (click)="goToIAProfile()">Tentar novamente</button>
+    <button appButton="info" (click)="goToIAProfile()">
+      {{ "button.tryAgain" | translate }}
+    </button>
   </app-error-request>
   } @else {
   <div class="main-content">
@@ -48,16 +50,13 @@
     <div class="card-explorer-ia">
       <div class="contain-description">
         <p class="contain-description-title">
-          Não encontramos novos perfis agora.
+          {{ "text.noProfilesFound" | translate }}
         </p>
-        <span
-          >Aproveite os perfis de IA criados para conversas e experiências
-          únicas.</span
-        >
+        <span>{{ "text.iaProfileDescription" | translate }}</span>
       </div>
       <div class="contain-button">
         <button appButton (click)="goToIAProfile()">
-          Explorar perfil de IA
+          {{ "button.exploreIaProfile" | translate }}
         </button>
       </div>
     </div>

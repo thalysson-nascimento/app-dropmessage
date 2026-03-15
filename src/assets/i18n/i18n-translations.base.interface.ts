@@ -1,3 +1,5 @@
+import { PrivacyPolicyTranslations } from './privacy-policy.interface';
+
 export interface I18nTranslationsBase {
   button: {
     accessWithGoogle: string;
@@ -20,8 +22,10 @@ export interface I18nTranslationsBase {
     takePicture: string;
     allowCamera: string;
     completeProfile: string;
+    exploreIaProfile: string;
     titleCard: string;
     sibtitleCard: string;
+    [key: string]: string;
   };
   input: {
     placeholder: {
@@ -37,6 +41,7 @@ export interface I18nTranslationsBase {
     };
   };
   text: {
+    [key: string]: any;
     titleSign: string;
     or: string;
     linkDoNotAccount: string;
@@ -124,6 +129,13 @@ export interface I18nTranslationsBase {
     photoForProfile: string;
     describePhotoForProfile: string;
     describeErrorTryAgain: string;
+    errorOccurred: string;
+    errorRequestTryAgainLater: string;
+    systemUnavailable: string;
+    errorStatsCouldNotLoad: string;
+    totalPosts: string;
+    totalReceivedLikes: string;
+    totalGivenLikes: string;
     onlineRecently: string;
     userNotOnline: string;
     post_visible_for: string;
@@ -133,5 +145,6 @@ export interface I18nTranslationsBase {
     hour_other: string;
     day_one: string;
     day_other: string;
+    privacyPolicy: PrivacyPolicyTranslations;
   };
 }

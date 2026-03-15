@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { CardLoadingShimmerComponent } from '../../../../shared/component/card-loading-shimmer/card-loading-shimmer.component';
 import { CardsComponent } from '../../../../shared/component/cards/cards.component';
 import { ErrorRequestComponent } from '../../../../shared/component/error-request/error-request.component';
@@ -18,6 +19,7 @@ import { ButtonDirective } from '../../../../shared/directives/button-ia/button-
     ErrorRequestComponent,
     CardLoadingShimmerComponent,
     LoadShimmerComponent,
+    TranslateModule,
   ],
   standalone: true,
 })

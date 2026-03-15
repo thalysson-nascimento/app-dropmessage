@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { ErrorRequestComponent } from '../../../../shared/component/error-request/error-request.component';
 import { LogoDropmessageComponent } from '../../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { ButtonDirective } from '../../../../shared/directives/button-ia/button-ia.directive';
@@ -19,6 +20,7 @@ import { NotificationListComponent } from './notification-list/notification-list
     ErrorRequestComponent,
     ButtonDirective,
     NotificationListComponent,
+    TranslateModule,
   ],
   standalone: true,
 })

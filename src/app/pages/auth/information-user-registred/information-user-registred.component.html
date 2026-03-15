@@ -4,14 +4,14 @@
   </div>
 
   <div class="contain-text">
-    <h1>Perfil cadastrado com sucesso</h1>
+    <h1>{{ "text.profileCreatedSuccess" | translate }}</h1>
 
-    <p>Volte para a tela de login e continue o seu cadastro</p>
+    <p>{{ "text.backToLogin" | translate }}</p>
   </div>
 
   <div class="contain-button">
     <button appButtonStyle [buttonType]="'secondary'" (click)="goToLogin()">
-      Ir para login
+      {{ "button.goToLogin" | translate }}
     </button>
   </div>
 </div>

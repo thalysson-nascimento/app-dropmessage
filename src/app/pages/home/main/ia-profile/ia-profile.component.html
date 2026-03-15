@@ -26,7 +26,7 @@
   </div>
   } @else if(error) {
   <app-error-request>
-    <button appButton="info">Tentar novamente</button>
+    <button appButton="info">{{ "button.tryAgain" | translate }}</button>
   </app-error-request>
   } @else {
   <div class="swiper-container">
@@ -41,7 +41,7 @@
               </div>
               <card-footer-action>
                 <button appButton (click)="goToIAProfileDetails(ai)">
-                  Saiba mais sobre {{ ai.name }}
+                  {{ "button.learnMoreAbout" | translate }} {{ ai.name }}
                 </button>
               </card-footer-action>
             </div>

@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
+import { TranslateModule } from '@ngx-translate/core';
 import { ErrorComponent } from '../../../shared/component/error/error.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
@@ -23,7 +24,7 @@ const SharedComponents = [ButtonStyleDirective, ModalComponent, ErrorComponent];
   templateUrl: './plan-active-signature.component.html',
   styleUrls: ['./plan-active-signature.component.scss'],
   standalone: true,
-  imports: [CommonModule, ...SharedComponents],
+  imports: [CommonModule, ...SharedComponents, TranslateModule],
 })
 export class PlanActiveSignatureComponent implements OnInit {
   subscription: ActiveSubscription | null = null;

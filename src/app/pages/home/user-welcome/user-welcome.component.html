@@ -1,13 +1,13 @@
 <div class="contain">
-  <h1>Seja bem vindo ao DatingMatch</h1>
+  <h1>{{ "text.welcomeDatingMatch" | translate }}</h1>
 
   <img src="assets/icon-static/user-with-cell.svg" alt="" />
 
   <p>
-    Sua conta foi cadastrada com sucesso, vamos dar continuidade no seu perfil.
+    {{ "text.accountCreatedContinueProfile" | translate }}
   </p>
 
   <button appButtonStyle [buttonType]="'secondary'" (click)="toGoPostMessage()">
-    Continuar para o perfil
+    {{ "button.continueToProfile" | translate }}
   </button>
 </div>
