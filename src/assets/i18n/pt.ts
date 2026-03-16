@@ -190,5 +190,6 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     day_one: 'dia',
     day_other: 'dias',
     privacyPolicy: PRIVACY_POLICY_PT,
+    ai: 'ia',
   },
 };

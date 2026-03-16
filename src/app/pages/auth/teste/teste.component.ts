@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
-import { Post } from '../../../shared/interface/post';
+// import { Post } from '../../../shared/interface/post';
 import { AdmobService } from '../../../shared/service/ad-mob/ad-mob.service';
 import { SocketAddNewPostMessageService } from '../../../shared/service/socketAddNewPostMessage/socket-add-new-post-message.service';
 import { SocketRemovePostMessageService } from '../../../shared/service/socketRemovePostMessage/socket-remove-post-message.service';
@@ -24,7 +24,7 @@ import { SocketRemovePostMessageService } from '../../../shared/service/socketRe
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class TesteComponent implements OnInit, OnDestroy, AfterViewInit {
-  posts: Post[] = []; // Variável que armazenará os dados recebidos
+  posts: [] = []; // Variável que armazenará os dados recebidos
   socketSubscription!: Subscription;
   expirationSubscription!: Subscription;
   @ViewChild('dialog') dialog!: ModalComponent;
@@ -65,7 +65,7 @@ export class TesteComponent implements OnInit, OnDestroy, AfterViewInit {
       .onNewPostMessage()
       .subscribe({
         next: (data) => {
-          this.posts.push(data);
+          // this.posts.push(data);
           this.cdRef.detectChanges();
           // this.posts = [...this.posts, data];
         },
@@ -78,9 +78,9 @@ export class TesteComponent implements OnInit, OnDestroy, AfterViewInit {
       .onPostExpired()
       .subscribe({
         next: (expiredPostId: string) => {
-          this.posts = this.posts.filter(
-            (post: Post) => post.id !== expiredPostId
-          );
+          // this.posts = this.posts.filter(
+          //   (post: Post) => post.id !== expiredPostId
+          // );
           this.cdRef.detectChanges(); // Força atualização
         },
         error: (err) => console.error('Erro ao remover post:', err),

@@ -5,7 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { currentEnvironment } from '../../../environment.config';
 import { MatchDataDetailsService } from '../../shared/service/match-details/match-data-details.service';
-import { PostMock } from '../../shared/service/post/post.mock';
+// import { PostMock } from '../../shared/service/post/post.mock';
 import { PostMessageService } from '../../shared/service/post/post.service';
 import { SocketMatchService } from '../../shared/service/socket-match/socket-match.service';
 import { TokenStorageSecurityRequestService } from '../../shared/service/token-storage-security-request/token-storage-security-request.service';
@@ -23,7 +23,7 @@ const environmentMock = currentEnvironment.mock;
       : [],
     {
       provide: PostMessageService,
-      useClass: environmentMock ? PostMock : PostMessageService,
+      useClass: PostMessageService,
     },
   ],
   templateUrl: './home.component.html',

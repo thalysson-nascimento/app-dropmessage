@@ -40,11 +40,12 @@
   </app-error-request>
   } @else {
   <div class="main-content">
+    @switch (postMessage.type) { @case ('AI_SUGGESTION') {
     <app-cards
-      name="Sophia"
-      userProfile="Intelectual"
-      image="assets/images/ia-vanessa.png"
-      badge=".IA"
+      [name]="profileAI.name"
+      [userProfile]="profileAI.typeProfle"
+      [image]="profileAI.avatar"
+      [badge]="'text.ai' | translate"
     ></app-cards>
 
     <div class="card-explorer-ia">
@@ -60,6 +61,9 @@
         </button>
       </div>
     </div>
+    } @case ('POST') {
+    <p>retorna a lista de posts</p>
+    }}
   </div>
   }
 </div>

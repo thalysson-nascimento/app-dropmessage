@@ -192,7 +192,6 @@ export class UserDataComponent implements OnInit, OnDestroy {
     this.cacheAvatarService.getAvatarCachePreferences().subscribe({
       next: (response) => {
         if (response) {
-          // debugger;
           this.avatar = response;
         }
       },

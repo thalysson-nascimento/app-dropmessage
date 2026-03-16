@@ -145,6 +145,7 @@ export interface I18nTranslationsBase {
     hour_other: string;
     day_one: string;
     day_other: string;
+    ai: string;
     privacyPolicy: PrivacyPolicyTranslations;
   };
 }

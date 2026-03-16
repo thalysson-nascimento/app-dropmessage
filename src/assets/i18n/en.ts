@@ -186,5 +186,6 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     day_one: 'day',
     day_other: 'days',
     privacyPolicy: PRIVACY_POLICY_EN,
+    ai: 'ai',
   },
 };

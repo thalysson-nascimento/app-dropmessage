@@ -144,7 +144,6 @@ export class ProfileComponent implements OnInit {
     this.cacheAvatarService.getAvatarCachePreferences().subscribe({
       next: (response) => {
         if (response) {
-          // debugger;
           this.avatar = response;
         }
       },
