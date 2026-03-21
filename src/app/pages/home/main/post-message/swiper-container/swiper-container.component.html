@@ -1,0 +1,127 @@
+<div class="container">
+  @if (!posts || posts.length === 0) {
+  <div class="content">
+    @if (profileAI) {
+    <app-cards
+      [name]="profileAI.name"
+      [userProfile]="profileAI.typeProfle"
+      [image]="profileAI.avatar"
+      [badge]="'text.ai' | translate"
+    ></app-cards>
+    }
+    <div class="card-explorer-ia">
+      <div class="contain-description">
+        <p class="contain-description-title">
+          {{ "text.noProfilesFound" | translate }}
+        </p>
+        <span>{{ "text.iaProfileDescription" | translate }}</span>
+      </div>
+      <div class="contain-button">
+        <button appButton (click)="goToIAProfile()">
+          {{ "button.exploreIaProfile" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+  } @else {
+  <div class="contain-swiper">
+    <swiper-container
+      #swiperRef
+      class="list-post-message mySwiper"
+      slides-per-view="1"
+      space-between="10"
+      centered-slides="true"
+      grab-cursor="true"
+    >
+      <swiper-slide *ngFor="let post of posts" class="user-post-image">
+        @if (post.type === 'POST') {
+        <div class="post-card">
+          <img class="user-post" [src]="post.image" alt="Post image" />
+          <div class="contain-user-data">
+            <div>
+              <p class="user-name">{{ post.user.name }}</p>
+              @if (post.user.UserLocation.city) {
+              <span class="user-location">
+                <i class="fi fi-sr-marker"></i>
+                {{ post.user.UserLocation.city }}/{{
+                  post.user.UserLocation.stateCode
+                }}
+              </span>
+              } @else {
+              <span class="user-location-null" (click)="goToSubscription()">
+                <i class="fi fi-sr-marker"></i>
+                Ver localização
+              </span>
+              }
+            </div>
+          </div>
+        </div>
+        } @else {
+        <div class="fallback-card">
+          @switch(post.type) { @case('AI_SUGGESTION') {
+          <div class="content">
+            @if (profileAI) {
+            <app-cards
+              [name]="profileAI.name"
+              [userProfile]="profileAI.typeProfle"
+              [image]="profileAI.avatar"
+              [badge]="'text.ai' | translate"
+            ></app-cards>
+            }
+            <div class="card-explorer-ia">
+              <div class="contain-description">
+                <p class="contain-description-title">
+                  {{ "text.noProfilesFound" | translate }}
+                </p>
+                <span>{{ "text.iaProfileDescription" | translate }}</span>
+              </div>
+              <div class="contain-button">
+                <button appButton (click)="goToIAProfile()">
+                  {{ "button.exploreIaProfile" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+          } @case('WATCH_VIDEO') {
+          <div class="watch-video-reward">
+            <p class="title-no-users-nearby">
+              {{ "text.watchVideoReward" | translate }}
+            </p>
+            <button class="action-button" (click)="goToAdMobVideoReward()">
+              {{ "text.touchWhatch" | translate }}
+            </button>
+          </div>
+          } @case('LIKE_LIMIT') {
+          <div class="fallback-content">
+            <p>{{ "text.limitLike" | translate }}</p>
+          </div>
+          } @default {
+          <div class="fallback-content">
+            <p>Conteúdo não suportado</p>
+          </div>
+          } }
+        </div>
+        }
+      </swiper-slide>
+    </swiper-container>
+
+    @if (showLikeButton && activePost) {
+    <div class="heater">
+      <button class="like-button" type="button" (click)="likePostMessage()">
+        {{ "text.like" | translate }}
+      </button>
+    </div>
+    } @if (activePost) {
+    <!-- <div class="dislike-row">
+      <button
+        class="dislike-button"
+        type="button"
+        (click)="dislikePostMessage(activePost.id)"
+      >
+        {{ "text.dislike" | translate }}
+      </button>
+    </div> -->
+    }
+  </div>
+  }
+</div>

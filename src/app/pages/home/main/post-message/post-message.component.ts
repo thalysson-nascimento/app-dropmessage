@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -7,7 +8,10 @@ import { ErrorRequestComponent } from '../../../../shared/component/error-reques
 import { LoadShimmerComponent } from '../../../../shared/component/load-shimmer/load-shimmer.component';
 import { LogoDropmessageComponent } from '../../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { ButtonDirective } from '../../../../shared/directives/button-ia/button-ia.directive';
+import { AIProfileInterface } from '../../../../shared/interface/ai-profile.interface';
+import { Post } from '../../../../shared/interface/post.interface';
 import { PostMessageService } from '../../../../shared/service/post/post.service';
+import { SwiperContainerComponent } from './swiper-container/swiper-container.component';
 
 @Component({
   selector: 'app-post-message',
@@ -21,6 +25,8 @@ import { PostMessageService } from '../../../../shared/service/post/post.service
     CardLoadingShimmerComponent,
     LoadShimmerComponent,
     TranslateModule,
+    SwiperContainerComponent,
+    CommonModule,
   ],
   standalone: true,
 })
@@ -32,7 +38,8 @@ export class PostMessageComponent implements OnInit {
     typeProfle: '',
     avatar: '',
   };
-  public postMessage: any;
+  public postMessage!: Post;
+  public aiProfiles!: AIProfileInterface[];
 
   constructor(
     private router: Router,
@@ -57,6 +64,7 @@ export class PostMessageComponent implements OnInit {
 
     this.postMessageService.listPost().subscribe({
       next: (response) => {
+        console.log('Resposta da API:', response);
         this.postMessage = response;
 
         if (response.interests === 'male') {

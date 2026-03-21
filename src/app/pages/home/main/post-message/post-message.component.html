@@ -41,28 +41,15 @@
   } @else {
   <div class="main-content">
     @switch (postMessage.type) { @case ('AI_SUGGESTION') {
-    <app-cards
-      [name]="profileAI.name"
-      [userProfile]="profileAI.typeProfle"
-      [image]="profileAI.avatar"
-      [badge]="'text.ai' | translate"
-    ></app-cards>
-
-    <div class="card-explorer-ia">
-      <div class="contain-description">
-        <p class="contain-description-title">
-          {{ "text.noProfilesFound" | translate }}
-        </p>
-        <span>{{ "text.iaProfileDescription" | translate }}</span>
-      </div>
-      <div class="contain-button">
-        <button appButton (click)="goToIAProfile()">
-          {{ "button.exploreIaProfile" | translate }}
-        </button>
-      </div>
-    </div>
+    <app-swiper-container
+      [feedPostCard]="postMessage.items"
+      [profileAI]="profileAI"
+    ></app-swiper-container>
     } @case ('POST') {
-    <p>retorna a lista de posts</p>
+    <app-swiper-container
+      [feedPostCard]="postMessage.items"
+      [profileAI]="profileAI"
+    ></app-swiper-container>
     }}
   </div>
   }

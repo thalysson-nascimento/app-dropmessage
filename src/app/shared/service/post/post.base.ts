@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PostList } from '../../interface/post';
+import { Post } from '../../interface/post.interface';
 
 export abstract class PostBase {
   constructor(protected httpClient: HttpClient) {}
 
-  abstract listPost(): Observable<PostList>;
+  abstract listPost(): Observable<Post>;
 }
