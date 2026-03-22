@@ -9,10 +9,42 @@
   </div>
 
   @if(loading) {
-  <div class="loading-container"></div>
+  <section class="chat-loading">
+    @for (item of [1, 2, 3, 4, 5]; track $index) {
+    <div class="chat-loading__list">
+      <div class="chat-loading__item">
+        <div class="chat-loading__avatar-wrapper">
+          <div class="chat-loading__avatar skeleton"></div>
+          <div class="chat-loading__badge skeleton"></div>
+        </div>
+
+        <div class="chat-loading__content">
+          <div
+            class="chat-loading__line chat-loading__line--primary skeleton"
+          ></div>
+          <div
+            class="chat-loading__line chat-loading__line--secondary skeleton"
+          ></div>
+        </div>
+      </div>
+    </div>
+    }
+  </section>
   } @else if(error) {
   <app-error-request>
     <button appButton="info">{{ "button.tryAgain" | translate }}</button>
   </app-error-request>
-  } @else { }
+  } @else { @for (chat of listChat; track $index) {
+  <div class="chat" (click)="goToChat(chat)">
+    <div class="chat__avatar-wrapper">
+      <img class="chat__avatar" [src]="chat.avatar" />
+    </div>
+    <div class="chat__content">
+      <p>
+        <strong>{{ chat.name }}</strong>
+      </p>
+      <!-- <p class="chat__last-message">{{ chat.lastMessage }}</p> -->
+    </div>
+  </div>
+  } }
 </div>

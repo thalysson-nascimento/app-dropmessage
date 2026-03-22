@@ -1,279 +1,203 @@
-<div *ngIf="isLoading">
-  <div class="header-load-shimmer">
-    <div class="load-shimmer-avatar">
-      <div class="shine"></div>
-    </div>
-
-    <div class="loading-shimmer-name">
-      <div class="shine"></div>
-    </div>
-  </div>
-
-  <div class="contain-bar">
-    <div class="loading-bar">
-      <div class="shine"></div>
-    </div>
-  </div>
-
-  <div class="contain-bar aling-right">
-    <div class="loading-bar">
-      <div class="shine"></div>
-    </div>
-  </div>
-
-  <div class="contain-bar">
-    <div class="loading-bar">
-      <div class="shine"></div>
-    </div>
-  </div>
-
-  <div class="contain-bar">
-    <div class="loading-bar">
-      <div class="shine"></div>
-    </div>
-  </div>
-</div>
-
-<div
-  style="padding: 1rem"
-  *ngIf="showSuccessMessageReportProblem && !isLoading"
->
-  <div class="header-user-data">
-    <img
-      src="assets/icon-static/arrow-left.svg"
-      style="width: 24px; height: 24px"
-      alt=""
+<div>
+  @if (loading) {
+  <app-chat-message-loading></app-chat-message-loading>
+  }@else if(error) {
+  <div class="content-error">
+    <button
+      class="chat__action chat__action--back"
       (click)="goToListChat()"
-    />
+      aria-label="Back"
+    >
+      <span class="material-symbols-outlined">chevron_left</span>
+    </button>
+    <app-error-request>
+      <button appButton="info" (click)="tryAgain()">
+        {{ "button.tryAgain" | translate }}
+      </button>
+    </app-error-request>
   </div>
-
-  <div>
-    <h1 style="margin-top: 1rem">Problema relatado com sucesso!</h1>
-    <p style="margin-top: 2rem">
-      Obrigado por nos ajudar a melhorar nossa plataforma, iremos analisar o
-      ocorrido e tomaremos as medidas necessárias.
-    </p>
-  </div>
-</div>
-
-<div *ngIf="!showSuccessMessageReportProblem && !isLoading">
-  <div class="contain" *ngIf="!isLoading">
-    <div class="header">
-      <div class="header-user-data">
-        <img
-          src="assets/icon-static/arrow-left.svg"
-          style="width: 24px; height: 24px"
-          alt=""
+  }@else {
+  <div class="chat">
+    <!-- HEADER -->
+    <header class="chat__header">
+      <div class="chat__header-left">
+        <button
+          class="chat__action chat__action--back"
           (click)="goToListChat()"
-        />
-        <img [src]="userMatchAvatar" class="avatar" alt="" />
-        <div>
-          <p>
-            <strong>{{ userMatchName }}</strong>
-          </p>
-          <span class="location"
-            >{{ userMatchLocation.city }}/{{
-              userMatchLocation.stateCode
-            }}</span
-          >
-        </div>
-      </div>
-      <div>
-        <i
-          (click)="openModalChooseAction()"
-          class="fi fi-rs-circle-ellipsis-vertical"
-        ></i>
-      </div>
-    </div>
-
-    <app-system-unavailable
-      *ngIf="showSystemUnavailable && !isLoading"
-      (clickLoading)="tryAgain()"
-      [infoMessage]="
-        'No momento estamos com nossos serviço indisponíves, volte novamente mais tarde!'
-      "
-    >
-    </app-system-unavailable>
-
-    <div>
-      <div class="messages-wrapper">
-        <div class="contain-messages" #containMessages>
-          <div
-            *ngFor="let message of messages"
-            [ngClass]="{
-              'align-chat-right': getAlignment(message.user.userHashPublic)
-            }"
-            class="message"
-          >
-            <div class="group-message">
-              <div class="message-user">
-                <p class="message-text">{{ message.content }}</p>
-                <p class="message-time">
-                  {{ formatedCreatedAt(message.createdAt) }}
-                </p>
-              </div>
-            </div>
-          </div>
+          aria-label="Back"
+        >
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        <div class="chat__avatar-wrapper">
+          <img class="chat__avatar" [src]="userMatchAvatar" />
+          @if (isUserOnline) {
+          <span class="chat__online-indicator" @fadeIndicator></span>
+          }
         </div>
 
-        <!-- <div
-      class="contain-alert-error-message"
-      *ngIf="showAlertError"
-      [class.show]="showAlertError"
-    >
-      <div class="alert-error-message">
-        <p>Erro ao enviar mensagem</p>
+        <div class="chat__header-info">
+          <p class="chat__title">{{ userMatchName }}</p>
+          <span class="chat__status">
+            @if (isUserOnline) {
+            <span @fadeInUp>Online</span>
+            } @else {
+            <span @fadeInUp>Offline</span>
+            }
+          </span>
+        </div>
       </div>
-    </div> -->
 
-        <div class="contain-send-message">
+      <button class="chat__header-action" (click)="openModalChooseAction()">
+        <span class="material-symbols-outlined">more_vert</span>
+      </button>
+    </header>
+
+    <main class="chat__content" #containMessages>
+      @for (message of messagesChate; track message.id) { @if
+      (message.showDateLabel) {
+      <div class="chat__date">
+        {{ message.dateLabel }}
+      </div>
+      }
+
+      <div
+        class="chat__message"
+        [ngClass]="{
+          'chat__message--own': message.isOwnMessage,
+          'chat__message--other': !message.isOwnMessage
+        }"
+      >
+        @if (message.content) {
+        <div class="chat__bubble">
+          {{ message.content }}
+        </div>
+        }
+
+        <div class="chat__meta">
+          <span class="chat__time">{{ message.time }}</span>
+
+          @if (message.isOwnMessage) {
+          <span class="material-symbols-outlined chat__check"> done_all </span>
+          }
+        </div>
+      </div>
+      }
+    </main>
+
+    <footer class="chat__footer">
+      <div class="chat__footer-inner">
+        <div class="chat__input-wrapper">
           <form
             [formGroup]="sendMessageFormGroup"
             (submit)="sendMessage()"
             class="input-container"
           >
             <input
+              class="chat__input"
               formControlName="sendMessage"
               maxlength="500"
               type="text"
-              placeholder="Digite sua mensagem"
-              class="input-field"
+              placeholder="Type your message..."
+              (keyup.enter)="sendMessage()"
               (focus)="isInputFocused = true"
               (blur)="isInputFocused = false"
             />
+
             <button
               id="button-send-message"
-              class="button-send-message"
-              [disabled]="sendMessageFormGroup.invalid"
+              class="chat__send-inside"
               type="submit"
+              [disabled]="sendMessageFormGroup.invalid"
             >
-              <i class="fi fi-rr-paper-plane"></i>
+              <span class="material-symbols-outlined filled">send</span>
             </button>
           </form>
-
-          <div class="contain-option-tips" *ngIf="!isInputFocused">
-            <button class="button-option-tips" (click)="openModalTips()">
-              <img src="assets/icon-static/icon-ia-lightbulb.svg" alt="" />
-            </button>
-          </div>
         </div>
       </div>
-    </div>
+    </footer>
+  </div>
+  }
+</div>
+
+<app-modal #chooseAction>
+  <div class="contain-title-modal">
+    <p class="title-modal">{{ "text.chooseOption" | translate }}</p>
   </div>
 
-  <app-modal #generateModalTips>
-    <div class="contain-button-system-unavailable">
-      <div class="contain-title-modal">
-        <p class="title-modal">Criando novas dicas com novas mensagens</p>
-      </div>
+  <div style="margin-bottom: 1rem">
+    <button
+      [buttonType]="'secondary'"
+      (click)="openModalReportProblem()"
+      appButtonStyle
+    >
+      {{ "text.reportProblem" | translate }}
+    </button>
+  </div>
 
-      <div *ngIf="errorLoadTips" class="contain-alert">
-        <p>{{ responseErrorTips }}</p>
-      </div>
+  <div>
+    <button [buttonType]="'secondary'" appButtonStyle (click)="unmatch()">
+      {{ "text.unmatchUser" | translate }}
+    </button>
+  </div>
+</app-modal>
 
-      <div
-        class="contain-loading-generate-tips"
-        *ngIf="isLoadingTips && !errorLoadTips"
-      >
-        <app-load-shimmer [height]="'70px'"></app-load-shimmer>
-
-        <app-load-shimmer [height]="'70px'"></app-load-shimmer>
-
-        <app-load-shimmer [height]="'70px'"></app-load-shimmer>
-
-        <app-load-shimmer [height]="'70px'"></app-load-shimmer>
-      </div>
-
-      <div class="option-tips" *ngIf="!isLoadingTips && !errorLoadTips">
-        <div *ngFor="let tip of tips">
-          <button class="tip-item" (click)="choseTipsSendMessage(tip)">
-            {{ tip }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </app-modal>
-
-  <app-modal #chooseAction>
+<app-modal #repostProblem>
+  <div *ngIf="showReportProblem && !errorReportProblem">
     <div class="contain-title-modal">
-      <p class="title-modal">Escolha uma opção</p>
+      <p class="title-modal">{{ "text.waitAMoment" | translate }}</p>
+    </div>
+    <p>{{ "text.reportingProblem" | translate }}</p>
+  </div>
+
+  <div *ngIf="errorReportProblem && !showReportProblem">
+    <div class="contain-title-modal">
+      <p class="title-modal">{{ "text.errorReportingProblem" | translate }}</p>
+    </div>
+    <p>{{ "text.errorReportingProblemDesc" | translate }}</p>
+  </div>
+
+  <div *ngIf="!showReportProblem && !errorReportProblem">
+    <div class="contain-title-modal">
+      <p class="title-modal">
+        {{ "text.chooseOptionReportProblem" | translate }}
+      </p>
     </div>
 
     <div style="margin-bottom: 1rem">
       <button
         [buttonType]="'secondary'"
-        (click)="openModalReportProblem()"
+        (click)="reportProblem('not-want-talk')"
         appButtonStyle
       >
-        Relatar um problema
+        {{ "text.notWantTalk" | translate }}
       </button>
     </div>
-
-    <div>
-      <button [buttonType]="'secondary'" appButtonStyle (click)="unmatch()">
-        Desfazer match
+    <div style="margin-bottom: 1rem">
+      <button
+        [buttonType]="'secondary'"
+        (click)="reportProblem('abusive-image')"
+        appButtonStyle
+      >
+        {{ "text.abusiveContent" | translate }}
       </button>
     </div>
-  </app-modal>
-
-  <app-modal #repostProblem>
-    <div *ngIf="showReportProblem && !errorReportProblem">
-      <div class="contain-title-modal">
-        <p class="title-modal">Aguarde um instante</p>
-      </div>
-      <p>Estamos relatando seu problema</p>
+    <div style="margin-bottom: 1rem">
+      <button
+        [buttonType]="'secondary'"
+        (click)="reportProblem('inappropriate-photos-or-names')"
+        appButtonStyle
+      >
+        {{ "text.inappropriatePhotos" | translate }}
+      </button>
     </div>
-
-    <div *ngIf="errorReportProblem && !showReportProblem">
-      <div class="contain-title-modal">
-        <p class="title-modal">Erro ao relatar o problema</p>
-      </div>
-      <p>
-        Ops, houve um erro ao relatar o problema, tente novamente mais tarde!
-      </p>
+    <div style="margin-bottom: 1rem">
+      <button
+        [buttonType]="'secondary'"
+        (click)="reportProblem('child-sexual-exploration')"
+        appButtonStyle
+      >
+        {{ "text.childSexualExploitation" | translate }}
+      </button>
     </div>
-
-    <div *ngIf="!showReportProblem && !errorReportProblem">
-      <div class="contain-title-modal">
-        <p class="title-modal">Escolha uma opção para relatar o problema</p>
-      </div>
-
-      <div style="margin-bottom: 1rem">
-        <button
-          [buttonType]="'secondary'"
-          (click)="reportProblem('not-want-talk')"
-          appButtonStyle
-        >
-          Eu não quero mais falar com ele
-        </button>
-      </div>
-      <div style="margin-bottom: 1rem">
-        <button
-          [buttonType]="'secondary'"
-          (click)="reportProblem('abusive-image')"
-          appButtonStyle
-        >
-          Imagem ou textos abusivos
-        </button>
-      </div>
-      <div style="margin-bottom: 1rem">
-        <button
-          [buttonType]="'secondary'"
-          (click)="reportProblem('inappropriate-photos-or-names')"
-          appButtonStyle
-        >
-          Fotos ou nomes inapropriados
-        </button>
-      </div>
-      <div style="margin-bottom: 1rem">
-        <button
-          [buttonType]="'secondary'"
-          (click)="reportProblem('child-sexual-exploration')"
-          appButtonStyle
-        >
-          Exploração sexual infantil
-        </button>
-      </div>
-    </div>
-  </app-modal>
-</div>
+  </div>
+</app-modal>

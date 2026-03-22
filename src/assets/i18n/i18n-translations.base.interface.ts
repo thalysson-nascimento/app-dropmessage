@@ -146,6 +146,18 @@ export interface I18nTranslationsBase {
     day_one: string;
     day_other: string;
     ai: string;
+    chooseOption: string;
+    reportProblem: string;
+    unmatchUser: string;
+    waitAMoment: string;
+    reportingProblem: string;
+    errorReportingProblem: string;
+    errorReportingProblemDesc: string;
+    chooseOptionReportProblem: string;
+    notWantTalk: string;
+    abusiveContent: string;
+    inappropriatePhotos: string;
+    childSexualExploitation: string;
     privacyPolicy: PrivacyPolicyTranslations;
   };
 }
