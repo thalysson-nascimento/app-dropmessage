@@ -1,49 +1,3 @@
-// import { Inject, Injectable } from '@angular/core';
-// import { Observable } from 'rxjs';
-// import { Socket } from 'socket.io-client';
-
-// @Injectable({
-//   providedIn: 'root',
-// })
-// export class SocketSenMessageService {
-//   constructor(@Inject('SOCKET_IO') private socket: Socket) {}
-
-//   joinRoomSendMessage(matchId: string) {
-//     this.socket.emit('join-send-message', matchId);
-//   }
-
-//   connect(token: string) {
-//     // 🔥 seta o token corretamente
-//     this.socket.auth = { token };
-
-//     // 🔥 conecta explicitamente
-//     this.socket.connect();
-
-//     // 🔥 debug essencial
-//     this.socket.on('connect', () => {
-//       console.log('🟢 SOCKET MENSAGEM CONECTADO:', this.socket.id);
-//     });
-
-//     this.socket.on('disconnect', () => {
-//       console.log('🔴 SOCKET MENSAGEM DESCONECTADO');
-//     });
-//   }
-
-//   onConnect(callback: () => void) {
-//     this.socket.on('connect', callback);
-//   }
-
-//   onSendMessage(): Observable<any> {
-//     return new Observable((observer) => {
-//       this.socket.on('send-message', (data) => {
-//         console.log('📩 SOCKET RECEBIDO:', data); // 🔥 DEBUG
-//         observer.next(data);
-//       });
-
-//       return () => this.socket.off('send-message');
-//     });
-//   }
-// }
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Socket } from 'socket.io-client';
@@ -68,6 +22,14 @@ export class SocketSenMessageService {
     this.socket.on('disconnect', () => {
       console.log('🔴 SOCKET DESCONECTADO');
     });
+  }
+
+  onConnect(callback: () => void) {
+    if (this.socket.connected) {
+      callback(); // 🔥 já conectado → executa direto
+    } else {
+      this.socket.once('connect', callback); // 🔥 garante execução única
+    }
   }
 
   // ✅ ENTRAR NA SALA DO CHAT
@@ -110,9 +72,9 @@ export class SocketSenMessageService {
     });
   }
 
-  removeAllListeners() {
-    this.socket.removeAllListeners();
-  }
+  // removeAllListeners() {
+  //   this.socket.removeAllListeners();
+  // }
 
   disconnect() {
     if (this.socket) {

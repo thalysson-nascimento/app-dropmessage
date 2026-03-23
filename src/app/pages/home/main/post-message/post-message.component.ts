@@ -71,16 +71,16 @@ export class PostMessageComponent implements OnInit {
           this.profileAI = {
             name: 'David',
             typeProfle:
-              this.translate.currentLang === 'en' ? 'Mysterious' : 'Misterioso',
+              this.translate.currentLang === 'pt' ? 'Misterioso' : 'Mysterious',
             avatar: 'assets/images/ai-david.png',
           };
         } else if (response.interests === 'female') {
           this.profileAI = {
             name: 'Sophia',
             typeProfle:
-              this.translate.currentLang === 'en'
-                ? 'Provocative'
-                : 'Provocante',
+              this.translate.currentLang === 'pt'
+                ? 'Provocante'
+                : 'Provocative',
             avatar: 'assets/images/ai-sophia.png',
           };
         }

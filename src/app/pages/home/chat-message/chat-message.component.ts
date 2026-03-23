@@ -16,7 +16,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { format } from 'date-fns';
 import { combineLatest, Subject, takeUntil } from 'rxjs';
 import { ChatMessageAdapter } from '../../../shared/adapter/chat-message.adapter';
@@ -35,7 +35,6 @@ import { PreferencesUserAuthenticateService } from '../../../shared/service/pref
 import { ReportProblemService } from '../../../shared/service/report-problem/report-problem.service';
 import { SendMessageService } from '../../../shared/service/send-message/send-message.service';
 import { SocketSenMessageService } from '../../../shared/service/socket-send-message/socket-sen-message.service';
-import { SocketService } from '../../../shared/service/socket.service.ts/socket.service';
 import { UnmatchService } from '../../../shared/service/unmatch/unmatch.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 import { noOnlySpacesValidator } from '../../../shared/validators/noOnlySpacesValidator.validator';
@@ -111,9 +110,10 @@ export class ChatMessageComponent implements OnInit, OnDestroy, AfterViewInit {
     private reportProblemService: ReportProblemService,
     private loggerService: LoggerService,
     private unmatchService: UnmatchService,
-    private socketService: SocketService,
-    private preferencesUserAuthenticateService: PreferencesUserAuthenticateService
+    private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
+    private translate: TranslateService
   ) {}
+
   ngOnInit() {
     this.createSendMessageFormBuilder();
 
@@ -135,9 +135,11 @@ export class ChatMessageComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         if (this.userHashPublic && this.matchId && !this.socketInitialized) {
+          this.socketInitialized = true;
+
           this.loadSendMessage();
+          this.loadSocketUserStatus();
         }
-        this.loadSocketUserStatus();
       });
   }
 
@@ -150,7 +152,6 @@ export class ChatMessageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.unsubscribe$.complete();
     this.destroy$.next();
     this.destroy$.complete();
-    this.socketSenMessageService.disconnect();
   }
 
   loadSocketUserStatus() {
@@ -159,7 +160,11 @@ export class ChatMessageComponent implements OnInit, OnDestroy, AfterViewInit {
         if (response) {
           this.socketSenMessageService.connect(response.token);
 
-          this.socketSenMessageService.joinRoomSendMessage(this.matchId);
+          this.socketSenMessageService.onConnect(() => {
+            console.log('🚀 SOCKET PRONTO');
+
+            this.socketSenMessageService.joinRoomSendMessage(this.matchId);
+          });
         }
       },
     });
@@ -169,6 +174,8 @@ export class ChatMessageComponent implements OnInit, OnDestroy, AfterViewInit {
       .onUserOnline()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((data) => {
+        if (!this.matchUserId) return;
+
         if (data.userHashPublic === this.matchUserId) {
           this.isUserOnline = true;
         }
@@ -179,6 +186,8 @@ export class ChatMessageComponent implements OnInit, OnDestroy, AfterViewInit {
       .onUserOffline()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((data) => {
+        if (!this.matchUserId) return;
+
         if (data.userHashPublic === this.matchUserId) {
           this.isUserOnline = false;
         }
@@ -191,6 +200,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((response) => {
         this.zone.run(() => {
           const isOwn = response.user.userHashPublic === this.userHashPublic;
+          if (isOwn) return;
 
           this.messagesChate.push({
             id: response.id,
@@ -253,12 +263,6 @@ export class ChatMessageComponent implements OnInit, OnDestroy, AfterViewInit {
           // 🔥 status online
           this.isUserOnline = response.match.otherUser.isOnline;
           this.matchUserId = response.match.otherUser.userHashPublic;
-          if (!this.socketInitialized) {
-            this.socketInitialized = true;
-            this.loadSocketUserStatus();
-          }
-
-          // 👉 você pode usar isso no template depois
 
           // 🔥 ADAPTER
           const newMessages = ChatMessageAdapter.fromApi(
@@ -339,7 +343,10 @@ export class ChatMessageComponent implements OnInit, OnDestroy, AfterViewInit {
         content: messageContent,
         isOwnMessage: true,
         time: format(new Date(), 'HH:mm'),
-        dateLabel: format(new Date(), 'dd/MM/yyyy'),
+        dateLabel: format(
+          new Date(),
+          this.translate.currentLang === 'pt' ? 'dd/MM/yyyy' : 'MM/dd/yyyy'
+        ),
       });
 
       this.scrollToBottom();
@@ -363,29 +370,6 @@ export class ChatMessageComponent implements OnInit, OnDestroy, AfterViewInit {
 
       this.sendMessageFormGroup.reset();
     }
-  }
-
-  onListenSocketSendMessage(matchId: string) {
-    this.socketSenMessageService.joinRoomSendMessage(matchId);
-    this.socketSenMessageService
-      .onSendMessage()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((response) => {
-        this.zone.run(() => {
-          const isOwn = response.user.userHashPublic === this.userHashPublic;
-
-          const messageAdapted: ChatMessageUI = {
-            id: response.id,
-            content: response.content,
-            isOwnMessage: isOwn,
-            time: format(new Date(response.createdAt), 'HH:mm'),
-            dateLabel: format(new Date(response.createdAt), 'dd/MM/yyyy'),
-          };
-
-          this.messagesChate.push(messageAdapted);
-          this.scrollToBottom();
-        });
-      });
   }
 
   openModalChooseAction() {
