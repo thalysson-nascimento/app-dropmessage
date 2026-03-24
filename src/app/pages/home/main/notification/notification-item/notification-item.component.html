@@ -1,6 +1,3 @@
-<!-- Removido no momento até a api conseguir retornar o isRead -->
-<!-- Após a api conseguir retornar as operações de isRead incluir essa instrução abaixo nessa primeia div -->
-<!-- [class.notification--unread]="!notification.isRead" -->
 <div class="notification" (click)="openModal(notification)">
   <div class="notification__avatar-wrapper">
     @if (notification.actors.length === 1) {
@@ -39,23 +36,28 @@
     (notification.meta?.totalCount) {
     <p>
       <strong>{{ notification.actors[0].name }}</strong>
-      e
+      {{ "text.and" | translate }}
       <strong>
-        outras{{ (notification.meta?.totalCount ?? 0) - 1 }} pessoas
+        {{
+          "text.otherPeople"
+            | translate : { count: (notification.meta?.totalCount ?? 0) - 1 }
+        }}
       </strong>
     </p>
-    curtiram seu Post. } @else {
+    {{ "text.likedYourPostPlural" | translate }}
+    } @else {
     <p>
       <strong>{{ notification.actors[0].name }}</strong>
     </p>
-    curtiu seu Post. } } @case (NotificationType.COMMENT) {
+    {{ "text.likedYourPost" | translate }}
+    } } @case (NotificationType.COMMENT) {
     <div class="notification__comment">
       <p>
         <strong>{{ notification.actors[0].name }}</strong>
       </p>
-      comentou: "{{ notification.meta?.commentText }}"
+      {{ "text.commented" | translate }}: "{{ notification.meta?.commentText }}"
     </div>
-    }}
+    } }
 
     <div class="notification__time">
       {{ notification.createdAt | date : "shortTime" }}
@@ -107,12 +109,14 @@
       @if(notificationSelected.match) {
       <h1 class="notification-selected__name">
         {{ notificationSelected.actors[0].name }}
-        <span class="material-symbols-outlined icon-auto-awesome"
-          >auto_awesome</span
-        >
+        <span class="material-symbols-outlined icon-auto-awesome">
+          auto_awesome
+        </span>
       </h1>
 
-      <h2 class="notification-selected__text-match">Vocês deram match!</h2>
+      <h2 class="notification-selected__text-match">
+        {{ "text.match" | translate }}
+      </h2>
       } @else {
       <h1 class="notification-selected__name">
         {{ notificationSelected.actors[0].name }}
@@ -120,8 +124,10 @@
 
       <p class="notification-selected__type">
         @switch (notificationSelected.type) { @case (NotificationType.LIKE) {
-        curtiu seu Post } @case (NotificationType.COMMENT) { comentou em seu
-        Post }}
+        {{ "text.likedYourPost" | translate }}
+        } @case (NotificationType.COMMENT) {
+        {{ "text.commentedYourPost" | translate }}
+        } }
       </p>
       } @if (notificationSelected.meta?.commentText) {
       <div class="notification-selected__comment">
@@ -133,13 +139,23 @@
 
   <div class="notification-selected__buttons">
     @if(notificationSelected.match) {
-    <button appButton>Mandar mensagem</button>
-    } @else {<button appButton>
-      Curtir {{ notificationSelected.actors[0].name }}</button
-    >}
+    <button appButton>
+      {{ "button.sendMessage" | translate }}
+    </button>
+    } @else {
+    <button
+      appButton
+      (click)="likeUserProfile(notification.subscription, notificationSelected)"
+    >
+      {{
+        "button.likeUser"
+          | translate : { name: notificationSelected.actors[0].name }
+      }}
+    </button>
+    }
 
     <button appButton="ghost" variant="ghost" (click)="closeModal()">
-      Fechar
+      {{ "button.close" | translate }}
     </button>
   </div>
   }

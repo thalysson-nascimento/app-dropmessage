@@ -26,6 +26,9 @@ export interface I18nTranslationsBase {
     titleCard: string;
     sibtitleCard: string;
     [key: string]: string;
+    sendMessage: string;
+    likeUser: string;
+    close: string;
   };
   input: {
     placeholder: {
@@ -158,6 +161,13 @@ export interface I18nTranslationsBase {
     abusiveContent: string;
     inappropriatePhotos: string;
     childSexualExploitation: string;
+    and: string;
+    otherPeople: string;
+    likedYourPost: string;
+    likedYourPostPlural: string;
+    commented: string;
+    commentedYourPost: string;
+    match: string;
     privacyPolicy: PrivacyPolicyTranslations;
   };
 }

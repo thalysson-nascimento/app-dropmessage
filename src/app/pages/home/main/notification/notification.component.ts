@@ -53,6 +53,7 @@ export class NotificationComponent implements OnInit {
     this.loading = true;
     this.notificationService.notification().subscribe({
       next: (data) => {
+        console.log('Notifications loaded:', data);
         this.notifications = data;
         this.loading = false;
         this.error = false;

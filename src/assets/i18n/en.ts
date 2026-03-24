@@ -32,6 +32,9 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     share: 'Share',
     cancel: 'Cancel',
     exploreIaProfile: 'Explore AI profiles',
+    sendMessage: 'Send message',
+    likeUser: 'Like {{name}}',
+    close: 'Close',
   },
   input: {
     placeholder: {
@@ -200,5 +203,12 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     childSexualExploitation: 'Child sexual exploitation',
     privacyPolicy: PRIVACY_POLICY_EN,
     ai: 'ai',
+    and: 'and',
+    otherPeople: '{{count}} others',
+    likedYourPost: 'liked your post.',
+    likedYourPostPlural: 'liked your post.',
+    commented: 'commented',
+    commentedYourPost: 'commented on your post',
+    match: "It's a match!",
   },
 };

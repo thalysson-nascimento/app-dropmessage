@@ -38,6 +38,7 @@ export interface NotificationModel {
   id: string;
   type: NotificationType;
   actors: NotificationActor[];
+  subscription: boolean;
   target?: NotificationTarget;
   meta?: NotificationActionMeta;
   createdAt: Date;

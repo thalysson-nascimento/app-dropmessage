@@ -33,6 +33,9 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     share: 'Compartilhar',
     cancel: 'Cancelar',
     exploreIaProfile: 'Explore perfis de IA',
+    sendMessage: 'Mandar mensagem',
+    likeUser: 'Curtir {{name}}',
+    close: 'Fechar',
   },
   input: {
     placeholder: {
@@ -204,5 +207,12 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     childSexualExploitation: 'Exploração sexual infantil',
     privacyPolicy: PRIVACY_POLICY_PT,
     ai: 'ia',
+    and: 'e',
+    otherPeople: 'outras {{count}} pessoas',
+    likedYourPost: 'curtiu seu post.',
+    likedYourPostPlural: 'curtiram seu post.',
+    commented: 'comentou',
+    commentedYourPost: 'comentou em seu post',
+    match: 'Vocês deram match!',
   },
 };
