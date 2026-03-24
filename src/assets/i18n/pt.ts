@@ -36,6 +36,7 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     sendMessage: 'Mandar mensagem',
     likeUser: 'Curtir {{name}}',
     close: 'Fechar',
+    continueToSubscribe: 'Continuar para assinar',
   },
   input: {
     placeholder: {
@@ -214,5 +215,11 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     commented: 'comentou',
     commentedYourPost: 'comentou em seu post',
     match: 'Vocês deram match!',
+    biography: 'Biografia',
+    height: 'Altura',
+    zodiac: 'Signo',
+    characteristics: 'Características',
+    lifestyle: 'Estilo',
+    about: 'Sobre',
   },
 };

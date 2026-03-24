@@ -35,6 +35,7 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     sendMessage: 'Send message',
     likeUser: 'Like {{name}}',
     close: 'Close',
+    continueToSubscribe: 'Continue to subscribe',
   },
   input: {
     placeholder: {
@@ -210,5 +211,11 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     commented: 'commented',
     commentedYourPost: 'commented on your post',
     match: "It's a match!",
+    biography: 'Biography',
+    height: 'Height',
+    zodiac: 'Zodiac',
+    characteristics: 'Characteristics',
+    lifestyle: 'Lifestyle',
+    about: 'About',
   },
 };

@@ -59,7 +59,7 @@ const SharedComponent = [
   standalone: true,
 })
 export class ChatMessageComponent implements OnInit, OnDestroy, AfterViewInit {
-  loading: boolean = false;
+  loading: boolean = true;
   error: boolean = false;
   isLoadingMore: boolean = false;
   newMessage: string = '';
@@ -273,6 +273,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy, AfterViewInit {
             )
           );
 
+          this.loading = false;
           if (prepend) {
             this.messagesChate = [...newMessages, ...this.messagesChate];
             this.adjustScrollPosition(element, previousHeight);

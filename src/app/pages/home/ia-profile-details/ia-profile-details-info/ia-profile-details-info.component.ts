@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { CardGlassComponent } from '../../../../shared/component/card-glass/card-glass.component';
 import { AIProfileInterface } from '../../../../shared/interface/ai-profile.interface';
 
@@ -11,7 +12,7 @@ export interface Interesse {
   selector: 'app-ia-profile-details-info',
   templateUrl: './ia-profile-details-info.component.html',
   styleUrls: ['./ia-profile-details-info.component.scss'],
-  imports: [CardGlassComponent],
+  imports: [CardGlassComponent, TranslateModule],
   standalone: true,
 })
 export class IaProfileDetailsInfoComponent implements OnInit {

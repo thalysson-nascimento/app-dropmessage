@@ -29,6 +29,7 @@ export interface I18nTranslationsBase {
     sendMessage: string;
     likeUser: string;
     close: string;
+    continueToSubscribe: string;
   };
   input: {
     placeholder: {
@@ -169,5 +170,11 @@ export interface I18nTranslationsBase {
     commentedYourPost: string;
     match: string;
     privacyPolicy: PrivacyPolicyTranslations;
+    biography: string;
+    height: string;
+    zodiac: string;
+    characteristics: string;
+    lifestyle: string;
+    about: string;
   };
 }

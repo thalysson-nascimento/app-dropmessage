@@ -6,6 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { CardGlassComponent } from '../../../shared/component/card-glass/card-glass.component';
 import { AIProfileInterface } from '../../../shared/interface/ai-profile.interface';
 import { IaProfileDetailsInfoComponent } from './ia-profile-details-info/ia-profile-details-info.component';
@@ -14,7 +15,7 @@ import { IaProfileDetailsInfoComponent } from './ia-profile-details-info/ia-prof
   selector: 'app-ia-profile-details',
   templateUrl: './ia-profile-details.component.html',
   styleUrls: ['./ia-profile-details.component.scss'],
-  imports: [CardGlassComponent, IaProfileDetailsInfoComponent],
+  imports: [CardGlassComponent, IaProfileDetailsInfoComponent, TranslateModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   standalone: true,
 })

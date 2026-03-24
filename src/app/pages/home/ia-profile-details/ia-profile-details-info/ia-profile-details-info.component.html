@@ -12,7 +12,9 @@
   <div class="section-about">
     <app-card-glass>
       <ng-container cardContent>
-        <h2 class="section-about__label">BIOGRAFIA</h2>
+        <h2 class="section-about__label">
+          {{ "text.biography" | translate }}
+        </h2>
         <p>
           {{ aiProfiles.bio }}
         </p>
@@ -23,11 +25,13 @@
       <div class="profile-item">
         <app-card-glass>
           <ng-container cardContent>
-            <span class="material-symbols-outlined text-white/70 text-2xl"
-              >height</span
-            >
+            <span class="material-symbols-outlined text-white/70 text-2xl">
+              height
+            </span>
             <div>
-              <label class="profile-row__label">ALTURA</label>
+              <label class="profile-row__label">
+                {{ "text.height" | translate }}
+              </label>
               <p class="profile-row__text">{{ aiProfiles.height }}</p>
             </div>
           </ng-container>
@@ -39,7 +43,9 @@
           <ng-container cardContent>
             <span class="material-symbols-outlined"> wb_sunny </span>
             <div>
-              <label class="profile-row__label">SIGUINO</label>
+              <label class="profile-row__label">
+                {{ "text.zodiac" | translate }}
+              </label>
               <p class="profile-row__text">{{ aiProfiles.zodiac }}</p>
             </div>
           </ng-container>
@@ -48,7 +54,9 @@
     </div>
 
     <div class="section-interesting">
-      <h2 class="section-about__label">CARACTERISTICAS</h2>
+      <h2 class="section-about__label">
+        {{ "text.characteristics" | translate }}
+      </h2>
       <div class="interesses">
         <div class="tags">
           @for(trait of aiProfiles.traits; track trait.name) {
@@ -59,7 +67,9 @@
     </div>
 
     <div class="section-interesting">
-      <h2 class="section-about__label">INTERESSES</h2>
+      <h2 class="section-about__label">
+        {{ "text.interests" | translate }}
+      </h2>
       <div class="interesses">
         @for (item of aiProfiles.interests; track item.name) {
         <div class="interesse-chip">
@@ -71,7 +81,9 @@
     </div>
 
     <div class="section-interesting">
-      <h2 class="section-about__label">ESTILO</h2>
+      <h2 class="section-about__label">
+        {{ "text.lifestyle" | translate }}
+      </h2>
       <div class="interesses">
         @for (item of aiProfiles.lifestyles; track item.name) {
         <div class="interesse-chip">
@@ -81,6 +93,9 @@
         }
       </div>
     </div>
-    <button class="subscribe-button">Continuar para assinar</button>
+
+    <button class="subscribe-button">
+      {{ "button.continueToSubscribe" | translate }}
+    </button>
   </div>
 </div>

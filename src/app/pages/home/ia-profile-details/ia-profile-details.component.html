@@ -30,7 +30,7 @@
 
           <footer class="ia-details__footer">
             <div class="section-about">
-              <h2>Sobre</h2>
+              <h2>{{ "text.about" | translate }}</h2>
 
               <app-card-glass>
                 <ng-container cardContent>
@@ -55,7 +55,9 @@
               </app-card-glass>
             </div>
 
-            <button class="subscribe-button">Continuar para assinar</button>
+            <button class="subscribe-button">
+              {{ "button.continueToSubscribe" | translate }}
+            </button>
           </footer>
         </div>
       </swiper-slide>
