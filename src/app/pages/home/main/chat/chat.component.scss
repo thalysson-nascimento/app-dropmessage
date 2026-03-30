@@ -119,6 +119,17 @@
   cursor: pointer;
   transition: background 0.2s ease, transform 0.08s ease;
 
+  &__name {
+    font-size: var(--font-size-medium);
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+
+  &__last-message {
+    font-size: 12px;
+    color: var(--text-dark-d1);
+  }
+
   &--unread {
     background: rgba(19, 127, 236, 0.05);
   }
@@ -140,6 +151,7 @@
     font-size: 14px;
     line-height: 1.4;
     min-width: 0;
+    align-content: center;
   }
 
   &__comment {

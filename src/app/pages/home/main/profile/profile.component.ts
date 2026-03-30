@@ -71,7 +71,7 @@ export class ProfileComponent implements OnInit {
           label: 'Chat',
           description: 'Make new friends with your matches',
           icon: 'chat_bubble_outline',
-          route: 'home/list-chat',
+          route: 'home/main/chat',
         },
       ],
     },

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { CardGlassComponent } from '../../../../shared/component/card-glass/card-glass.component';
 import { AIProfileInterface } from '../../../../shared/interface/ai-profile.interface';
@@ -36,11 +37,15 @@ export class IaProfileDetailsInfoComponent implements OnInit {
     { label: 'sem julgamentos', icon: 'fitness_center' },
   ];
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {}
 
   goBack() {
     this.$goBack.emit();
+  }
+
+  goToListSubscriptionAI() {
+    this.router.navigate(['home/list-subscription-ai']);
   }
 }

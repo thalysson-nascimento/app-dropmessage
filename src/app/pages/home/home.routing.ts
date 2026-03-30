@@ -178,6 +178,13 @@ export const HomeRouting: Routes = [
           ),
       },
       {
+        path: 'list-subscription-ai',
+        loadComponent: () =>
+          import('./list-subscription-ai/list-subscription-ai.component').then(
+            (m) => m.ListSubscriptionAiComponent
+          ),
+      },
+      {
         path: 'checkout-payment',
         loadComponent: () =>
           import('./checkout-payment/checkout-payment.component').then(

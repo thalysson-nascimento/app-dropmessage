@@ -6,6 +6,7 @@
 
 export interface ListChat {
   mathId: string;
+  message: string;
   name: string;
   avatar: string;
   userLocation: UserLocation;

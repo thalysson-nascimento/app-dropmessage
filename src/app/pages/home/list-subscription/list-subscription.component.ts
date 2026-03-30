@@ -115,13 +115,16 @@
 //   }
 // }
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
+import { TranslateModule } from '@ngx-translate/core';
+import { ErrorRequestComponent } from '../../../shared/component/error-request/error-request.component';
 import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
 import { Product } from '../../../shared/interface/product.interface';
 import { ListSubscriptionService } from '../../../shared/service/list-subscription/list-subscription.service';
 import { SignalService } from '../../../shared/service/signal/signal.service';
+import { ListSubscriptionLoadingComponent } from './list-subscription-loading/list-subscription-loading.component';
 
 interface Feature {
   id: string;
@@ -135,6 +138,7 @@ interface Plan {
   id: string;
   durationLabel: string;
   pricePerMonth: number;
+  ammount?: number;
   originalPrice?: number;
   discountLabel?: string;
   isBestValue?: boolean;
@@ -144,11 +148,16 @@ interface Plan {
   selector: 'app-list-subscription',
   templateUrl: './list-subscription.component.html',
   styleUrls: ['./list-subscription.component.scss'],
-  imports: [ButtonDirective],
+  imports: [
+    ButtonDirective,
+    ErrorRequestComponent,
+    ListSubscriptionLoadingComponent,
+    TranslateModule,
+  ],
   standalone: true,
 })
-export class ListSubscriptionComponent {
-  selectedPlanId: string = 'plan-12';
+export class ListSubscriptionComponent implements OnInit {
+  selectedPlanId!: string;
 
   features: Feature[] = [
     {
@@ -183,27 +192,10 @@ export class ListSubscriptionComponent {
       icon: 'bolt',
     },
   ];
-  plans: Plan[] = [
-    {
-      id: 'plan-12',
-      durationLabel: '6 Months',
-      pricePerMonth: 4.99,
-      originalPrice: 119.88,
-      discountLabel: 'Save 60%',
-      isBestValue: true,
-    },
-    {
-      id: 'plan-6',
-      durationLabel: '3 Months',
-      pricePerMonth: 7.99,
-      discountLabel: 'Save 35%',
-    },
-    {
-      id: 'plan-1',
-      durationLabel: '1 Month',
-      pricePerMonth: 12.99,
-    },
-  ];
+  plans: any[] = [];
+  loading: boolean = true;
+  error: boolean = false;
+  listSubscription!: Product[];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -211,6 +203,26 @@ export class ListSubscriptionComponent {
     private listSubscriptionService: ListSubscriptionService,
     private signalService: SignalService<Product>
   ) {}
+
+  ngOnInit(): void {
+    this.loadListSubscription();
+  }
+
+  loadListSubscription() {
+    this.listSubscriptionService.subscriptions().subscribe({
+      next: (response) => {
+        console.log('Response from API:', response);
+        this.plans = response.reverse();
+        this.loading = false;
+        this.listSubscription = response;
+        this.selectedPlanId = this.plans[0].id;
+      },
+      error: () => {
+        this.error = true;
+        this.loading = false;
+      },
+    });
+  }
 
   selectPlan(planId: string): void {
     this.selectedPlanId = planId;
@@ -222,7 +234,8 @@ export class ListSubscriptionComponent {
 
   subscribe(): void {
     const selectedPlan = this.plans.find((p) => p.id === this.selectedPlanId);
-    console.log('Selected plan:', selectedPlan);
+    this.signalService.set(selectedPlan);
+    this.router.navigateByUrl('home/checkout-payment');
   }
 
   navigateBackUsingApp() {

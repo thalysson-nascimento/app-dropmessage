@@ -136,6 +136,16 @@
     <div class="swiper-pagination"></div>
   </div>
 </div> -->
+
+@if (loading) {
+<app-list-subscription-loading></app-list-subscription-loading>
+}@else if (error) {
+<app-error-request>
+  <button appButton="info">
+    {{ "button.tryAgain" | translate }}
+  </button> </app-error-request
+>} @else {
+
 <div class="subscription">
   <div class="subscription__background"></div>
 
@@ -203,7 +213,7 @@
       [class.subscription__plan--active]="isSelected(plan.id)"
       (click)="selectPlan(plan.id)"
     >
-      @if (plan.isBestValue) {
+      @if (plan.metadata.isBestValue) {
       <div class="subscription__badge">Best Value</div>
       }
 
@@ -212,24 +222,27 @@
       <div class="subscription__plan-content">
         <div class="subscription__plan-header">
           <span class="subscription__plan-title">
-            {{ plan.durationLabel }}
-            @if (plan.discountLabel) {
+            {{ plan.metadata.durationLabel }}
+            @if (plan.metadata.discountLabel) {
             <p class="subscription__plan-discount">
-              {{ plan.discountLabel }}
+              {{ plan.metadata.discountLabel }}
             </p>
             }
           </span>
 
           <div class="subscription__plan-price">
             <span class="subscription__plan-price--main">
-              ${{ plan.pricePerMonth }}
-              <br />
+              ${{ plan.metadata.pricePerMonth }}
               <span class="subscription__plan-price--suffix"> /mo </span>
             </span>
-
-            @if (plan.originalPrice) {
+            <br />
+            @if (plan.metadata.originalPrice) { @if (plan.metadata.ammount) {
+            <span class="subscription__plan-price--original">
+              ${{ plan.metadata.ammount }}
+            </span>
+            } →
             <span class="subscription__plan-price--old">
-              ${{ plan.originalPrice }}
+              ${{ plan.metadata.originalPrice }}
             </span>
             }
           </div>
@@ -252,3 +265,4 @@
     </button>
   </div>
 </div>
+}

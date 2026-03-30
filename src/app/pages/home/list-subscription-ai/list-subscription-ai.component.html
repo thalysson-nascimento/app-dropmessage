@@ -1,0 +1,144 @@
+@if (loading) {
+<app-list-subscription-loading></app-list-subscription-loading>
+} @else if (error) {
+<app-error-request>
+  <button appButton="info">
+    {{ "button.tryAgain" | translate }}
+  </button>
+</app-error-request>
+} @else {
+
+<div class="subscription-ai">
+  <div class="subscription-ai__background"></div>
+
+  <!-- HEADER -->
+  <header class="subscription-ai__header">
+    <button class="subscription-ai__icon-button" (click)="goToProfile()">
+      <span class="material-icons">close</span>
+    </button>
+
+    <div class="subscription-ai__logo">
+      <span>Dating</span>
+      <span class="subscription-ai__logo--gradient">AI+</span>
+    </div>
+
+    <button class="subscription-ai__restore">Restore</button>
+  </header>
+
+  <!-- HERO -->
+  <section class="subscription-ai__hero">
+    <div class="subscription-ai__hero-icon">
+      <span class="material-icons">auto_awesome</span>
+    </div>
+
+    <h1 class="subscription-ai__title">
+      Unlock <span class="subscription-ai__gradient-text">AI Power</span>
+    </h1>
+
+    <p class="subscription-ai__subtitle">
+      Generate messages, improve matches and boost your conversations using
+      advanced AI.
+    </p>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="subscription-ai__features">
+    <div class="subscription-ai__feature-list">
+      @for (feature of features; track feature.id) {
+      <div
+        class="subscription-ai__feature-card"
+        [class.subscription-ai__feature-card--highlight]="feature.highlight"
+      >
+        <div class="subscription-ai__feature-icon">
+          <span class="material-icons">{{ feature.icon }}</span>
+        </div>
+
+        <h3>{{ feature.title }}</h3>
+        <p>{{ feature.description }}</p>
+      </div>
+      }
+    </div>
+  </section>
+
+  <!-- 🔥 PLAN TYPE SELECTOR -->
+  <div class="subscription-ai__container">
+    <div class="subscription-ai__plan-types">
+      @for (type of planTypes; track type.id) {
+      <button
+        class="subscription-ai__plan-type"
+        [class.subscription-ai__plan-type--active]="
+          type.id === selectedPlanType
+        "
+        (click)="selectPlanType(type.id)"
+      >
+        {{ type.label }}
+      </button>
+      }
+    </div>
+  </div>
+
+  <!-- PLANS -->
+  <section
+    class="subscription-ai__plans"
+    [class.subscription-ai__plans--changing]="isChangingPlans"
+  >
+    <h2>Choose your AI Plan</h2>
+
+    @for (plan of plans; track plan.id) {
+    <label
+      class="subscription-ai__plan"
+      [class.subscription-ai__plan--active]="isSelected(plan.id)"
+      (click)="selectPlan(plan.id)"
+    >
+      @if (plan.metadata.isBestValue) {
+      <div class="subscription-ai__badge">Most Popular</div>
+      }
+
+      <input type="radio" name="plan" [checked]="isSelected(plan.id)" />
+
+      <!-- 🔥 RADIO VISUAL -->
+      <div class="subscription-ai__radio"></div>
+
+      <div class="subscription-ai__plan-content">
+        <div>
+          <h3>{{ plan.metadata.durationLabel }}</h3>
+          @if (plan.metadata.discountLabel) {
+          <span class="subscription-ai__discount">
+            {{ plan.metadata.discountLabel }}
+          </span>
+          }
+        </div>
+
+        <div class="subscription-ai__price">
+          ${{ plan.metadata.pricePerMonth }}
+          <span>/mo</span>
+
+          <br />
+          @if (plan.metadata.originalPrice) { @if (plan.metadata.ammount) {
+          <span class="subscription-ai__plan-price--original">
+            ${{ plan.metadata.ammount }}
+          </span>
+          } →
+          <span class="subscription-ai__plan-price--old">
+            ${{ plan.metadata.originalPrice }}
+          </span>
+          }
+        </div>
+      </div>
+    </label>
+    }
+
+    <p class="subscription-ai__terms">
+      Cancel anytime. Secure payments. Powered by AI.
+    </p>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="subscription-ai__footer">
+    <button class="subscription-ai__cta" (click)="subscribe()">
+      <span>Upgrade to AI+</span>
+      <span class="material-icons">bolt</span>
+    </button>
+  </div>
+</div>
+}

@@ -44,6 +44,10 @@ export class IaProfileDetailsComponent implements OnInit {
     this.router.navigate(['home/main/ia-profile']);
   }
 
+  goToListSubscriptionAI() {
+    this.router.navigate(['home/list-subscription-ai']);
+  }
+
   public loadMoviesAI() {
     if (this.aiProfiles.name === 'Sophia') {
       this.movieAI = 'assets/movie/sophia-movie.mp4';

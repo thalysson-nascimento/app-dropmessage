@@ -1,0 +1,87 @@
+<div class="subscription-skeleton">
+  <!-- HEADER -->
+  <header class="subscription-skeleton__header">
+    <div class="subscription-skeleton__circle"></div>
+    <div class="subscription-skeleton__logo"></div>
+    <div class="subscription-skeleton__text-small"></div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="subscription-skeleton__main">
+    <!-- HERO -->
+    <section class="subscription-skeleton__hero">
+      <div class="subscription-skeleton__hero-icon"></div>
+      <div class="subscription-skeleton__hero-title"></div>
+      <div class="subscription-skeleton__hero-line"></div>
+      <div
+        class="subscription-skeleton__hero-line subscription-skeleton__hero-line--short"
+      ></div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="subscription-skeleton__features">
+      <div class="subscription-skeleton__features-wrapper">
+        @for (item of [1,2,3]; track $index) {
+        <div class="subscription-skeleton__feature-card">
+          <div class="subscription-skeleton__feature-icon"></div>
+
+          <div>
+            <div class="subscription-skeleton__feature-title"></div>
+            <div class="subscription-skeleton__feature-line"></div>
+            <div
+              class="subscription-skeleton__feature-line subscription-skeleton__feature-line--short"
+            ></div>
+          </div>
+        </div>
+        }
+      </div>
+    </section>
+
+    <!-- PLANS -->
+    <section class="subscription-skeleton__plans">
+      <!-- Plano ativo -->
+      <div
+        class="subscription-skeleton__plan subscription-skeleton__plan--active"
+      >
+        <div class="subscription-skeleton__radio"></div>
+
+        <div class="subscription-skeleton__plan-content">
+          <div class="subscription-skeleton__plan-title"></div>
+          <div class="subscription-skeleton__plan-price"></div>
+
+          <div class="subscription-skeleton__plan-footer">
+            <div class="subscription-skeleton__plan-old"></div>
+            <div class="subscription-skeleton__plan-badge"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Outros planos -->
+      @for (item of [1,2]; track $index) {
+      <div class="subscription-skeleton__plan">
+        <div
+          class="subscription-skeleton__radio subscription-skeleton__radio--inactive"
+        ></div>
+
+        <div class="subscription-skeleton__plan-content">
+          <div class="subscription-skeleton__plan-title"></div>
+          <div class="subscription-skeleton__plan-price"></div>
+          <div class="subscription-skeleton__plan-old"></div>
+        </div>
+      </div>
+      }
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="subscription-skeleton__footer">
+      <div class="subscription-skeleton__button"></div>
+
+      <div class="subscription-skeleton__disclaimer">
+        <div class="subscription-skeleton__line"></div>
+        <div
+          class="subscription-skeleton__line subscription-skeleton__line--short"
+        ></div>
+      </div>
+    </footer>
+  </main>
+</div>
