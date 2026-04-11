@@ -61,6 +61,8 @@ export class IaProfileComponent implements OnInit {
   }
 
   goToIAProfileDetails(ai: AIProfileInterface) {
+    localStorage.setItem('aiProfile', JSON.stringify(ai));
+
     this.router.navigate(['/home/ia-profile-details'], {
       state: { aiProfile: ai },
     });

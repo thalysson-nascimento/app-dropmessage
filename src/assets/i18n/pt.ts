@@ -37,6 +37,7 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     likeUser: 'Curtir {{name}}',
     close: 'Fechar',
     continueToSubscribe: 'Continuar para assinar',
+    createPost: 'Fazer uma postagem',
   },
   input: {
     placeholder: {
@@ -221,5 +222,8 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     characteristics: 'Características',
     lifestyle: 'Estilo',
     about: 'Sobre',
+    noMessages: 'Nenhuma mensagem ainda',
+    messagesEmptyDescription:
+      'Quando você der match com alguém, poderá iniciar uma conversa por aqui.',
   },
 };

@@ -1,50 +1,4 @@
-// export interface Notification {
-//   id: string;
-//   createdAt: Date;
-//   user: User;
-//   post?: Post;
-// }
-
-export interface Post {
-  id: string;
-  createdAt: Date;
-  image: string;
-}
-
-export interface User {
-  name: string;
-  avatar: string;
-}
-
-export interface NotificationActor {
-  id: string;
-  name: string;
-  avatarUrl: string;
-}
-
-export interface NotificationTarget {
-  id: string;
-  thumbnailUrl?: string;
-  type: 'photo' | 'video' | 'post';
-}
-
-export interface NotificationActionMeta {
-  commentText?: string;
-  totalCount?: number; // para multi like
-  isFollowing?: boolean; // botão seguir
-}
-
-export interface NotificationModel {
-  id: string;
-  type: NotificationType;
-  actors: NotificationActor[];
-  subscription: boolean;
-  target?: NotificationTarget;
-  meta?: NotificationActionMeta;
-  createdAt: Date;
-  isRead: boolean;
-  match: boolean;
-}
+import { DataConnectChatMessage } from './data-connect-chat-message.interface';
 
 export enum NotificationType {
   LIKE = 'LIKE',
@@ -61,3 +15,41 @@ export type NotificationFilter =
   | 'MENTIONS'
   | 'FOLLOWS'
   | 'SHARES';
+
+export interface GetNotificationsResponse {
+  subscription: boolean;
+  items: NotificationItem[];
+}
+
+export interface NotificationItem {
+  id: string;
+  type: NotificationType;
+  subscription: boolean;
+  actors: NotificationActor[];
+  meta: NotificationActionMeta;
+  target: NotificationTarget | null;
+  createdAt: string; // ⚠️ string já formatada (ex: "há 2 horas")
+  isRead: boolean;
+  match: boolean;
+  matchData: DataConnectChatMessage;
+}
+
+export interface NotificationActor {
+  id: string;
+  name: string;
+  avatarUrl: string;
+}
+
+export interface NotificationTarget {
+  id: string;
+  type: NotificationTargetType;
+  thumbnailUrl: string | null;
+}
+
+export type NotificationTargetType = 'photo' | 'video' | 'post';
+
+export interface NotificationActionMeta {
+  commentText?: string;
+  totalCount?: number; // para multi like
+  isFollowing?: boolean; // botão seguir
+}

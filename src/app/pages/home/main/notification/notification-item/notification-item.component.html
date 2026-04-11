@@ -33,14 +33,15 @@
 
   <div class="notification__content">
     @switch (notification.type) { @case (NotificationType.LIKE) { @if
-    (notification.meta?.totalCount) {
+    (notification.meta.totalCount !== undefined && notification.meta.totalCount
+    > 1) {
     <p>
       <strong>{{ notification.actors[0].name }}</strong>
       {{ "text.and" | translate }}
       <strong>
         {{
           "text.otherPeople"
-            | translate : { count: (notification.meta?.totalCount ?? 0) - 1 }
+            | translate : { count: notification.meta.totalCount - 1 }
         }}
       </strong>
     </p>
@@ -55,13 +56,9 @@
       <p>
         <strong>{{ notification.actors[0].name }}</strong>
       </p>
-      {{ "text.commented" | translate }}: "{{ notification.meta?.commentText }}"
+      {{ "text.commented" | translate }}: "{{ notification.meta.commentText }}"
     </div>
     } }
-
-    <div class="notification__time">
-      {{ notification.createdAt | date : "shortTime" }}
-    </div>
   </div>
 
   <div class="notification__side">
@@ -129,9 +126,9 @@
         {{ "text.commentedYourPost" | translate }}
         } }
       </p>
-      } @if (notificationSelected.meta?.commentText) {
+      } @if (notificationSelected.meta.commentText) {
       <div class="notification-selected__comment">
-        "{{ notificationSelected.meta?.commentText }}"
+        "{{ notificationSelected.meta.commentText }}"
       </div>
       }
     </div>
@@ -139,7 +136,7 @@
 
   <div class="notification-selected__buttons">
     @if(notificationSelected.match) {
-    <button appButton>
+    <button appButton (click)="sendMessage(notificationSelected.matchData)">
       {{ "button.sendMessage" | translate }}
     </button>
     } @else {

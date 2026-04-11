@@ -34,6 +34,32 @@
   <app-error-request>
     <button appButton="info">{{ "button.tryAgain" | translate }}</button>
   </app-error-request>
+  } @else { @if (listChat.length === 0) {
+  <section class="chat-empty">
+    <div class="chat-empty__illustration">
+      <div class="chat-empty__icon-wrapper">
+        <span class="material-symbols-outlined chat-empty__icon-main">
+          forum
+        </span>
+
+        <div class="chat-empty__icon-badge">
+          <span class="material-symbols-outlined chat-empty__icon-cancel">
+            sentiment_dissatisfied
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-empty__content">
+      <h2 class="chat-empty__title">
+        {{ "text.noMessages" | translate }}
+      </h2>
+
+      <p class="chat-empty__description">
+        {{ "text.messagesEmptyDescription" | translate }}
+      </p>
+    </div>
+  </section>
   } @else { @for (chat of listChat; track $index) {
   <div class="chat" (click)="goToChat(chat)">
     <div class="chat__avatar-wrapper">
@@ -46,5 +72,5 @@
       <p class="chat__last-message">{{ chat.message }}</p>
     </div>
   </div>
-  } }
+  } } }
 </div>

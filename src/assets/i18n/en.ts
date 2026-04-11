@@ -36,6 +36,7 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     likeUser: 'Like {{name}}',
     close: 'Close',
     continueToSubscribe: 'Continue to subscribe',
+    createPost: 'Create a post',
   },
   input: {
     placeholder: {
@@ -217,5 +218,8 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     characteristics: 'Characteristics',
     lifestyle: 'Lifestyle',
     about: 'About',
+    noMessages: 'No messages yet',
+    messagesEmptyDescription:
+      'Once you match with someone, you’ll be able to start a conversation here.',
   },
 };

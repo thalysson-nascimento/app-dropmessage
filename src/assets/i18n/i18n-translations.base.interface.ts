@@ -30,6 +30,7 @@ export interface I18nTranslationsBase {
     likeUser: string;
     close: string;
     continueToSubscribe: string;
+    createPost: string;
   };
   input: {
     placeholder: {
@@ -176,5 +177,7 @@ export interface I18nTranslationsBase {
     characteristics: string;
     lifestyle: string;
     about: string;
+    noMessages: string;
+    messagesEmptyDescription: string;
   };
 }

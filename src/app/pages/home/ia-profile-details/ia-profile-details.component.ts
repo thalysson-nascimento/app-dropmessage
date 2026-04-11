@@ -32,6 +32,14 @@ export class IaProfileDetailsComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit() {
+    const localDataIAProfile = localStorage.getItem('aiProfile');
+
+    if (localDataIAProfile) {
+      const aiProfile = JSON.parse(localDataIAProfile);
+      this.aiProfiles = aiProfile;
+      this.loadMoviesAI();
+    }
+
     const state = window.history.state as { aiProfile?: AIProfileInterface };
 
     if (!state?.aiProfile) return;

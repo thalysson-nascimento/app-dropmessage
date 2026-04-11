@@ -1,122 +1,6 @@
-// import { CommonModule, isPlatformBrowser } from '@angular/common';
-// import {
-//   CUSTOM_ELEMENTS_SCHEMA,
-//   Component,
-//   Inject,
-//   OnInit,
-//   PLATFORM_ID,
-// } from '@angular/core';
-// import { Router } from '@angular/router';
-// import { App } from '@capacitor/app';
-
-// import Swiper from 'swiper';
-// import 'swiper/css';
-// import 'swiper/css/navigation';
-// import 'swiper/css/pagination';
-// import { Navigation, Pagination } from 'swiper/modules';
-// import { ErrorComponent } from '../../../shared/component/error/error.component';
-// import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
-// import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
-// import { Product } from '../../../shared/interface/product.interface';
-// import { ListSubscriptionService } from '../../../shared/service/list-subscription/list-subscription.service';
-// import { SignalService } from '../../../shared/service/signal/signal.service';
-
-// const swiper = new Swiper('.swiper', {
-//   modules: [Navigation, Pagination],
-// });
-
-// const SharedComponents = [
-//   ButtonStyleDirective,
-//   LoadShimmerComponent,
-//   ErrorComponent,
-// ];
-// const CoreModule = [CommonModule];
-
-// @Component({
-//   selector: 'app-list-subscription',
-//   templateUrl: './list-subscription.component.html',
-//   styleUrls: ['./list-subscription.component.scss'],
-//   standalone: true,
-//   imports: [...SharedComponents, ...CoreModule],
-//   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-// })
-// export class ListSubscriptionComponent implements OnInit {
-//   buttonDisalbled: boolean = false;
-//   isLoading: boolean = true;
-//   errorRequest: boolean = false;
-//   listSubscription: Product[] = [];
-
-//   constructor(
-//     @Inject(PLATFORM_ID) private platformId: Object,
-//     private router: Router,
-//     private listSubscriptionService: ListSubscriptionService,
-//     private signalService: SignalService<Product>
-//   ) {}
-
-//   ngOnInit() {
-//     this.loadListSubscription();
-//   }
-
-//   ngAfterViewInit(): void {
-//     this.initializationSwipper();
-//   }
-
-//   initializationSwipper() {
-//     new Swiper('.swiper', {
-//       direction: 'horizontal',
-//       spaceBetween: 16,
-//       modules: [Navigation, Pagination],
-//       pagination: {
-//         el: '.swiper-pagination',
-//         clickable: true,
-//       },
-//     });
-//   }
-
-//   navigateBackUsingApp() {
-//     if (isPlatformBrowser(this.platformId)) {
-//       App.addListener('backButton', () => {
-//         this.router.navigateByUrl('home/main/profile');
-//       });
-//     }
-//   }
-
-//   goToProfile() {
-//     this.router.navigateByUrl('home/main/profile');
-//     this.navigateBackUsingApp();
-//   }
-
-//   createSessionPayment(product: Product) {
-//     this.signalService.set(product);
-//     this.router.navigateByUrl('home/checkout-payment');
-//     // this.buttonDisalbled = true;
-//   }
-
-//   loadListSubscription() {
-//     this.listSubscriptionService.subscriptions().subscribe({
-//       next: (response) => {
-//         this.isLoading = false;
-//         this.listSubscription = response;
-//       },
-//       error: () => {
-//         this.errorRequest = true;
-//         this.isLoading = false;
-//       },
-//     });
-//   }
-
-//   timerSubscription(interval: string, invervalCount: number) {
-//     if (interval === 'week') {
-//       return 'plano de assinatura por 7 dias';
-//     } else if (interval === 'month' && invervalCount === 1) {
-//       return 'plano de assinatura por 1 mês';
-//     }
-//     return 'plano de assinatura por 6 meses';
-//   }
-// }
-import { isPlatformBrowser } from '@angular/common';
+import { CurrencyPipe, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { TranslateModule } from '@ngx-translate/core';
 import { ErrorRequestComponent } from '../../../shared/component/error-request/error-request.component';
@@ -153,6 +37,7 @@ interface Plan {
     ErrorRequestComponent,
     ListSubscriptionLoadingComponent,
     TranslateModule,
+    CurrencyPipe,
   ],
   standalone: true,
 })
@@ -196,16 +81,22 @@ export class ListSubscriptionComponent implements OnInit {
   loading: boolean = true;
   error: boolean = false;
   listSubscription!: Product[];
+  state!: string;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
     private listSubscriptionService: ListSubscriptionService,
-    private signalService: SignalService<Product>
+    private signalService: SignalService<Product>,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.loadListSubscription();
+
+    this.route.queryParams.subscribe((params) => {
+      this.state = params['path'];
+    });
   }
 
   loadListSubscription() {
@@ -241,12 +132,21 @@ export class ListSubscriptionComponent implements OnInit {
   navigateBackUsingApp() {
     if (isPlatformBrowser(this.platformId)) {
       App.addListener('backButton', () => {
+        if (this.state) {
+          this.router.navigateByUrl(this.state);
+          return;
+        }
         this.router.navigateByUrl('home/main/profile');
       });
     }
   }
 
   goToProfile() {
+    if (this.state) {
+      this.router.navigateByUrl(this.state);
+      this.navigateBackUsingApp();
+      return;
+    }
     this.router.navigateByUrl('home/main/profile');
     this.navigateBackUsingApp();
   }

@@ -5,8 +5,9 @@ import { ErrorRequestComponent } from '../../../../shared/component/error-reques
 import { LogoDropmessageComponent } from '../../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { ButtonDirective } from '../../../../shared/directives/button-ia/button-ia.directive';
 import {
+  GetNotificationsResponse,
   NotificationFilter,
-  NotificationModel,
+  NotificationItem,
 } from '../../../../shared/interface/notification.interface';
 import { NotificationService } from '../../../../shared/service/notification/notification.service';
 import { NotificationListComponent } from './notification-list/notification-list.component';
@@ -28,14 +29,14 @@ export class NotificationComponent implements OnInit {
   protected readonly skeletonItems = Array.from({ length: 6 });
 
   public selectedFilter: NotificationFilter = 'ALL';
-  public notifications: NotificationModel[] = [];
+  public notifications!: GetNotificationsResponse;
   public loading = false;
   public error = false;
 
-  get filtered(): NotificationModel[] {
-    if (this.selectedFilter === 'ALL') return this.notifications;
+  get filtered(): NotificationItem[] {
+    if (this.selectedFilter === 'ALL') return this.notifications.items;
 
-    return this.notifications.filter((n) =>
+    return this.notifications.items.filter((n) =>
       n.type.toLowerCase().includes(this.selectedFilter.toLowerCase())
     );
   }

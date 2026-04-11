@@ -1,11 +1,5 @@
-// export interface ListChat {
-//   mathId: string;
-//   name: string;
-//   avatar: string;
-// }
-
 export interface ListChat {
-  mathId: string;
+  matchId: string;
   message: string;
   name: string;
   avatar: string;

@@ -96,7 +96,6 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  background: rgba(0, 0, 0, 0.25);
   border-radius: 0.75rem;
   padding: 0.4rem 0.55rem;
   box-sizing: border-box;
@@ -124,6 +123,7 @@
 
 .user-location,
 .user-location-null {
+  margin-top: var(--space-small);
   color: #fff;
   font-size: 0.72rem;
   font-weight: 600;
@@ -139,6 +139,9 @@
   border-radius: 999px;
   padding: 0.22rem 0.45rem;
   cursor: pointer;
+
+  align-self: flex-start; // 👈 ESSENCIAL
+  width: fit-content; // 👈 GARANTE
 }
 
 .fallback-card {
@@ -301,6 +304,51 @@
   min-height: 0;
 }
 
+.heater {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.like-button {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // 🎯 Gradiente igual ao template (vertical/diagonal suave)
+  background: linear-gradient(135deg, #ff4b91 0%, #ff9068 100%);
+
+  // ✨ Sombra rosada (efeito glow)
+  box-shadow: 0 10px 25px rgba(255, 75, 145, 0.4);
+
+  transition: all 0.3s ease;
+
+  // Ícone
+  .material-symbols-rounded {
+    color: #ffffff;
+    font-size: 2.5rem;
+    font-variation-settings: "FILL" 1; // deixa o coração preenchido
+  }
+
+  // 🔥 Hover (efeito de crescer + sombra mais forte)
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 30px rgba(255, 75, 145, 0.6);
+  }
+
+  // 👇 Clique (feedback)
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 6px 15px rgba(255, 75, 145, 0.4);
+  }
+}
+
 app-cards {
   flex: 1 1 auto;
   min-height: 0;
@@ -320,7 +368,7 @@ app-cards {
   }
 
   .user-name {
-    font-size: 0.95rem;
+    font-size: 1.5rem;
   }
 
   .heater {

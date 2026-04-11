@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild, untracked } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Stripe, StripeElements, loadStripe } from '@stripe/stripe-js';
 import { ErrorModalComponent } from '../../../shared/component/error-modal/error-modal.component';
@@ -37,10 +37,12 @@ export class CheckoutPaymentComponent implements OnInit {
   @ViewChild('modalErrorRequest') modalErrorRequest!: ErrorModalComponent;
   typeErrorModal: 'success' | 'warn' | 'error' = 'success';
   errorRequestMessage: string | undefined;
+  state!: string;
 
   constructor(
     private sessionPaymentIntentService: SessionPaymentIntentService,
     private router: Router,
+    private route: ActivatedRoute,
     private signalService: SignalService<Product>,
     private stripePublicKeyService: StripePublicKeyService
   ) {
@@ -52,6 +54,10 @@ export class CheckoutPaymentComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      this.state = params['path'];
+    });
+
     this.stripePublicKeyService.stripePublicKey().subscribe({
       next: async (response) => {
         const publicApi = response.publicKey;
@@ -150,6 +156,10 @@ export class CheckoutPaymentComponent implements OnInit {
   }
 
   goToListSubscription() {
+    if (this.state) {
+      this.router.navigateByUrl(this.state);
+      return;
+    }
     this.router.navigateByUrl('home/list-subscription');
   }
 }

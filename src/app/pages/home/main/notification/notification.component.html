@@ -36,7 +36,7 @@
   <app-error-request>
     <button appButton="info">{{ "button.tryAgain" | translate }}</button>
   </app-error-request>
-  } @else { @if (notifications.length === 0) {
+  } @else { @if (notifications.items.length === 0) {
   <section class="notification-empty">
     <div class="notification-empty__illustration">
       <div class="notification-empty__icon-wrapper">
@@ -71,7 +71,10 @@
 
   <div class="notifications-page">
     <section class="notifications-page__section">
-      <app-notification-list [notifications]="filtered">
+      <app-notification-list
+        [notifications]="filtered"
+        [subscriptions]="notifications.subscription"
+      >
       </app-notification-list>
     </section>
   </div>

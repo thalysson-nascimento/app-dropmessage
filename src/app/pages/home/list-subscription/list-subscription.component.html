@@ -232,17 +232,35 @@
 
           <div class="subscription__plan-price">
             <span class="subscription__plan-price--main">
-              ${{ plan.metadata.pricePerMonth }}
+              {{
+                plan.metadata.pricePerMonth
+                  | currency
+                    : plan.metadata.currency.toLocaleUpperCase()
+                    : "symbol"
+                    : "1.2-2"
+              }}
               <span class="subscription__plan-price--suffix"> /mo </span>
             </span>
             <br />
             @if (plan.metadata.originalPrice) { @if (plan.metadata.ammount) {
             <span class="subscription__plan-price--original">
-              ${{ plan.metadata.ammount }}
+              {{
+                plan.metadata.ammount
+                  | currency
+                    : plan.metadata.currency?.toLocaleUpperCase()
+                    : "symbol"
+                    : "1.2-2"
+              }}
             </span>
             } →
             <span class="subscription__plan-price--old">
-              ${{ plan.metadata.originalPrice }}
+              {{
+                plan.metadata.originalPrice
+                  | currency
+                    : plan.metadata.currency?.toLocaleUpperCase()
+                    : "symbol"
+                    : "1.2-2"
+              }}
             </span>
             }
           </div>

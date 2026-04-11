@@ -22,7 +22,6 @@ interface Feature {
   highlight?: boolean;
 }
 
-// 🔥 EXATAMENTE O QUE O HTML ESPERA
 interface PlanOption {
   id: string;
   type: PlanType;
@@ -87,16 +86,11 @@ export class ListSubscriptionAiComponent implements OnInit {
     this.loadListSubscription();
   }
 
-  // =============================
-  // 🔥 API
-  // =============================
   loadListSubscription() {
     this.loading = true;
 
     this.listSubscriptionAiService.subscriptions().subscribe({
       next: (response) => {
-        console.log('Response from API:', response);
-
         this.buildPlans(response);
         this.updatePlans();
 
@@ -109,9 +103,6 @@ export class ListSubscriptionAiComponent implements OnInit {
     });
   }
 
-  // =============================
-  // 🔥 MAPPER (SEM QUEBRAR HTML)
-  // =============================
   private buildPlans(data: SubscriptionAIResponse) {
     this.originalPlansMap = {};
     const allPlans: PlanOption[] = [];
@@ -140,12 +131,9 @@ export class ListSubscriptionAiComponent implements OnInit {
     process(data.pro, 'pro');
     process(data.premium, 'premium');
 
-    this.allPlans = allPlans; // 🔥 guarda todos
+    this.allPlans = allPlans;
   }
 
-  // =============================
-  // 🔥 FILTRO
-  // =============================
   updatePlans() {
     this.plans = this.allPlans.filter((p) => p.type === this.selectedPlanType);
 
@@ -164,7 +152,6 @@ export class ListSubscriptionAiComponent implements OnInit {
     this.selectedPlanId = this.plans[0]?.id;
   }
 
-  // 🔥 AGORA NÃO DÁ MAIS ERRO
   selectPlanType(type: PlanType) {
     this.isChangingPlans = true;
 
@@ -183,19 +170,18 @@ export class ListSubscriptionAiComponent implements OnInit {
     return this.selectedPlanId === planId;
   }
 
-  // =============================
-  // 🔥 ENVIA OBJETO ORIGINAL
-  // =============================
   subscribe(): void {
     const originalProduct = this.originalPlansMap[this.selectedPlanId];
 
     console.log('🔥 ENVIANDO ORIGINAL:', originalProduct);
 
     this.signalService.set(originalProduct);
-    this.router.navigateByUrl('home/checkout-payment');
+    this.router.navigate(['home/checkout-payment'], {
+      queryParams: { path: 'home/list-subscription-ai' },
+    });
   }
 
   goToProfile() {
-    this.router.navigateByUrl('home/main/profile');
+    this.router.navigateByUrl('home/ia-profile-details');
   }
 }

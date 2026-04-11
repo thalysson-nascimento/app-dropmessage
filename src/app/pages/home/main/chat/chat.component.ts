@@ -26,7 +26,7 @@ import { ListChatService } from '../../../../shared/service/list-chat/list-chat.
 export class ChatComponent implements OnInit {
   public loading = true;
   public error = false;
-  listChat: ListChat[] = [];
+  public listChat: ListChat[] = [];
 
   constructor(
     private router: Router,
@@ -69,6 +69,7 @@ export class ChatComponent implements OnInit {
   }
 
   goToChat(userSelectForChat: DataConnectChatMessage) {
+    console.log(userSelectForChat);
     this.dataConnectChatMessageService.setDataConnectChatMessage(
       userSelectForChat
     );

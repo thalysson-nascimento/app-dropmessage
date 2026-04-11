@@ -131,7 +131,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy, AfterViewInit {
           this.userMatchAvatar = chatData.avatar;
           this.userMatchName = chatData.name;
           this.userMatchLocation = chatData.userLocation;
-          this.matchId = chatData.mathId;
+          this.matchId = chatData.matchId;
         }
 
         if (this.userHashPublic && this.matchId && !this.socketInitialized) {
