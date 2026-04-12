@@ -9,6 +9,7 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     createAccountWithGoogle: 'Criar conta com o Google',
     buttonCreateAccount: 'Criar conta',
     touchWhatch: 'Toque para assistir',
+    subscribe: 'Assinar',
     subscribePlan: 'Assinar plano',
     deleteAccount: 'Deletar conta',
     takePhoto: 'Tirar foto',
@@ -63,6 +64,8 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     backToLogin: 'Volte para a tela de login e continue o seu cadastro',
     registrationAgree: 'Ao realizar o seu cadastro você concorda com os nossas',
     politicsPrivacy: 'Políticas de privacidade',
+    premiumBannerTitle: 'Desbloqueie todas as suas interações.',
+    premiumBannerSubtitle: 'Assine o Premium agora!',
     noNewFriends: 'Ops, sem novas amizades!',
     noProfilesFound: 'Não encontramos novos perfis agora.',
     iaProfileDescription:

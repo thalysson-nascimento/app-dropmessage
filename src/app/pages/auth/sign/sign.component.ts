@@ -20,7 +20,7 @@ import { ErrorModalComponent } from '../../../shared/component/error-modal/error
 import { LoadingComponent } from '../../../shared/component/loading/loading.component';
 import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
-import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
+import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { Sign } from '../../../shared/interface/sign.interface';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
@@ -36,10 +36,10 @@ import { UserHashPublicService } from '../../../shared/service/user-hash-public/
 const SharedComponents = [
   LogoDropmessageComponent,
   InputCustomDirective,
-  ButtonStyleDirective,
   LoadingComponent,
   ModalComponent,
   ErrorModalComponent,
+  ButtonDirective,
 ];
 
 const CoreModule = [

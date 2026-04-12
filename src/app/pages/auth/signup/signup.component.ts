@@ -19,7 +19,7 @@ import { Device } from '@capacitor/device';
 import { TranslateModule } from '@ngx-translate/core';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
 import { ErrorModalComponent } from '../../../shared/component/error-modal/error-modal.component';
-import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
+import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { CreateAccount } from '../../../shared/interface/create-account.interface';
 import { CreateAccountWithGoogleOauthService } from '../../../shared/service/create-account-with-google-oauth/create-account-with-google-oauth.service';
@@ -35,8 +35,8 @@ declare let gtag: Function;
 
 const SharedComponents = [
   InputCustomDirective,
-  ButtonStyleDirective,
   ErrorModalComponent,
+  ButtonDirective,
 ];
 
 const CoreModule = [ReactiveFormsModule, CommonModule, TranslateModule];

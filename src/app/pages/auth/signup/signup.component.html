@@ -75,12 +75,10 @@
       class="input-custom"
     />
     <button
-      appButtonStyle
+      appButton
       type="submit"
       class="button-create-acount"
-      [buttonType]="'primary'"
       [disabled]="buttonDisalbled || createAccountFormGroup.invalid"
-      [disabledButton]="buttonDisalbled || createAccountFormGroup.invalid"
       aria-label="criar conta"
     >
       <span *ngIf="!buttonDisalbled">{{

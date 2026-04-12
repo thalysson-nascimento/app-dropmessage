@@ -9,6 +9,7 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     createAccountWithGoogle: 'Create account with Google',
     buttonCreateAccount: 'Create account',
     touchWhatch: 'Touch to watch',
+    subscribe: 'Subscribe',
     subscribePlan: 'Subscribe to plan',
     deleteAccount: 'Delete account',
     takePhoto: 'Take photo',
@@ -62,6 +63,8 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     backToLogin: 'Go back to the login screen and continue your registration',
     registrationAgree: 'By creating an account, you agree to our',
     politicsPrivacy: 'Politic Privacy',
+    premiumBannerTitle: 'Unlock all your interactions.',
+    premiumBannerSubtitle: 'Subscribe to Premium now!',
     noNewFriends: 'Oops, no new friends!',
     noProfilesFound: 'We did not find new profiles right now.',
     iaProfileDescription:
