@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
   ElementRef,
@@ -19,11 +20,13 @@ import { IaProfileDetailsInfoComponent } from './ia-profile-details-info/ia-prof
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   standalone: true,
 })
-export class IaProfileDetailsComponent implements OnInit {
+export class IaProfileDetailsComponent implements OnInit, AfterViewInit {
   public aiProfiles!: AIProfileInterface;
   public movieAI!: string;
+  public videoReady = false;
 
   @ViewChild('swiperRef') swiperRef!: ElementRef;
+  @ViewChild('bgVideo') videoRef!: ElementRef<HTMLVideoElement>;
 
   get swiper() {
     return this.swiperRef.nativeElement.swiper;
@@ -48,6 +51,16 @@ export class IaProfileDetailsComponent implements OnInit {
     this.loadMoviesAI();
   }
 
+  ngAfterViewInit() {
+    const video = this.videoRef.nativeElement;
+
+    video.muted = true;
+
+    video.onloadeddata = () => {
+      this.videoReady = true;
+      video.play().catch(() => {});
+    };
+  }
   goBack() {
     this.router.navigate(['home/main/ia-profile']);
   }

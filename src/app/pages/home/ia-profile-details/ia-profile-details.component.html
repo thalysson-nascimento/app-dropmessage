@@ -1,6 +1,18 @@
 <div class="ia-details">
   <div class="ia-details__background">
-    <video [src]="movieAI" autoplay muted loop playsinline></video>
+    <video
+      #bgVideo
+      [src]="movieAI"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      webkit-playsinline
+      disablePictureInPicture
+      controlslist="nodownload nofullscreen noremoteplayback"
+      [class.video-ready]="videoReady"
+    ></video>
     <div class="ia-details__overlay"></div>
   </div>
 
