@@ -31,7 +31,7 @@ export class SendMessageSuccessComponent implements OnInit {
 
   goBack() {
     if (this.sharedPost?.showADS) {
-      return this.router.navigateByUrl('home/admob-video-reward-free-trial');
+      return this.router.navigateByUrl('home/admob-intertistial');
     }
 
     return this.router.navigateByUrl('home/main/post-message');

@@ -46,25 +46,24 @@ export class AdmobVideoRewardComponent
   }
 
   async onShowRewardAd() {
-    try {
-      await this.admobService.rewardVideo();
-    } catch (error) {
-      this.erroLoadVideoReward = true;
-      this.isLoading = false;
-    } finally {
-      this.updateAdmobVideoRewardService.updateVideoReward().subscribe({
-        next: () => {
-          this.isLoading = false;
-
-          this.router.navigateByUrl('home/main/post-message');
-        },
-        error: (error) => {
-          console.log(error);
-          this.erroLoadVideoReward = true;
-          this.isLoading = false;
-        },
-      });
-    }
+    // try {
+    //   await this.admobService.rewardVideo();
+    // } catch (error) {
+    //   this.erroLoadVideoReward = true;
+    //   this.isLoading = false;
+    // } finally {
+    //   this.updateAdmobVideoRewardService.updateVideoReward().subscribe({
+    //     next: () => {
+    //       this.isLoading = false;
+    //       this.router.navigateByUrl('home/main/post-message');
+    //     },
+    //     error: (error) => {
+    //       console.log(error);
+    //       this.erroLoadVideoReward = true;
+    //       this.isLoading = false;
+    //     },
+    //   });
+    // }
   }
 
   goToPostMessage() {

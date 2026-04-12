@@ -1,0 +1,30 @@
+<div class="container">
+  @if (isLoading) {
+  <div class="loading">
+    <h2>🎬 Anúncio</h2>
+    <p>{{ statusMessage }}</p>
+
+    <div class="fake-ad">
+      <span class="badge">Publicidade</span>
+
+      <div class="video-mock">
+        @if (mockStep === 'loading') {
+        <p>🔄 Carregando vídeo...</p>
+        } @if (mockStep === 'playing') {
+        <p>▶ Reproduzindo...</p>
+
+        <div class="progress-bar">
+          <div class="progress" [style.width.%]="progress"></div>
+        </div>
+
+        <small>{{ progress }}%</small>
+        } @if (mockStep === 'finished') {
+        <p>✅ Vídeo finalizado</p>
+        }
+      </div>
+    </div>
+  </div>
+  } @else {
+  <p>Redirecionando...</p>
+  }
+</div>

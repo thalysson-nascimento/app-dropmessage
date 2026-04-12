@@ -261,6 +261,13 @@ export const HomeRouting: Routes = [
             (m) => m.UpdateAvatarComponent
           ),
       },
+      {
+        path: 'admob-intertistial',
+        loadComponent: () =>
+          import('./admob-intertistial/admob-intertistial.component').then(
+            (m) => m.AdmobIntertistialComponent
+          ),
+      },
     ],
   },
 ];

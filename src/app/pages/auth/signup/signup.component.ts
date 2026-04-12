@@ -17,7 +17,6 @@ import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { Device } from '@capacitor/device';
 import { TranslateModule } from '@ngx-translate/core';
-import { currentEnvironment } from '../../../../environment.config';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
 import { ErrorModalComponent } from '../../../shared/component/error-modal/error-modal.component';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
@@ -50,7 +49,6 @@ const CoreModule = [ReactiveFormsModule, CommonModule, TranslateModule];
   styleUrl: './signup.component.scss',
 })
 export class SignupComponent implements OnInit {
-  private baseUrl: string = currentEnvironment.baseURL;
   buttonDisalbled: boolean = false;
   createAccountFormGroup!: FormGroup;
   isLoadingButton: boolean = false;

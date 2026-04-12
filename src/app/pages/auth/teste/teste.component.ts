@@ -37,7 +37,7 @@ export class TesteComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   async onShowRewardAd() {
-    await this.admobService.rewardVideo();
+    // await this.admobService.rewardVideo();
   }
 
   ngAfterViewInit(): void {
