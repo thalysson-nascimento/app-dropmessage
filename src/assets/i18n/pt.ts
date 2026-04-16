@@ -143,6 +143,8 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     titleVerifyEmail: 'Verifique o seu e-mail',
     subtitleVerifyEmail: 'Verifique o código que foi enviado para o seu e-mail',
     invalidCode: 'Ops, código inválido',
+    invalidEmailVerificationCode:
+      'O código de verificação enviado para o seu e-mail não confere. Verifique e tente novamente.',
     plan: 'Plano',
     goldPlanPromotion: 'PROMOÇÃO PLANO GOLD',
     describeGoldPlanPromotion:
@@ -228,5 +230,13 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     noMessages: 'Nenhuma mensagem ainda',
     messagesEmptyDescription:
       'Quando você der match com alguém, poderá iniciar uma conversa por aqui.',
+    otpTitle: 'Digite o código OTP',
+    otpDescription: 'O código foi enviado para',
+    verify: 'Verificar',
+    otpNotReceived: 'Não recebeu o código?',
+    resendOtp: 'Reenviar',
+    secureTitle: 'Verificação Segura',
+    secureDescription:
+      'Utilizamos criptografia padrão da indústria para manter seus dados seguros.',
   },
 };

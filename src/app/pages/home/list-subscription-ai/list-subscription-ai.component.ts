@@ -1,3 +1,4 @@
+import { CurrencyPipe } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -33,7 +34,9 @@ interface PlanOption {
     isBestValue?: string;
     originalPrice?: string;
     pricePerMonth: string;
+    currency: string;
   };
+  product: StripeProduct;
 }
 
 @Component({
@@ -46,6 +49,7 @@ interface PlanOption {
     ErrorRequestComponent,
     ListSubscriptionLoadingComponent,
     TranslateModule,
+    CurrencyPipe,
   ],
 })
 export class ListSubscriptionAiComponent implements OnInit {
@@ -122,7 +126,9 @@ export class ListSubscriptionAiComponent implements OnInit {
             isBestValue: product.metadata.isBestValue,
             originalPrice: product.metadata.originalPrice,
             pricePerMonth: product.metadata.pricePerMonth,
+            currency: product.prices?.[0]?.currency?.toUpperCase(),
           },
+          product,
         });
       });
     };

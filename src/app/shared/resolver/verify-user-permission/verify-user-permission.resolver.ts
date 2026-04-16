@@ -34,7 +34,7 @@ export class VerifyUserPermissionResolver implements Resolve<boolean> {
     return this.preferencesUserAuthenticateService.getToken().pipe(
       map((userData) => {
         if (!userData?.userVerificationData.verificationTokenEmail) {
-          this.router.navigateByUrl('home/verify-token-email');
+          this.router.navigateByUrl('home/code-confirmation');
           return false;
         }
 

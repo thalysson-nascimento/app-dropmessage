@@ -235,7 +235,7 @@
               {{
                 plan.metadata.pricePerMonth
                   | currency
-                    : plan.metadata.currency.toLocaleUpperCase()
+                    : plan.prices?.[0].currency.toUpperCase()
                     : "symbol"
                     : "1.2-2"
               }}
@@ -247,7 +247,7 @@
               {{
                 plan.metadata.ammount
                   | currency
-                    : plan.metadata.currency?.toLocaleUpperCase()
+                    : plan.prices?.[0].currency.toUpperCase()
                     : "symbol"
                     : "1.2-2"
               }}
@@ -257,7 +257,7 @@
               {{
                 plan.metadata.originalPrice
                   | currency
-                    : plan.metadata.currency?.toLocaleUpperCase()
+                    : plan.prices?.[0].currency.toUpperCase()
                     : "symbol"
                     : "1.2-2"
               }}

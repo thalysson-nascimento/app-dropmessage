@@ -1,0 +1,302 @@
+.code-confirmation {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--surface);
+  color: var(--on-surface);
+  font-family: "Be Vietnam Pro", sans-serif;
+
+  /* ================= HEADER ================= */
+  &__header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px;
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 50;
+  }
+
+  &__header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 420px;
+  }
+
+  &__back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scale(0.95);
+    color: var(--primary);
+    cursor: pointer;
+  }
+
+  &__steps {
+    display: flex;
+    gap: 6px;
+  }
+
+  &__step {
+    width: 32px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--surface-container-high);
+
+    &--active {
+      background: var(--primary);
+    }
+
+    &--filled {
+      background: var(--primary-container);
+    }
+  }
+
+  &__spacer {
+    width: 24px;
+  }
+
+  /* ================= MAIN ================= */
+  &__content {
+    flex: 1;
+    padding: 96px 24px 48px; // pt-24 pb-12 px-8
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 420px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* ================= HERO ================= */
+  &__hero {
+    margin-bottom: 48px;
+    position: relative;
+
+    &-outer {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: rgba(59, 130, 246, 0.16);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &-inner {
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      background: rgba(59, 130, 246, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 24px -4px rgba(59, 130, 246, 0.2);
+    }
+
+    &-icon {
+      font-size: 48px;
+      color: #fff;
+      font-variation-settings: "FILL" 1;
+    }
+  }
+
+  /* ================= TEXT ================= */
+  &__text {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  &__title {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  &__subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--on-surface-variant);
+    max-width: 240px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+  }
+
+  &__phone {
+    font-weight: 600;
+    color: var(--on-surface);
+  }
+
+  /* ================= OTP ================= */
+  &__otp {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: clamp(0.5rem, 2vw, 1rem);
+    margin-bottom: 48px;
+  }
+
+  &__verify-button {
+    margin-bottom: 1rem;
+  }
+
+  &__otp-input {
+    flex: 1 1 0;
+    max-width: 56px;
+    min-width: 40px;
+    width: clamp(40px, 10vw, 56px);
+    height: clamp(40px, 10vw, 56px);
+    border-radius: 999px;
+    text-align: center;
+    font-size: clamp(18px, 2vw, 20px);
+    font-weight: 700;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    border: 1px solid rgba(217, 192, 200, 0.3);
+    background: var(--surface-container-low);
+    color: var(--on-surface);
+    transition: all 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+    }
+  }
+
+  &__resend {
+    text-align: center;
+    font-size: 14px;
+    color: var(--on-surface-variant);
+    font-weight: 500;
+
+    button {
+      margin-left: 6px;
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-weight: 700;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  /* ================= SECURITY ================= */
+  &__security {
+    padding: 0 24px 48px;
+    max-width: 420px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  &__security-card {
+    background: var(--surface-container-low);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ================= SECURITY ================= */
+  &__security {
+    padding: 0 32px 48px; // px-8 pb-12
+    max-width: 448px; // equivalente ao max-w-md real
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  &__security-card {
+    background: var(--surface-container-low);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  &__security-icon {
+    min-width: 40px;
+    height: 40px;
+    background: #fff;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      color: var(--primary);
+    }
+  }
+
+  &__security-title {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: 600;
+    color: var(--on-surface);
+  }
+
+  &__security-text {
+    font-size: 12px;
+    color: var(--on-surface-variant);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* DECORATION (ESSENCIAL — faltava isso) */
+  &__security-card::after {
+    content: "";
+    position: absolute;
+    right: -16px;
+    bottom: -16px;
+    width: 64px;
+    height: 64px;
+    background: rgba(156, 59, 109, 0.05);
+    border-radius: 50%;
+  }
+
+  &__security-icon {
+    padding: 8px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+  }
+
+  &__security-title {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: 600;
+  }
+
+  &__security-text {
+    font-size: 12px;
+    color: var(--on-surface-variant);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  &__security-decoration {
+    position: absolute;
+    right: -16px;
+    bottom: -16px;
+    width: 64px;
+    height: 64px;
+    background: rgba(156, 59, 109, 0.05);
+    border-radius: 50%;
+  }
+}

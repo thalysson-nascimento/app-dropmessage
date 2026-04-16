@@ -106,6 +106,7 @@ export interface I18nTranslationsBase {
     titleVerifyEmail: string;
     subtitleVerifyEmail: string;
     invalidCode: string;
+    invalidEmailVerificationCode: string;
     plan: string;
     goldPlanPromotion: string;
     describeGoldPlanPromotion: string;
@@ -179,5 +180,12 @@ export interface I18nTranslationsBase {
     about: string;
     noMessages: string;
     messagesEmptyDescription: string;
+    otpTitle: string;
+    otpDescription: string;
+    verify: string;
+    otpNotReceived: string;
+    resendOtp: string;
+    secureTitle: string;
+    secureDescription: string;
   };
 }

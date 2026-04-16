@@ -268,6 +268,13 @@ export const HomeRouting: Routes = [
             (m) => m.AdmobIntertistialComponent
           ),
       },
+      {
+        path: 'code-confirmation',
+        loadComponent: () =>
+          import('./code-confirmation/code-confirmation.component').then(
+            (m) => m.CodeConfirmationComponent
+          ),
+      },
     ],
   },
 ];

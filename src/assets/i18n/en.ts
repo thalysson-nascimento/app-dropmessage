@@ -139,6 +139,8 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     titleVerifyEmail: 'Check your email',
     subtitleVerifyEmail: 'Check the code that was sent to your email',
     invalidCode: 'Invalid code',
+    invalidEmailVerificationCode:
+      'The verification code sent to your email does not match. Please check it and try again.',
     plan: 'Plan',
     goldPlanPromotion: 'GOLD PLAN PROMOTION',
     describeGoldPlanPromotion:
@@ -224,5 +226,13 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     noMessages: 'No messages yet',
     messagesEmptyDescription:
       'Once you match with someone, you’ll be able to start a conversation here.',
+    otpTitle: 'Enter OTP code',
+    otpDescription: 'OTP code has been sent to',
+    verify: 'Verify',
+    otpNotReceived: "Didn't receive the code?",
+    resendOtp: 'Resend OTP',
+    secureTitle: 'Secure Verification',
+    secureDescription:
+      'We use industry-standard encryption to keep your data safe at all times.',
   },
 };

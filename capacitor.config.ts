@@ -13,8 +13,8 @@ const config: CapacitorConfig = {
       customScheme: 'datingmatch', // Deve coincidir com o esquema do link
       routes: [
         {
-          path: '/verify-token-email',
-          component: 'app-verify-token-email',
+          path: '/code-confirmation',
+          component: 'app-code-confirmation',
         },
       ],
     },

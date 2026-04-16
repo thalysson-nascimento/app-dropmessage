@@ -110,17 +110,37 @@
         </div>
 
         <div class="subscription-ai__price">
-          ${{ plan.metadata.pricePerMonth }}
-          <span>/mo</span>
+          <span>
+            {{
+              plan.metadata.pricePerMonth
+                | currency
+                  : plan.product.prices[0]?.currency?.toUpperCase()
+                  : "symbol"
+                  : "1.2-2"
+            }}
+            <span>/mo</span>
+          </span>
 
           <br />
           @if (plan.metadata.originalPrice) { @if (plan.metadata.ammount) {
           <span class="subscription-ai__plan-price--original">
-            ${{ plan.metadata.ammount }}
+            {{
+              plan.metadata.ammount
+                | currency
+                  : plan.product.prices[0]?.currency?.toUpperCase()
+                  : "symbol"
+                  : "1.2-2"
+            }}
           </span>
           } →
           <span class="subscription-ai__plan-price--old">
-            ${{ plan.metadata.originalPrice }}
+            {{
+              plan.metadata.originalPrice
+                | currency
+                  : plan.product.prices[0]?.currency?.toUpperCase()
+                  : "symbol"
+                  : "1.2-2"
+            }}
           </span>
           }
         </div>
