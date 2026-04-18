@@ -1,0 +1,119 @@
+.video-reward-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.video-reward-card {
+  position: relative;
+  width: min(520px, 100%);
+  padding: 1.75rem;
+  border-radius: 28px;
+  background: rgba(18, 18, 26, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  color: #fff;
+}
+
+.video-reward-card__header {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-top: 1.5rem;
+}
+
+.video-reward-card__header-content {
+  max-width: 100%;
+}
+
+.video-reward-card__header-content h2 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.video-reward-card__header-content p {
+  margin: 0.35rem 0 0;
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+.close-button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1.35rem;
+  line-height: 1;
+  padding: 0;
+  aspect-ratio: 1 / 1;
+  cursor: pointer;
+}
+
+.video-reward-card__body {
+  display: grid;
+  gap: 1rem;
+}
+
+.status-block {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.status-block--error p {
+  color: #ff7a7a;
+}
+
+.status-block--success p {
+  color: #c8ffd7;
+}
+
+.hint {
+  margin: 0;
+  opacity: 0.8;
+  font-size: 0.95rem;
+}
+
+.spinner {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 6px solid rgba(255, 255, 255, 0.12);
+  border-top-color: #9f7fff;
+  animation: spin 1s linear infinite;
+}
+
+.action-button {
+  width: 100%;
+  max-width: 280px;
+  padding: 0.95rem 1.2rem;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #6d3bff, #9f7fff);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

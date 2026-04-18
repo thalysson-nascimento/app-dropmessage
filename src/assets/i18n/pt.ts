@@ -37,6 +37,7 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     sendMessage: 'Mandar mensagem',
     likeUser: 'Curtir {{name}}',
     close: 'Fechar',
+    continue: 'Continuar',
     continueToSubscribe: 'Continuar para assinar',
     createPost: 'Fazer uma postagem',
   },
@@ -74,6 +75,17 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     likeMoreLikes: 'Gostaria de mais curtidas?',
     watchVideoReward:
       'Assista o vídeo publicitário para continuar com mais curtidas.',
+    videoRewardTitle: 'Ganhe +4 curtidas',
+    videoRewardDescription:
+      'Assista um vídeo rápido e aumente suas chances de conquistar matches no app.',
+    videoRewardLoading: 'Carregando o anúncio... aguarde um instante.',
+    videoRewardWebHint:
+      'Navegador detectado. O anúncio será simulado para teste.',
+    videoRewardErrorLoad: 'Não foi possível carregar o anúncio.',
+    videoRewardChecking: 'Recompensa recebida! Validando...',
+    videoRewardReleased: 'Recompensa liberada! Você pode continuar.',
+    videoRewardConfirmError: 'Não foi possível confirmar a recompensa.',
+    videoRewardIncomplete: 'Vídeo não concluído. Você pode tentar novamente.',
     becomeSubscriber: 'Seja um assinante',
     personalizedBenefits: 'Acesse benefícios personalizados',
     explorePremium: 'Explore recursos premium',

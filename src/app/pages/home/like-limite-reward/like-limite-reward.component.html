@@ -1,0 +1,41 @@
+<div class="match-overlay">
+  <div class="match-overlay__backdrop" @backdropFade></div>
+
+  <div class="match-card">
+    <div class="match-card__content" @cardScale>
+      <button
+        class="match-card__close"
+        type="button"
+        aria-label="Close"
+        (click)="close()"
+      >
+        <span class="material-symbols-outlined">close</span>
+      </button>
+
+      <div class="match-card__icon">💜</div>
+
+      <h2 class="match-card__title">Don’t stop now</h2>
+
+      <p class="match-card__subtitle">You’re getting noticed</p>
+
+      <p class="match-card__description">
+        Watch a quick video to keep the momentum going
+      </p>
+
+      <!-- NOVO BLOCO DA IMAGEM -->
+      <div class="match-card__media">
+        <img
+          class="match-card__image"
+          src="assets/images/casal.jpeg"
+          alt="couple"
+        />
+      </div>
+
+      <p class="match-card__hint">Unlock more chances to connect instantly</p>
+
+      <button class="match-card__button" type="button" (click)="watchReward()">
+        Keep swiping
+      </button>
+    </div>
+  </div>
+</div>

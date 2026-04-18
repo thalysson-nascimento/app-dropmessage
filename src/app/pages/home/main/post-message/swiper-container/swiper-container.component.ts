@@ -5,11 +5,13 @@ import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
+  EventEmitter,
   Input,
   NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
+  Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -20,15 +22,14 @@ import { register } from 'swiper/element/bundle';
 import { CardsComponent } from '../../../../../shared/component/cards/cards.component';
 import { ButtonDirective } from '../../../../../shared/directives/button-ia/button-ia.directive';
 import { AIProfileInterface } from '../../../../../shared/interface/ai-profile.interface';
-import {
-  FeedPost,
-  FeedPostCard,
-} from '../../../../../shared/interface/post.interface';
+import { FeedPost } from '../../../../../shared/interface/post.interface';
 import { AiProfilesService } from '../../../../../shared/service/ai-profiles/ai-profiles.service';
 import { LikePostMessageService } from '../../../../../shared/service/like-post-message/like-post-message.service';
 import { LoggerService } from '../../../../../shared/service/logger/logger.service';
 import { PostMessageService } from '../../../../../shared/service/post/post.service';
 import { UnlikePostMessageService } from '../../../../../shared/service/unlike-post-message/unlike-post-message.service';
+import { AdmobVideoRewardComponent } from '../../../admob-video-reward/admob-video-reward.component';
+import { LikeLimiteRewardComponent } from '../../../like-limite-reward/like-limite-reward.component';
 register();
 
 @Component({
@@ -43,32 +44,40 @@ register();
     CardsComponent,
     CardsComponent,
     ButtonDirective,
+    LikeLimiteRewardComponent,
+    AdmobVideoRewardComponent,
   ],
 })
 export class SwiperContainerComponent
   implements OnInit, AfterViewInit, OnChanges, OnDestroy
 {
-  @Input() feedPostCard: FeedPostCard[] = [];
+  @Input() feedPostCard: FeedPost[] = [];
   @Input() profileAI?: { name: string; typeProfle: string; avatar: string } = {
     name: '',
     typeProfle: '',
     avatar: '',
   };
 
+  @Output() closeAdmobModalReward = new EventEmitter<void>();
+
   @ViewChild('swiperRef', { read: ElementRef }) swiperRef!: ElementRef;
 
-  posts: FeedPostCard[] = [];
-  aiProfiles: AIProfileInterface[] = [];
-  currentPage = 1;
-  isLoading = false;
-  isLoadingMore = false;
-  hasMorePosts = true;
-  showLikeButton = true;
-  activePost?: FeedPost;
-  mySwiper: any;
-  likeButtonClicked = false;
-  isLoadingAi = false;
-  showErrorAi = false;
+  public posts: FeedPost[] = [];
+  public aiProfiles: AIProfileInterface[] = [];
+  public currentPage = 1;
+  public isLoading = false;
+  public isLoadingMore = false;
+  public hasMorePosts = true;
+  public showLikeButton = true;
+  public activePost?: FeedPost;
+  public mySwiper: any;
+  public likeButtonClicked = false;
+  public isLoadingAi = false;
+  public showErrorAi = false;
+  public showCard = false;
+  public showRewardCard = false;
+  private pendingLikePostId?: string;
+
   private destroy$ = new Subject<void>();
   private likeQueue = new Subject<string>();
   private unlikeQueue = new Subject<string>();
@@ -106,7 +115,7 @@ export class SwiperContainerComponent
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['feedPostCard'] && !changes['feedPostCard'].firstChange) {
-      const value = changes['feedPostCard'].currentValue as FeedPostCard[];
+      const value = changes['feedPostCard'].currentValue as FeedPost[];
       if (Array.isArray(value)) {
         this.posts = [...value];
         setTimeout(() => this.initializeSwiper(), 50);
@@ -148,6 +157,7 @@ export class SwiperContainerComponent
           this.likePostMessageService.likePostMessage(postId).pipe(
             tap({
               next: (response) => {
+                console.log('like response', response);
                 this.logger
                   .info({
                     pageView: 'PostMessage:Swiper',
@@ -198,6 +208,7 @@ export class SwiperContainerComponent
           this.unlikePostMessageService.unlikePostMessage(postId).pipe(
             tap({
               next: (response) => {
+                console.log('unlike response', response);
                 this.logger
                   .info({
                     pageView: 'PostMessage:Swiper',
@@ -238,6 +249,7 @@ export class SwiperContainerComponent
 
     this.postMessageService.listPost(page).subscribe({
       next: (response) => {
+        console.log('Posts API response:', response);
         const items = response.items ?? [];
         if (page === 1) {
           this.posts = items;
@@ -255,6 +267,12 @@ export class SwiperContainerComponent
 
         if (!this.activePost) {
           this.setActivePost(0);
+        }
+
+        if (response.type.includes('WATCH_VIDEO')) {
+          setTimeout(() => {
+            this.showCard = true;
+          }, 500);
         }
       },
       error: (error) => {
@@ -302,7 +320,13 @@ export class SwiperContainerComponent
 
       this.mySwiper.on('slideChangeTransitionEnd', () => {
         const activeIndex = this.mySwiper.activeIndex;
-        if (activeIndex > 0 && !this.likeButtonClicked) {
+        console.log('activeIndex on slideChangeTransitionEnd', activeIndex);
+
+        if (this.likeButtonClicked && this.pendingLikePostId) {
+          const likedPostId = this.pendingLikePostId;
+          this.pendingLikePostId = undefined;
+          this.removePostById(likedPostId);
+        } else if (activeIndex > 0) {
           const postToRemove = this.posts[activeIndex - 1] as any;
           if (
             postToRemove?.id &&
@@ -312,6 +336,7 @@ export class SwiperContainerComponent
             this.removePostFromSwiper(postToRemove);
           }
         }
+
         this.likeButtonClicked = false;
       });
 
@@ -323,7 +348,7 @@ export class SwiperContainerComponent
 
   setActivePost(index: number) {
     const post = this.posts[index];
-    if (post?.type === 'POST') {
+    if (post?.type.includes('POST')) {
       this.activePost = post as FeedPost;
     } else {
       this.activePost = undefined;
@@ -332,24 +357,34 @@ export class SwiperContainerComponent
 
   updateLikeState(index: number) {
     const post = this.posts[index];
-    this.showLikeButton = post?.type === 'POST';
+    this.showLikeButton = post?.type.includes('POST');
   }
 
   likePostMessage() {
     if (!this.activePost?.id) return;
     this.likeButtonClicked = true;
-    this.likeQueue.next(this.activePost.id);
+    this.pendingLikePostId = this.activePost.id;
+    this.likeQueue.next(this.pendingLikePostId);
     this.mySwiper?.slideNext();
   }
 
   removePostById(postId: string) {
-    const idx = this.posts.findIndex((p) => (p as any).id === postId);
+    const idx = this.posts.findIndex((p) => p.id === postId);
     if (idx === -1) return;
+
+    const currentActiveIndex = this.mySwiper?.activeIndex ?? 0;
     this.posts.splice(idx, 1);
     this.mySwiper?.removeSlide(idx);
     this.mySwiper?.update();
-    this.setActivePost(this.mySwiper?.activeIndex ?? 0);
-    this.updateLikeState(this.mySwiper?.activeIndex ?? 0);
+
+    const nextIndex = Math.min(currentActiveIndex, this.posts.length - 1);
+    if (this.mySwiper && typeof this.mySwiper.slideTo === 'function') {
+      this.mySwiper.slideTo(nextIndex, 0);
+    }
+
+    this.setActivePost(this.mySwiper?.activeIndex ?? nextIndex);
+    this.updateLikeState(this.mySwiper?.activeIndex ?? nextIndex);
+
     if (this.posts.length === 0) {
       this.showLikeButton = false;
     }
@@ -374,5 +409,21 @@ export class SwiperContainerComponent
 
   goToSubscription() {
     this.router.navigateByUrl('home/list-subscription');
+  }
+
+  public closeCard() {
+    console.log('fechado cards');
+    this.showCard = false;
+  }
+
+  public openVideoReward() {
+    this.showCard = false;
+    this.showRewardCard = true;
+  }
+
+  public closeVideoReward() {
+    console.log('fechado video reward');
+    this.closeAdmobModalReward.emit();
+    this.showRewardCard = false;
   }
 }

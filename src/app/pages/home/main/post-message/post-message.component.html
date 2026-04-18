@@ -40,17 +40,19 @@
   </app-error-request>
   } @else {
   <div class="main-content">
-    @switch (postMessage.type) { @case ('AI_SUGGESTION') {
+    @if (postMessage.type.includes('AI_SUGGESTION')) {
     <app-swiper-container
       [feedPostCard]="postMessage.items"
       [profileAI]="profileAI"
+      (closeAdmobModalReward)="closeAdmobModalReward()"
     ></app-swiper-container>
-    } @case ('POST') {
+    } @else if (postMessage.type.includes('POST')) {
     <app-swiper-container
       [feedPostCard]="postMessage.items"
       [profileAI]="profileAI"
+      (closeAdmobModalReward)="closeAdmobModalReward()"
     ></app-swiper-container>
-    }}
+    }
   </div>
   }
 </div>

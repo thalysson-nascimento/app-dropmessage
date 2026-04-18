@@ -1,3 +1,12 @@
+@if (showRewardCard) {
+<app-admob-video-reward (close)="closeVideoReward()"></app-admob-video-reward>
+} @if (showCard) {
+<app-like-limite-reward
+  (closeCard)="closeCard()"
+  (openReward)="openVideoReward()"
+></app-like-limite-reward>
+}
+
 <div class="container">
   @if (!posts || posts.length === 0) {
   <div class="content">
@@ -34,7 +43,7 @@
       grab-cursor="true"
     >
       <swiper-slide *ngFor="let post of posts" class="user-post-image">
-        @if (post.type === 'POST') {
+        @if (post.type.includes('POST')) {
         <div class="post-card">
           <img class="user-post" [src]="post.image" alt="Post image" />
           <div class="contain-user-data">
@@ -62,7 +71,7 @@
         </div>
         } @else {
         <div class="fallback-card">
-          @switch(post.type) { @case('AI_SUGGESTION') {
+          @if (post.type.includes('AI_SUGGESTION')) {
           <div class="content">
             @if (profileAI) {
             <app-cards
@@ -86,7 +95,7 @@
               </div>
             </div>
           </div>
-          } @case('WATCH_VIDEO') {
+          } @else if (post.type.includes('WATCH_VIDEO')) {
           <div class="watch-video-reward">
             <p class="title-no-users-nearby">
               {{ "text.watchVideoReward" | translate }}
@@ -95,15 +104,15 @@
               {{ "text.touchWhatch" | translate }}
             </button>
           </div>
-          } @case('LIKE_LIMIT') {
+          } @else if (post.type.includes('LIKE_LIMIT')) {
           <div class="fallback-content">
             <p>{{ "text.limitLike" | translate }}</p>
           </div>
-          } @default {
+          } @else {
           <div class="fallback-content">
             <p>Conteúdo não suportado</p>
           </div>
-          } }
+          }
         </div>
         }
       </swiper-slide>

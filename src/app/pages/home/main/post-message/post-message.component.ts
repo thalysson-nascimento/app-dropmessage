@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CardLoadingShimmerComponent } from '../../../../shared/component/card-loading-shimmer/card-loading-shimmer.component';
-import { CardsComponent } from '../../../../shared/component/cards/cards.component';
 import { ErrorRequestComponent } from '../../../../shared/component/error-request/error-request.component';
 import { LoadShimmerComponent } from '../../../../shared/component/load-shimmer/load-shimmer.component';
 import { LogoDropmessageComponent } from '../../../../shared/component/logo-dropmessage/logo-dropmessage.component';
@@ -19,7 +18,6 @@ import { SwiperContainerComponent } from './swiper-container/swiper-container.co
   styleUrls: ['./post-message.component.scss'],
   imports: [
     LogoDropmessageComponent,
-    CardsComponent,
     ButtonDirective,
     ErrorRequestComponent,
     CardLoadingShimmerComponent,
@@ -84,6 +82,7 @@ export class PostMessageComponent implements OnInit {
             avatar: 'assets/images/ai-sophia.png',
           };
         }
+
         this.loading = false;
         this.error = false;
       },
@@ -92,5 +91,10 @@ export class PostMessageComponent implements OnInit {
         this.error = true;
       },
     });
+  }
+
+  closeAdmobModalReward() {
+    console.log('carregar novamente os posts');
+    this.loadPostMessage();
   }
 }

@@ -13,7 +13,10 @@ export class ConfirmRewardService {
 
   confirmReward(): Observable<{ success: boolean }> {
     return this.httpClient
-      .post<{ success: boolean }>(`${this.baseURL}/rewards/confirm`, {})
+      .post<{ success: boolean }>(
+        `${this.baseURL}/update-admob-video-reward `,
+        {}
+      )
       .pipe(
         catchError((error) => {
           return throwError(() => error);

@@ -1,11 +1,5 @@
-export type FeedPostCard =
-  | FeedPost
-  | FeedAISuggestion
-  | FeedWatchVideo
-  | FeedLikeLimit;
-
 export interface FeedPost {
-  type: 'POST';
+  type: string[];
 
   id: string;
   image: string;
@@ -24,25 +18,13 @@ export interface FeedPost {
   };
 }
 
-export interface FeedAISuggestion {
-  type: 'AI_SUGGESTION';
-}
-
-export interface FeedWatchVideo {
-  type: 'WATCH_VIDEO';
-}
-
-export interface FeedLikeLimit {
-  type: 'LIKE_LIMIT';
-}
-
 export interface Post {
   page: number;
   totalPages: number;
   totalItems: number;
   interests: string;
-  type: string;
-  items: FeedPostCard[];
+  type: string[];
+  items: FeedPost[];
 }
 
 export interface FeedEmptyResponse {

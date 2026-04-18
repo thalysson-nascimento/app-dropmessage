@@ -1,3 +1,49 @@
-<p>
-  admob-video-reward works!
-</p>
+<div class="video-reward-overlay">
+  <div class="video-reward-card">
+    @if (showButtonClose) {
+    <button
+      class="close-button"
+      type="button"
+      (click)="closeOverlay()"
+      aria-label="{{ 'button.close' | translate }}"
+    >
+      ×
+    </button>
+    }
+
+    <div class="video-reward-card__header">
+      <div class="video-reward-card__header-content">
+        <h2>{{ "text.videoRewardTitle" | translate }}</h2>
+        <p>{{ "text.videoRewardDescription" | translate }}</p>
+      </div>
+    </div>
+
+    <div class="video-reward-card__body">
+      @if (isLoading) {
+      <div class="status-block">
+        <div class="spinner"></div>
+        <p>{{ statusMessage | translate }}</p>
+        @if (isWeb) {
+        <p class="hint">
+          {{ "text.videoRewardWebHint" | translate }}
+        </p>
+        }
+      </div>
+      } @else if (erroLoadVideoReward) {
+      <div class="status-block status-block--error">
+        <p>{{ "text.videoRewardErrorLoad" | translate }}</p>
+        <button class="action-button" type="button" (click)="retry()">
+          {{ "button.tryAgain" | translate }}
+        </button>
+      </div>
+      } @else {
+      <div class="status-block status-block--success">
+        <p>{{ statusMessage | translate }}</p>
+        <button class="action-button" type="button" (click)="closeOverlay()">
+          {{ "button.continue" | translate }}
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+</div>

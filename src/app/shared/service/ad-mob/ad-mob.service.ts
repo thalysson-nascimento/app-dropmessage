@@ -29,7 +29,7 @@ export class AdmobService {
     }
 
     await AdMob.initialize({
-      initializeForTesting: true, // Ativar modo de teste
+      initializeForTesting: false, // Ativar modo de teste
     });
 
     const [trackingInfo, consentInfo] = await Promise.all([
@@ -77,6 +77,16 @@ export class AdmobService {
 
     this.isShowingAd = true;
 
+    if (Capacitor.getPlatform() === 'web') {
+      console.log('[AdMob][MOCK] Reward video mock web');
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          this.isShowingAd = false;
+          resolve({ rewarded: true, completed: true });
+        }, 2800);
+      });
+    }
+
     return new Promise(async (resolve, reject) => {
       let rewarded = false;
 
@@ -121,6 +131,7 @@ export class AdmobService {
 
         const options: RewardAdOptions = {
           adId: 'ca-app-pub-3940256099942544/5224354917', // teste correto
+          // adId: 'ca-app-pub-8691674404508428/7187041674', //anuncio real
           ssv: {
             userId: userData.userHashPublic,
           },
