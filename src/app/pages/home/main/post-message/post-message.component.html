@@ -1,3 +1,12 @@
+@if (showRewardCard) {
+<app-admob-video-reward (close)="closeVideoReward()"></app-admob-video-reward>
+} @if (showCard) {
+<app-like-limite-reward
+  (closeCard)="closeCard()"
+  (openReward)="openVideoReward()"
+></app-like-limite-reward>
+}
+
 <div class="content">
   <div class="header">
     <app-logo-dropmessage [fontSize]="'1rem'"></app-logo-dropmessage>

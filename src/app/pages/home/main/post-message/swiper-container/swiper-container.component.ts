@@ -76,11 +76,12 @@ export class SwiperContainerComponent
   public showErrorAi = false;
   public showCard = false;
   public showRewardCard = false;
-  private pendingLikePostId?: string;
 
+  private pendingLikePostId?: FeedPost;
+  private isRemovingSlide = false;
   private destroy$ = new Subject<void>();
-  private likeQueue = new Subject<string>();
-  private unlikeQueue = new Subject<string>();
+  private likeQueue = new Subject<FeedPost>();
+  private unlikeQueue = new Subject<FeedPost>();
 
   constructor(
     private postMessageService: PostMessageService,
@@ -153,8 +154,15 @@ export class SwiperContainerComponent
   initializeQueues() {
     this.likeQueue
       .pipe(
-        concatMap((postId) =>
-          this.likePostMessageService.likePostMessage(postId).pipe(
+        concatMap((post) => {
+          console.log('Processing like for post:', post);
+
+          // debugger;
+          // if (post.type.includes('WATCH_VIDEO')) {
+          //   this.loadPosts();
+          // }
+
+          return this.likePostMessageService.likePostMessage(post.id).pipe(
             tap({
               next: (response) => {
                 console.log('like response', response);
@@ -163,23 +171,14 @@ export class SwiperContainerComponent
                     pageView: 'PostMessage:Swiper',
                     category: 'like',
                     event: 'success',
-                    message: `liked_${postId}`,
+                    message: `liked_${post.id}`,
                     statusCode: 200,
                     level: 'info',
                   })
                   .pipe(takeUntil(this.destroy$))
                   .subscribe();
 
-                if (response.mustVideoWatch) {
-                  this.goToAdMobVideoReward();
-                }
-                if (response.awaitLikePostMessage) {
-                  this.router.navigate(['home/limit-like-post-message'], {
-                    queryParams: { message: response.message },
-                  });
-                }
-
-                this.removePostById(postId);
+                // this.removePostById(post.id);
               },
               error: (error) => {
                 this.logger
@@ -187,7 +186,7 @@ export class SwiperContainerComponent
                     pageView: 'PostMessage:Swiper',
                     category: 'like',
                     event: 'error',
-                    message: `like_error_${postId}:${
+                    message: `like_error_${post.id}:${
                       error?.message || 'unknown'
                     }`,
                     statusCode: error?.status || 500,
@@ -197,15 +196,15 @@ export class SwiperContainerComponent
                   .subscribe();
               },
             })
-          )
-        )
+          );
+        })
       )
       .subscribe();
 
     this.unlikeQueue
       .pipe(
-        concatMap((postId) =>
-          this.unlikePostMessageService.unlikePostMessage(postId).pipe(
+        concatMap((post) =>
+          this.unlikePostMessageService.unlikePostMessage(post.id).pipe(
             tap({
               next: (response) => {
                 console.log('unlike response', response);
@@ -214,7 +213,7 @@ export class SwiperContainerComponent
                     pageView: 'PostMessage:Swiper',
                     category: 'unlike',
                     event: 'success',
-                    message: `unliked_${postId}`,
+                    message: `unliked_${post.id}`,
                     statusCode: 200,
                     level: 'info',
                   })
@@ -227,7 +226,7 @@ export class SwiperContainerComponent
                     pageView: 'PostMessage:Swiper',
                     category: 'unlike',
                     event: 'error',
-                    message: `unlike_error_${postId}:${
+                    message: `unlike_error_${post.id}:${
                       error?.message || 'unknown'
                     }`,
                     statusCode: error?.status || 500,
@@ -247,15 +246,36 @@ export class SwiperContainerComponent
     if (this.isLoading) return;
     this.isLoading = true;
 
+    if (page > this.currentPage && !this.hasMorePosts) {
+      this.isLoading = false;
+      return;
+    }
+
     this.postMessageService.listPost(page).subscribe({
       next: (response) => {
         console.log('Posts API response:', response);
-        const items = response.items ?? [];
+        let items = response.items ?? [];
+
         if (page === 1) {
           this.posts = items;
         } else {
           this.posts = [...this.posts, ...items];
+          // ✅ Garante apenas um AI_SUGGESTION
+          const aiIndexes = this.posts
+            .map((p, i) =>
+              Array.isArray(p.type) && p.type.includes('AI_SUGGESTION') ? i : -1
+            )
+            .filter((i) => i !== -1);
+
+          if (aiIndexes.length > 1) {
+            const first = aiIndexes[0];
+            this.posts = this.posts.filter(
+              (_, i) => i === first || !aiIndexes.includes(i)
+            );
+          }
         }
+
+        console.log('Posts após atualização:', this.posts);
 
         this.hasMorePosts = page < response.totalPages;
         this.currentPage = page;
@@ -267,12 +287,6 @@ export class SwiperContainerComponent
 
         if (!this.activePost) {
           this.setActivePost(0);
-        }
-
-        if (response.type.includes('WATCH_VIDEO')) {
-          setTimeout(() => {
-            this.showCard = true;
-          }, 500);
         }
       },
       error: (error) => {
@@ -319,29 +333,75 @@ export class SwiperContainerComponent
       });
 
       this.mySwiper.on('slideChangeTransitionEnd', () => {
+        if (this.isRemovingSlide) {
+          return;
+        }
+
         const activeIndex = this.mySwiper.activeIndex;
-        console.log('activeIndex on slideChangeTransitionEnd', activeIndex);
+        const currentPost = this.posts[activeIndex];
+        // Exemplo de regra baseada no objeto do post atual
+        console.log('Current post on slideChangeTransitionEnd:', currentPost);
+        console.log('Current post type:', Array.isArray(currentPost.type));
+        console.log(
+          'Current post type includes WATCH_VIDEO:',
+          currentPost?.type.includes('WATCH_VIDEO')
+        );
+        if (currentPost.type.includes('WATCH_VIDEO')) {
+          setTimeout(() => {
+            this.showCard = true;
+          }, 500);
+        }
+
+        console.log('activeIndex on slideChangeTransitionEnd');
 
         if (this.likeButtonClicked && this.pendingLikePostId) {
           const likedPostId = this.pendingLikePostId;
           this.pendingLikePostId = undefined;
-          this.removePostById(likedPostId);
-        } else if (activeIndex > 0) {
-          const postToRemove = this.posts[activeIndex - 1] as any;
-          if (
-            postToRemove?.id &&
-            postToRemove.id !== 'no-matches' &&
-            postToRemove.id !== 'watch-video-reward'
-          ) {
-            this.removePostFromSwiper(postToRemove);
-          }
+          this.isRemovingSlide = true;
+          this.removePostById(likedPostId.id, true);
+          setTimeout(() => {
+            this.isRemovingSlide = false;
+          });
+          this.likeButtonClicked = false;
+          return;
         }
 
+        // 🚫 NÃO remover automaticamente se foi um LIKE
+        if (!this.likeButtonClicked && activeIndex > 0) {
+          const postToRemove = this.posts[activeIndex - 1] as any;
+
+          if (postToRemove?.id) {
+            this.isRemovingSlide = true;
+
+            this.removePostFromSwiper(postToRemove);
+
+            setTimeout(() => {
+              this.isRemovingSlide = false;
+            });
+          }
+        }
         this.likeButtonClicked = false;
       });
 
       this.mySwiper.on('reachEnd', () => {
-        this.loadMorePosts();
+        if (this.hasMorePosts) {
+          this.loadMorePosts();
+          return;
+        }
+
+        const activeIndex = this.mySwiper.activeIndex;
+        const currentPost = this.posts[activeIndex];
+
+        const isLast = activeIndex === this.posts.length - 1;
+        const hasWatchVideo =
+          Array.isArray(currentPost?.type) &&
+          currentPost.type.includes('WATCH_VIDEO');
+
+        if (isLast && hasWatchVideo) {
+          setTimeout(() => {
+            this.showCard = true;
+          }, 500);
+        }
       });
     });
   }
@@ -362,28 +422,56 @@ export class SwiperContainerComponent
 
   likePostMessage() {
     if (!this.activePost?.id) return;
+
     this.likeButtonClicked = true;
-    this.pendingLikePostId = this.activePost.id;
+    console.log('Liking post with ID ========>:', this.activePost);
+    this.pendingLikePostId = this.activePost;
     this.likeQueue.next(this.pendingLikePostId);
-    this.mySwiper?.slideNext();
+    setTimeout(() => {
+      this.mySwiper?.slideNext();
+    }, 50); // Log posts após curtir
+    setTimeout(() => {
+      console.log('Posts após curtir:', this.posts);
+    }, 500);
   }
 
-  removePostById(postId: string) {
+  removePostById(postId: string, skipSlideTo = false) {
     const idx = this.posts.findIndex((p) => p.id === postId);
     if (idx === -1) return;
 
     const currentActiveIndex = this.mySwiper?.activeIndex ?? 0;
     this.posts.splice(idx, 1);
+
+    // ULTIMA SUGESTÃO DA IA PARA EVITAR OS CARDES DUPLICADOS CONFORME O ULTIMO RESPONSE DO ENDPOINT QUANDO ACABA OS VIDEOS ADS
+    // Após remover o post, garanta que só exista um AI_SUGGESTION
+    // const aiIndexes = this.posts
+    //   .map((p, i) =>
+    //     Array.isArray(p.type) && p.type.includes('AI_SUGGESTION') ? i : -1
+    //   )
+    //   .filter((i) => i !== -1);
+    // if (aiIndexes.length > 1) {
+    //   const first = aiIndexes[0];
+    //   this.posts = this.posts.filter(
+    //     (_, i) => i === first || !aiIndexes.includes(i)
+    //   );
+    // }
+
     this.mySwiper?.removeSlide(idx);
     this.mySwiper?.update();
 
-    const nextIndex = Math.min(currentActiveIndex, this.posts.length - 1);
-    if (this.mySwiper && typeof this.mySwiper.slideTo === 'function') {
-      this.mySwiper.slideTo(nextIndex, 0);
+    if (!skipSlideTo) {
+      const nextIndex = Math.min(currentActiveIndex, this.posts.length - 1);
+      if (this.mySwiper && typeof this.mySwiper.slideTo === 'function') {
+        this.mySwiper.slideTo(nextIndex, 0);
+      }
     }
 
-    this.setActivePost(this.mySwiper?.activeIndex ?? nextIndex);
-    this.updateLikeState(this.mySwiper?.activeIndex ?? nextIndex);
+    const targetIndex = Math.min(
+      this.mySwiper?.activeIndex ?? currentActiveIndex,
+      this.posts.length - 1
+    );
+    this.setActivePost(targetIndex);
+    this.updateLikeState(targetIndex);
 
     if (this.posts.length === 0) {
       this.showLikeButton = false;
@@ -396,11 +484,11 @@ export class SwiperContainerComponent
     if (postId !== 'no-matches' && postId !== 'watch-video-reward') {
       this.dislikePostMessage(postId);
     }
-    this.removePostById(postId);
+    this.removePostById(postId, true);
   }
 
-  dislikePostMessage(postId: string) {
-    this.unlikeQueue.next(postId);
+  dislikePostMessage(postId: any) {
+    this.unlikeQueue.next(postId.id);
   }
 
   goToAdMobVideoReward() {
@@ -423,7 +511,6 @@ export class SwiperContainerComponent
 
   public closeVideoReward() {
     console.log('fechado video reward');
-    this.closeAdmobModalReward.emit();
     this.showRewardCard = false;
   }
 }

@@ -10,6 +10,8 @@ import { ButtonDirective } from '../../../../shared/directives/button-ia/button-
 import { AIProfileInterface } from '../../../../shared/interface/ai-profile.interface';
 import { Post } from '../../../../shared/interface/post.interface';
 import { PostMessageService } from '../../../../shared/service/post/post.service';
+import { AdmobVideoRewardComponent } from '../../admob-video-reward/admob-video-reward.component';
+import { LikeLimiteRewardComponent } from '../../like-limite-reward/like-limite-reward.component';
 import { SwiperContainerComponent } from './swiper-container/swiper-container.component';
 
 @Component({
@@ -25,6 +27,8 @@ import { SwiperContainerComponent } from './swiper-container/swiper-container.co
     TranslateModule,
     SwiperContainerComponent,
     CommonModule,
+    LikeLimiteRewardComponent,
+    AdmobVideoRewardComponent,
   ],
   standalone: true,
 })
@@ -38,6 +42,8 @@ export class PostMessageComponent implements OnInit {
   };
   public postMessage!: Post;
   public aiProfiles!: AIProfileInterface[];
+  public showCard = false;
+  public showRewardCard = false;
 
   constructor(
     private router: Router,
@@ -83,6 +89,14 @@ export class PostMessageComponent implements OnInit {
           };
         }
 
+        if (response.items.length === 1) {
+          if (response.items[0].type.includes('WATCH_VIDEO')) {
+            setTimeout(() => {
+              this.showCard = true;
+            }, 500);
+          }
+        }
+
         this.loading = false;
         this.error = false;
       },
@@ -96,5 +110,20 @@ export class PostMessageComponent implements OnInit {
   closeAdmobModalReward() {
     console.log('carregar novamente os posts');
     this.loadPostMessage();
+  }
+
+  public closeCard() {
+    console.log('fechado cards');
+    this.showCard = false;
+  }
+
+  public openVideoReward() {
+    this.showCard = false;
+    this.showRewardCard = true;
+  }
+
+  public closeVideoReward() {
+    console.log('fechado video reward');
+    this.showRewardCard = false;
   }
 }

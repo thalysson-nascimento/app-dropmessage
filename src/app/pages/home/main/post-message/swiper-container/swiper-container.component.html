@@ -71,7 +71,8 @@
         </div>
         } @else {
         <div class="fallback-card">
-          @if (post.type.includes('AI_SUGGESTION')) {
+          @if (post.type.includes('AI_SUGGESTION') &&
+          post.type.includes('WATCH_VIDEO')) {
           <div class="content">
             @if (profileAI) {
             <app-cards
@@ -95,14 +96,29 @@
               </div>
             </div>
           </div>
-          } @else if (post.type.includes('WATCH_VIDEO')) {
-          <div class="watch-video-reward">
-            <p class="title-no-users-nearby">
-              {{ "text.watchVideoReward" | translate }}
-            </p>
-            <button class="action-button" (click)="goToAdMobVideoReward()">
-              {{ "text.touchWhatch" | translate }}
-            </button>
+          } @else if (post.type.includes('AI_SUGGESTION')) {
+          <div class="content">
+            @if (profileAI) {
+            <app-cards
+              [name]="profileAI.name"
+              [userProfile]="profileAI.typeProfle"
+              [image]="profileAI.avatar"
+              [badge]="'text.ai' | translate"
+            ></app-cards>
+            }
+            <div class="card-explorer-ia">
+              <div class="contain-description">
+                <p class="contain-description-title">
+                  {{ "text.watchVideoReward" | translate }}
+                </p>
+                <span>{{ "text.iaProfileDescription" | translate }}</span>
+              </div>
+              <div class="contain-button">
+                <button appButton (click)="goToIAProfile()">
+                  {{ "button.exploreIaProfile" | translate }}
+                </button>
+              </div>
+            </div>
           </div>
           } @else if (post.type.includes('LIKE_LIMIT')) {
           <div class="fallback-content">
@@ -124,16 +140,6 @@
         <span class="material-symbols-rounded">favorite</span>
       </button>
     </div>
-    } @if (activePost) {
-    <!-- <div class="dislike-row">
-      <button
-        class="dislike-button"
-        type="button"
-        (click)="dislikePostMessage(activePost.id)"
-      >
-        {{ "text.dislike" | translate }}
-      </button>
-    </div> -->
     }
   </div>
   }

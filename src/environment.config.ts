@@ -35,11 +35,11 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
   //   apiKeyGeoLocationCageData: '5f25465dd2a74ba884e38fb29b700814',
   // },
   development: {
-    baseURL: 'https://selections-feeds-framed-starts.trycloudflare.com',
+    baseURL: 'https://shadow-via-showcase-raleigh.trycloudflare.com',
     pathURL: '/api/dev',
     production: false,
     mock: false,
-    baseUrlSocket: 'https://selections-feeds-framed-starts.trycloudflare.com',
+    baseUrlSocket: 'https://shadow-via-showcase-raleigh.trycloudflare.com',
     apiKeyGeoLocationCageData: '5f25465dd2a74ba884e38fb29b700814',
   },
 };
