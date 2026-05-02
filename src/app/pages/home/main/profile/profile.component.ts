@@ -90,12 +90,12 @@ export class ProfileComponent implements OnInit {
           icon: 'security',
           route: 'home/privacy-police',
         },
-        {
-          label: 'Testar banner Admob',
-          description: 'See how we protect your information',
-          icon: 'security',
-          route: 'home/admob-intertistial',
-        },
+        // {
+        //   label: 'Testar banner Admob',
+        //   description: 'See how we protect your information',
+        //   icon: 'security',
+        //   route: 'home/admob-intertistial',
+        // },
       ],
     },
   ];
