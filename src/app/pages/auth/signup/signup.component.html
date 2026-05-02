@@ -101,11 +101,40 @@
       }}</span>
     </p>
   </div>
+
+  <button (click)="modalSuccess.open()">teste</button>
+  <button (click)="modalError.open()">teste error''</button>
 </div>
 
-<app-error-modal #modalErrorRequest [type]="typeErrorModal">
-  <p>
-    <strong>{{ "text.titleError" | translate }}</strong>
-  </p>
-  <p class="description-error">{{ errorMessage }}</p>
-</app-error-modal>
+<app-modal #modalSuccess>
+  <app-feedback-overlay
+    variant="success"
+    icon="celebration"
+    [title]="'text.createAccountSuccess' | translate"
+    [description]="'text.descriptionCreateAccountSuccess' | translate"
+  ></app-feedback-overlay>
+
+  <button appButton (click)="goToAuthSign()">
+    {{ "button.goToLogin" | translate }}
+  </button>
+</app-modal>
+
+<app-modal #modalError>
+  <app-feedback-overlay
+    variant="error"
+    [title]="'text.errorSomethingWentWrong' | translate"
+    [description]="errorMessage"
+  ></app-feedback-overlay>
+
+  <button appButton (click)="tryAgain()">
+    {{ "button.tryAgain" | translate }}
+  </button>
+  <button
+    appButton="ghost"
+    class="btn-ghost"
+    variant="ghost"
+    (click)="closeModal()"
+  >
+    {{ "button.cancel" | translate }}
+  </button>
+</app-modal>

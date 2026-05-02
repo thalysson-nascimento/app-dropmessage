@@ -18,7 +18,8 @@ import { App } from '@capacitor/app';
 import { Device } from '@capacitor/device';
 import { TranslateModule } from '@ngx-translate/core';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
-import { ErrorModalComponent } from '../../../shared/component/error-modal/error-modal.component';
+import { FeedbackOverlayComponent } from '../../../shared/component/feedback-overlay/feedback-overlay.component';
+import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { CreateAccount } from '../../../shared/interface/create-account.interface';
@@ -35,8 +36,9 @@ declare let gtag: Function;
 
 const SharedComponents = [
   InputCustomDirective,
-  ErrorModalComponent,
   ButtonDirective,
+  ModalComponent,
+  FeedbackOverlayComponent,
 ];
 
 const CoreModule = [ReactiveFormsModule, CommonModule, TranslateModule];
@@ -53,10 +55,12 @@ export class SignupComponent implements OnInit {
   createAccountFormGroup!: FormGroup;
   isLoadingButton: boolean = false;
   user: any = null;
-  errorMessage: unknown;
+  errorMessage!: string;
   isLoadingButtonGoogleOAuth: boolean = false;
-  @ViewChild('modalErrorRequest') modalErrorRequest!: ErrorModalComponent;
   typeErrorModal: 'success' | 'warn' | 'error' = 'success';
+
+  @ViewChild('modalError') modalError!: ModalComponent;
+  @ViewChild('modalSuccess') modalSuccess!: ModalComponent;
 
   constructor(
     private router: Router,
@@ -110,7 +114,8 @@ export class SignupComponent implements OnInit {
               this.userHashPublicService.setUserHashPublic(
                 response.userVerificationData.userHashPublic
               );
-              this.router.navigateByUrl('home/user-welcome');
+              this.modalSuccess.open();
+              // this.router.navigateByUrl('home/user-welcome');
             },
             error: (errorResponse: any) => {
               gtag('event', 'error_create_account_with_google', {
@@ -125,7 +130,7 @@ export class SignupComponent implements OnInit {
               this.typeErrorModal = 'warn';
               this.errorMessage = errorResponse.error.message;
               this.isLoadingButtonGoogleOAuth = false;
-              this.modalErrorRequest.open();
+              this.modalError.open();
             },
           });
       }
@@ -133,7 +138,7 @@ export class SignupComponent implements OnInit {
       this.typeErrorModal = 'warn';
       this.errorMessage = errorResponse.error.message;
       this.isLoadingButtonGoogleOAuth = false;
-      this.modalErrorRequest.open();
+      this.modalError.open();
     }
   }
 
@@ -180,17 +185,18 @@ export class SignupComponent implements OnInit {
           gtag('event', 'create_account', {
             page_path: '/cadastro',
           });
-
-          this.router.navigateByUrl('auth/information-user-registred');
-        },
-
-        error: (error) => {
-          this.openBottomSheet('Ops, ocorreu um erro.', error.error.message);
-        },
-
-        complete: () => {
-          this.isLoadingButton = false;
           this.buttonDisalbled = false;
+          this.isLoadingButton = false;
+          this.createAccountFormGroup.reset();
+          this.modalSuccess.open();
+        },
+
+        error: (errorResponse) => {
+          // this.openBottomSheet('Ops, ocorreu um erro.', error.error.message);
+          this.modalError.open();
+          this.buttonDisalbled = false;
+          this.isLoadingButton = false;
+          this.errorMessage = errorResponse.error.message;
         },
       });
     } catch (error) {
@@ -226,5 +232,14 @@ export class SignupComponent implements OnInit {
 
   goToPrivecePolice() {
     this.router.navigateByUrl('auth/privacy-police');
+  }
+
+  tryAgain() {
+    this.modalError.close();
+    this.createAccountUser();
+  }
+
+  closeModal() {
+    this.modalError.close();
   }
 }

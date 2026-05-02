@@ -130,8 +130,8 @@ export class AdmobService {
         );
 
         const options: RewardAdOptions = {
-          adId: 'ca-app-pub-3940256099942544/5224354917', // teste correto
-          // adId: 'ca-app-pub-8691674404508428/7187041674', //anuncio real
+          // adId: 'ca-app-pub-3940256099942544/5224354917', // teste correto
+          adId: 'ca-app-pub-8691674404508428/7187041674', //anuncio real
           ssv: {
             userId: userData.userHashPublic,
           },
@@ -201,7 +201,8 @@ export class AdmobService {
         );
 
         const prepared = await AdMob.prepareInterstitial({
-          adId: 'ca-app-pub-3940256099942544/1033173712', // teste correto
+          adId: 'ca-app-pub-8691674404508428/6895932094',
+          // adId: 'ca-app-pub-3940256099942544/1033173712', // teste correto
         });
 
         if (!prepared) {

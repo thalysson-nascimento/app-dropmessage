@@ -178,6 +178,13 @@
     color: var(--on-surface-variant);
     font-weight: 500;
 
+    &--contain-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
     button {
       margin-left: 6px;
       background: none;
@@ -185,6 +192,7 @@
       color: var(--primary);
       font-weight: 700;
       cursor: pointer;
+      flex: 1;
 
       &:hover {
         opacity: 0.7;

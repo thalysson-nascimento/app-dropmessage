@@ -74,7 +74,16 @@
       <span>{{ "text.otpNotReceived" | translate }}</span>
 
       <button (click)="onResend()">
-        {{ "text.resendOtp" | translate }}
+        <div class="code-confirmation__resend--contain-button">
+          {{ "text.resendOtp" | translate }}
+          @if (resending) {
+          <app-spinner
+            [size]="12"
+            color="#666"
+            backgroundColor="#999"
+          ></app-spinner>
+          }
+        </div>
       </button>
     </div>
   </main>

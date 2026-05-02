@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -20,13 +20,7 @@ import { DataConnectChatMessageService } from '../../../../../shared/service/dat
 @Component({
   selector: 'app-notification-item',
   templateUrl: './notification-item.component.html',
-  imports: [
-    DatePipe,
-    CommonModule,
-    ModalComponent,
-    ButtonDirective,
-    TranslateModule,
-  ],
+  imports: [CommonModule, ModalComponent, ButtonDirective, TranslateModule],
   standalone: true,
   styleUrls: ['./notification-item.component.scss'],
 })

@@ -270,5 +270,8 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     post_visible_subtitle:
       'Seu post já está visível para seus matches e publicado temporariamente.',
     active_posts: 'POSTS ATIVOS',
+    createAccountSuccess: '|o| Sua conta foi criada com sucesso!',
+    descriptionCreateAccountSuccess:
+      'Sua conta foi cadastrada com sucesso, faça login e confirme o token enviado para seu email.',
   },
 };

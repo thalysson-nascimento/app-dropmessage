@@ -194,5 +194,7 @@ export interface I18nTranslationsBase {
     post_visible_subtitle: string;
     post_is_live: string;
     active_posts: string;
+    createAccountSuccess: string;
+    descriptionCreateAccountSuccess: string;
   };
 }

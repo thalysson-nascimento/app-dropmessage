@@ -18,6 +18,7 @@ import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-a
 import { CodeConfirmationEmailService } from '../../../shared/service/code-confirmation-email/code-confirmation-email.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
+import { ResendCodeConfirmationEmailService } from '../../../shared/service/resend-code-confirmation-email/resend-code-confirmation-email.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 
@@ -33,6 +34,7 @@ import { UserHashPublicService } from '../../../shared/service/user-hash-public/
     SpinnerComponent,
     ModalComponent,
     FeedbackOverlayComponent,
+    SpinnerComponent,
   ],
 })
 export class CodeConfirmationComponent implements OnInit {
@@ -42,6 +44,7 @@ export class CodeConfirmationComponent implements OnInit {
   public invalidCode: boolean = false;
   public pageView: string = 'DatingMatch:VerifyTokenEmail';
   public destroy$: Subject<void> = new Subject<void>();
+  public resending = false;
 
   public steps = [1, 2, 3];
   public currentStep = 0;
@@ -62,7 +65,8 @@ export class CodeConfirmationComponent implements OnInit {
     private cacheAvatarService: CacheAvatarService,
     private userHashPublicService: UserHashPublicService,
     private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
-    private loggerService: LoggerService
+    private loggerService: LoggerService,
+    private resendCodeConfirmationEmailService: ResendCodeConfirmationEmailService
   ) {}
 
   ngOnInit() {
@@ -207,7 +211,47 @@ export class CodeConfirmationComponent implements OnInit {
   }
 
   onResend() {
+    this.resending = true;
+    this.form.reset();
+
     console.log('Resend OTP');
+    this.resendCodeConfirmationEmailService.resendConfirmation().subscribe({
+      next: (response) => {
+        console.log('OTP resent:', response);
+        const loggerGender: TrackAction = {
+          pageView: this.pageView,
+          category: 'user_resend_token_email',
+          event: 'click',
+          label: 'botao:Reenviar codigo email',
+          message: 'codigo de email reenviado',
+          statusCode: 200,
+          level: 'info',
+        };
+
+        this.loggerService
+          .info(loggerGender)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe();
+        this.resending = false;
+      },
+      error: (error) => {
+        const loggerGender: TrackAction = {
+          pageView: this.pageView,
+          category: 'user_resend_token_email',
+          event: 'click',
+          label: 'botao:Reenviar codigo email',
+          message: error.message,
+          statusCode: 402,
+          level: 'error',
+        };
+
+        this.loggerService
+          .info(loggerGender)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe();
+        this.resending = false;
+      },
+    });
   }
 
   onBack() {
