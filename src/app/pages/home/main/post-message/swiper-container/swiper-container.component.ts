@@ -501,6 +501,7 @@ export class SwiperContainerComponent
 
   public closeCard() {
     console.log('fechado cards');
+    this.loadPosts(1);
     this.showCard = false;
   }
 
@@ -512,5 +513,6 @@ export class SwiperContainerComponent
   public closeVideoReward() {
     console.log('fechado video reward');
     this.showRewardCard = false;
+    this.loadPosts(1);
   }
 }

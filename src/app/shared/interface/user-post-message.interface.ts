@@ -9,7 +9,7 @@ export interface UserPostMessage {
 export interface UserPostMessageElement {
   id: string;
   image: string;
-  createdAt: Date;
+  updatedAt: string;
   typeExpirationTimer: string;
   isExpired: boolean;
   totalLikes: number;

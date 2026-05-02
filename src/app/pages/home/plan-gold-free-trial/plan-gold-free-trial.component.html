@@ -17,22 +17,20 @@
     <div class="success-card">
       <div class="card-glow"></div>
 
-      <h2 class="card-title">Parabéns!</h2>
-
+      <h2 class="card-title">{{ "text.plan_gold_congrats" | translate }}</h2>
       <p class="card-description">
-        Você ganhou 7 dias de assinatura DatingMatch Gold por publicar seu
-        primeiro Post.
+        {{ "text.plan_gold_description" | translate }}
       </p>
 
       <div class="actions">
         <button appButton (click)="goBack()">
-          Ir para o Feed
+          {{ "button.go_to_feed" | translate }}
           <span class="material-symbols-outlined">arrow_forward</span>
         </button>
 
         <button appButton="secondary" (click)="takePicture()">
           <span class="material-symbols-outlined">add_box</span>
-          Criar outro Post
+          {{ "button.create_another_post" | translate }}
         </button>
       </div>
     </div>
@@ -40,7 +38,7 @@
     <div class="success-card success-card--not-aligned">
       <div class="content-text">
         <span class="material-symbols-outlined"> local_fire_department </span>
-        <span class="text">Seu Post está no ar!</span>
+        <span class="text">{{ "text.post_is_live" | translate }}</span>
       </div>
       <div class="description">
         <p>
@@ -62,7 +60,9 @@
 
     <div class="success-card success-card--not-aligned">
       <div class="content-text">
-        <span class="text text--no-margin">Desbloqueados para 7 dias!</span>
+        <span class="text text--no-margin">{{
+          "text.unlocked_for_7_days" | translate
+        }}</span>
       </div>
 
       <div class="content-feature-item">
@@ -76,8 +76,8 @@
             </div>
 
             <div class="text">
-              <span class="title">{{ item.title }}</span>
-              <span class="subtitle">{{ item.subtitle }}</span>
+              <span class="title">{{ item.title | translate }}</span>
+              <span class="subtitle">{{ item.subtitle | translate }}</span>
             </div>
           </div>
           }

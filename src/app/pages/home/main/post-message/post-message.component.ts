@@ -114,6 +114,7 @@ export class PostMessageComponent implements OnInit {
 
   public closeCard() {
     console.log('fechado cards');
+    this.loadPostMessage();
     this.showCard = false;
   }
 
@@ -125,5 +126,6 @@ export class PostMessageComponent implements OnInit {
   public closeVideoReward() {
     console.log('fechado video reward');
     this.showRewardCard = false;
+    this.loadPostMessage();
   }
 }

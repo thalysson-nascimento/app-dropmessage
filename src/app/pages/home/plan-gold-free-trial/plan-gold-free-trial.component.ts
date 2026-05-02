@@ -24,23 +24,23 @@ export class PlanGoldFreeTrialComponent implements OnInit {
   features: FeatureItem[] = [
     {
       icon: 'block',
-      title: 'Sem anúncios',
-      subtitle: 'Navegue sem interrupções',
+      title: 'text.feature_no_ads',
+      subtitle: 'text.feature_no_interruptions',
     },
     {
       icon: 'favorite',
-      title: '300 curtidas',
-      subtitle: 'Receba até 300 likes',
+      title: 'text.feature_300_likes',
+      subtitle: 'text.feature_300_likes_subtitle',
     },
     {
       icon: 'location_on',
-      title: 'Localização dos matchs',
-      subtitle: 'Veja onde seus matchs estão',
+      title: 'text.feature_see_match_location',
+      subtitle: 'text.feature_see_match_location_subtitle',
     },
     {
       icon: 'visibility',
-      title: 'Veja quem curtiu você',
-      subtitle: 'Descubra quem demonstrou interesse',
+      title: 'text.feature_see_who_liked',
+      subtitle: 'text.feature_discover_interest',
     },
   ];
 

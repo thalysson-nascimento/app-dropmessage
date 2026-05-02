@@ -1,3 +1,16 @@
-<div class="ai-badge">
-  <span class="status-dot"></span> <span class="ai-title">{{ title }}</span>
+<div
+  class="ai-badge"
+  [ngStyle]="{
+    padding: padding
+  }"
+>
+  <span class="status-dot"></span>
+  <span
+    class="ai-title"
+    [ngStyle]="{
+      'font-size': fontSize
+    }"
+  >
+    {{ title }}
+  </span>
 </div>

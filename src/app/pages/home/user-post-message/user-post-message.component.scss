@@ -44,19 +44,45 @@ section {
   column-count: 2;
 }
 
-.image-container {
+// BEM STRUCTURE
+.user-post-message__image-wrapper {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.user-post-message__badge {
+  position: absolute;
+  top: 0.3rem;
+  left: 0.3rem;
+  z-index: 2;
+  margin: 0;
+  width: 100%;
+}
+
+.user-post-message__image-container {
   position: relative;
 }
 
-.overlay {
+.user-post-message__image {
+  width: 100%;
+  height: 12rem;
+  border-radius: 1rem;
+  margin-bottom: var(--space-small);
+  object-fit: cover;
+  display: block;
+}
+
+.user-post-message__overlay {
   position: absolute;
-  bottom: 10px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
   padding: var(--space-small);
   border-end-end-radius: 1rem;
   border-end-start-radius: 1rem;
-  background: rgba(53, 53, 53, 0.2); /* efeito de vidro */
-  backdrop-filter: blur(5px); /* suaviza o efeito de vidro */
+  background: rgba(53, 53, 53, 0.2);
+  backdrop-filter: blur(5px);
   color: #fff;
   font-size: 0.875rem;
   display: flex;
@@ -64,7 +90,7 @@ section {
   justify-content: start;
 }
 
-.heart-like {
+.user-post-message__heart-like {
   width: 1rem;
   height: 1rem;
   margin-right: var(--space-small);

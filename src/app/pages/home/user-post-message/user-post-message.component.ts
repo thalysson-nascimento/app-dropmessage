@@ -2,6 +2,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { BadgeCircleComponent } from '../../../shared/component/badge-circle/badge-circle.component';
 import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
 import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
 import { UserPostMessageElement } from '../../../shared/interface/user-post-message.interface';
@@ -17,7 +18,7 @@ const CoreModule = [NgIf, NgFor, TranslateModule];
   templateUrl: './user-post-message.component.html',
   styleUrls: ['./user-post-message.component.scss'],
   standalone: true,
-  imports: [SahredComponents, CoreModule],
+  imports: [SahredComponents, CoreModule, BadgeCircleComponent],
 })
 export class UserPostMessageComponent implements OnInit {
   isLoading: boolean = true;
@@ -54,6 +55,7 @@ export class UserPostMessageComponent implements OnInit {
   loadUserPostMessage() {
     return this.userPostMessageService.userPostMessage().subscribe({
       next: (response) => {
+        console.log('User Post Message API response:', response);
         this.listPostMessage = response.userPostMessages;
         this.listPostMessage.forEach(() => {
           this.randomHeights.push(this.getRandomHeight());

@@ -40,6 +40,8 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     continue: 'Continuar',
     continueToSubscribe: 'Continuar para assinar',
     createPost: 'Fazer uma postagem',
+    go_to_feed: 'Ir para o Feed',
+    create_another_post: 'Criar outro Post',
   },
   input: {
     placeholder: {
@@ -250,5 +252,18 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     secureTitle: 'Verificação Segura',
     secureDescription:
       'Utilizamos criptografia padrão da indústria para manter seus dados seguros.',
+    plan_gold_congrats: 'Parabéns!',
+    plan_gold_description:
+      'Você ganhou 7 dias de assinatura DatingMatch Gold por publicar seu primeiro Post.',
+    post_is_live: 'Seu Post está no ar!',
+    unlocked_for_7_days: 'Desbloqueados para 7 dias!',
+    feature_no_ads: 'Sem anúncios',
+    feature_no_interruptions: 'Navegue sem interrupções',
+    feature_300_likes: 'Likes ilimitados',
+    feature_300_likes_subtitle: 'Curta quantos perfis quiser',
+    feature_see_match_location: 'Localização dos matchs',
+    feature_see_match_location_subtitle: 'Veja onde seus matchs estão',
+    feature_see_who_liked: 'Veja quem curtiu você',
+    feature_discover_interest: 'Descubra quem demonstrou interesse',
   },
 };
