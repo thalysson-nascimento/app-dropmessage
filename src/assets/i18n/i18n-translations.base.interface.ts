@@ -32,6 +32,8 @@ export interface I18nTranslationsBase {
     continueToSubscribe: string;
     createPost: string;
     comingSoon: string;
+    go_to_feed: string;
+    create_another_post: string;
   };
   input: {
     placeholder: {
@@ -188,5 +190,9 @@ export interface I18nTranslationsBase {
     resendOtp: string;
     secureTitle: string;
     secureDescription: string;
+    all_set: string;
+    post_visible_subtitle: string;
+    post_is_live: string;
+    active_posts: string;
   };
 }

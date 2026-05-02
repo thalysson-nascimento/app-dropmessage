@@ -262,5 +262,9 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     feature_see_match_location_subtitle: 'See where your matches are',
     feature_see_who_liked: 'See who liked you',
     feature_discover_interest: 'Discover who showed interest',
+    all_set: 'All set!',
+    post_visible_subtitle:
+      'Your post is now visible to your matches and temporarily published.',
+    active_posts: 'ACTIVE POSTS',
   },
 };

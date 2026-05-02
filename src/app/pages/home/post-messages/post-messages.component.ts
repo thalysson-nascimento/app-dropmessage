@@ -26,7 +26,7 @@ import { SystemUnavailableComponent } from '../../../shared/component/system-una
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
 import { LastLoggedUsers } from '../../../shared/interface/last-logged-users.interface';
-import { FeedPostCard } from '../../../shared/interface/post.interface';
+import { FeedPost } from '../../../shared/interface/post.interface';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { LastLoggedUsersService } from '../../../shared/service/last-logged-users/last-logged-users.service';
@@ -647,7 +647,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe();
   }
 
-  dislikePostMessage(post: FeedPostCard) {
+  dislikePostMessage(post: FeedPost) {
     this.unlikePostMessageQueue.next((post as any).id);
   }
 

@@ -15,14 +15,14 @@
     <div class="success-card">
       <div class="card-glow"></div>
 
-      <h2 class="card-title">Tudo certo!</h2>
+      <h2 class="card-title">{{ "text.all_set" | translate }}</h2>
 
       <p class="card-description">
-        Seu post já está visível para seus matches e publicado temporariamente.
+        {{ "text.post_visible_subtitle" | translate }}
       </p>
 
       <div class="posts-section">
-        <p class="posts-label">Posts Ativos</p>
+        <p class="posts-label">{{ "text.active_posts" | translate }}</p>
 
         <div class="posts-list">
           @for(item of sharedPost?.listActivePost; track item) {
@@ -40,7 +40,7 @@
 
       <div class="actions">
         <button appButton class="btn-primary" (click)="goBack()">
-          Ir para o Feed
+          {{ "button.go_to_feed" | translate }}
           <span class="material-symbols-outlined">arrow_forward</span>
         </button>
 
@@ -50,7 +50,7 @@
           (click)="takePicture()"
         >
           <span class="material-symbols-outlined">add_box</span>
-          Criar outro Post
+          {{ "button.create_another_post" | translate }}
         </button>
       </div>
     </div>
@@ -58,7 +58,7 @@
     <div class="success-card success-card--not-aligned">
       <div class="content-text">
         <span class="material-symbols-outlined"> local_fire_department </span>
-        <span class="text">Seu Post está no ar!</span>
+        <span class="text">{{ "text.post_visible_title" | translate }}</span>
       </div>
       <div class="description">
         <p>
