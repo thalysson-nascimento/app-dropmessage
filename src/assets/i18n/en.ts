@@ -41,6 +41,7 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     createPost: 'Create a post',
     go_to_feed: 'Go to Feed',
     create_another_post: 'Create another Post',
+    comingSoon: 'Premium Coming Soon',
   },
   input: {
     placeholder: {

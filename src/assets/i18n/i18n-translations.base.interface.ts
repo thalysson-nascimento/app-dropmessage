@@ -31,6 +31,7 @@ export interface I18nTranslationsBase {
     close: string;
     continueToSubscribe: string;
     createPost: string;
+    comingSoon: string;
   };
   input: {
     placeholder: {

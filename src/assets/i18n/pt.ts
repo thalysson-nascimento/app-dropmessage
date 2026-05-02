@@ -42,6 +42,7 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     createPost: 'Fazer uma postagem',
     go_to_feed: 'Ir para o Feed',
     create_another_post: 'Criar outro Post',
+    comingSoon: 'Em breve...',
   },
   input: {
     placeholder: {
