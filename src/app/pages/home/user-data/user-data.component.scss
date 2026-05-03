@@ -185,6 +185,29 @@
   &__detail-value {
     font-weight: 700;
     color: #0f172a;
+    &--profession {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      vertical-align: middle;
+    }
+  }
+
+  &__profession-text {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+  }
+
+  &__profession-icon {
+    font-size: 1.3em;
+    color: #94a3b8;
+    margin-left: 0.25rem;
+    vertical-align: middle;
+    display: inline-flex;
+    align-items: center;
   }
 }
 

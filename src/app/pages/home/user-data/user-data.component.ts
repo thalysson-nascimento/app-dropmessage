@@ -106,7 +106,14 @@ export class UserDataComponent implements OnInit, OnDestroy {
 
   professionFormBuilder() {
     this.professionFormGroup = this.formBuilder.group({
-      profession: ['', [Validators.required]],
+      profession: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(12),
+        ],
+      ],
     });
   }
 

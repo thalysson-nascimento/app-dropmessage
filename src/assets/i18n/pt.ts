@@ -63,7 +63,8 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     or: 'ou',
     linkDoNotAccount: `Ainda não tem uma conta?`,
     titleError: 'Ops, erro de requisição!',
-    descriptionError: '',
+    descriptionError:
+      'Error ao realizar a requisição, tente novamente mais tarde.',
     titleCreateAccount: 'Crie sua conta',
     profileCreatedSuccess: 'Perfil cadastrado com sucesso',
     backToLogin: 'Volte para a tela de login e continue o seu cadastro',
@@ -140,7 +141,7 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     version: 'Versão',
     titleErrorLocation: 'Ops, erro de localização',
     descriptionErrorLocation:
-      ' Não foi possível obter sua localização, para continuar clique no botão abaixo, ou acesse as configurações doseu disposivo.',
+      'Não foi possível obter sua localização, para continuar clique no botão abaixo, ou acesse as configurações doseu disposivo.',
     errorRequestLocation:
       'Houve um erro de requisição, tente novamente mais tarde.',
     errorSomethingWentWrong: 'Ops, algo deu errado!',

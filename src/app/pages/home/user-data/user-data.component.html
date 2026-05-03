@@ -142,8 +142,15 @@
             <span class="material-symbols-outlined">work</span>
             <span>Profession</span>
           </div>
-          <span class="user-data__detail-value">
-            {{ user.details.profession }}
+          <span
+            class="user-data__detail-value user-data__detail-value--profession"
+          >
+            <span class="user-data__profession-text">{{
+              user.details.profession
+            }}</span>
+            <span class="material-symbols-outlined user-data__profession-icon"
+              >chevron_right</span
+            >
           </span>
         </div>
       </div>

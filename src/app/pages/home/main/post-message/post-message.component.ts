@@ -87,6 +87,15 @@ export class PostMessageComponent implements OnInit {
                 : 'Provocative',
             avatar: 'assets/images/ai-sophia.png',
           };
+        } else {
+          this.profileAI = {
+            name: 'Sophia',
+            typeProfle:
+              this.translate.currentLang === 'pt'
+                ? 'Provocante'
+                : 'Provocative',
+            avatar: 'assets/images/ai-sophia.png',
+          };
         }
 
         if (response.items.length === 1) {
