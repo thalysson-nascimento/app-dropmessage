@@ -42,6 +42,7 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     go_to_feed: 'Go to Feed',
     create_another_post: 'Create another Post',
     comingSoon: 'Premium Coming Soon',
+    save: 'Save',
   },
   input: {
     placeholder: {
@@ -269,5 +270,8 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     createAccountSuccess: '|o| Your account was created successfully!',
     descriptionCreateAccountSuccess:
       'Your account has been successfully registered. Please log in and confirm the token sent to your email.',
+    professionTitle: 'What do you do for a living?',
+    professionDescription:
+      'Add your profession so people can learn a little more about your daily life.',
   },
 };

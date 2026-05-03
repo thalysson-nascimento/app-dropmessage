@@ -129,6 +129,16 @@
 
         <div class="user-data__detail-row">
           <div class="user-data__detail-left">
+            <span class="material-symbols-outlined">groups</span>
+            <span>Interest</span>
+          </div>
+          <span class="user-data__detail-value">
+            {{ user.details.interests }}
+          </span>
+        </div>
+
+        <div class="user-data__detail-row" (click)="userProfessional()">
+          <div class="user-data__detail-left">
             <span class="material-symbols-outlined">work</span>
             <span>Profession</span>
           </div>
@@ -138,6 +148,7 @@
         </div>
       </div>
     </section>
+    <hr class="user-data__divider" />
     }
   </div>
   <div class="action-button">
@@ -183,10 +194,12 @@
 <app-modal #modalRequesteError>
   <app-feedback-overlay
     variant="error"
-    title="Ops, Algo deu errado!"
-    description="Não foi possível conectar ao servidor para compartilhar seu post. Verifique sua conexão e tente novamente."
+    [title]="'text.titleErrorRequest' | translate"
+    [description]="'text.descriptionErrorRequest' | translate"
   ></app-feedback-overlay>
-  <button appButton (click)="deleteAccount()">Try again</button>
+  <button appButton (click)="deleteAccount()">
+    {{ "button.tryAgain" | translate }}
+  </button>
 
   <button
     appButton="ghost"
@@ -195,6 +208,67 @@
     [disabled]="buttonDisalbled"
     (click)="closeModalRequesteError()"
   >
-    Close
+    {{ "button.close" | translate }}
+  </button>
+</app-modal>
+
+<app-modal #modalUserProfessional>
+  <app-feedback-overlay
+    variant="success"
+    icon="badge"
+    [title]="'text.professionTitle' | translate"
+    [description]="'text.professionDescription' | translate"
+  ></app-feedback-overlay>
+
+  <form [formGroup]="professionFormGroup" (ngSubmit)="saveProfession()">
+    <input
+      type="email"
+      [placeholder]="'Profession' | translate"
+      appInputCustom
+      class="user-data__input-custom"
+      formControlName="profession"
+    />
+    <button
+      appButton="primary"
+      type="submit"
+      [disabled]="professionFormGroup.invalid || professionButtonDisabled"
+    >
+      @if(professionLoading) {
+      <app-spinner></app-spinner>
+      }@else {
+      {{ "button.save" | translate }}
+      }
+    </button>
+  </form>
+
+  <button
+    appButton="ghost"
+    class="btn-ghost"
+    variant="ghost"
+    [disabled]="buttonDisalbled"
+    (click)="closeModalProfession()"
+  >
+    {{ "button.close" | translate }}
+  </button></app-modal
+>
+
+<app-modal #modalProfessionErrorRequest>
+  <app-feedback-overlay
+    variant="error"
+    [title]="'text.errorSomethingWentWrong' | translate"
+    [description]="'text.describeErrorTryAgain' | translate"
+  ></app-feedback-overlay>
+  <button appButton (click)="saveProfession()">
+    {{ "button.tryAgain" | translate }}
+  </button>
+
+  <button
+    appButton="ghost"
+    class="btn-ghost"
+    variant="ghost"
+    [disabled]="buttonDisalbled"
+    (click)="closeModalProfessionErrorRequest()"
+  >
+    {{ "button.close" | translate }}
   </button>
 </app-modal>

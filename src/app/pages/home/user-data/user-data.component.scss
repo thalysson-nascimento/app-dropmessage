@@ -4,6 +4,10 @@
   display: flex;
   flex-direction: column;
 
+  &__input-custom {
+    margin-bottom: 1rem;
+  }
+
   &__cover {
     position: relative;
     height: 60vh;

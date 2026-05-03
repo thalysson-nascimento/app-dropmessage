@@ -56,6 +56,7 @@ export class HomeComponent implements OnInit {
     this.socketMatchService.joinRoom(userId);
     this.socketMatchService.onMatchNotification().subscribe({
       next: (response) => {
+        console.log('Resposta do match recebida no home:', response);
         this.matchDataDetailsService.setMatchedDetails(response);
         this.router.navigateByUrl('home/match-notification');
       },

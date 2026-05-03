@@ -685,7 +685,7 @@ export const PRIVACY_POLICY_PT: PrivacyPolicyTranslations = {
         'Completar perfil do usuário ao iniciar a descrição sobre si',
 
       chatSuggestions:
-        'Na tela de chat após o match entre os usuários poderá dar sugestões de como iniciar uma conversa entre ambos os usuários com base no perfil',
+        'Na tela de chat após o match entre os usuários poderá dar sugestões de como iniciar uma conversa entre both os usuários com base no perfil',
 
       matchAnalysis: 'Análise de perfil para matchs',
     },

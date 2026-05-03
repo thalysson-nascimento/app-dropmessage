@@ -43,6 +43,7 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     go_to_feed: 'Ir para o Feed',
     create_another_post: 'Criar outro Post',
     comingSoon: 'Em breve...',
+    save: 'Salvar',
   },
   input: {
     placeholder: {
@@ -185,7 +186,7 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     describeBinary: 'Identidade além do binário tradicional',
     describeInterestMan: 'Afinidade com o genero masculino',
     describeInterestWoman: 'Afinidade com o genero feminino',
-    describeInterestBoth: 'Afinidade com ambos os generos',
+    describeInterestBoth: 'Afinidade com both os generos',
     whatYourInterest: 'Qual o seu interesse?',
     photoForProfile: 'Ops, falta a foto para o perfil',
     describePhotoForProfile:
@@ -273,5 +274,8 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     createAccountSuccess: '|o| Sua conta foi criada com sucesso!',
     descriptionCreateAccountSuccess:
       'Sua conta foi cadastrada com sucesso, faça login e confirme o token enviado para seu email.',
+    professionTitle: 'Com o que você trabalha?',
+    professionDescription:
+      'Adicione sua profissão para que as pessoas conheçam um pouco mais sobre sua rotina.',
   },
 };

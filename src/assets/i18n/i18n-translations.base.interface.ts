@@ -34,6 +34,7 @@ export interface I18nTranslationsBase {
     comingSoon: string;
     go_to_feed: string;
     create_another_post: string;
+    save: string;
   };
   input: {
     placeholder: {
@@ -196,5 +197,7 @@ export interface I18nTranslationsBase {
     active_posts: string;
     createAccountSuccess: string;
     descriptionCreateAccountSuccess: string;
+    professionTitle: string;
+    professionDescription: string;
   };
 }

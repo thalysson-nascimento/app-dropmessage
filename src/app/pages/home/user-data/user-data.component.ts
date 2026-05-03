@@ -7,6 +7,12 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { Preferences } from '@capacitor/preferences';
@@ -15,7 +21,9 @@ import { Subject, takeUntil } from 'rxjs';
 import { ErrorRequestComponent } from '../../../shared/component/error-request/error-request.component';
 import { FeedbackOverlayComponent } from '../../../shared/component/feedback-overlay/feedback-overlay.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
+import { SpinnerComponent } from '../../../shared/component/spinner/spinner.component';
 import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
+import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
 import { MyProfile } from '../../../shared/interface/my-profile.interface';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
@@ -25,6 +33,7 @@ import { DeleteAccountService } from '../../../shared/service/delete-account/del
 import { GoogleAuthService } from '../../../shared/service/google-auth/google-auth.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
+import { ProfessionService } from '../../../shared/service/profession/profession.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 import { UserDataService } from '../../../shared/service/user-data/user-data.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
@@ -44,6 +53,9 @@ import { UserDataLoadingComponent } from './user-data-loading/user-data-loading.
     CommonModule,
     ErrorRequestComponent,
     CommonModule,
+    InputCustomDirective,
+    ReactiveFormsModule,
+    SpinnerComponent,
   ],
 })
 export class UserDataComponent implements OnInit, OnDestroy {
@@ -56,9 +68,15 @@ export class UserDataComponent implements OnInit, OnDestroy {
   public pageView: string = 'DatingMatch:UserData';
   public avatar!: AvatarSuccess;
   public user!: UserDataInterface;
+  public professionFormGroup!: FormGroup;
+  public professionLoading: boolean = false;
+  public professionButtonDisabled: boolean = false;
 
   @ViewChild('modalDeleteAccount') modalDeleteAccount!: ModalComponent;
   @ViewChild('modalRequesteError') modalRequesteError!: ModalComponent;
+  @ViewChild('modalUserProfessional') modalUserProfessional!: ModalComponent;
+  @ViewChild('modalProfessionErrorRequest')
+  modalProfessionErrorRequest!: ModalComponent;
 
   constructor(
     private router: Router,
@@ -70,17 +88,26 @@ export class UserDataComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object,
     private loggerService: LoggerService,
     private googleAuthService: GoogleAuthService,
-    private preferencesUserAuthenticateService: PreferencesUserAuthenticateService
+    private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
+    private formBuilder: FormBuilder,
+    private professionService: ProfessionService
   ) {}
 
   ngOnInit() {
     this.loadUserData();
     this.loadCacheAvatar();
+    this.professionFormBuilder();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  professionFormBuilder() {
+    this.professionFormGroup = this.formBuilder.group({
+      profession: ['', [Validators.required]],
+    });
   }
 
   navigateBackUsingApp() {
@@ -243,5 +270,42 @@ export class UserDataComponent implements OnInit, OnDestroy {
 
   closeModalDeleteAccount() {
     this.modalDeleteAccount.close();
+  }
+
+  saveProfession() {
+    this.professionLoading = true;
+    this.professionButtonDisabled = true;
+
+    if (this.professionFormGroup.valid) {
+      const profession = this.professionFormGroup.get('profession')?.value;
+      console.log(profession);
+
+      this.professionService.profession(profession).subscribe({
+        next: (response) => {
+          this.professionLoading = false;
+          this.professionButtonDisabled = false;
+          this.modalUserProfessional.close();
+          this.loadUserData();
+        },
+        error: () => {
+          this.professionLoading = false;
+          this.professionButtonDisabled = false;
+          this.modalUserProfessional.close();
+          this.modalProfessionErrorRequest.open();
+        },
+      });
+    }
+  }
+
+  userProfessional() {
+    this.modalUserProfessional.open();
+  }
+
+  closeModalProfession() {
+    this.modalUserProfessional.close();
+  }
+
+  closeModalProfessionErrorRequest() {
+    this.modalProfessionErrorRequest.close();
   }
 }
