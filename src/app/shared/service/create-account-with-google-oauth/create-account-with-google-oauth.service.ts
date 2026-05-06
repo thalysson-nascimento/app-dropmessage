@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { currentEnvironment } from '../../../../environment.config';
+import { CreateAccountWithGoogleOAuth } from '../../interface/create-account.interface';
 import { TokenResponseSuccess } from '../../interface/token-response-success.interface';
 
 @Injectable({
@@ -12,10 +13,12 @@ export class CreateAccountWithGoogleOauthService {
 
   constructor(private httpClient: HttpClient) {}
 
-  createAccount(token: string): Observable<TokenResponseSuccess> {
+  createAccount(
+    dataCreateAccountWithGoogle: CreateAccountWithGoogleOAuth
+  ): Observable<TokenResponseSuccess> {
     return this.httpClient.post<TokenResponseSuccess>(
       `${this.baseURL}/auth/create-account-with-google`,
-      { token }
+      dataCreateAccountWithGoogle
     );
   }
 }

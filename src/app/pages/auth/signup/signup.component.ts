@@ -22,7 +22,10 @@ import { FeedbackOverlayComponent } from '../../../shared/component/feedback-ove
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
-import { CreateAccount } from '../../../shared/interface/create-account.interface';
+import {
+  CreateAccount,
+  CreateAccountWithGoogleOAuth,
+} from '../../../shared/interface/create-account.interface';
 import { CreateAccountWithGoogleOauthService } from '../../../shared/service/create-account-with-google-oauth/create-account-with-google-oauth.service';
 import { CreateAccountService } from '../../../shared/service/create-account/create-account.service';
 import { DeviceLanguageService } from '../../../shared/service/device-language/device-language.service';
@@ -90,14 +93,22 @@ export class SignupComponent implements OnInit {
   }
 
   async createAccountWithGoogle() {
+    debugger;
+    const languageInfo = await this.deviceLanguageService.getLanguage();
+    console.log('Idioma do dispositivo:', ...languageInfo);
     try {
       const token = await this.googleAuthService.signInWithGoogle();
       if (token.authentication.idToken) {
         this.isLoadingButtonGoogleOAuth = true;
         const device = await this.deviceInfor();
+        const languageInfo = await this.deviceLanguageService.getLanguage();
+        const payload: CreateAccountWithGoogleOAuth = {
+          token: token.authentication.idToken,
+          ...languageInfo,
+        };
 
         this.createAccountWithGoogleOauthService
-          .createAccount(token.authentication.idToken)
+          .createAccount(payload)
           .subscribe({
             next: (response) => {
               gtag('event', 'click', {
