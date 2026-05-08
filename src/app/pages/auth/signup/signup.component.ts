@@ -32,6 +32,7 @@ import { PreferencesUserAuthenticateService } from '../../../shared/service/pref
 import { SignWithGoogleService } from '../../../shared/service/sign-with-google/sign-with-google.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
+import { SpinnerComponent } from '../../../shared/component/spinner/spinner.component';
 
 declare let gtag: Function;
 
@@ -40,6 +41,7 @@ const SharedComponents = [
   ButtonDirective,
   ModalComponent,
   FeedbackOverlayComponent,
+  SpinnerComponent,
 ];
 
 const CoreModule = [ReactiveFormsModule, CommonModule, TranslateModule];
@@ -92,19 +94,46 @@ export class SignupComponent implements OnInit {
     }
   }
 
+  createAccountFormBuilder() {
+    this.createAccountFormGroup = this.formBuilder.group({
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(30),
+        ],
+      ],
+      email: ['', [Validators.required, Validators.email]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(30),
+        ],
+      ],
+    });
+  }
+
   async createAccountWithGoogle() {
+    console.log('Iniciando autenticação com Google...');
+    this.isLoadingButtonGoogleOAuth = true;
     try {
-      this.isLoadingButtonGoogleOAuth = true;
+      const languageInfo = await this.deviceLanguageService.getLanguage();
 
       const token = await this.googleAuthService.signInWithGoogle();
-      console.log('GOOGLE SIGNIN TOKEN:', token);
 
       if (!token?.authentication?.idToken) {
         throw new Error('Token Google inválido');
       }
 
-      // console.log(window.google);
-      this.signWithGoogleService.sign(token.authentication.idToken).subscribe({
+      const payload = {
+        token: token.authentication.idToken,
+        ...languageInfo,
+      };
+
+      this.signWithGoogleService.sign(payload).subscribe({
         next: (response) => {
           console.log('GOOGLE SIGNIN RESPONSE:', response);
           this.isLoadingButtonGoogleOAuth = false;
@@ -152,28 +181,6 @@ export class SignupComponent implements OnInit {
 
       this.modalError.open();
     }
-  }
-
-  createAccountFormBuilder() {
-    this.createAccountFormGroup = this.formBuilder.group({
-      name: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(30),
-        ],
-      ],
-      email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(30),
-        ],
-      ],
-    });
   }
 
   async createAccountUser() {

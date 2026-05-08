@@ -120,19 +120,6 @@ img {
   }
 }
 
-//loading-circular
-.loader {
-  position: relative;
-  margin: 0px auto;
-  width: 2rem;
-}
-
-.loader:before {
-  content: "";
-  display: block;
-  padding-top: 50%;
-}
-
 .circular {
   -webkit-animation: rotate 2s linear infinite;
   animation: rotate 2s linear infinite;

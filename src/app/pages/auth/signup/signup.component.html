@@ -17,22 +17,13 @@
   <p class="text-login">{{ "text.titleCreateAccount" | translate }}</p>
 
   <div class="contain-button-google">
-    <button class="button-google" (click)="createAccountWithGoogle()">
+    <button
+      class="button-google"
+      (click)="createAccountWithGoogle()"
+      [disabled]="isLoadingButtonGoogleOAuth"
+    >
       @if (isLoadingButtonGoogleOAuth) {
-      <div class="loader">
-        <svg class="circular" viewBox="25 25 50 50">
-          <circle
-            class="path"
-            cx="50"
-            cy="50"
-            r="20"
-            fill="none"
-            stroke-width="3"
-            stroke-miterlimit="10"
-          />
-        </svg>
-      </div>
-
+      <app-spinner></app-spinner>
       }@else {
       <img src="assets/icon-static/logo-google.svg" alt="" />
       <span>{{ "button.accessWithGoogle" | translate }}</span>
@@ -81,15 +72,11 @@
       [disabled]="buttonDisalbled || createAccountFormGroup.invalid"
       aria-label="criar conta"
     >
-      <span *ngIf="!buttonDisalbled">{{
-        "button.buttonCreateAccount" | translate
-      }}</span>
-      <div *ngIf="buttonDisalbled" class="bouncing-dots">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>
+      @if (isLoadingButton) {
+      <app-spinner></app-spinner>
+      }@else {
+      <span>{{ "button.buttonCreateAccount" | translate }}</span>
+      }
     </button>
   </form>
 
@@ -102,6 +89,7 @@
     </p>
   </div>
 </div>
+
 <app-modal #modalSuccess>
   <app-feedback-overlay
     variant="success"

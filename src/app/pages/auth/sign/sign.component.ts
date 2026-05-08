@@ -16,15 +16,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
-import { ErrorModalComponent } from '../../../shared/component/error-modal/error-modal.component';
-import { LoadingComponent } from '../../../shared/component/loading/loading.component';
+import { FeedbackOverlayComponent } from '../../../shared/component/feedback-overlay/feedback-overlay.component';
 import { LogoDropmessageComponent } from '../../../shared/component/logo-dropmessage/logo-dropmessage.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
+import { SpinnerComponent } from '../../../shared/component/spinner/spinner.component';
 import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { Sign } from '../../../shared/interface/sign.interface';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
+import { DeviceLanguageService } from '../../../shared/service/device-language/device-language.service';
 import { GoogleAuthService } from '../../../shared/service/google-auth/google-auth.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
@@ -36,10 +37,10 @@ import { UserHashPublicService } from '../../../shared/service/user-hash-public/
 const SharedComponents = [
   LogoDropmessageComponent,
   InputCustomDirective,
-  LoadingComponent,
   ModalComponent,
-  ErrorModalComponent,
   ButtonDirective,
+  FeedbackOverlayComponent,
+  SpinnerComponent,
 ];
 
 const CoreModule = [
@@ -54,7 +55,7 @@ declare let gtag: Function;
 @Component({
   selector: 'app-sign',
   standalone: true,
-  imports: [...SharedComponents, ...CoreModule],
+  imports: [...SharedComponents, ...CoreModule, SpinnerComponent],
   templateUrl: './sign.component.html',
   styleUrls: ['./sign.component.scss'],
 })
@@ -65,15 +66,15 @@ export class SignComponent implements OnInit, OnDestroy {
   userLoginFormGroup!: FormGroup;
   isLoadingButton: boolean = false;
   errorMessage: string = 'error';
-  @ViewChild('dialog') modal!: ModalComponent;
   isOpen: boolean = false;
   backButtonListener!: PluginListenerHandle;
   pageView: string = 'DatingMatch:Login';
   isLoadingButtonGoogleOAuth: boolean = false;
-  @ViewChild('modalErrorRequest') modalErrorRequest!: ErrorModalComponent;
   typeErrorModal: 'success' | 'warn' | 'error' = 'success';
   testeToken: string = '';
   showPassword: boolean = false;
+
+  @ViewChild('modalError') modalError!: ModalComponent;
 
   constructor(
     private router: Router,
@@ -86,7 +87,8 @@ export class SignComponent implements OnInit, OnDestroy {
     private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
     private loggerService: LoggerService,
     private googleAuthService: GoogleAuthService,
-    private signWithGoogleService: SignWithGoogleService
+    private signWithGoogleService: SignWithGoogleService,
+    private deviceLanguageService: DeviceLanguageService
   ) {}
 
   ngOnInit(): void {
@@ -175,7 +177,7 @@ export class SignComponent implements OnInit, OnDestroy {
             this.tokenStorageSecurityRequestService.deleteToken();
             this.errorMessage = responseError.error.message.message;
 
-            this.modal.open();
+            this.modalError.open();
           },
         });
     }
@@ -200,52 +202,71 @@ export class SignComponent implements OnInit, OnDestroy {
 
   async userAuthenticatorWithGoogle() {
     try {
+      const languageInfo = await this.deviceLanguageService.getLanguage();
+      this.isLoadingButtonGoogleOAuth = true;
+
       const token = await this.googleAuthService.signInWithGoogle();
 
-      console.log(token);
-
-      if (token.authentication.idToken) {
-        this.isLoadingButtonGoogleOAuth = true;
-        this.signWithGoogleService
-          .sign(token.authentication.idToken)
-          .subscribe({
-            next: (response) => {
-              this.isLoadingButtonGoogleOAuth = false;
-              this.tokenStorageSecurityRequestService.saveToken(response.token);
-              this.preferencesUserAuthenticateService.savePreferences(response);
-              this.cacheAvatarService.setAvatarCachePreferences(
-                response.avatar
-              );
-              this.userHashPublicService.setUserHashPublic(
-                response.userVerificationData.userHashPublic
-              );
-              this.router.navigateByUrl('home/main/post-message');
-            },
-            error: (errorResponse: any) => {
-              this.typeErrorModal = 'warn';
-              this.errorMessage = errorResponse.error.message;
-              this.isLoadingButtonGoogleOAuth = false;
-              this.modalErrorRequest.open();
-            },
-          });
+      if (!token?.authentication?.idToken) {
+        throw new Error('Token Google inválido');
       }
-    } catch (error: any) {
-      console.error(error);
 
-      this.isLoadingButtonGoogleOAuth = false;
+      const payload = {
+        token: token.authentication.idToken,
+        ...languageInfo,
+      };
+
+      this.signWithGoogleService.sign(payload).subscribe({
+        next: (response) => {
+          console.log('GOOGLE SIGNIN RESPONSE:', response);
+          this.isLoadingButtonGoogleOAuth = false;
+
+          this.tokenStorageSecurityRequestService.saveToken(response.token);
+
+          this.preferencesUserAuthenticateService.savePreferences(response);
+
+          this.cacheAvatarService.setAvatarCachePreferences(response.avatar);
+
+          this.userHashPublicService.setUserHashPublic(
+            response.userVerificationData.userHashPublic
+          );
+
+          gtag('event', 'google_auth_success', {
+            page_path: '/cadastro',
+          });
+
+          this.router.navigateByUrl('home/main/post-message');
+        },
+
+        error: (errorResponse: any) => {
+          console.error('GOOGLE SIGNIN ERROR RESPONSE:', errorResponse);
+          console.error(errorResponse);
+
+          this.typeErrorModal = 'warn';
+
+          this.errorMessage =
+            errorResponse?.error?.message || 'Erro ao autenticar com Google';
+
+          this.isLoadingButtonGoogleOAuth = false;
+
+          this.modalError.open();
+        },
+      });
+    } catch (error: any) {
+      console.error('GOOGLE SIGNIN ERROR:', error);
+      console.error(error);
 
       this.typeErrorModal = 'warn';
 
       this.errorMessage = error?.message || 'Erro ao autenticar com Google';
 
-      this.modalErrorRequest.open();
+      this.isLoadingButtonGoogleOAuth = false;
 
-      gtag('event', 'error', {
-        page_title: 'Tela de Login - google auth',
-        page_location: window.location.href,
-        page_path: '/login',
-        message: JSON.stringify(error),
-      });
+      this.modalError.open();
     }
+  }
+
+  closeModal() {
+    this.modalError.close();
   }
 }

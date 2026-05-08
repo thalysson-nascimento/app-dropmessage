@@ -8,22 +8,13 @@
   <p class="text-login">{{ "text.titleSign" | translate }}</p>
 
   <div class="contain-button-google">
-    <button class="button-google" (click)="userAuthenticatorWithGoogle()">
+    <button
+      class="button-google"
+      (click)="userAuthenticatorWithGoogle()"
+      [disabled]="isLoadingButtonGoogleOAuth"
+    >
       @if (isLoadingButtonGoogleOAuth) {
-      <div class="loader">
-        <svg class="circular" viewBox="25 25 50 50">
-          <circle
-            class="path"
-            cx="50"
-            cy="50"
-            r="20"
-            fill="none"
-            stroke-width="3"
-            stroke-miterlimit="10"
-          />
-        </svg>
-      </div>
-
+      <app-spinner color="#666" backgroundColor="#999"></app-spinner>
       }@else {
       <img src="assets/icon-static/logo-google.svg" alt="" />
       <span>{{ "button.accessWithGoogle" | translate }}</span>
@@ -76,13 +67,11 @@
       appButton
       [disabled]="buttonDisalbled || userLoginFormGroup.invalid"
     >
-      <span *ngIf="!isLoadingButton">{{ "button.signIn" | translate }}</span>
-      <app-loading
-        *ngIf="isLoadingButton"
-        width="22px"
-        height="22px"
-        lineHeight="2px"
-      ></app-loading>
+      @if (isLoadingButton) {
+      <app-spinner></app-spinner>
+      }@else {
+      {{ "button.signIn" | translate }}
+      }
     </button>
     <div class="regiter-acount">
       <p (click)="navigateToSignup()">
@@ -92,33 +81,19 @@
   </form>
 </div>
 
-<app-modal #dialog>
-  <div class="contain-title">
-    <p class="title-error">{{ "text.titleError" | translate }}</p>
-  </div>
+<app-modal #modalError>
+  <app-feedback-overlay
+    variant="error"
+    [title]="'text.errorSomethingWentWrong' | translate"
+    [description]="errorMessage"
+  ></app-feedback-overlay>
 
-  <div class="contain-image">
-    <img
-      src="assets/icon-static/error-request.svg"
-      class="image-error-request"
-      alt=""
-    />
-  </div>
-
-  <div class="contain-description-error">
-    <p class="description-error">{{ errorMessage }}</p>
-  </div>
-
-  <div class="contain-button-system-unavailable">
-    <button appButton (click)="dialog.close()">
-      {{ "button.tryAgain" | translate }}
-    </button>
-  </div>
+  <button
+    appButton="ghost"
+    class="btn-ghost"
+    variant="ghost"
+    (click)="closeModal()"
+  >
+    {{ "button.cancel" | translate }}
+  </button>
 </app-modal>
-
-<app-error-modal #modalErrorRequest [type]="typeErrorModal">
-  <p>
-    <strong>{{ "titleError" | translate }}</strong>
-  </p>
-  <p class="description-error">{{ errorMessage }}</p>
-</app-error-modal>
