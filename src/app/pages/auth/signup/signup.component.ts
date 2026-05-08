@@ -22,16 +22,14 @@ import { FeedbackOverlayComponent } from '../../../shared/component/feedback-ove
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
 import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
-import {
-  CreateAccount,
-  CreateAccountWithGoogleOAuth,
-} from '../../../shared/interface/create-account.interface';
-import { CreateAccountWithGoogleOauthService } from '../../../shared/service/create-account-with-google-oauth/create-account-with-google-oauth.service';
+import { CreateAccount } from '../../../shared/interface/create-account.interface';
+import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { CreateAccountService } from '../../../shared/service/create-account/create-account.service';
 import { DeviceLanguageService } from '../../../shared/service/device-language/device-language.service';
 import { GoogleAuthService } from '../../../shared/service/google-auth/google-auth.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
+import { SignWithGoogleService } from '../../../shared/service/sign-with-google/sign-with-google.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 
@@ -72,16 +70,18 @@ export class SignupComponent implements OnInit {
     private bottomSheet: MatBottomSheet,
     @Inject(PLATFORM_ID) private platformId: Object,
     private googleAuthService: GoogleAuthService,
-    private createAccountWithGoogleOauthService: CreateAccountWithGoogleOauthService,
     private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
     private userHashPublicService: UserHashPublicService,
     private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
     private loggerService: LoggerService,
-    private deviceLanguageService: DeviceLanguageService
+    private deviceLanguageService: DeviceLanguageService,
+    private signWithGoogleService: SignWithGoogleService,
+    private cacheAvatarService: CacheAvatarService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.createAccountFormBuilder();
+    await this.googleAuthService.initializeApp();
   }
 
   navigateBackUsingApp() {
@@ -93,62 +93,63 @@ export class SignupComponent implements OnInit {
   }
 
   async createAccountWithGoogle() {
-    debugger;
-    const languageInfo = await this.deviceLanguageService.getLanguage();
-    console.log('Idioma do dispositivo:', ...languageInfo);
     try {
+      this.isLoadingButtonGoogleOAuth = true;
+
       const token = await this.googleAuthService.signInWithGoogle();
-      if (token.authentication.idToken) {
-        this.isLoadingButtonGoogleOAuth = true;
-        const device = await this.deviceInfor();
-        const languageInfo = await this.deviceLanguageService.getLanguage();
-        const payload: CreateAccountWithGoogleOAuth = {
-          token: token.authentication.idToken,
-          ...languageInfo,
-        };
+      console.log('GOOGLE SIGNIN TOKEN:', token);
 
-        this.createAccountWithGoogleOauthService
-          .createAccount(payload)
-          .subscribe({
-            next: (response) => {
-              gtag('event', 'click', {
-                page_title: 'Tela de Cadastro com Google', // Título que você quer identificar
-                page_location: window.location.href,
-                page_path: '/cadastro', // Defina o caminho conforme sua rota
-                create_account: 'create_account_with_google',
-              });
-              gtag('device_infor', 'create_account', device);
-
-              this.isLoadingButtonGoogleOAuth = false;
-              this.tokenStorageSecurityRequestService.saveToken(response.token);
-              this.preferencesUserAuthenticateService.savePreferences(response);
-              this.userHashPublicService.setUserHashPublic(
-                response.userVerificationData.userHashPublic
-              );
-              this.modalSuccess.open();
-              // this.router.navigateByUrl('home/user-welcome');
-            },
-            error: (errorResponse: any) => {
-              gtag('event', 'error_create_account_with_google', {
-                page_title: 'Tela de Cadastro',
-                page_location: window.location.href,
-                page_path: '/cadastro',
-                error_message:
-                  errorResponse.error.message?.message || 'Erro desconhecido',
-                error_code: errorResponse.status || 'sem código',
-              });
-
-              this.typeErrorModal = 'warn';
-              this.errorMessage = errorResponse.error.message;
-              this.isLoadingButtonGoogleOAuth = false;
-              this.modalError.open();
-            },
-          });
+      if (!token?.authentication?.idToken) {
+        throw new Error('Token Google inválido');
       }
-    } catch (errorResponse: any) {
+
+      // console.log(window.google);
+      this.signWithGoogleService.sign(token.authentication.idToken).subscribe({
+        next: (response) => {
+          console.log('GOOGLE SIGNIN RESPONSE:', response);
+          this.isLoadingButtonGoogleOAuth = false;
+
+          this.tokenStorageSecurityRequestService.saveToken(response.token);
+
+          this.preferencesUserAuthenticateService.savePreferences(response);
+
+          this.cacheAvatarService.setAvatarCachePreferences(response.avatar);
+
+          this.userHashPublicService.setUserHashPublic(
+            response.userVerificationData.userHashPublic
+          );
+
+          gtag('event', 'google_auth_success', {
+            page_path: '/cadastro',
+          });
+
+          this.router.navigateByUrl('home/main/post-message');
+        },
+
+        error: (errorResponse: any) => {
+          console.error('GOOGLE SIGNIN ERROR RESPONSE:', errorResponse);
+          console.error(errorResponse);
+
+          this.typeErrorModal = 'warn';
+
+          this.errorMessage =
+            errorResponse?.error?.message || 'Erro ao autenticar com Google';
+
+          this.isLoadingButtonGoogleOAuth = false;
+
+          this.modalError.open();
+        },
+      });
+    } catch (error: any) {
+      console.error('GOOGLE SIGNIN ERROR:', error);
+      console.error(error);
+
       this.typeErrorModal = 'warn';
-      this.errorMessage = errorResponse.error.message;
+
+      this.errorMessage = error?.message || 'Erro ao autenticar com Google';
+
       this.isLoadingButtonGoogleOAuth = false;
+
       this.modalError.open();
     }
   }

@@ -229,12 +229,22 @@ export class SignComponent implements OnInit, OnDestroy {
             },
           });
       }
-    } catch (error) {
+    } catch (error: any) {
+      console.error(error);
+
+      this.isLoadingButtonGoogleOAuth = false;
+
+      this.typeErrorModal = 'warn';
+
+      this.errorMessage = error?.message || 'Erro ao autenticar com Google';
+
+      this.modalErrorRequest.open();
+
       gtag('event', 'error', {
-        page_title: 'Tela de Login - google auth', // Título que você quer identificar
+        page_title: 'Tela de Login - google auth',
         page_location: window.location.href,
-        page_path: '/login', // Defina o caminho conforme sua rota
-        message: error,
+        page_path: '/login',
+        message: JSON.stringify(error),
       });
     }
   }

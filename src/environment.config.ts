@@ -35,11 +35,12 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
   //   apiKeyGeoLocationCageData: '5f25465dd2a74ba884e38fb29b700814',
   // },
   development: {
-    baseURL: 'https://want-belts-cold-der.trycloudflare.com',
+    baseURL: 'https://medicines-director-rely-arbitrary.trycloudflare.com',
     pathURL: '/api/dev',
     production: false,
     mock: false,
-    baseUrlSocket: 'https://want-belts-cold-der.trycloudflare.com',
+    baseUrlSocket:
+      'https://medicines-director-rely-arbitrary.trycloudflare.com',
     apiKeyGeoLocationCageData: '5f25465dd2a74ba884e38fb29b700814',
   },
 };

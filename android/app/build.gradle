@@ -3,12 +3,20 @@ apply plugin: 'com.android.application'
 android {
     namespace "br.com.dropmessage"
     compileSdk rootProject.ext.compileSdkVersion
+    signingConfigs {
+      release {
+          storeFile file('release-key.keystore')
+          storePassword '$%Thalysson@1987'
+          keyAlias 'DatingMatchSignature'
+          keyPassword '$%Thalysson@1987'
+      }
+  }
     defaultConfig {
         applicationId "br.com.dropmessage"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 30
-        versionName "1.188.0"
+        versionCode 33
+        versionName "1.191.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -18,6 +26,7 @@ android {
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -33,6 +42,7 @@ repositories {
 }
 
 dependencies {
+    implementation platform('com.google.firebase:firebase-bom:34.12.0')
     implementation "com.google.android.gms:play-services-ads:25.1.0"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"

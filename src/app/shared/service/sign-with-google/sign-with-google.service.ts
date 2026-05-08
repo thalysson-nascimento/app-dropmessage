@@ -14,7 +14,7 @@ export class SignWithGoogleService {
 
   sign(token: string): Observable<TokenResponseSuccess> {
     return this.httpClient.post<TokenResponseSuccess>(
-      `${this.baseURL}/auth/user-credentials-with-google`,
+      `${this.baseURL}/auth/create-account-with-google`,
       { token }
     );
   }
