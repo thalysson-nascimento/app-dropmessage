@@ -91,9 +91,10 @@ export class SignComponent implements OnInit, OnDestroy {
     private deviceLanguageService: DeviceLanguageService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.userLoginFormBuilder();
     this.navigateBackUsingApp();
+    await this.googleAuthService.initializeApp();
 
     gtag('event', 'page_view', {
       page_title: 'Tela de Login', // Título que você quer identificar
@@ -145,7 +146,6 @@ export class SignComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$)) // Garante que a assinatura será encerrada
         .subscribe({
           next: (response) => {
-            this.isLoadingButton = false;
             this.tokenStorageSecurityRequestService.saveToken(response.token);
             this.preferencesUserAuthenticateService.savePreferences(response);
 

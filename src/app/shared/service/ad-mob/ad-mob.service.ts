@@ -6,8 +6,11 @@ import {
   RewardAdOptions,
   RewardAdPluginEvents,
 } from '@capacitor-community/admob';
+
 import { Capacitor } from '@capacitor/core';
+
 import { lastValueFrom, map } from 'rxjs';
+
 import { PreferencesUserAuthenticateService } from '../preferences-user-authenticate/preferences-user-authenticate.service';
 
 @Injectable({
@@ -23,45 +26,41 @@ export class AdmobService {
   }
 
   async initializeAdmob(): Promise<void> {
-    if (Capacitor.getPlatform() === 'web') {
-      console.log('[AdMob] Web detectado → mock ativo');
+    const isNative = Capacitor.isNativePlatform();
+
+    if (!isNative) {
+      console.log('[AdMob] Browser detected -> mock mode enabled');
       return;
     }
 
-    await AdMob.initialize({
-      initializeForTesting: false, // Ativar modo de teste
-    });
+    try {
+      await AdMob.initialize({
+        initializeForTesting: false,
+      });
 
-    const [trackingInfo, consentInfo] = await Promise.all([
-      AdMob.trackingAuthorizationStatus(),
-      AdMob.requestConsentInfo(),
-    ]);
+      try {
+        const [trackingInfo, consentInfo] = await Promise.all([
+          AdMob.trackingAuthorizationStatus(),
+          AdMob.requestConsentInfo(),
+        ]);
 
-    if (trackingInfo.status === 'notDetermined') {
-      /**
-       * If you want to explain TrackingAuthorization before showing the iOS dialog,
-       * you can show the modal here.
-       * ex)
-       * const modal = await this.modalCtrl.create({
-       *   component: RequestTrackingPage,
-       * });
-       * await modal.present();
-       * await modal.onDidDismiss();  // Wait for close modal
-       **/
+        if (trackingInfo.status === 'notDetermined') {
+          await AdMob.requestTrackingAuthorization();
+        }
 
-      await AdMob.requestTrackingAuthorization();
-    }
-
-    const authorizationStatus = await AdMob.trackingAuthorizationStatus();
-    if (
-      authorizationStatus.status === 'authorized' &&
-      consentInfo.isConsentFormAvailable &&
-      consentInfo.status === AdmobConsentStatus.REQUIRED
-    ) {
-      await AdMob.showConsentForm();
+        if (
+          consentInfo.isConsentFormAvailable &&
+          consentInfo.status === AdmobConsentStatus.REQUIRED
+        ) {
+          await AdMob.showConsentForm();
+        }
+      } catch (error) {
+        console.error('[Consent Error]', error);
+      }
+    } catch (error) {
+      console.error('[AdMob] Initialization error', error);
     }
   }
-
   async removeAdMob() {
     await AdMob.removeBanner();
   }
@@ -70,19 +69,26 @@ export class AdmobService {
     rewarded: boolean;
     completed: boolean;
   }> {
-    // 🚫 BLOQUEIA múltiplos anúncios
     if (this.isShowingAd) {
-      return Promise.reject('Já existe um anúncio sendo exibido');
+      return Promise.reject('An ad is already being displayed');
     }
 
     this.isShowingAd = true;
 
-    if (Capacitor.getPlatform() === 'web') {
-      console.log('[AdMob][MOCK] Reward video mock web');
+    const isNative = Capacitor.isNativePlatform();
+
+    // MOCK ONLY ON BROWSER
+    if (!isNative) {
+      console.log('[AdMob MOCK] Reward ad');
+
       return new Promise((resolve) => {
         setTimeout(() => {
           this.isShowingAd = false;
-          resolve({ rewarded: true, completed: true });
+
+          resolve({
+            rewarded: true,
+            completed: true,
+          });
         }, 2800);
       });
     }
@@ -97,6 +103,8 @@ export class AdmobService {
         rewardListener = await AdMob.addListener(
           RewardAdPluginEvents.Rewarded,
           () => {
+            console.log('[Reward] User rewarded');
+
             rewarded = true;
           }
         );
@@ -107,7 +115,7 @@ export class AdmobService {
             await rewardListener.remove();
             await dismissListener.remove();
 
-            this.isShowingAd = false; // 👈 LIBERA novamente
+            this.isShowingAd = false;
 
             resolve({
               rewarded,
@@ -124,33 +132,47 @@ export class AdmobService {
                   userHashPublic: response.userVerificationData.userHashPublic,
                 };
               }
-              throw new Error('Token inválido ou não encontrado.');
+
+              throw new Error('Invalid token');
             })
           )
         );
 
         const options: RewardAdOptions = {
-          // adId: 'ca-app-pub-3940256099942544/5224354917', // teste correto
-          adId: 'ca-app-pub-8691674404508428/7187041674', //anuncio real
+          adId: 'ca-app-pub-8691674404508428/7187041674',
+
           ssv: {
             userId: userData.userHashPublic,
           },
         };
 
+        console.log('[Reward] Preparing ad');
+
         const prepared = await AdMob.prepareRewardVideoAd(options);
 
         if (!prepared) {
-          this.isShowingAd = false; // 👈 IMPORTANTE
-          reject('Falha ao preparar anúncio');
+          this.isShowingAd = false;
+
+          reject('Failed to prepare reward ad');
+
           return;
         }
 
+        console.log('[Reward] Showing ad');
+
         await AdMob.showRewardVideoAd();
       } catch (err) {
-        this.isShowingAd = false; // 👈 IMPORTANTE
+        console.error('[Reward] Error', err);
 
-        if (rewardListener) await rewardListener.remove();
-        if (dismissListener) await dismissListener.remove();
+        this.isShowingAd = false;
+
+        if (rewardListener) {
+          await rewardListener.remove();
+        }
+
+        if (dismissListener) {
+          await dismissListener.remove();
+        }
 
         reject(err);
       }
@@ -159,29 +181,30 @@ export class AdmobService {
 
   async showInterstitial(): Promise<void> {
     if (this.isShowingAd) {
-      return Promise.reject('Já existe um anúncio sendo exibido');
+      return Promise.reject('An ad is already being displayed');
     }
 
     this.isShowingAd = true;
 
-    // 🔵 MOCK WEB
-    if (Capacitor.getPlatform() === 'web') {
-      console.log('[AdMob][MOCK] Iniciando interstitial...');
+    const isNative = Capacitor.isNativePlatform();
+
+    console.log('[Interstitial]', {
+      platform: Capacitor.getPlatform(),
+      isNative,
+    });
+
+    // MOCK ONLY ON REAL BROWSER
+    if (!isNative) {
+      console.log('[Interstitial MOCK] Starting');
 
       return new Promise((resolve) => {
         setTimeout(() => {
-          console.log('[AdMob][MOCK] Anúncio exibido');
-        }, 500);
+          console.log('[Interstitial MOCK] Finished');
 
-        setTimeout(() => {
-          console.log('[AdMob][MOCK] Usuário visualizando...');
-        }, 1500);
-
-        setTimeout(() => {
-          console.log('[AdMob][MOCK] Usuário fechou anúncio');
           this.isShowingAd = false;
+
           resolve();
-        }, 3000); // simula tempo real
+        }, 3000);
       });
     }
 
@@ -192,30 +215,45 @@ export class AdmobService {
         dismissListener = await AdMob.addListener(
           InterstitialAdPluginEvents.Dismissed,
           async () => {
+            console.log('[Interstitial] Dismissed');
+
             await dismissListener.remove();
 
-            this.isShowingAd = false; // 👈 LIBERA
+            this.isShowingAd = false;
 
             resolve();
           }
         );
 
+        console.log('[Interstitial] Preparing');
+
         const prepared = await AdMob.prepareInterstitial({
-          adId: 'ca-app-pub-8691674404508428/6895932094',
-          // adId: 'ca-app-pub-3940256099942544/1033173712', // teste correto
+          adId: 'ca-app-pub-8691674404508428/6422423791',
+          // adId: 'ca-app-pub-3940256099942544/1033173712', // TEST AD UNIT ID
         });
 
+        console.log('[Interstitial] Prepared:', prepared);
+
         if (!prepared) {
-          this.isShowingAd = false; // 👈 IMPORTANTE
-          reject('Erro ao carregar interstitial');
+          this.isShowingAd = false;
+
+          reject('Failed to load interstitial');
+
           return;
         }
 
+        console.log('[Interstitial] Showing');
+
         await AdMob.showInterstitial();
       } catch (error) {
-        this.isShowingAd = false; // 👈 IMPORTANTE
+        console.error('[Interstitial] Error', error);
 
-        if (dismissListener) await dismissListener.remove();
+        this.isShowingAd = false;
+
+        if (dismissListener) {
+          await dismissListener.remove();
+        }
+
         reject(error);
       }
     });

@@ -23,7 +23,7 @@
       [disabled]="isLoadingButtonGoogleOAuth"
     >
       @if (isLoadingButtonGoogleOAuth) {
-      <app-spinner></app-spinner>
+      <app-spinner color="#666" backgroundColor="#999"></app-spinner>
       }@else {
       <img src="assets/icon-static/logo-google.svg" alt="" />
       <span>{{ "button.accessWithGoogle" | translate }}</span>

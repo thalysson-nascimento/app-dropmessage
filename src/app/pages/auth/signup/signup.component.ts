@@ -20,6 +20,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
 import { FeedbackOverlayComponent } from '../../../shared/component/feedback-overlay/feedback-overlay.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
+import { SpinnerComponent } from '../../../shared/component/spinner/spinner.component';
 import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { CreateAccount } from '../../../shared/interface/create-account.interface';
@@ -32,7 +33,6 @@ import { PreferencesUserAuthenticateService } from '../../../shared/service/pref
 import { SignWithGoogleService } from '../../../shared/service/sign-with-google/sign-with-google.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
-import { SpinnerComponent } from '../../../shared/component/spinner/spinner.component';
 
 declare let gtag: Function;
 
@@ -136,8 +136,6 @@ export class SignupComponent implements OnInit {
       this.signWithGoogleService.sign(payload).subscribe({
         next: (response) => {
           console.log('GOOGLE SIGNIN RESPONSE:', response);
-          this.isLoadingButtonGoogleOAuth = false;
-
           this.tokenStorageSecurityRequestService.saveToken(response.token);
 
           this.preferencesUserAuthenticateService.savePreferences(response);
