@@ -366,7 +366,7 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
                               .info(loggerInterest)
                               .pipe(takeUntil(this.destroy$))
                               .subscribe();
-                            this.router.navigateByUrl('home/main/post-message');
+                            this.router.navigateByUrl('home/user-description');
                           },
                         });
                     }

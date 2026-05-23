@@ -94,20 +94,6 @@ export const HomeRouting: Routes = [
           import('./profile/profile.component').then((m) => m.ProfileComponent),
       },
       {
-        path: 'user-location',
-        loadComponent: () =>
-          import('./user-location/user-location.component').then(
-            (m) => m.UserLocationComponent
-          ),
-      },
-      // {
-      //   path: 'notification',
-      //   loadComponent: () =>
-      //     import('./notification/notification.component').then(
-      //       (m) => m.NotificationComponent
-      //     ),
-      // },
-      {
         path: 'privacy-police',
         loadComponent: () =>
           import('./privacy-police/privacy-police.component').then(

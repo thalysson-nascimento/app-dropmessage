@@ -26,4 +26,5 @@ export interface UserVerificationData {
   isUploadAvatar: boolean;
   verificationTokenEmail: boolean;
   validatorLocation: boolean;
+  bio: boolean;
 }
