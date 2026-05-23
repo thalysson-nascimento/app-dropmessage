@@ -8,6 +8,12 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
   >
+
+      <meta-data
+      android:name="com.google.android.gms.client_id"
+      android:value="@string/server_client_id"
+    />
+
         <meta-data
       android:name="com.google.android.gms.ads.APPLICATION_ID"
       android:value="@string/admob_app_id"
@@ -33,7 +39,7 @@
                 <data
           android:scheme="datingmatch"
           android:host="home"
-          android:pathPrefix="/verify-token-email"
+          android:pathPrefix="/code-confirmation"
         />
             </intent-filter>
         </activity>

@@ -1,0 +1,159 @@
+<div class="notification" (click)="openModal(notification)">
+  <div class="notification__avatar-wrapper">
+    @if (notification.actors.length === 1) {
+    <img
+      class="notification__avatar"
+      [src]="notification.actors[0].avatarUrl"
+      [alt]="notification.actors[0].name"
+    />
+    } @if (notification.actors.length > 1) {
+    <div class="notification__avatar-group">
+      @for (actor of notification.actors.slice(0,2); track actor.id) {
+      <img
+        class="notification__avatar notification__avatar--stacked"
+        [src]="actor.avatarUrl"
+        [alt]="actor.name"
+      />
+      }
+    </div>
+    }
+
+    <div class="notification__action-icon">
+      <span
+        class="material-symbols-outlined"
+        [class.icon-like]="notification.type === NotificationType.LIKE"
+        [class.icon-comment]="notification.type === NotificationType.COMMENT"
+      >
+        @switch (notification.type) { @case (NotificationType.LIKE) { favorite }
+        @case (NotificationType.COMMENT) { chat_bubble } @case
+        (NotificationType.FOLLOW) { person_add } @default { favorite } }
+      </span>
+    </div>
+  </div>
+
+  <div class="notification__content">
+    @switch (notification.type) { @case (NotificationType.LIKE) { @if
+    (notification.meta.totalCount !== undefined && notification.meta.totalCount
+    > 1) {
+    <p>
+      <strong>{{ notification.actors[0].name }}</strong>
+      {{ "text.and" | translate }}
+      <strong>
+        {{
+          "text.otherPeople"
+            | translate : { count: notification.meta.totalCount - 1 }
+        }}
+      </strong>
+    </p>
+    {{ "text.likedYourPostPlural" | translate }}
+    } @else {
+    <p>
+      <strong>{{ notification.actors[0].name }}</strong>
+    </p>
+    {{ "text.likedYourPost" | translate }}
+    } } @case (NotificationType.COMMENT) {
+    <div class="notification__comment">
+      <p>
+        <strong>{{ notification.actors[0].name }}</strong>
+      </p>
+      {{ "text.commented" | translate }}: "{{ notification.meta.commentText }}"
+    </div>
+    } }
+  </div>
+
+  <div class="notification__side">
+    @if (notification.target?.thumbnailUrl) {
+    <img
+      class="notification__thumbnail"
+      [src]="notification.target?.thumbnailUrl"
+      alt="thumbnail"
+    />
+    }
+  </div>
+</div>
+
+<app-modal #modal>
+  @if (notificationSelected) {
+
+  <div class="notification-selected">
+    <div class="notification-selected__avatar-wrapper">
+      <img
+        class="notification-selected__avatar"
+        [src]="notificationSelected.actors[0].avatarUrl"
+        [alt]="notificationSelected.actors[0].name"
+        (click)="openProfile(notificationSelected)"
+      />
+
+      <div class="notification-selected__action-icon">
+        <span
+          class="material-symbols-outlined"
+          [class.icon-like]="
+            notificationSelected.type === NotificationType.LIKE
+          "
+          [class.icon-comment]="
+            notificationSelected.type === NotificationType.COMMENT
+          "
+        >
+          @switch (notificationSelected.type) { @case (NotificationType.LIKE) {
+          favorite } @case (NotificationType.COMMENT) { chat_bubble } @case
+          (NotificationType.FOLLOW) { person_add } @case
+          (NotificationType.SHARE) { sync } @default { favorite } }
+        </span>
+      </div>
+    </div>
+
+    <div class="notification-selected__info">
+      @if(notificationSelected.match) {
+      <h1 class="notification-selected__name">
+        {{ notificationSelected.actors[0].name }}
+        <span class="material-symbols-outlined icon-auto-awesome">
+          auto_awesome
+        </span>
+      </h1>
+
+      <h2 class="notification-selected__text-match">
+        {{ "text.match" | translate }}
+      </h2>
+      } @else {
+      <h1 class="notification-selected__name">
+        {{ notificationSelected.actors[0].name }}
+      </h1>
+
+      <p class="notification-selected__type">
+        @switch (notificationSelected.type) { @case (NotificationType.LIKE) {
+        {{ "text.likedYourPost" | translate }}
+        } @case (NotificationType.COMMENT) {
+        {{ "text.commentedYourPost" | translate }}
+        } }
+      </p>
+      } @if (notificationSelected.meta.commentText) {
+      <div class="notification-selected__comment">
+        "{{ notificationSelected.meta.commentText }}"
+      </div>
+      }
+    </div>
+  </div>
+
+  <div class="notification-selected__buttons">
+    @if(notificationSelected.match) {
+    <button appButton (click)="sendMessage(notificationSelected.matchData)">
+      {{ "button.sendMessage" | translate }}
+    </button>
+    } @else {
+    <button
+      appButton
+      (click)="likeUserProfile(notification.subscription, notificationSelected)"
+    >
+      {{
+        "button.likeUser"
+          | translate : { name: notificationSelected.actors[0].name }
+      }}
+    </button>
+    }
+
+    <button appButton="ghost" variant="ghost" (click)="closeModal()">
+      {{ "button.close" | translate }}
+    </button>
+  </div>
+  }
+</app-modal>

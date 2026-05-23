@@ -1,0 +1,88 @@
+<div class="content">
+  <header class="header">
+    <button class="icon-button" (click)="goBack()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </header>
+
+  <div class="center-wrapper">
+    <div class="emoji-wrapper">
+      <div class="emoji-main">
+        <div class="content-crown">
+          <img src="assets/icon-static/crown.svg" alt="crown" />
+        </div>
+      </div>
+    </div>
+
+    <div class="success-card">
+      <div class="card-glow"></div>
+
+      <h2 class="card-title">{{ "text.plan_gold_congrats" | translate }}</h2>
+      <p class="card-description">
+        {{ "text.plan_gold_description" | translate }}
+      </p>
+
+      <div class="actions">
+        <button appButton (click)="goBack()">
+          {{ "button.go_to_feed" | translate }}
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+
+        <button appButton="secondary" (click)="takePicture()">
+          <span class="material-symbols-outlined">add_box</span>
+          {{ "button.create_another_post" | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="success-card success-card--not-aligned">
+      <div class="content-text">
+        <span class="material-symbols-outlined"> local_fire_department </span>
+        <span class="text">{{ "text.post_is_live" | translate }}</span>
+      </div>
+      <div class="description">
+        <p>
+          {{
+            "text.post_visible_for"
+              | translate
+                : {
+                    amount: sharedPost?.expirationAmount,
+                    unit:
+                      "text." +
+                        (sharedPost?.expirationAmount === 1
+                          ? sharedPost?.expirationUnit + "_one"
+                          : sharedPost?.expirationUnit + "_other") | translate
+                  }
+          }}
+        </p>
+      </div>
+    </div>
+
+    <div class="success-card success-card--not-aligned">
+      <div class="content-text">
+        <span class="text text--no-margin">{{
+          "text.unlocked_for_7_days" | translate
+        }}</span>
+      </div>
+
+      <div class="content-feature-item">
+        <div class="feature-list">
+          @for (item of features; track item.title) {
+          <div class="feature-item">
+            <div class="icon-wrapper">
+              <span class="material-symbols-outlined">
+                {{ item.icon }}
+              </span>
+            </div>
+
+            <div class="text">
+              <span class="title">{{ item.title | translate }}</span>
+              <span class="subtitle">{{ item.subtitle | translate }}</span>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

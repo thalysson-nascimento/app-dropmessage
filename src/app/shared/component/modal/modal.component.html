@@ -1,7 +1,10 @@
-<div class="dialog-backdrop" *ngIf="isOpen" (click)="closeDialog()"></div>
-<div class="dialog-container" [class.open]="isOpen">
-  <div class="dialog-content">
-    <div class="body-modal">
+<div class="modal" [class.modal--open]="isOpen">
+  <div class="modal__backdrop" *ngIf="isOpen" (click)="close()"></div>
+
+  <div class="modal__sheet">
+    <div class="modal__handle"></div>
+
+    <div class="modal__body">
       <ng-content></ng-content>
     </div>
   </div>

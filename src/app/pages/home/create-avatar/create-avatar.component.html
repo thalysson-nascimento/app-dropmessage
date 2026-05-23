@@ -164,9 +164,9 @@
       <p>{{ "input.placeholder.identifyYourSelf" | translate }}</p>
     </div>
 
-    <li class="action-timer" (click)="selectGender('homem')">
+    <li class="action-timer" (click)="selectGender('male')">
       <div class="contain-icon-and-description">
-        <i class="fi fi-tr-mars"></i>
+        <span class="material-icons-outlined gender-icon">male</span>
         <div>
           <p>{{ "text.man" | translate }}</p>
           <span class="drescription-timer">{{
@@ -176,9 +176,9 @@
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
     </li>
-    <li class="action-timer" (click)="selectGender('mulher')">
+    <li class="action-timer" (click)="selectGender('female')">
       <div class="contain-icon-and-description">
-        <i class="fi fi-tr-venus"></i>
+        <span class="material-icons-outlined gender-icon">female</span>
         <div>
           <p>{{ "text.woman" | translate }}</p>
           <span class="drescription-timer">{{
@@ -188,9 +188,9 @@
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
     </li>
-    <li class="action-timer" (click)="selectGender('não binário')">
+    <li class="action-timer" (click)="selectGender('notBinary')">
       <div class="contain-icon-and-description">
-        <i class="fi fi-tr-transgender"></i>
+        <span class="material-icons-outlined gender-icon">transgender</span>
         <div>
           <p>{{ "text.nonBinary" | translate }}</p>
           <span class="drescription-timer">{{
@@ -209,9 +209,9 @@
       <p>{{ "text.whatYourInterest" | translate }}</p>
     </div>
 
-    <li class="action-timer" (click)="selectInterests('homem')">
+    <li class="action-timer" (click)="selectInterests('male')">
       <div class="contain-icon-and-description">
-        <i class="fi fi-tr-mars"></i>
+        <span class="material-icons-outlined gender-icon">male</span>
         <div>
           <p>{{ "text.man" | translate }}</p>
           <span class="drescription-timer">{{
@@ -221,9 +221,9 @@
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
     </li>
-    <li class="action-timer" (click)="selectInterests('mulher')">
+    <li class="action-timer" (click)="selectInterests('female')">
       <div class="contain-icon-and-description">
-        <i class="fi fi-tr-venus"></i>
+        <span class="material-icons-outlined gender-icon">female</span>
         <div>
           <p>{{ "text.woman" | translate }}</p>
           <span class="drescription-timer">{{
@@ -233,9 +233,9 @@
       </div>
       <img src="assets/icon-static/arrow-right.svg" alt="" />
     </li>
-    <li class="action-timer" (click)="selectInterests('ambos')">
+    <li class="action-timer" (click)="selectInterests('both')">
       <div class="contain-icon-and-description">
-        <i class="fi fi-tr-transgender"></i>
+        <span class="material-icons-outlined gender-icon">transgender</span>
         <div>
           <p>{{ "text.both" | translate }}</p>
           <span class="drescription-timer">{{
@@ -271,7 +271,7 @@
     <button
       appButtonStyle
       [buttonType]="'secondary'"
-      (click)="modalPhotoNotFound.closeDialog(); openBottomSheet()"
+      (click)="modalPhotoNotFound.close(); openBottomSheet()"
     >
       {{ "button.takePhoto" | translate }}
     </button>
@@ -303,7 +303,7 @@
     <button
       appButtonStyle
       [buttonType]="'secondary'"
-      (click)="modalErrorRequest.closeDialog()"
+      (click)="modalErrorRequest.close()"
     >
       {{ "button.tryAgain" | translate }}
     </button>

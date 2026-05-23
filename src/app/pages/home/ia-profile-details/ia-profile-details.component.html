@@ -1,0 +1,85 @@
+<div class="ia-details">
+  <div class="ia-details__background">
+    <video
+      #bgVideo
+      [src]="movieAI"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      webkit-playsinline
+      disablePictureInPicture
+      controlslist="nodownload nofullscreen noremoteplayback"
+      [class.video-ready]="videoReady"
+    ></video>
+    <div class="ia-details__overlay"></div>
+  </div>
+
+  <div class="swiper-container">
+    <swiper-container
+      #swiperRef
+      slides-per-view="1"
+      space-between="16"
+      class="mySwiper"
+    >
+      <swiper-slide>
+        <div class="ia-details__content">
+          <header class="ia-details__header">
+            <button class="back-button" (click)="goBack()">
+              <img
+                class="back-icon"
+                src="assets/icon-static/arrow-white-left .svg"
+                alt="back"
+              />
+            </button>
+
+            <div class="ia-details__title">
+              <h1>{{ aiProfiles.name }}</h1>
+              <p>{{ aiProfiles.personality }}</p>
+            </div>
+          </header>
+
+          <footer class="ia-details__footer">
+            <div class="section-about">
+              <h2>{{ "text.about" | translate }}</h2>
+
+              <app-card-glass>
+                <ng-container cardContent>
+                  <p class="about-text">
+                    {{ aiProfiles.description }}
+                  </p>
+
+                  <div class="tags">
+                    @for(trait of aiProfiles.traits; track trait) {
+                    <span>{{ trait.name }}</span>
+                    }
+                  </div>
+
+                  <div class="info-wrapper">
+                    <span
+                      class="material-symbols-outlined"
+                      (click)="slideNext()"
+                      >info</span
+                    >
+                  </div>
+                </ng-container>
+              </app-card-glass>
+            </div>
+
+            <button class="subscribe-button">
+              <!-- {{ "button.continueToSubscribe" | translate }} -->
+              {{ "button.comingSoon" | translate }}
+            </button>
+          </footer>
+        </div>
+      </swiper-slide>
+      <swiper-slide>
+        <app-ia-profile-details-info
+          [aiProfiles]="aiProfiles"
+          ($goBack)="slidePrev()"
+        ></app-ia-profile-details-info>
+      </swiper-slide>
+    </swiper-container>
+  </div>
+</div>

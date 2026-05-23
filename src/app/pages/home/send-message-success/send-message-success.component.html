@@ -1,22 +1,81 @@
-<div class="container">
-  <div class="header">
-    <img
-      src="assets/icon-static/arrow-left.svg"
-      style="width: 24px; height: 24px"
-      alt=""
-      (click)="goToPostList()"
-    />
-  </div>
+<div class="content">
+  <header class="header">
+    <button class="icon-button" (click)="goBack()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </header>
 
-  <div class="contain-body">
-    <h1 class="title">Compartilhado com sucesso!</h1>
-    <div
-      id="send-message"
-      class="send-message"
-      style="width: 270px; height: 270px"
-    ></div>
-    <div class="contain-subtitle">
-      <p>Agora seu post está visível para todos no tempo escolhido!</p>
+  <div class="center-wrapper">
+    <div class="emoji-wrapper">
+      <div class="emoji-main">🔥</div>
+      <div class="emoji-sparkle">✨</div>
+      <div class="emoji-heart">💖</div>
+    </div>
+
+    <div class="success-card">
+      <div class="card-glow"></div>
+
+      <h2 class="card-title">{{ "text.all_set" | translate }}</h2>
+
+      <p class="card-description">
+        {{ "text.post_visible_subtitle" | translate }}
+      </p>
+
+      <div class="posts-section">
+        <p class="posts-label">{{ "text.active_posts" | translate }}</p>
+
+        <div class="posts-list">
+          @for(item of sharedPost?.listActivePost; track item) {
+          <div class="post-item">
+            <div class="avatar">
+              <img [src]="item.image" />
+            </div>
+            <div class="time-ago">
+              <span>{{ formatTimeLeft(item.expirationTimer) }}</span>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+
+      <div class="actions">
+        <button appButton class="btn-primary" (click)="goBack()">
+          {{ "button.go_to_feed" | translate }}
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+
+        <button
+          appButton="secondary"
+          class="btn-secondary"
+          (click)="takePicture()"
+        >
+          <span class="material-symbols-outlined">add_box</span>
+          {{ "button.create_another_post" | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="success-card success-card--not-aligned">
+      <div class="content-text">
+        <span class="material-symbols-outlined"> local_fire_department </span>
+        <span class="text">{{ "text.post_visible_title" | translate }}</span>
+      </div>
+      <div class="description">
+        <p>
+          {{
+            "text.post_visible_for"
+              | translate
+                : {
+                    amount: sharedPost?.expirationAmount,
+                    unit:
+                      "text." +
+                        (sharedPost?.expirationAmount === 1
+                          ? sharedPost?.expirationUnit + "_one"
+                          : sharedPost?.expirationUnit + "_other") | translate
+                  }
+          }}
+        </p>
+      </div>
     </div>
   </div>
 </div>

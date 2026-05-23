@@ -12,11 +12,11 @@ export class ErrorModalComponent {
   @Input() type: 'success' | 'warn' | 'error' = 'success';
   isOpen = false;
 
-  openDialog() {
+  open() {
     this.isOpen = true;
   }
 
-  closeDialog() {
+  close() {
     this.isOpen = false;
   }
 }

@@ -34,7 +34,7 @@ export class VerifyUserPermissionResolver implements Resolve<boolean> {
     return this.preferencesUserAuthenticateService.getToken().pipe(
       map((userData) => {
         if (!userData?.userVerificationData.verificationTokenEmail) {
-          this.router.navigateByUrl('home/verify-token-email');
+          this.router.navigateByUrl('home/code-confirmation');
           return false;
         }
 
@@ -43,30 +43,10 @@ export class VerifyUserPermissionResolver implements Resolve<boolean> {
           return false;
         }
 
-        if (!userData?.userVerificationData.validatorLocation) {
-          this.router.navigateByUrl('home/user-location');
+        if (!userData?.userVerificationData.bio) {
+          this.router.navigateByUrl('home/user-description');
           return false;
         }
-
-        if (
-          userData?.goldFreeTrialData !== null &&
-          !userData?.goldFreeTrialData?.viewCardFreeTrial
-        ) {
-          // this.router.navigateByUrl('home/view-card-free-trial');
-          this.router.navigateByUrl('home/admob-video-reward-free-trial');
-          return false;
-        }
-
-        // Verificar se statusSignature false e watchVideoRewardAdmob false
-        if (
-          (userData.statusSignature === false &&
-            this.watchVideoRewardAdmob === false) ||
-          this.watchVideoRewardAdmob === null
-        ) {
-          this.router.navigateByUrl('home/admob-video-reward-free-trial');
-          return false;
-        }
-
         return true;
       })
     );

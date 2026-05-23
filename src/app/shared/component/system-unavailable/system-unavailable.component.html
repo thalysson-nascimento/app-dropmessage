@@ -1,5 +1,7 @@
 <div class="contain-system-unavailable">
-  <p class="title-system-unavailable">Ops, serviço indisponível!</p>
+  <p class="title-system-unavailable">
+    {{ "text.systemUnavailable" | translate }}
+  </p>
 
   <div class="contain-icon-animation">
     <div id="lottie-icon-system-unavailable" class="icon-animation"></div>
@@ -15,7 +17,7 @@
       [buttonType]="'secondary'"
       (click)="tryAgainLoadingPostMessage()"
     >
-      Tentar novamente
+      {{ "button.tryAgain" | translate }}
     </button>
   </div>
 </div>

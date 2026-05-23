@@ -18,7 +18,7 @@ const CoreModules = [TranslateModule];
 })
 export class CardFirstPublicationComponent implements OnInit {
   @Input()
-  gender: string = 'homem';
+  gender: string = 'male';
   private destroy$: Subject<void> = new Subject<void>();
 
   pageView: string = 'DatingMatch:PostMessage';

@@ -120,11 +120,11 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   openModalGender() {
-    this.genderModal.openDialog();
+    this.genderModal.open();
   }
 
   openModalInterests() {
-    this.interestsModal.openDialog();
+    this.interestsModal.open();
   }
 
   selectGender(selectedTypeGender: string) {
@@ -133,7 +133,7 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
       .get('gender')
       ?.setValue(selectedTypeGender);
     // Fecha o modal após a seleção
-    this.genderModal.closeDialog();
+    this.genderModal.close();
   }
 
   selectInterests(selectedInterests: string) {
@@ -142,7 +142,7 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
       .get('interests')
       ?.setValue(selectedInterests);
     // Fecha o modal após a seleção
-    this.interestsModal.closeDialog();
+    this.interestsModal.close();
   }
 
   ngAfterViewInit(): void {
@@ -289,7 +289,7 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
   createAvatarAndCompletedData() {
     if (this.avatarAndCompletedFormGroup.valid) {
       if (this.cameraImage === null) {
-        this.modalPhotoNotFound.openDialog();
+        this.modalPhotoNotFound.open();
         return;
       }
 
@@ -366,7 +366,7 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
                               .info(loggerInterest)
                               .pipe(takeUntil(this.destroy$))
                               .subscribe();
-                            this.router.navigateByUrl('home/post-messages');
+                            this.router.navigateByUrl('home/user-description');
                           },
                         });
                     }
@@ -390,7 +390,7 @@ export class CreateAvatarComponent implements OnInit, AfterViewInit, OnDestroy {
                   .pipe(takeUntil(this.destroy$))
                   .subscribe();
 
-                this.modalErrorRequest.openDialog();
+                this.modalErrorRequest.open();
               },
               complete: () => {
                 this.isLoadingButton = false;

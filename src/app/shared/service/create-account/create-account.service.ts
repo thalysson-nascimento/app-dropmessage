@@ -16,11 +16,11 @@ export class CreateAccountService {
   constructor(private httpClient: HttpClient) {}
 
   createAccount(
-    dataCreateAccount: CreateAccount
+    userData: CreateAccount
   ): Observable<CreateAccountSuccess> {
     return this.httpClient.post<CreateAccountSuccess>(
       `${this.baseURL}/auth/create-account`,
-      dataCreateAccount
+      userData
     );
   }
 }

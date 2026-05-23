@@ -1,0 +1,21 @@
+<div class="error-container">
+  <div class="error-content">
+    <div class="icon-wrapper">
+      <span class="material-symbols-outlined main-icon"> cloud_off </span>
+
+      <div class="icon-badge">
+        <span class="material-symbols-outlined badge-icon">
+          error_outline
+        </span>
+      </div>
+    </div>
+
+    <h2 class="title">{{ "text.errorSomethingWentWrong" | translate }}</h2>
+
+    <p class="description">
+      {{ "text.describeErrorTryAgain" | translate }}
+    </p>
+
+    <ng-content></ng-content>
+  </div>
+</div>

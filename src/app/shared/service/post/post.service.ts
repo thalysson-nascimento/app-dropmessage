@@ -6,7 +6,7 @@ import {
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { currentEnvironment } from '../../../../environment.config';
-import { PostList } from '../../interface/post';
+import { Post } from '../../interface/post.interface';
 import { PostBase } from './post.base';
 
 @Injectable({
@@ -19,13 +19,13 @@ export class PostMessageService extends PostBase {
     super(httpClient);
   }
 
-  listPost(page: number = 1, limit: number = 10): Observable<PostList> {
+  listPost(page: number = 1, limit: number = 10): Observable<Post> {
     const params = new HttpParams()
       .set('page', page.toString())
       .set('limit', limit.toString());
 
     return this.httpClient
-      .get<PostList>(`${this.baseURL}/post-message`, { params })
+      .get<Post>(`${this.baseURL}/post-message`, { params })
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           return throwError(() => errorResponse);

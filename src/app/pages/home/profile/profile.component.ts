@@ -88,7 +88,7 @@ export class ProfileComponent implements OnInit {
           .pipe(takeUntil(this.destroy$))
           .subscribe();
 
-        this.router.navigateByUrl('home/post-messages');
+        this.router.navigateByUrl('home/main/post-message');
       });
     }
   }
@@ -108,7 +108,7 @@ export class ProfileComponent implements OnInit {
   }
 
   goToPostMessage() {
-    this.router.navigateByUrl('home/post-messages');
+    this.router.navigateByUrl('home/main/post-message');
     this.navigateBackUsingApp();
   }
 

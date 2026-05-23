@@ -13,8 +13,8 @@ const config: CapacitorConfig = {
       customScheme: 'datingmatch', // Deve coincidir com o esquema do link
       routes: [
         {
-          path: '/verify-token-email',
-          component: 'app-verify-token-email',
+          path: '/code-confirmation',
+          component: 'app-code-confirmation',
         },
       ],
     },
@@ -26,9 +26,6 @@ const config: CapacitorConfig = {
     },
     GoogleAuth: {
       scopes: ['profile', 'email'],
-      serverClientId:
-        '999388705991-k8nj0pm920domilt0mtoedfqefgqvf0f.apps.googleusercontent.com', // Web Client ID
-      forceCodeForRefreshToken: true,
     },
     SplashScreen: {
       launchShowDuration: 2000, // Evita que a splash screen seja oculta automaticamente

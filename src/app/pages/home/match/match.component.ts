@@ -74,7 +74,7 @@ export class MatchComponent implements OnInit {
   goToPrivacyChat() {
     if (this.matchUser) {
       const userMatch: DataConnectChatMessage = {
-        mathId: this.matchUser?.matchId,
+        matchId: this.matchUser?.matchId,
         name: this.matchUser?.name,
         avatar: this.matchUser?.avatar?.image,
         userLocation: {

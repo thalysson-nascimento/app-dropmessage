@@ -27,12 +27,6 @@
     </div>
   </div>
 
-  <!-- <div class="contain-account-post">
-    <p class="acount-post" *ngIf="!isLoading">
-      meus posts({{ listPostMessage.length }})
-    </p>
-  </div> -->
-
   <app-system-unavailable
     *ngIf="showSystemUnavailable"
     (clickLoading)="tryAgain()"
@@ -45,21 +39,35 @@
   <section *ngIf="!showSystemUnavailable">
     <div *ngIf="!isLoading">
       <div
-        class="image-container"
+        class="user-post-message__image-wrapper"
         *ngFor="let postMessage of listPostMessage; let i = index"
       >
-        <img
-          [src]="postMessage.image"
-          [style.height]="randomHeights[i]"
-          alt=""
-        />
-        <div class="overlay">
+        @if (!postMessage.isExpired) {
+        <div class="user-post-message__badge">
+          <div class="user-post-message__badge">
+            <app-badge-circle
+              [title]="postMessage.updatedAt"
+              fontSize="0.5625rem"
+              padding="0.25rem 0.6rem"
+            ></app-badge-circle>
+          </div>
+        </div>
+        }
+        <div class="user-post-message__image-container">
           <img
-            src="assets/icon-static/heart-like.svg"
-            class="heart-like"
+            [src]="postMessage.image"
+            [style.height]="randomHeights[i]"
             alt=""
+            class="user-post-message__image"
           />
-          <p>{{ postMessage.totalLikes }}</p>
+          <div class="user-post-message__overlay">
+            <img
+              src="assets/icon-static/heart-like.svg"
+              class="user-post-message__heart-like"
+              alt=""
+            />
+            <p>{{ postMessage.totalLikes }}</p>
+          </div>
         </div>
       </div>
     </div>

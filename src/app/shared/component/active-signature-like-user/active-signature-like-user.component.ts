@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { ButtonStyleDirective } from '../../directives/button-style/button-style.directive';
 import { LastLikePostMessage } from '../../interface/last-like-post-message.interface';
 import { LastLikePostMessageService } from '../../service/last-like-post-message/last-like-post-message.service';
@@ -17,7 +18,7 @@ const SharedComponents = [
   templateUrl: './active-signature-like-user.component.html',
   styleUrls: ['./active-signature-like-user.component.scss'],
   standalone: true,
-  imports: [...SharedComponents],
+  imports: [...SharedComponents, TranslateModule],
 })
 export class ActiveSignatureLikeUserComponent implements OnInit {
   isLoading: boolean = true;

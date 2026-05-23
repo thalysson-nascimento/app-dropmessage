@@ -1,0 +1,103 @@
+<div class="profile">
+  <div class="profile__container">
+    <div class="profile__content">
+      @if (avatar) {
+      <div class="profile__header">
+        <div class="profile__avatar-wrapper">
+          <div class="profile__avatar">
+            <img
+              class="profile__avatar-img"
+              [src]="avatar.image"
+              alt="avatar"
+            />
+          </div>
+          <div class="profile__avatar-status"></div>
+        </div>
+        <h1 class="profile__name">
+          {{ avatar.user.name }}
+        </h1>
+
+        <p class="profile__email">
+          {{ avatar.user.email }}
+        </p>
+      </div>
+      } @if (isLoadingCardSubscription) {
+      <div class="contain-load-shimmer-card">
+        <app-load-shimmer [height]="'3rem'"></app-load-shimmer>
+
+        <app-load-shimmer [height]="'9rem'"></app-load-shimmer>
+
+        <app-load-shimmer [height]="'3rem'"></app-load-shimmer>
+      </div>
+      } @else if(showCardSubscription) {
+      <div class="profile__premium">
+        <div class="profile__premium-content">
+          <div class="profile__premium-left">
+            <div class="profile__premium-title">
+              <span class="material-icons-outlined"> auto_awesome </span>
+              <h2>Unlock Premium</h2>
+            </div>
+
+            <ul class="profile__premium-list">
+              <li>
+                <span class="material-icons-outlined">check_circle</span>
+                Access personalized benefits
+              </li>
+              <li>
+                <span class="material-icons-outlined">check_circle</span>
+                Explore premium features
+              </li>
+            </ul>
+
+            <button
+              class="profile__premium-button"
+              (click)="goToListSignature()"
+            >
+              Subscribe to plan
+            </button>
+          </div>
+
+          <div class="profile__premium-icon">
+            <span class="material-icons-outlined"> workspace_premium </span>
+          </div>
+        </div>
+      </div>
+      } @else if (showError) {
+      <app-error></app-error>
+      } @for(menu of menuSections; track menu) {
+      <h3 class="profile__section-title">
+        {{ menu.title }}
+      </h3>
+
+      <div class="profile__menu">
+        <button
+          class="profile__menu-item"
+          *ngFor="let item of menu.items"
+          (click)="navigate(item)"
+        >
+          <div class="profile__menu-left">
+            <div class="profile__menu-icon">
+              <span class="material-icons-outlined">
+                {{ item.icon }}
+              </span>
+            </div>
+
+            <div class="profile__menu-content-action">
+              <span class="profile__menu-label">
+                {{ item.label }}
+              </span>
+              <p class="profile__menu-description">
+                {{ item.description }}
+              </p>
+            </div>
+          </div>
+
+          <span class="material-icons-outlined profile__menu-arrow">
+            chevron_right
+          </span>
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+</div>

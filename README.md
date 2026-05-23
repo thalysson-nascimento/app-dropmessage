@@ -72,3 +72,15 @@ keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -sto
 
 assinar
 jarsigner -verbose -keystore release-key.keystore ./app/app-release.aab DatingMatchSignature
+
+observação se atentar quando estiver dando error de cors se esta rodando o start:dev se nao ele vai ficar apontando para a url mock
+
+## OTIMIZADOR DE VIDEO
+
+deve estar na pasta do video para otimizar
+ffmpeg -i sophia-movie.mp4 -vcodec libx264 -crf 28 -preset fast -acodec aac -b:a 128k sophia-movie-otimizado.mp4
+
+## para inpecionar o debugger
+
+observação: deve se instalar o apk e nao o aab.
+chrome://inspect/#devices

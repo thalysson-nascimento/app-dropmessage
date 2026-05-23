@@ -16,7 +16,7 @@ export class ListSettingsComponent implements OnInit {
   ngOnInit() {}
 
   goToHomePostMessages() {
-    this.router.navigateByUrl('/home/post-messages');
+    this.router.navigateByUrl('/home/main/post-message');
   }
 
   goToSign() {

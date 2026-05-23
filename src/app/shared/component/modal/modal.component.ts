@@ -9,13 +9,13 @@ import { Component } from '@angular/core';
   imports: [CommonModule],
 })
 export class ModalComponent {
-  isOpen = false;
+  public isOpen = false;
 
-  openDialog() {
+  open() {
     this.isOpen = true;
   }
 
-  closeDialog() {
+  close() {
     this.isOpen = false;
   }
 }

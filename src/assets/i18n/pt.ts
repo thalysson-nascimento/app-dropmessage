@@ -1,4 +1,5 @@
 import { I18nTranslationsBase } from './i18n-translations.base.interface';
+import { PRIVACY_POLICY_PT } from './privacy-policy.pt';
 
 export const PT_TRANSLATIONS: I18nTranslationsBase = {
   button: {
@@ -8,6 +9,7 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     createAccountWithGoogle: 'Criar conta com o Google',
     buttonCreateAccount: 'Criar conta',
     touchWhatch: 'Toque para assistir',
+    subscribe: 'Assinar',
     subscribePlan: 'Assinar plano',
     deleteAccount: 'Deletar conta',
     takePhoto: 'Tirar foto',
@@ -15,6 +17,7 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     selectFromGallery: 'Selecionar da galeria',
     allowLocation: 'Permitir localização',
     confirmeLocation: 'Confirmar localização',
+    goToLogin: 'Ir para login',
     logout: 'Sair',
     codeConfirmation: 'Confirmar código',
     processing: 'Processando',
@@ -22,9 +25,25 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     takePicture: 'Tirar foto',
     allowCamera: 'Permitir camera',
     completeProfile: 'Completar perfil',
+    learnMoreAbout: 'Saiba mais sobre',
     titleCard:
       'Faça sua primeira postagem e tente se conectar com novas pessas.',
     sibtitleCard: 'Compartilar post',
+    uploadPhoto: 'Enviar foto',
+    changePhoto: 'Alterar foto',
+    share: 'Compartilhar',
+    cancel: 'Cancelar',
+    exploreIaProfile: 'Explore perfis de IA',
+    sendMessage: 'Mandar mensagem',
+    likeUser: 'Curtir {{name}}',
+    close: 'Fechar',
+    continue: 'Continuar',
+    continueToSubscribe: 'Continuar para assinar',
+    createPost: 'Fazer uma postagem',
+    go_to_feed: 'Ir para o Feed',
+    create_another_post: 'Criar outro Post',
+    comingSoon: 'Em breve...',
+    save: 'Salvar',
   },
   input: {
     placeholder: {
@@ -44,15 +63,34 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     or: 'ou',
     linkDoNotAccount: `Ainda não tem uma conta?`,
     titleError: 'Ops, erro de requisição!',
-    descriptionError: '',
+    descriptionError:
+      'Error ao realizar a requisição, tente novamente mais tarde.',
     titleCreateAccount: 'Crie sua conta',
+    profileCreatedSuccess: 'Perfil cadastrado com sucesso',
+    backToLogin: 'Volte para a tela de login e continue o seu cadastro',
     registrationAgree: 'Ao realizar o seu cadastro você concorda com os nossas',
     politicsPrivacy: 'Políticas de privacidade',
+    premiumBannerTitle: 'Desbloqueie todas as suas interações.',
+    premiumBannerSubtitle: 'Assine o Premium agora!',
     noNewFriends: 'Ops, sem novas amizades!',
+    noProfilesFound: 'Não encontramos novos perfis agora.',
+    iaProfileDescription:
+      'Aproveite os perfis de IA criados para conversas e experiências únicas.',
     tryAgainLater: 'Que tal tentar novamente mais tarde?',
     likeMoreLikes: 'Gostaria de mais curtidas?',
     watchVideoReward:
       'Assista o vídeo publicitário para continuar com mais curtidas.',
+    videoRewardTitle: 'Ganhe +4 curtidas',
+    videoRewardDescription:
+      'Assista um vídeo rápido e aumente suas chances de conquistar matches no app.',
+    videoRewardLoading: 'Carregando o anúncio... aguarde um instante.',
+    videoRewardWebHint:
+      'Navegador detectado. O anúncio será simulado para teste.',
+    videoRewardErrorLoad: 'Não foi possível carregar o anúncio.',
+    videoRewardChecking: 'Recompensa recebida! Validando...',
+    videoRewardReleased: 'Recompensa liberada! Você pode continuar.',
+    videoRewardConfirmError: 'Não foi possível confirmar a recompensa.',
+    videoRewardIncomplete: 'Vídeo não concluído. Você pode tentar novamente.',
     becomeSubscriber: 'Seja um assinante',
     personalizedBenefits: 'Acesse benefícios personalizados',
     explorePremium: 'Explore recursos premium',
@@ -82,6 +120,11 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     descriptionConfirmDeleteAccount:
       'Após deletar sua conta você perderá todos os dados, seus posts e as amizadas realizadas',
     noNotifications: 'Ops, sem curtidas!',
+    notificationsEmptyDescription:
+      'Suas notificações, curtidas e comentários aparecerão aqui quando as pessoas interagirem com você.',
+    shareMomentLimitedTime:
+      'Compartilhe um momento que dure por tempo limitado',
+    createPost: 'Fazer uma postagem',
     noChat: 'Ops, sem novas amizades!',
     chooseTimer: 'Escolha o tempo que o seu post ficará visível',
     thirtyMinutes: '30 minutos',
@@ -98,12 +141,27 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     version: 'Versão',
     titleErrorLocation: 'Ops, erro de localização',
     descriptionErrorLocation:
-      ' Não foi possível obter sua localização, para continuar clique no botão abaixo, ou acesse as configurações doseu disposivo.',
+      'Não foi possível obter sua localização, para continuar clique no botão abaixo, ou acesse as configurações doseu disposivo.',
     errorRequestLocation:
       'Houve um erro de requisição, tente novamente mais tarde.',
+    errorSomethingWentWrong: 'Ops, algo deu errado!',
+    couldNotConnectToServerSharePost:
+      'Não foi possível conectar ao servidor para compartilhar seu post. Verifique sua conexão e tente novamente.',
+    createTimedPost: 'Criar publicação cronometrada',
+    updateProfilePhoto: 'Atualizar foto de perfil',
+    chooseNewPhotoToUpdateProfile:
+      'Escolha uma nova foto para atualizar sua imagem de perfil.',
+    expiresIn: 'Expira em',
+    visibilityDuration: 'Duração de visibilidade',
+    cameraAccessDenied: 'Acesso à câmera negado',
+    enableCameraPermissionInSettings:
+      'Permita a permissão da câmera nas configurações para enviar uma foto.',
+    tapToSelectFromGallery: 'Toque para selecionar da galeria',
     titleVerifyEmail: 'Verifique o seu e-mail',
     subtitleVerifyEmail: 'Verifique o código que foi enviado para o seu e-mail',
     invalidCode: 'Ops, código inválido',
+    invalidEmailVerificationCode:
+      'O código de verificação enviado para o seu e-mail não confere. Verifique e tente novamente.',
     plan: 'Plano',
     goldPlanPromotion: 'PROMOÇÃO PLANO GOLD',
     describeGoldPlanPromotion:
@@ -129,14 +187,96 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     describeBinary: 'Identidade além do binário tradicional',
     describeInterestMan: 'Afinidade com o genero masculino',
     describeInterestWoman: 'Afinidade com o genero feminino',
-    describeInterestBoth: 'Afinidade com ambos os generos',
+    describeInterestBoth: 'Afinidade com both os generos',
     whatYourInterest: 'Qual o seu interesse?',
     photoForProfile: 'Ops, falta a foto para o perfil',
     describePhotoForProfile:
       'Para concluir o seu cadastro você precisa tirar ou selecionar uma foto para o seu perfil.',
     describeErrorTryAgain:
       'Ops no momento houve um erro de requisição. Tente novamente mais tarde',
+    errorOccurred: 'Ops, ocorreu um erro!',
+    errorRequestTryAgainLater:
+      'Houve um erro na requisição, tente novamente mais tarde.',
+    systemUnavailable: 'Ops, serviço indisponível!',
+    errorStatsCouldNotLoad: 'Não foi possível carregar as estatísticas.',
+    totalPosts: 'Total de post',
+    totalReceivedLikes: 'Curtidas recebidas',
+    totalGivenLikes: 'Você curtiu',
     onlineRecently: 'online recentemente',
     userNotOnline: 'Ops, não encontramos nenhum usuário online',
+    welcomeDatingMatch: 'Seja bem vindo ao DatingMatch',
+    accountCreatedContinueProfile:
+      'Sua conta foi cadastrada com sucesso, vamos dar continuidade no seu perfil.',
+    continueToProfile: 'Continuar para o perfil',
+    post_visible_for:
+      'Ele ficará visível por {{amount}} {{unit}} para todos os seus matches. Aproveite enquanto dura!',
+    minute_one: 'minuto',
+    minute_other: 'minutos',
+    hour_one: 'hora',
+    hour_other: 'horas',
+    day_one: 'dia',
+    day_other: 'dias',
+    chooseOption: 'Escolha uma opção',
+    reportProblem: 'Relatar um problema',
+    unmatchUser: 'Desfazer match',
+    waitAMoment: 'Aguarde um instante',
+    reportingProblem: 'Estamos relatando seu problema',
+    errorReportingProblem: 'Erro ao relatar o problema',
+    errorReportingProblemDesc:
+      'Ops, houve um erro ao relatar o problema, tente novamente mais tarde!',
+    chooseOptionReportProblem: 'Escolha uma opção para relatar o problema',
+    notWantTalk: 'Eu não quero mais falar com ele',
+    abusiveContent: 'Imagem ou textos abusivos',
+    inappropriatePhotos: 'Fotos ou nomes inapropriados',
+    childSexualExploitation: 'Exploração sexual infantil',
+    privacyPolicy: PRIVACY_POLICY_PT,
+    ai: 'ia',
+    and: 'e',
+    otherPeople: 'outras {{count}} pessoas',
+    likedYourPost: 'curtiu seu post.',
+    likedYourPostPlural: 'curtiram seu post.',
+    commented: 'comentou',
+    commentedYourPost: 'comentou em seu post',
+    match: 'Vocês deram match!',
+    biography: 'Biografia',
+    height: 'Altura',
+    zodiac: 'Signo',
+    characteristics: 'Características',
+    lifestyle: 'Estilo',
+    about: 'Sobre',
+    noMessages: 'Nenhuma mensagem ainda',
+    messagesEmptyDescription:
+      'Quando você der match com alguém, poderá iniciar uma conversa por aqui.',
+    otpTitle: 'Digite o código OTP',
+    otpDescription: 'O código foi enviado para',
+    verify: 'Verificar',
+    otpNotReceived: 'Não recebeu o código?',
+    resendOtp: 'Reenviar',
+    secureTitle: 'Verificação Segura',
+    secureDescription:
+      'Utilizamos criptografia padrão da indústria para manter seus dados seguros.',
+    plan_gold_congrats: 'Parabéns!',
+    plan_gold_description:
+      'Você ganhou 7 dias de assinatura DatingMatch Gold por publicar seu primeiro Post.',
+    post_is_live: 'Seu Post está no ar!',
+    unlocked_for_7_days: 'Desbloqueados para 7 dias!',
+    feature_no_ads: 'Sem anúncios',
+    feature_no_interruptions: 'Navegue sem interrupções',
+    feature_300_likes: 'Likes ilimitados',
+    feature_300_likes_subtitle: 'Curta quantos perfis quiser',
+    feature_see_match_location: 'Localização dos matchs',
+    feature_see_match_location_subtitle: 'Veja onde seus matchs estão',
+    feature_see_who_liked: 'Veja quem curtiu você',
+    feature_discover_interest: 'Descubra quem demonstrou interesse',
+    all_set: 'Tudo certo!',
+    post_visible_subtitle:
+      'Seu post já está visível para seus matches e publicado temporariamente.',
+    active_posts: 'POSTS ATIVOS',
+    createAccountSuccess: '|o| Sua conta foi criada com sucesso!',
+    descriptionCreateAccountSuccess:
+      'Sua conta foi cadastrada com sucesso, faça login e confirme o token enviado para seu email.',
+    professionTitle: 'Com o que você trabalha?',
+    professionDescription:
+      'Adicione sua profissão para que as pessoas conheçam um pouco mais sobre sua rotina.',
   },
 };

@@ -17,17 +17,20 @@ import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { Device } from '@capacitor/device';
 import { TranslateModule } from '@ngx-translate/core';
-import { currentEnvironment } from '../../../../environment.config';
 import { BottomSheetErrorRequestComponent } from '../../../shared/component/bottom-sheet/bottom-sheet-error-request.component';
-import { ErrorModalComponent } from '../../../shared/component/error-modal/error-modal.component';
-import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
+import { FeedbackOverlayComponent } from '../../../shared/component/feedback-overlay/feedback-overlay.component';
+import { ModalComponent } from '../../../shared/component/modal/modal.component';
+import { SpinnerComponent } from '../../../shared/component/spinner/spinner.component';
+import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
 import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
 import { CreateAccount } from '../../../shared/interface/create-account.interface';
-import { CreateAccountWithGoogleOauthService } from '../../../shared/service/create-account-with-google-oauth/create-account-with-google-oauth.service';
+import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { CreateAccountService } from '../../../shared/service/create-account/create-account.service';
+import { DeviceLanguageService } from '../../../shared/service/device-language/device-language.service';
 import { GoogleAuthService } from '../../../shared/service/google-auth/google-auth.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
 import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
+import { SignWithGoogleService } from '../../../shared/service/sign-with-google/sign-with-google.service';
 import { TokenStorageSecurityRequestService } from '../../../shared/service/token-storage-security-request/token-storage-security-request.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 
@@ -35,8 +38,10 @@ declare let gtag: Function;
 
 const SharedComponents = [
   InputCustomDirective,
-  ButtonStyleDirective,
-  ErrorModalComponent,
+  ButtonDirective,
+  ModalComponent,
+  FeedbackOverlayComponent,
+  SpinnerComponent,
 ];
 
 const CoreModule = [ReactiveFormsModule, CommonModule, TranslateModule];
@@ -49,15 +54,16 @@ const CoreModule = [ReactiveFormsModule, CommonModule, TranslateModule];
   styleUrl: './signup.component.scss',
 })
 export class SignupComponent implements OnInit {
-  private baseUrl: string = currentEnvironment.baseURL;
   buttonDisalbled: boolean = false;
   createAccountFormGroup!: FormGroup;
   isLoadingButton: boolean = false;
   user: any = null;
-  errorMessage: unknown;
+  errorMessage!: string;
   isLoadingButtonGoogleOAuth: boolean = false;
-  @ViewChild('modalErrorRequest') modalErrorRequest!: ErrorModalComponent;
   typeErrorModal: 'success' | 'warn' | 'error' = 'success';
+
+  @ViewChild('modalError') modalError!: ModalComponent;
+  @ViewChild('modalSuccess') modalSuccess!: ModalComponent;
 
   constructor(
     private router: Router,
@@ -66,15 +72,18 @@ export class SignupComponent implements OnInit {
     private bottomSheet: MatBottomSheet,
     @Inject(PLATFORM_ID) private platformId: Object,
     private googleAuthService: GoogleAuthService,
-    private createAccountWithGoogleOauthService: CreateAccountWithGoogleOauthService,
     private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService,
     private userHashPublicService: UserHashPublicService,
     private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
-    private loggerService: LoggerService
+    private loggerService: LoggerService,
+    private deviceLanguageService: DeviceLanguageService,
+    private signWithGoogleService: SignWithGoogleService,
+    private cacheAvatarService: CacheAvatarService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.createAccountFormBuilder();
+    await this.googleAuthService.initializeApp();
   }
 
   navigateBackUsingApp() {
@@ -82,58 +91,6 @@ export class SignupComponent implements OnInit {
       App.addListener('backButton', () => {
         this.router.navigateByUrl('auth/sign');
       });
-    }
-  }
-
-  async createAccountWithGoogle() {
-    try {
-      const token = await this.googleAuthService.signInWithGoogle();
-      if (token.authentication.idToken) {
-        this.isLoadingButtonGoogleOAuth = true;
-        const device = await this.deviceInfor();
-
-        this.createAccountWithGoogleOauthService
-          .createAccount(token.authentication.idToken)
-          .subscribe({
-            next: (response) => {
-              gtag('event', 'click', {
-                page_title: 'Tela de Cadastro com Google', // Título que você quer identificar
-                page_location: window.location.href,
-                page_path: '/cadastro', // Defina o caminho conforme sua rota
-                create_account: 'create_account_with_google',
-              });
-              gtag('device_infor', 'create_account', device);
-
-              this.isLoadingButtonGoogleOAuth = false;
-              this.tokenStorageSecurityRequestService.saveToken(response.token);
-              this.preferencesUserAuthenticateService.savePreferences(response);
-              this.userHashPublicService.setUserHashPublic(
-                response.userVerificationData.userHashPublic
-              );
-              this.router.navigateByUrl('home/user-welcome');
-            },
-            error: (errorResponse: any) => {
-              gtag('event', 'error_create_account_with_google', {
-                page_title: 'Tela de Cadastro',
-                page_location: window.location.href,
-                page_path: '/cadastro',
-                error_message:
-                  errorResponse.error.message?.message || 'Erro desconhecido',
-                error_code: errorResponse.status || 'sem código',
-              });
-
-              this.typeErrorModal = 'warn';
-              this.errorMessage = errorResponse.error.message;
-              this.isLoadingButtonGoogleOAuth = false;
-              this.modalErrorRequest.openDialog();
-            },
-          });
-      }
-    } catch (errorResponse: any) {
-      this.typeErrorModal = 'warn';
-      this.errorMessage = errorResponse.error.message;
-      this.isLoadingButtonGoogleOAuth = false;
-      this.modalErrorRequest.openDialog();
     }
   }
 
@@ -159,48 +116,108 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  async createAccountUser() {
-    if (this.createAccountFormGroup.valid) {
-      this.isLoadingButton = true;
-      this.buttonDisalbled = true;
-      const device = await this.deviceInfor();
-      const dataCreateAccountUser =
-        this.createAccountFormGroup.getRawValue() as CreateAccount;
+  async createAccountWithGoogle() {
+    console.log('Iniciando autenticação com Google...');
+    this.isLoadingButtonGoogleOAuth = true;
+    try {
+      const languageInfo = await this.deviceLanguageService.getLanguage();
 
-      this.createAccountService.createAccount(dataCreateAccountUser).subscribe({
-        next: () => {
-          gtag('event', 'click', {
-            page_title: 'Tela de Cadastro', // Título que você quer identificar
-            page_location: window.location.href,
-            page_path: '/cadastro', // Defina o caminho conforme sua rota
-            create_account: 'create_account',
-          });
+      const token = await this.googleAuthService.signInWithGoogle();
 
-          gtag('device_infor', 'create_account', device);
+      if (!token?.authentication?.idToken) {
+        throw new Error('Token Google inválido');
+      }
 
-          this.isLoadingButton = false;
-          this.buttonDisalbled = false;
-          this.router.navigateByUrl('auth/information-user-registred');
-        },
-        error: (responseError) => {
-          this.isLoadingButton = false;
-          this.buttonDisalbled = false;
+      const payload = {
+        token: token.authentication.idToken,
+        ...languageInfo,
+      };
 
-          gtag('event', 'error_create_account', {
-            page_title: 'Tela de Cadastro',
-            page_location: window.location.href,
-            page_path: '/cadastro',
-            error_message:
-              responseError.error.message?.message || 'Erro desconhecido',
-            error_code: responseError.status || 'sem código',
-          });
+      this.signWithGoogleService.sign(payload).subscribe({
+        next: (response) => {
+          console.log('GOOGLE SIGNIN RESPONSE:', response);
+          this.tokenStorageSecurityRequestService.saveToken(response.token);
 
-          this.openBottomSheet(
-            'Ops, ocorreu um erro.',
-            responseError.error.message.message
+          this.preferencesUserAuthenticateService.savePreferences(response);
+
+          this.cacheAvatarService.setAvatarCachePreferences(response.avatar);
+
+          this.userHashPublicService.setUserHashPublic(
+            response.userVerificationData.userHashPublic
           );
+
+          gtag('event', 'google_auth_success', {
+            page_path: '/cadastro',
+          });
+
+          this.router.navigateByUrl('home/main/post-message');
+        },
+
+        error: (errorResponse: any) => {
+          console.error('GOOGLE SIGNIN ERROR RESPONSE:', errorResponse);
+          console.error(errorResponse);
+
+          this.typeErrorModal = 'warn';
+
+          this.errorMessage =
+            errorResponse?.error?.message || 'Erro ao autenticar com Google';
+
+          this.isLoadingButtonGoogleOAuth = false;
+
+          this.modalError.open();
         },
       });
+    } catch (error: any) {
+      console.error('GOOGLE SIGNIN ERROR:', error);
+      console.error(error);
+
+      this.typeErrorModal = 'warn';
+
+      this.errorMessage = error?.message || 'Erro ao autenticar com Google';
+
+      this.isLoadingButtonGoogleOAuth = false;
+
+      this.modalError.open();
+    }
+  }
+
+  async createAccountUser() {
+    if (!this.createAccountFormGroup.valid) return;
+
+    this.isLoadingButton = true;
+    this.buttonDisalbled = true;
+
+    try {
+      const formData = this.createAccountFormGroup.getRawValue();
+
+      const languageInfo = await this.deviceLanguageService.getLanguage();
+
+      const payload: CreateAccount = {
+        ...formData,
+        ...languageInfo,
+      };
+
+      this.createAccountService.createAccount(payload).subscribe({
+        next: () => {
+          gtag('event', 'create_account', {
+            page_path: '/cadastro',
+          });
+          this.buttonDisalbled = false;
+          this.isLoadingButton = false;
+          this.createAccountFormGroup.reset();
+          this.modalSuccess.open();
+        },
+
+        error: (errorResponse) => {
+          // this.openBottomSheet('Ops, ocorreu um erro.', error.error.message);
+          this.modalError.open();
+          this.buttonDisalbled = false;
+          this.isLoadingButton = false;
+          this.errorMessage = errorResponse.error.message;
+        },
+      });
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -232,5 +249,14 @@ export class SignupComponent implements OnInit {
 
   goToPrivecePolice() {
     this.router.navigateByUrl('auth/privacy-police');
+  }
+
+  tryAgain() {
+    this.modalError.close();
+    this.createAccountUser();
+  }
+
+  closeModal() {
+    this.modalError.close();
   }
 }

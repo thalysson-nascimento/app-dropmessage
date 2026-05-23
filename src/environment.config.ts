@@ -26,12 +26,20 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
     baseUrlSocket: '',
     apiKeyGeoLocationCageData: '5f25465dd2a74ba884e38fb29b700814',
   },
+  // development: {
+  //   baseURL: 'http://localhost:3000',
+  //   pathURL: '/api/dev',
+  //   production: false,
+  //   mock: false,
+  //   baseUrlSocket: 'http://localhost:3000',
+  //   apiKeyGeoLocationCageData: '5f25465dd2a74ba884e38fb29b700814',
+  // },
   development: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'https://victor-partly-fold-nicole.trycloudflare.com',
     pathURL: '/api/dev',
     production: false,
     mock: false,
-    baseUrlSocket: 'http://localhost:3000',
+    baseUrlSocket: 'https://victor-partly-fold-nicole.trycloudflare.com',
     apiKeyGeoLocationCageData: '5f25465dd2a74ba884e38fb29b700814',
   },
 };

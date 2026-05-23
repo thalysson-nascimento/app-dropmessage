@@ -1,0 +1,102 @@
+<div class="ia-details__blur ia-details__blur--active"></div>
+<div class="ia-details__content ia-details__content--second">
+  <header class="ia-details__header ia-details__header--position-right">
+    <button class="back-button" (click)="goBack()">✕</button>
+  </header>
+
+  <div class="ia-details__title">
+    <h1>{{ aiProfiles.name }}, {{ aiProfiles.age }}</h1>
+    <p>{{ aiProfiles.personality }}</p>
+  </div>
+
+  <div class="section-about">
+    <app-card-glass>
+      <ng-container cardContent>
+        <h2 class="section-about__label">
+          {{ "text.biography" | translate }}
+        </h2>
+        <p>
+          {{ aiProfiles.bio }}
+        </p>
+      </ng-container>
+    </app-card-glass>
+
+    <div class="profile-row">
+      <div class="profile-item">
+        <app-card-glass>
+          <ng-container cardContent>
+            <span class="material-symbols-outlined text-white/70 text-2xl">
+              height
+            </span>
+            <div>
+              <label class="profile-row__label">
+                {{ "text.height" | translate }}
+              </label>
+              <p class="profile-row__text">{{ aiProfiles.height }}</p>
+            </div>
+          </ng-container>
+        </app-card-glass>
+      </div>
+
+      <div class="profile-item">
+        <app-card-glass>
+          <ng-container cardContent>
+            <span class="material-symbols-outlined"> wb_sunny </span>
+            <div>
+              <label class="profile-row__label">
+                {{ "text.zodiac" | translate }}
+              </label>
+              <p class="profile-row__text">{{ aiProfiles.zodiac }}</p>
+            </div>
+          </ng-container>
+        </app-card-glass>
+      </div>
+    </div>
+
+    <div class="section-interesting">
+      <h2 class="section-about__label">
+        {{ "text.characteristics" | translate }}
+      </h2>
+      <div class="interesses">
+        <div class="tags">
+          @for(trait of aiProfiles.traits; track trait.name) {
+          <span>{{ trait.name }}</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="section-interesting">
+      <h2 class="section-about__label">
+        {{ "text.interests" | translate }}
+      </h2>
+      <div class="interesses">
+        @for (item of aiProfiles.interests; track item.name) {
+        <div class="interesse-chip">
+          <span class="material-symbols-outlined">{{ item.icon }}</span>
+          <span class="interesse-chip__label">{{ item.name }}</span>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="section-interesting">
+      <h2 class="section-about__label">
+        {{ "text.lifestyle" | translate }}
+      </h2>
+      <div class="interesses">
+        @for (item of aiProfiles.lifestyles; track item.name) {
+        <div class="interesse-chip">
+          <span class="material-symbols-outlined">{{ item.icon }}</span>
+          <span class="interesse-chip__label">{{ item.name }}</span>
+        </div>
+        }
+      </div>
+    </div>
+
+    <button class="subscribe-button">
+      <!-- {{ "button.continueToSubscribe" | translate }} -->
+      {{ "button.comingSoon" | translate }}
+    </button>
+  </div>
+</div>

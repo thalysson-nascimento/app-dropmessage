@@ -1,0 +1,245 @@
+.profile {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  background: #f9fafb;
+  font-family: "Inter", sans-serif;
+
+  &__container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #f9fafb;
+  }
+
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 16px;
+    margin-bottom: 32px;
+  }
+
+  &__avatar-wrapper {
+    position: relative;
+  }
+
+  &__avatar {
+    width: 128px;
+    height: 128px;
+    border-radius: 40px;
+    overflow: hidden;
+    transform: rotate(3deg);
+    border: 4px solid #fff;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05),
+      0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  }
+
+  &__avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: rotate(-3deg) scale(1.1);
+  }
+
+  &__avatar-status {
+    position: absolute;
+    bottom: 0.2rem;
+    right: 0.2rem;
+    width: 20px;
+    height: 20px;
+    background: #22c55e;
+    border-radius: 50%;
+    border: 4px solid #fff;
+  }
+
+  &__name {
+    margin-top: 24px;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  &__email {
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    margin-top: 4px;
+  }
+
+  /* PREMIUM */
+
+  &__premium {
+    background: linear-gradient(135deg, #fd3a73 0%, #ff7b54 100%);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 40px;
+    color: #fff;
+  }
+
+  &__premium-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__premium-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+
+    h2 {
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+  }
+
+  &__premium-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 16px;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+  }
+
+  &__premium-button {
+    background: #fff;
+    color: #fd3a73;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  &__premium-icon span {
+    font-size: 64px;
+    opacity: 0.4;
+  }
+
+  /* SECTIONS */
+
+  &__section {
+    margin-bottom: 32px;
+  }
+
+  &__section-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 16px;
+  }
+
+  /* MENU */
+
+  &__menu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-radius: 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  &__menu-item:hover {
+    background: #f1f5f9;
+  }
+
+  &__menu-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__menu-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__menu-content-action {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  &__menu-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  &__menu-description {
+    font-size: 11px;
+    color: #64748b;
+  }
+
+  &__menu-arrow {
+    color: #cbd5e1;
+  }
+
+  /* LOGOUT */
+
+  &__logout {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  &__menu-icon--danger {
+    background: #fee2e2;
+
+    span {
+      color: #ef4444;
+    }
+  }
+
+  &__logout-label {
+    font-weight: 600;
+    color: #ef4444;
+  }
+
+  &__logout-description {
+    font-size: 11px;
+    color: #f87171;
+  }
+
+  &__menu-arrow--danger {
+    color: #fecaca;
+  }
+}

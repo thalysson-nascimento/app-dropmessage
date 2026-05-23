@@ -1,0 +1,127 @@
+<div class="code-confirmation">
+  <header class="code-confirmation__header">
+    <div class="code-confirmation__steps">
+      @for (step of steps; track step; let i = $index) {
+      <div
+        class="code-confirmation__step"
+        [class.code-confirmation__step--active]="i === currentStep"
+      ></div>
+      }
+    </div>
+
+    <div class="code-confirmation__spacer"></div>
+  </header>
+
+  <main class="code-confirmation__content" [formGroup]="form">
+    <div class="code-confirmation__hero">
+      <div class="code-confirmation__hero-outer">
+        <div class="code-confirmation__hero-inner">
+          <span class="material-symbols-outlined code-confirmation__hero-icon">
+            shield
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEXT -->
+    <div class="code-confirmation__text">
+      <h1 class="code-confirmation__title">
+        {{ "text.otpTitle" | translate }}
+      </h1>
+
+      <p class="code-confirmation__subtitle">
+        {{ "text.otpDescription" | translate }}
+        <span class="code-confirmation__phone">{{ email }}</span>
+      </p>
+    </div>
+
+    <!-- OTP -->
+    <div
+      class="code-confirmation__otp"
+      formArrayName="otp"
+      (paste)="onPaste($event)"
+    >
+      @for (control of otpControls.controls; track $index; let i = $index) {
+      <input
+        class="code-confirmation__otp-input"
+        type="tel"
+        inputmode="numeric"
+        pattern="[0-9]*"
+        autocomplete="one-time-code"
+        maxlength="1"
+        [formControlName]="i"
+        (input)="onInput($event, i)"
+        (keydown)="onKeyDown($event, i)"
+      />
+      }
+    </div>
+
+    <button
+      class="code-confirmation__verify-button"
+      appButton
+      type="button"
+      [disabled]="form.invalid || disabled"
+      (click)="onVerify()"
+    >
+      @if (loading) {
+      <app-spinner></app-spinner>
+      } @else {
+      {{ "text.verify" | translate }}
+      }
+    </button>
+
+    <div class="code-confirmation__resend">
+      <span>{{ "text.otpNotReceived" | translate }}</span>
+
+      <button (click)="onResend()">
+        <div class="code-confirmation__resend--contain-button">
+          {{ "text.resendOtp" | translate }}
+          @if (resending) {
+          <app-spinner
+            [size]="12"
+            color="#666"
+            backgroundColor="#999"
+          ></app-spinner>
+          }
+        </div>
+      </button>
+    </div>
+  </main>
+
+  <section class="code-confirmation__security">
+    <div class="code-confirmation__security-card">
+      <div class="code-confirmation__security-icon">
+        <span class="material-symbols-outlined">security</span>
+      </div>
+
+      <div>
+        <h3 class="code-confirmation__security-title">
+          {{ "text.secureTitle" | translate }}
+        </h3>
+
+        <p class="code-confirmation__security-text">
+          {{ "text.secureDescription" | translate }}
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<app-modal #modal>
+  <app-feedback-overlay
+    variant="error"
+    [title]="'text.errorSomethingWentWrong' | translate"
+    [description]="'text.invalidEmailVerificationCode' | translate"
+  ></app-feedback-overlay>
+  <button appButton (click)="tryAgain()">
+    {{ "button.tryAgain" | translate }}
+  </button>
+  <button
+    appButton="ghost"
+    class="btn-ghost"
+    variant="ghost"
+    (click)="closeModal()"
+  >
+    {{ "button.cancel" | translate }}
+  </button>
+</app-modal>

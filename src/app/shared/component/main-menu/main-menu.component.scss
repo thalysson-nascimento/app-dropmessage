@@ -1,0 +1,49 @@
+.main-menu {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 var(--space-medium);
+  align-items: center;
+
+  button {
+    background: transparent;
+    border: none;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    touch-action: manipulation;
+  }
+
+  button {
+    background: transparent;
+    border: none;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    touch-action: manipulation;
+
+    color: var(--text-dark-d1); // cor padrão (claro)
+    transition: all 0.2s ease;
+  }
+
+  button.active {
+    color: var(--text-dark); // mais escuro quando ativo
+  }
+
+  button:active {
+    transform: scale(0.96);
+  }
+}
+
+.icon-main-menu {
+  height: 2rem; // mudar o tamanho do icone
+  pointer-events: none;
+}
+
+.icon-likes {
+  height: 3rem;
+  pointer-events: none;
+}

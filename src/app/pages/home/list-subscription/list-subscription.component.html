@@ -1,4 +1,4 @@
-<div class="content">
+<!-- <div class="content">
   <div class="header">
     <img
       src="assets/icon-static/arrow-left.svg"
@@ -75,29 +75,29 @@
             </p>
             <ul class="allowed-features">
               <li *ngIf="subscription.metadata?.ads">
-                <i class="fi fi-rr-assept-document"></i>
+                <span class="material-icons-outlined feature-icon">description</span>
                 <p class="item">{{ subscription.metadata.ads }}</p>
               </li>
               <li *ngIf="subscription.metadata?.likes">
-                <i class="fi fi-rr-assept-document"></i>
+                <span class="material-icons-outlined feature-icon">description</span>
                 <p class="item">{{ subscription.metadata.likes }}</p>
               </li>
               <li *ngIf="subscription.metadata?.location">
-                <i class="fi fi-rr-assept-document"></i>
+                <span class="material-icons-outlined feature-icon">description</span>
                 <p class="item">{{ subscription.metadata.location }}</p>
               </li>
               <li *ngIf="subscription.metadata?.view">
-                <i class="fi fi-rr-assept-document"></i>
+                <span class="material-icons-outlined feature-icon">description</span>
                 <p class="item">{{ subscription.metadata.view }}</p>
               </li>
               <li *ngIf="subscription.metadata?.['location-global']">
-                <i class="fi fi-rr-assept-document"></i>
+                <span class="material-icons-outlined feature-icon">description</span>
                 <p class="item">
                   {{ subscription.metadata["location-global"] }}
                 </p>
               </li>
               <li *ngIf="subscription.metadata?.['assistant-ia']">
-                <i class="fi fi-rr-assept-document"></i>
+                <span class="material-icons-outlined feature-icon">description</span>
                 <p class="item">
                   {{ subscription.metadata["assistant-ia"] }}
                 </p>
@@ -135,4 +135,152 @@
     </div>
     <div class="swiper-pagination"></div>
   </div>
+</div> -->
+
+@if (loading) {
+<app-list-subscription-loading></app-list-subscription-loading>
+}@else if (error) {
+<app-error-request>
+  <button appButton="info">
+    {{ "button.tryAgain" | translate }}
+  </button> </app-error-request
+>} @else {
+
+<div class="subscription">
+  <div class="subscription__background"></div>
+
+  <!-- HEADER -->
+  <header class="subscription__header">
+    <button class="subscription__icon-button" (click)="goToProfile()">
+      <span class="material-icons">close</span>
+    </button>
+
+    <div class="subscription__logo">
+      <span>Dating</span>
+      <span class="subscription__logo--gradient">Match</span>
+    </div>
+
+    <button class="subscription__restore">Restore</button>
+  </header>
+
+  <!-- HERO -->
+  <section class="subscription__hero">
+    <div class="subscription__hero-icon">
+      <span class="material-icons">diamond</span>
+    </div>
+
+    <h1 class="subscription__title">
+      Get <span class="subscription__gradient-text">Premium</span>
+    </h1>
+
+    <p class="subscription__subtitle">
+      Unlock the full potential of your dating life with exclusive features and
+      priority access.
+    </p>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="subscription__features">
+    <div class="subscription__feature-list">
+      @for (feature of features; track feature.id) {
+      <div
+        class="subscription__feature-card"
+        [class.subscription__feature-card--highlight]="feature.highlight"
+      >
+        <div class="subscription__feature-icon">
+          <span class="material-icons">{{ feature.icon }}</span>
+        </div>
+
+        <h3 class="subscription__feature-title">
+          {{ feature.title }}
+        </h3>
+
+        <p class="subscription__feature-description">
+          {{ feature.description }}
+        </p>
+      </div>
+      }
+    </div>
+  </section>
+
+  <!-- PLANS -->
+  <section class="subscription__plans">
+    <h2 class="subscription__plans-title">Choose a Plan</h2>
+
+    @for (plan of plans; track plan.id) {
+    <label
+      class="subscription__plan"
+      [class.subscription__plan--active]="isSelected(plan.id)"
+      (click)="selectPlan(plan.id)"
+    >
+      @if (plan.metadata.isBestValue) {
+      <div class="subscription__badge">Best Value</div>
+      }
+
+      <input type="radio" name="plan" [checked]="isSelected(plan.id)" />
+
+      <div class="subscription__plan-content">
+        <div class="subscription__plan-header">
+          <span class="subscription__plan-title">
+            {{ plan.metadata.durationLabel }}
+            @if (plan.metadata.discountLabel) {
+            <p class="subscription__plan-discount">
+              {{ plan.metadata.discountLabel }}
+            </p>
+            }
+          </span>
+
+          <div class="subscription__plan-price">
+            <span class="subscription__plan-price--main">
+              {{
+                plan.metadata.pricePerMonth
+                  | currency
+                    : plan.prices?.[0].currency.toUpperCase()
+                    : "symbol"
+                    : "1.2-2"
+              }}
+              <span class="subscription__plan-price--suffix"> /mo </span>
+            </span>
+            <br />
+            @if (plan.metadata.originalPrice) { @if (plan.metadata.ammount) {
+            <span class="subscription__plan-price--original">
+              {{
+                plan.metadata.ammount
+                  | currency
+                    : plan.prices?.[0].currency.toUpperCase()
+                    : "symbol"
+                    : "1.2-2"
+              }}
+            </span>
+            } →
+            <span class="subscription__plan-price--old">
+              {{
+                plan.metadata.originalPrice
+                  | currency
+                    : plan.prices?.[0].currency.toUpperCase()
+                    : "symbol"
+                    : "1.2-2"
+              }}
+            </span>
+            }
+          </div>
+        </div>
+      </div>
+    </label>
+    }
+
+    <p class="subscription__terms">
+      Recurring billing, cancel anytime. By continuing you agree to our
+      <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
+    </p>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="subscription__footer">
+    <button appButton (click)="subscribe()">
+      <span>Subscribe Now</span>
+      <span class="material-icons">arrow_forward</span>
+    </button>
+  </div>
 </div>
+}

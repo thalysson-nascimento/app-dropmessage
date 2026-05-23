@@ -1,30 +1,36 @@
 import { Injectable } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import { environmentConfig } from '../../../../environment.config';
+
 @Injectable({
   providedIn: 'root',
 })
 export class GoogleAuthService {
-  constructor() {
-    this.initializeApp();
-  }
+  private initialized = false;
+  
+  constructor() {}
 
-  initializeApp() {
+  async initializeApp() {
+    if (this.initialized) return;
+
     if (Capacitor.isNativePlatform()) {
-      GoogleAuth.initialize({
-        clientId:
-          '999388705991-k8nj0pm920domilt0mtoedfqefgqvf0f.apps.googleusercontent.com',
+      await GoogleAuth.initialize({
         scopes: ['profile', 'email'],
         grantOfflineAccess: true,
       });
+
+      this.initialized = true;
     }
   }
 
   async signInWithGoogle() {
     try {
       const user = await GoogleAuth.signIn();
+
       return user;
     } catch (error) {
+      console.error('GOOGLE SIGNIN ERROR:', error);
       throw error;
     }
   }

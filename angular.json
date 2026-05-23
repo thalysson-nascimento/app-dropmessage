@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "allowedCommonJsDependencies": ["xmlhttprequest-ssl"],
             "sourceMap": false,
             "outputPath": "dist/app-dropmessage",
             "index": "src/index.html",
@@ -37,11 +38,8 @@
               "src/styles.scss"
             ],
             "scripts": [],
-            "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            "prerender": false,
+            "ssr": false
           },
           "configurations": {
             "production": {
@@ -51,7 +49,10 @@
               "sourceMap": false,
               "optimization": {
                 "scripts": true,
-                "styles": true
+                "styles": true,
+                "fonts": {
+                  "inline": false
+                }
               },
               "budgets": [
                 {
@@ -61,16 +62,13 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "5kB"
+                  "maximumWarning": "6kB",
+                  "maximumError": "10kB"
                 }
               ],
               "outputHashing": "all",
-              "server": "src/main.server.ts",
-              "ssr": {
-                "entry": "server.ts"
-              },
-              "prerender": true,
+              "ssr":false,
+              "prerender": false,
               "define": {
                 "process.env.NODE_ENV": "'production'"
               }

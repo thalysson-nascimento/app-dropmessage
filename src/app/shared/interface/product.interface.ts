@@ -9,14 +9,7 @@ export interface Product {
   images: any[];
   livemode: boolean;
   marketing_features: any[];
-  metadata: {
-    ads?: string;
-    likes?: string;
-    location?: string;
-    view?: string;
-    'location-global'?: string;
-    'assistant-ia'?: string;
-  };
+  metadata: any;
   name: string;
   package_dimensions: null;
   shippable: null;

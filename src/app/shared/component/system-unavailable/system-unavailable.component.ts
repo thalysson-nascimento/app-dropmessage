@@ -10,6 +10,7 @@ import {
   Output,
   PLATFORM_ID,
 } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { default as lottie } from 'lottie-web';
 import { ButtonStyleDirective } from '../../directives/button-style/button-style.directive';
 
@@ -27,7 +28,7 @@ const SharedComponents = [ButtonStyleDirective];
   selector: 'app-system-unavailable',
   templateUrl: './system-unavailable.component.html',
   styleUrls: ['./system-unavailable.component.scss'],
-  imports: [...SharedComponents],
+  imports: [...SharedComponents, TranslateModule],
   standalone: true,
 })
 export class SystemUnavailableComponent implements OnInit, AfterViewInit {

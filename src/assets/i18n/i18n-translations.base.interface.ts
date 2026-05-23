@@ -1,3 +1,5 @@
+import { PrivacyPolicyTranslations } from './privacy-policy.interface';
+
 export interface I18nTranslationsBase {
   button: {
     accessWithGoogle: string;
@@ -20,8 +22,19 @@ export interface I18nTranslationsBase {
     takePicture: string;
     allowCamera: string;
     completeProfile: string;
+    exploreIaProfile: string;
     titleCard: string;
     sibtitleCard: string;
+    [key: string]: string;
+    sendMessage: string;
+    likeUser: string;
+    close: string;
+    continueToSubscribe: string;
+    createPost: string;
+    comingSoon: string;
+    go_to_feed: string;
+    create_another_post: string;
+    save: string;
   };
   input: {
     placeholder: {
@@ -37,6 +50,7 @@ export interface I18nTranslationsBase {
     };
   };
   text: {
+    [key: string]: any;
     titleSign: string;
     or: string;
     linkDoNotAccount: string;
@@ -96,6 +110,7 @@ export interface I18nTranslationsBase {
     titleVerifyEmail: string;
     subtitleVerifyEmail: string;
     invalidCode: string;
+    invalidEmailVerificationCode: string;
     plan: string;
     goldPlanPromotion: string;
     describeGoldPlanPromotion: string;
@@ -124,7 +139,65 @@ export interface I18nTranslationsBase {
     photoForProfile: string;
     describePhotoForProfile: string;
     describeErrorTryAgain: string;
+    errorOccurred: string;
+    errorRequestTryAgainLater: string;
+    systemUnavailable: string;
+    errorStatsCouldNotLoad: string;
+    totalPosts: string;
+    totalReceivedLikes: string;
+    totalGivenLikes: string;
     onlineRecently: string;
     userNotOnline: string;
+    post_visible_for: string;
+    minute_one: string;
+    minute_other: string;
+    hour_one: string;
+    hour_other: string;
+    day_one: string;
+    day_other: string;
+    ai: string;
+    chooseOption: string;
+    reportProblem: string;
+    unmatchUser: string;
+    waitAMoment: string;
+    reportingProblem: string;
+    errorReportingProblem: string;
+    errorReportingProblemDesc: string;
+    chooseOptionReportProblem: string;
+    notWantTalk: string;
+    abusiveContent: string;
+    inappropriatePhotos: string;
+    childSexualExploitation: string;
+    and: string;
+    otherPeople: string;
+    likedYourPost: string;
+    likedYourPostPlural: string;
+    commented: string;
+    commentedYourPost: string;
+    match: string;
+    privacyPolicy: PrivacyPolicyTranslations;
+    biography: string;
+    height: string;
+    zodiac: string;
+    characteristics: string;
+    lifestyle: string;
+    about: string;
+    noMessages: string;
+    messagesEmptyDescription: string;
+    otpTitle: string;
+    otpDescription: string;
+    verify: string;
+    otpNotReceived: string;
+    resendOtp: string;
+    secureTitle: string;
+    secureDescription: string;
+    all_set: string;
+    post_visible_subtitle: string;
+    post_is_live: string;
+    active_posts: string;
+    createAccountSuccess: string;
+    descriptionCreateAccountSuccess: string;
+    professionTitle: string;
+    professionDescription: string;
   };
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,174 +7,165 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subject, debounceTime, takeUntil } from 'rxjs';
-import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
-import { InputCustomDirective } from '../../../shared/directives/input-custom/input-custom.directive';
+import { TranslateModule } from '@ngx-translate/core';
+import { Subject, takeUntil } from 'rxjs';
+import { FeedbackOverlayComponent } from '../../../shared/component/feedback-overlay/feedback-overlay.component';
+import { ModalComponent } from '../../../shared/component/modal/modal.component';
+import { SpinnerComponent } from '../../../shared/component/spinner/spinner.component';
+import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
-import { CompleteDescriptionWithIA } from '../../../shared/service/complete-description-with-ia/complete-description-with-ia.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
+import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
 import { UserDescriptionService } from '../../../shared/service/user-description/user-description.service';
-import { noOnlySpacesValidator } from '../../../shared/validators/noOnlySpacesValidator.validator';
-
-const SharedComponent = [ButtonStyleDirective, InputCustomDirective];
-const CoreModule = [ReactiveFormsModule, CommonModule];
 
 @Component({
   selector: 'app-user-description',
   templateUrl: './user-description.component.html',
   styleUrls: ['./user-description.component.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    SpinnerComponent,
+    ButtonDirective,
+    ModalComponent,
+    FeedbackOverlayComponent,
+    TranslateModule,
+  ],
   standalone: true,
-  imports: [...SharedComponent, ...CoreModule],
 })
 export class UserDescriptionComponent implements OnInit, OnDestroy {
-  userDescriptionFormGroup!: FormGroup;
-  showAlertUserDescription: boolean = false;
-  showUserDescriptionComplete: boolean = false;
-  userDescriptionCompleted: string = '';
-  erroCompletedUserDescription: boolean = false;
-  aplicationUserDescriptionCompleted: boolean = false;
-  buttonDisalbled: boolean = false;
-  isLoadingButton: boolean = false;
-  errorRequest: boolean = false;
-  destroy$: Subject<void> = new Subject<void>();
-  pageView: string = 'DatingMatch:UserDescription';
+  public descriptionFormGroup!: FormGroup;
+
+  public bioLength: number = 0;
+  public buttonDisalbled: boolean = false;
+  public buttonLoading: boolean = false;
+  public errorRequest: boolean = false;
+  public pageView: string = 'DatingMatch:UserDescription';
+
+  private destroy$ = new Subject<void>();
+
+  @ViewChild('modalDescription') modalDescription!: ModalComponent;
 
   constructor(
     private formBuilder: FormBuilder,
-    private completeDescriptionWithIA: CompleteDescriptionWithIA,
     private userDescriptionService: UserDescriptionService,
     private router: Router,
-    private loggerService: LoggerService
+    private loggerService: LoggerService,
+    private preferencesUserAuthenticateService: PreferencesUserAuthenticateService
   ) {}
+
+  ngOnInit(): void {
+    this.createUserDescriptionFormBuilder();
+    this.listenBioChanges();
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  ngOnInit() {
-    this.createUserDescriptionFormBuilder();
-    this.userDescriptionFormGroup
-      .get('userDescription')
-      ?.valueChanges.pipe(debounceTime(500))
-      .subscribe((value: string) => {
-        this.errorRequest = false;
-        if (value.length === 0) {
-          this.showUserDescriptionComplete = false;
-          this.showAlertUserDescription = false;
-          return;
-        }
-
-        if (value.length > 80) {
-          this.showAlertUserDescription = false;
-        }
-
-        if (value.length < 80) {
-          this.showAlertUserDescription = true;
-          this.showUserDescriptionComplete = false;
-        } else if (
-          value.length > 80 &&
-          !this.aplicationUserDescriptionCompleted
-        ) {
-          this.completeDescriptionWithIA.complete(value).subscribe({
-            next: (response) => {
-              this.showUserDescriptionComplete = true;
-              this.showAlertUserDescription = false;
-              this.userDescriptionCompleted = response.userDescriprition;
-            },
-            error: (error) => {
-              this.erroCompletedUserDescription = true;
-            },
-          });
-        }
-      });
-  }
-
-  createUserDescriptionFormBuilder() {
-    this.userDescriptionFormGroup = this.formBuilder.group({
+  private createUserDescriptionFormBuilder(): void {
+    this.descriptionFormGroup = this.formBuilder.group({
       userDescription: [
         '',
         [
           Validators.required,
           Validators.minLength(6),
           Validators.maxLength(200),
-          noOnlySpacesValidator(),
         ],
       ],
     });
   }
 
-  applyDescriptionForm() {
-    this.userDescriptionFormGroup
+  private listenBioChanges(): void {
+    this.descriptionFormGroup
       .get('userDescription')
-      ?.setValue(this.userDescriptionCompleted);
-    this.aplicationUserDescriptionCompleted = true;
-
-    const logger: TrackAction = {
-      pageView: this.pageView,
-      category: 'user_description',
-      event: 'click',
-      label: 'button:usar descrição',
-      message: 'Usar descrição com IA',
-      statusCode: 200,
-      level: 'info',
-    };
-
-    this.loggerService.info(logger).pipe(takeUntil(this.destroy$)).subscribe();
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value: string) => {
+        this.bioLength = value?.length || 0;
+      });
   }
 
-  saveUserDescription() {
-    if (this.userDescriptionFormGroup.valid) {
-      this.buttonDisalbled = true;
-      this.isLoadingButton = true;
-      const userDescription =
-        this.userDescriptionFormGroup.get('userDescription')?.value;
-
-      this.userDescriptionService.description(userDescription).subscribe({
-        next: () => {
-          const logger: TrackAction = {
-            pageView: this.pageView,
-            category: 'user_description',
-            event: 'click',
-            label: 'button:Salvar descrição',
-            message: 'Salvar descrição',
-            statusCode: 200,
-            level: 'info',
-          };
-
-          this.loggerService
-            .info(logger)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-              next: () => {
-                this.router.navigateByUrl('home/post-messages');
-              },
-            });
-        },
-        error: (error) => {
-          this.errorRequest = true;
-          this.showUserDescriptionComplete = false;
-          this.showAlertUserDescription = false;
-
-          const logger: TrackAction = {
-            pageView: this.pageView,
-            category: 'user_description',
-            event: 'click',
-            label: 'button:Salvar descrição',
-            message: error.message,
-            statusCode: 200,
-            level: 'error',
-          };
-
-          this.loggerService
-            .info(logger)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe();
-
-          this.buttonDisalbled = false;
-          this.isLoadingButton = false;
-        },
-      });
+  saveBio(): void {
+    if (this.descriptionFormGroup.invalid) {
+      this.descriptionFormGroup.markAllAsTouched();
+      return;
     }
+
+    this.buttonDisalbled = true;
+    this.buttonLoading = true;
+    this.errorRequest = false;
+
+    const userDescription =
+      this.descriptionFormGroup.get('userDescription')?.value;
+
+    this.userDescriptionService.description(userDescription).subscribe({
+      next: () => {
+        const logger: TrackAction = {
+          pageView: this.pageView,
+          category: 'user_description',
+          event: 'click',
+          label: 'button:Salvar descrição',
+          message: 'Salvar descrição',
+          statusCode: 200,
+          level: 'info',
+        };
+
+        this.loggerService
+          .info(logger)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe();
+
+        this.preferencesUserAuthenticateService.getToken().subscribe({
+          next: (response) => {
+            if (response) {
+              const updatedData = {
+                ...response,
+                userVerificationData: {
+                  ...response.userVerificationData,
+                  bio: true,
+                },
+              };
+
+              this.preferencesUserAuthenticateService
+                .savePreferences(updatedData)
+                .subscribe({
+                  next: () => {
+                    this.router.navigateByUrl('/home/main/post-message');
+                  },
+                });
+
+              return;
+            }
+
+            this.router.navigateByUrl('/home/main/post-message');
+          },
+        });
+      },
+      error: (error) => {
+        this.errorRequest = true;
+        this.buttonDisalbled = false;
+        this.buttonLoading = false;
+
+        const logger: TrackAction = {
+          pageView: this.pageView,
+          category: 'user_description',
+          event: 'click',
+          label: 'button:Salvar descrição',
+          message: error.message,
+          statusCode: 200,
+          level: 'error',
+        };
+
+        this.loggerService
+          .info(logger)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe();
+      },
+    });
+  }
+
+  closeModal() {
+    this.modalDescription.close();
   }
 }

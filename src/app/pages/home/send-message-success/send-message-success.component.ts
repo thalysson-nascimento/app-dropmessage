@@ -1,74 +1,60 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, NgZone, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { default as lottie } from 'lottie-web';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { differenceInSeconds, formatDistanceStrict } from 'date-fns';
+import { enUS, ptBR } from 'date-fns/locale';
+import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
+import { SharedPostMessage } from '../../../shared/interface/shared-post-message.interface';
 
-interface LottieAnimationOptions {
-  pathIconAnimation: string;
-  idElement: string;
-  loop?: boolean;
-  autoplay?: boolean;
-  onClick?: boolean;
-}
+const SharedComponents = [ButtonDirective, TranslateModule];
 
 @Component({
   selector: 'app-send-message-success',
   templateUrl: './send-message-success.component.html',
   styleUrls: ['./send-message-success.component.scss'],
+  imports: [SharedComponents],
   standalone: true,
 })
 export class SendMessageSuccessComponent implements OnInit {
-  constructor(
-    private router: Router,
-    private zone: NgZone,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  public sharedPost?: SharedPostMessage;
 
-  ngOnInit() {}
+  constructor(private router: Router, private translate: TranslateService) {}
 
-  ngAfterViewInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.zone.runOutsideAngular(() => {
-        this.loadLottieAnimation({
-          pathIconAnimation: 'send-message.json',
-          idElement: 'send-message',
-          loop: true,
-          autoplay: true,
-        });
-      });
-    }
+  ngOnInit() {
+    const state = window.history.state as { response?: SharedPostMessage };
+
+    if (!state?.response) return;
+
+    this.sharedPost = state.response;
+    console.log(this.sharedPost);
   }
 
-  goToPostList() {
-    this.router.navigate(['/home']);
+  goBack() {
+    if (this.sharedPost?.showADS) {
+      return this.router.navigateByUrl('home/admob-intertistial');
+    }
+
+    return this.router.navigateByUrl('home/main/post-message');
   }
 
-  loadLottieAnimation(options: LottieAnimationOptions): void {
-    const {
-      pathIconAnimation,
-      idElement,
-      loop = false,
-      autoplay = false,
-      onClick = false,
-    } = options;
+  takePicture() {
+    this.router.navigateByUrl('home/take-picture-shared-message');
+  }
 
-    const animationContainer = document.getElementById(idElement);
-    if (animationContainer) {
-      const animation = lottie.loadAnimation({
-        container: animationContainer,
-        path: `assets/icon-animation/${pathIconAnimation}`,
-        renderer: 'svg',
-        loop,
-        autoplay,
-      });
+  formatTimeLeft(expirationDate: Date | undefined): string {
+    if (!expirationDate) return '';
 
-      if (onClick) {
-        animationContainer.addEventListener('click', () => {
-          animation.goToAndPlay(0, true);
-        });
-      }
-    } else {
-      console.error(`Elemento com ID ${idElement} não encontrado.`);
+    const now = new Date();
+    const expiration = new Date(expirationDate);
+
+    const secondsLeft = differenceInSeconds(expiration, now);
+
+    if (secondsLeft <= 0) {
+      return this.translate.currentLang === 'en' ? 'Expired' : 'Expirado';
     }
+
+    return formatDistanceStrict(expiration, now, {
+      locale: this.translate.currentLang === 'en' ? enUS : ptBR,
+    });
   }
 }

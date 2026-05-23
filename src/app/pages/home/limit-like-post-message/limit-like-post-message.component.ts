@@ -19,6 +19,6 @@ export class LimitLikePostMessageComponent implements OnInit {
   }
 
   goToPostMessage() {
-    this.router.navigateByUrl('home/post-messages');
+    this.router.navigateByUrl('home/main/post-message');
   }
 }

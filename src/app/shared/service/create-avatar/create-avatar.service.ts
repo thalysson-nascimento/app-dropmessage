@@ -24,6 +24,13 @@ export class CreateAvatarService {
     formData.append('gender', gender);
     formData.append('interests', interests);
 
+    console.log({
+      file,
+      dateOfBirth,
+      gender,
+      interests,
+    });
+
     return this.httpClient
       .post<AvatarSuccess>(`${this.baseURL}/avatar-and-about`, formData)
       .pipe(

@@ -26,7 +26,7 @@ import { SystemUnavailableComponent } from '../../../shared/component/system-una
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 import { AvatarSuccess } from '../../../shared/interface/avatar.interface';
 import { LastLoggedUsers } from '../../../shared/interface/last-logged-users.interface';
-import { Post } from '../../../shared/interface/post';
+import { FeedPost } from '../../../shared/interface/post.interface';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { CacheAvatarService } from '../../../shared/service/cache-avatar/cache-avatar.service';
 import { LastLoggedUsersService } from '../../../shared/service/last-logged-users/last-logged-users.service';
@@ -56,15 +56,16 @@ const SharedComponent = [
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
-  posts: Post[] = [];
+  posts: any[] = [];
   mySwiper: any;
   showLikeButton: boolean = true;
   isLoaded: boolean = false;
-  likePostMessageWhitHeart!: Post;
+  likePostMessageWhitHeart: any;
   showSystemUnavailable: boolean = false;
   textInformationSystemUnavailable: string = '';
   currentPage: number = 1;
   isLoadingMorePosts: boolean = false;
+  hasMorePosts: boolean = true;
   totalPosts: number = 0;
   private likeButtonClicked: boolean = false;
   private destroy$: Subject<void> = new Subject<void>();
@@ -77,6 +78,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   pageView: string = 'DatingMatch:PostMessage';
   lastUserLogged!: LastLoggedUsers;
   isLoadingLoggedUser: boolean = true;
+
   constructor(
     private postMessageService: PostMessageService,
     private zone: NgZone,
@@ -163,7 +165,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
           const updateShowLikeButton = (activeIndex: number) => {
             const activePost = this.posts[activeIndex];
 
-            if (activePost?.id === 'no-matches') {
+            if ((activePost as any)?.id === 'no-matches') {
               this.lastLoggedUsersService.lastLoggedUsers().subscribe({
                 next: (response) => {
                   this.isLoadingLoggedUser = false;
@@ -193,8 +195,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
             }
 
             if (
-              activePost?.id === 'no-matches' ||
-              activePost?.id === 'watch-video-reward'
+              (activePost as any)?.id === 'no-matches' ||
+              (activePost as any)?.id === 'watch-video-reward'
             ) {
               this.showLikeButton = false;
               this.mySwiper.autoplay.stop();
@@ -219,8 +221,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
                 const postToRemove = this.posts[activeIndex - 1];
 
                 if (
-                  postToRemove?.id !== 'no-matches' &&
-                  postToRemove?.id !== 'watch-video-reward'
+                  (postToRemove as any)?.id !== 'no-matches' &&
+                  (postToRemove as any)?.id !== 'watch-video-reward'
                 ) {
                   this.removePostFromSwiper(postToRemove);
                 }
@@ -236,8 +238,8 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
             // Atualiza a mensagem do botão com o post atual
             const likePostSwiper = this.posts[activeIndex];
             if (
-              likePostSwiper?.id !== 'no-matches' &&
-              likePostSwiper?.id !== 'watch-video-reward'
+              (likePostSwiper as any)?.id !== 'no-matches' &&
+              (likePostSwiper as any)?.id !== 'watch-video-reward'
             ) {
               this.likePostMessageWhitHeart = likePostSwiper;
             }
@@ -249,9 +251,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
             if (activeIndex === 0) {
               this.showLikeButton = false;
             }
-
-            // Garante que o botão esteja oculto se necessário
-            // updateShowLikeButton(activeIndex);
+            this.loadMorePosts();
           });
         }
       });
@@ -260,31 +260,73 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   loadFistPostMessageForLikeHeartButton(activeIndex: any) {
     const activeIndexSwiper = activeIndex;
-    const likeHeartPost = this.posts[activeIndexSwiper];
-    this.likePostMessageWhitHeart = likeHeartPost;
+    this.likePostMessageWhitHeart = this.posts[activeIndexSwiper];
   }
 
   loadPostMessage() {
-    this.postMessageService.listPost().subscribe({
+    this.isLoadingMorePosts = true;
+    this.postMessageService.listPost(this.currentPage).subscribe({
       next: (response) => {
-        this.totalPosts += response.data.length;
-        this.posts = [...this.posts, ...response.data];
+        const incomingPosts =
+          (response as any).data ?? (response as any).items ?? [];
+        this.totalPosts += (incomingPosts || []).length;
+
+        if (incomingPosts.length > 0) {
+          this.posts = [...this.posts, ...incomingPosts];
+
+          const logger: TrackAction = {
+            pageView: this.pageView,
+            category: 'user_post_message:load_posts',
+            event: 'view',
+            message: `loaded_page_${this.currentPage}_${incomingPosts.length}_posts`,
+            statusCode: 200,
+            level: 'info',
+          };
+          this.loggerService
+            .info(logger)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe();
+
+          this.hasMorePosts = incomingPosts.length > 0;
+
+          if (this.currentPage === 1) {
+            setTimeout(() => {
+              this.initializeSwiper();
+            }, 100);
+          } else {
+            this.mySwiper?.update();
+          }
+        } else {
+          this.hasMorePosts = false;
+          const logger: TrackAction = {
+            pageView: this.pageView,
+            category: 'user_post_message:no_posts',
+            event: 'view',
+            message: `no_posts_page_${this.currentPage}`,
+            statusCode: 200,
+            level: 'info',
+          };
+          this.loggerService
+            .info(logger)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe();
+        }
+
         this.isLoaded = true;
         this.loadIconHeart(this.posts);
-
-        if (this.currentPage === 1) {
-          setTimeout(() => {
-            this.initializeSwiper();
-          }, 100);
-        }
+        this.isLoadingMorePosts = false;
       },
       error: (error) => {
+        this.isLoadingMorePosts = false;
+        this.showSystemUnavailable = true;
+        this.isLoaded = false;
+
         const logger: TrackAction = {
           pageView: this.pageView,
-          category: 'user_post_message',
-          event: 'view',
-          message: error.message,
-          statusCode: error.status,
+          category: 'user_post_message:load_posts_error',
+          event: 'error',
+          message: error?.message || 'Unknown error',
+          statusCode: error?.status || 500,
           level: 'error',
         };
 
@@ -292,87 +334,92 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
           .info(logger)
           .pipe(takeUntil(this.destroy$))
           .subscribe();
-
-        this.showSystemUnavailable = true;
-        this.isLoaded = false;
       },
     });
   }
 
   loadMorePosts() {
-    if (this.isLoadingMorePosts) return;
+    if (this.isLoadingMorePosts || !this.hasMorePosts) {
+      return;
+    }
 
     this.isLoadingMorePosts = true;
-    this.currentPage++;
+    this.currentPage += 1;
+    const loggerStart: TrackAction = {
+      pageView: this.pageView,
+      category: 'user_post_message:load_more_posts',
+      event: 'start',
+      message: `fetching_page_${this.currentPage}`,
+      statusCode: 200,
+      level: 'info',
+    };
+    this.loggerService
+      .info(loggerStart)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
 
     this.postMessageService.listPost(this.currentPage).subscribe({
       next: (response) => {
-        if (response.data.length > 0) {
-          this.posts = [...this.posts, ...response.data];
-          const logger: TrackAction = {
+        const incoming =
+          (response as any).data ?? (response as any).items ?? [];
+        if (!incoming || incoming.length === 0) {
+          this.hasMorePosts = false;
+          const loggerEnd: TrackAction = {
             pageView: this.pageView,
-            category: 'user_post_message:load_more_post',
-            event: 'view',
-            message: 'carregar mais posts',
+            category: 'user_post_message:load_more_posts',
+            event: 'no_more_posts',
+            message: `no_more_posts_page_${this.currentPage}`,
             statusCode: 200,
             level: 'info',
           };
-
           this.loggerService
-            .info(logger)
+            .info(loggerEnd)
             .pipe(takeUntil(this.destroy$))
-            .subscribe({
-              error: (error) => {
-                console.log(error);
-              },
-            });
-          this.mySwiper.update();
+            .subscribe();
         } else {
-          const logger: TrackAction = {
+          this.posts = [...this.posts, ...incoming];
+          this.totalPosts += incoming.length;
+          this.mySwiper?.update();
+
+          const loggerEnd: TrackAction = {
             pageView: this.pageView,
-            category: 'user_post_message:no_posts',
-            event: 'view',
-            message: 'Não há mais posts para carregar',
+            category: 'user_post_message:load_more_posts',
+            event: 'success',
+            message: `loaded_${incoming.length}_posts_page_${this.currentPage}`,
             statusCode: 200,
             level: 'info',
           };
-
           this.loggerService
-            .info(logger)
+            .info(loggerEnd)
             .pipe(takeUntil(this.destroy$))
-            .subscribe({
-              error: (error) => {
-                console.log(error);
-              },
-            });
+            .subscribe();
         }
         this.isLoadingMorePosts = false;
       },
       error: (error) => {
-        console.error('Erro ao carregar mais posts:', error);
+        this.isLoadingMorePosts = false;
+        this.currentPage -= 1;
 
         const logger: TrackAction = {
           pageView: this.pageView,
-          category: 'user_post_message',
-          event: 'view',
-          message: error.message,
-          statusCode: error.status,
+          category: 'user_post_message:load_more_posts',
+          event: 'error',
+          message: error?.message || 'loadMorePosts failed',
+          statusCode: error?.status || 500,
           level: 'error',
         };
-
         this.loggerService
           .info(logger)
           .pipe(takeUntil(this.destroy$))
           .subscribe();
-
-        this.isLoadingMorePosts = false;
       },
     });
   }
 
-  loadIconHeart(post: Post[]) {
-    if (post.length === 1) {
-      return (this.showLikeButton = false);
+  loadIconHeart(post: any[]) {
+    if (!post || post.length <= 1) {
+      this.showLikeButton = false;
+      return;
     }
     setTimeout(() => {
       this.lottieAnimationIconService.loadLottieAnimation({
@@ -383,62 +430,109 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
         onClick: true,
       });
     }, 100);
-
-    return (this.showLikeButton = true);
+    this.showLikeButton = true;
   }
 
-  removePostFromSwiper(post: Post) {
-    const postIndex = this.posts.findIndex((p) => p.id === post.id);
+  removePostFromSwiper(post: any) {
+    const postIndex = this.posts.findIndex(
+      (p) => (p as any).id === (post as any).id
+    );
 
-    if (postIndex !== -1 && post.id !== 'no-matches') {
-      this.dislikePostMessage(post);
-      this.posts.splice(postIndex, 1);
-      this.mySwiper.removeSlide(postIndex);
-      this.mySwiper.update();
-    } else {
-      console.log('Post não encontrado ou é o "no-matches"');
+    if (postIndex === -1) {
+      this.loggerService
+        .info({
+          pageView: this.pageView,
+          category: 'user_post_message:remove_swiper',
+          event: 'error',
+          message: `Post not found ${(post as any).id}`,
+          statusCode: 404,
+          level: 'warn',
+        })
+        .pipe(takeUntil(this.destroy$))
+        .subscribe();
+      return;
     }
+
+    if ((post as any).id !== 'no-matches') {
+      this.dislikePostMessage(post);
+    }
+
+    this.posts.splice(postIndex, 1);
+    this.mySwiper?.removeSlide(postIndex);
+    this.mySwiper?.update();
+
+    this.loggerService
+      .info({
+        pageView: this.pageView,
+        category: 'user_post_message:remove_swiper',
+        event: 'success',
+        message: `removed_post_${(post as any).id}`,
+        statusCode: 200,
+        level: 'info',
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
   }
 
   likePostMessage() {
-    this.likePostMessageQueue.next(this.likePostMessageWhitHeart.id);
-
-    const logger: TrackAction = {
-      pageView: this.pageView,
-      category: 'user_post_message:like_post_message',
-      event: 'click',
-      label: 'button:like',
-      message: `like_post_message:${this.likePostMessageWhitHeart.id}`,
-      statusCode: 200,
-      level: 'info',
-    };
-
-    this.loggerService.info(logger).pipe(takeUntil(this.destroy$)).subscribe();
-
-    if (this.mySwiper) {
-      this.likeButtonClicked = true;
-
-      this.mySwiper.slideNext();
-
-      setTimeout(() => {
-        const activeIndex = this.mySwiper.activeIndex;
-        const postToRemove = this.posts[activeIndex - 1];
-
-        if (postToRemove && postToRemove.id !== 'no-matches') {
-          this.removePostFromSwiperWithLikeButton(postToRemove);
-        }
-      }, 100);
+    if (
+      !this.likePostMessageWhitHeart ||
+      !(this.likePostMessageWhitHeart as any).id
+    ) {
+      return;
     }
+
+    const postId = (this.likePostMessageWhitHeart as any).id;
+    this.likePostMessageQueue.next(postId);
+
+    this.loggerService
+      .info({
+        pageView: this.pageView,
+        category: 'user_post_message:like',
+        event: 'click',
+        message: `queue_like_post_${postId}`,
+        statusCode: 200,
+        level: 'info',
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
+
+    this.likeButtonClicked = true;
+    this.mySwiper?.slideNext();
   }
 
   handleLikePostMessageQueue() {
     this.likePostMessageQueue
       .pipe(
-        tap((postId) => console.log('Post ID recebido na fila:', postId)),
+        tap((postId) => {
+          this.loggerService
+            .info({
+              pageView: this.pageView,
+              category: 'user_post_message:like_queue',
+              event: 'queued',
+              message: `queued_like_${postId}`,
+              statusCode: 200,
+              level: 'debug',
+            })
+            .pipe(takeUntil(this.destroy$))
+            .subscribe();
+        }),
         concatMap((postId) =>
           this.likePostMessageService.likePostMessage(postId).pipe(
             tap({
               next: (response) => {
+                this.loggerService
+                  .info({
+                    pageView: this.pageView,
+                    category: 'user_post_message:like_queue',
+                    event: 'success',
+                    message: `like_post_success_${postId}`,
+                    statusCode: 200,
+                    level: 'info',
+                  })
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe();
+
                 if (response.mustVideoWatch) {
                   this.goToAdMobVideoReward();
                 }
@@ -449,32 +543,23 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
                   });
                 }
 
-                const logger: TrackAction = {
-                  pageView: this.pageView,
-                  category: 'user_post_message',
-                  event: 'click',
-                  message: `like_post_message:${postId}`,
-                  statusCode: 200,
-                  level: 'info',
-                };
-
-                this.loggerService
-                  .info(logger)
-                  .pipe(takeUntil(this.destroy$))
-                  .subscribe();
+                const likedPost = this.posts.find(
+                  (p) => (p as any).id === postId
+                );
+                if (likedPost) {
+                  this.removePostFromSwiperWithLikeButton(likedPost);
+                }
               },
               error: (error) => {
-                const logger: TrackAction = {
-                  pageView: this.pageView,
-                  category: 'user_post_message',
-                  event: 'view',
-                  message: `like_post_message:${error.message}`,
-                  statusCode: error.status,
-                  level: 'error',
-                };
-
                 this.loggerService
-                  .info(logger)
+                  .info({
+                    pageView: this.pageView,
+                    category: 'user_post_message:like_queue',
+                    event: 'error',
+                    message: `like_post_error_${error?.message || 'unknown'}`,
+                    statusCode: error?.status || 500,
+                    level: 'error',
+                  })
                   .pipe(takeUntil(this.destroy$))
                   .subscribe();
               },
@@ -488,37 +573,45 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
   handleUnlikePostMessageQueue() {
     this.unlikePostMessageQueue
       .pipe(
-        tap((postId) => console.log('Post ID recebido na fila:', postId)),
+        tap((postId) => {
+          this.loggerService
+            .info({
+              pageView: this.pageView,
+              category: 'user_post_message:unlike_queue',
+              event: 'queued',
+              message: `queued_unlike_${postId}`,
+              statusCode: 200,
+              level: 'debug',
+            })
+            .pipe(takeUntil(this.destroy$))
+            .subscribe();
+        }),
         concatMap((postId) =>
           this.unlikePostMessageService.unlikePostMessage(postId).pipe(
             tap({
               next: (response) => {
-                const logger: TrackAction = {
-                  pageView: this.pageView,
-                  category: 'user_post_message',
-                  event: 'click',
-                  message: `unlike_post_message:${response.postId}`,
-                  statusCode: 200,
-                  level: 'info',
-                };
-
                 this.loggerService
-                  .info(logger)
+                  .info({
+                    pageView: this.pageView,
+                    category: 'user_post_message:unlike_queue',
+                    event: 'success',
+                    message: `unlike_success_${postId}`,
+                    statusCode: 200,
+                    level: 'info',
+                  })
                   .pipe(takeUntil(this.destroy$))
                   .subscribe();
               },
               error: (error) => {
-                const logger: TrackAction = {
-                  pageView: this.pageView,
-                  category: 'user_post_message',
-                  event: 'view',
-                  message: `unlike_post_message:${error.message}`,
-                  statusCode: error.status,
-                  level: 'error',
-                };
-
                 this.loggerService
-                  .info(logger)
+                  .info({
+                    pageView: this.pageView,
+                    category: 'user_post_message:unlike_queue',
+                    event: 'error',
+                    message: `unlike_error_${error?.message || 'unknown'}`,
+                    statusCode: error?.status || 500,
+                    level: 'error',
+                  })
                   .pipe(takeUntil(this.destroy$))
                   .subscribe();
               },
@@ -529,18 +622,33 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe();
   }
 
-  removePostFromSwiperWithLikeButton(post: Post) {
-    const postIndex = this.posts.findIndex((p) => p.id === post.id);
-
-    if (postIndex !== -1 && post.id !== 'no-matches') {
-      this.posts.splice(postIndex, 1);
-      this.mySwiper.removeSlide(postIndex);
-      this.mySwiper.update();
+  removePostFromSwiperWithLikeButton(post: any) {
+    const postIndex = this.posts.findIndex(
+      (p) => (p as any).id === (post as any).id
+    );
+    if (postIndex === -1) {
+      return;
     }
+
+    this.posts.splice(postIndex, 1);
+    this.mySwiper?.removeSlide(postIndex);
+    this.mySwiper?.update();
+
+    this.loggerService
+      .info({
+        pageView: this.pageView,
+        category: 'user_post_message:remove_with_like',
+        event: 'success',
+        message: `removed_with_like_${(post as any).id}`,
+        statusCode: 200,
+        level: 'info',
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
   }
 
-  dislikePostMessage(post: Post) {
-    this.unlikePostMessageQueue.next(post.id);
+  dislikePostMessage(post: FeedPost) {
+    this.unlikePostMessageQueue.next((post as any).id);
   }
 
   openBottomSheet(): void {
@@ -571,7 +679,7 @@ export class PostMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     };
 
     this.loggerService.info(logger).pipe(takeUntil(this.destroy$)).subscribe();
-    this.router.navigateByUrl('home/profile');
+    this.router.navigateByUrl('home/main/profile');
   }
 
   tryAgainLoadingPostMessage() {

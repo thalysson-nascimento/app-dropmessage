@@ -1,5 +1,6 @@
 import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { StaticLikePreferences } from '../../interface/static-like-preferences.interface';
 import { StaticLikePreferencesService } from '../../service/static-like-preferences/static-like-preferences.service';
 import { LoadShimmerComponent } from '../load-shimmer/load-shimmer.component';
@@ -11,7 +12,7 @@ const SharedComponents = [LoadShimmerComponent];
   templateUrl: './post-like-state.component.html',
   styleUrls: ['./post-like-state.component.scss'],
   standalone: true,
-  imports: [SharedComponents, NgIf],
+  imports: [SharedComponents, NgIf, TranslateModule],
 })
 export class PostLikeStateComponent implements OnInit {
   isLoading: boolean = true;

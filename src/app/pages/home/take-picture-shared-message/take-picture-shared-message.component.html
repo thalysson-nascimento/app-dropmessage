@@ -1,59 +1,98 @@
-<div class="container">
-  <div class="header">
-    <img
-      src="assets/icon-static/arrow-left.svg"
-      style="width: 24px; height: 24px"
-      alt=""
-      (click)="goToPostList()"
-    />
+<div class="content">
+  <header class="header header--position-right">
+    <button class="icon-button" (click)="goBack()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </header>
+
+  <div class="container-title-subtitle">
+    <h1 class="title">{{ "text.createTimedPost" | translate }}</h1>
+    <p class="subtitle">{{ "text.shareMomentLimitedTime" | translate }}</p>
   </div>
 
-  <div class="contain-take-photo">
-    <div class="contain-photo-state">
-      <div *ngIf="!cameraImage; else takePhoto" class="information-take-photo">
-        <img
-          src="assets/icon-static/choose-camera.svg"
-          class="image-information-svg"
-          alt=""
-        />
+  @if (!cameraAllowed) {
+  <section class="upload" (click)="openAppSettings()">
+    <div class="upload__box">
+      <div class="upload__icon-wrapper">
+        <span class="material-symbols-outlined">photo_camera_front</span>
       </div>
-
-      <ng-template #takePhoto>
-        <div *ngIf="cameraAllowed && cameraImage" class="take-photo-preview">
-          <img class="photo-preview" [src]="cameraImage" />
-        </div>
-      </ng-template>
+      <span class="upload__title">{{
+        "text.cameraAccessDenied" | translate
+      }}</span>
+      <span class="upload__subtitle">{{
+        "text.enableCameraPermissionInSettings" | translate
+      }}</span>
+    </div>
+  </section>
+  }@else {
+  <section class="upload" (click)="openBottomSheet()">
+    <div class="upload__box" [class.upload__box--filled]="cameraImage">
+      @if (!cameraImage) {
+      <div class="upload__icon-wrapper">
+        <span class="material-symbols-outlined">add_a_photo</span>
+      </div>
+      <span class="upload__title">{{ "button.uploadPhoto" | translate }}</span>
+      <span class="upload__subtitle">{{
+        "text.tapToSelectFromGallery" | translate
+      }}</span>
+      } @else if(cameraAllowed && cameraImage) {
+      <img class="upload__image" [src]="cameraImage" />
+      }
     </div>
 
-    <div class="contain-button">
-      <button
-        *ngIf="cameraImage"
-        class="space-bottom style-button"
-        appButtonStyle
-        (click)="postMessage(cameraImage)"
-        [buttonType]="'primary'"
-        [disabled]="disabledButton"
-        [disabledButton]="disabledButton"
-      >
-        <span *ngIf="!disabledButton">{{
-          "button.sharedPost" | translate
-        }}</span>
-        <div *ngIf="disabledButton" class="bouncing-dots">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-        </div>
-      </button>
-      <button
-        [disabled]="disabledButton"
-        [disabledButton]="disabledButton"
-        appButtonStyle
-        (click)="openBottomSheet()"
-        [buttonType]="'primary'"
-      >
-        {{ "button.takePhoto" | translate }}
-      </button>
+    <div class="upload__badge">
+      {{ "text.expiresIn" | translate }} {{ showTimerSelected }}
     </div>
-  </div>
+  </section>
+  }
+
+  <section class="duration">
+    <h3>
+      <span class="material-symbols-outlined">timer</span>
+      {{ "text.visibilityDuration" | translate }}
+    </h3>
+
+    <div class="duration-list">
+      @for (item of durations; track item.value) {
+      <app-duration-option
+        [option]="item"
+        [disabled]="isLoadingButton"
+        [selected]="selectedDuration === item.value"
+        (select)="selectDuration(item)"
+      >
+      </app-duration-option>
+      }
+    </div>
+  </section>
+
+  <button
+    appButton
+    [disabled]="!cameraImage || isLoadingButton"
+    (click)="sharedPost(cameraImage)"
+  >
+    @if (isLoadingButton) {
+    <app-spinner></app-spinner>
+    } @else {
+    <ng-container>{{ "button.share" | translate }}</ng-container>
+    }
+  </button>
 </div>
+
+<app-modal #modal>
+  <app-feedback-overlay
+    variant="error"
+    [title]="'text.errorSomethingWentWrong' | translate"
+    [description]="'text.couldNotConnectToServerSharePost' | translate"
+  ></app-feedback-overlay>
+  <button appButton (click)="tryAgain()">
+    {{ "button.tryAgain" | translate }}
+  </button>
+  <button
+    appButton="ghost"
+    class="btn-ghost"
+    variant="ghost"
+    (click)="closeModal()"
+  >
+    {{ "button.cancel" | translate }}
+  </button>
+</app-modal>

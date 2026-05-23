@@ -1,5 +1,5 @@
 export interface DataConnectChatMessage {
-  mathId: string;
+  matchId: string;
   name: string;
   avatar: string;
   userLocation: {

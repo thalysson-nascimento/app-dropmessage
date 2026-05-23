@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   NgZone,
@@ -15,32 +16,38 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { format, formatDistanceToNow, isToday } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import { Subject, takeUntil } from 'rxjs';
-import { LoadShimmerComponent } from '../../../shared/component/load-shimmer/load-shimmer.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { format } from 'date-fns';
+import { combineLatest, Subject, takeUntil } from 'rxjs';
+import { ChatMessageAdapter } from '../../../shared/adapter/chat-message.adapter';
+import { statusIndicatorAnimation } from '../../../shared/animation/status-indicator.animation';
+import { ErrorRequestComponent } from '../../../shared/component/error-request/error-request.component';
 import { ModalComponent } from '../../../shared/component/modal/modal.component';
-import { SystemUnavailableComponent } from '../../../shared/component/system-unavailable/system-unavailable.component';
+import { ButtonDirective } from '../../../shared/directives/button-ia/button-ia.directive';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
+import { ChatMessageUI } from '../../../shared/interface/chat-message-ui.interface';
 import { Message } from '../../../shared/interface/get-send-message.interface';
 import { TrackAction } from '../../../shared/interface/track-action.interface';
 import { DataConnectChatMessageService } from '../../../shared/service/data-connect-chat-message/data-connect-chat-message.service';
 import { GetSendMessageService } from '../../../shared/service/get-send-message/get-send-message.service';
 import { LoggerService } from '../../../shared/service/logger/logger.service';
+import { PreferencesUserAuthenticateService } from '../../../shared/service/preferences-user-authenticate/preferences-user-authenticate.service';
 import { ReportProblemService } from '../../../shared/service/report-problem/report-problem.service';
 import { SendMessageService } from '../../../shared/service/send-message/send-message.service';
 import { SocketSenMessageService } from '../../../shared/service/socket-send-message/socket-sen-message.service';
-import { GenerateTipsService } from '../../../shared/service/tips/generate-tips.service';
 import { UnmatchService } from '../../../shared/service/unmatch/unmatch.service';
 import { UserHashPublicService } from '../../../shared/service/user-hash-public/user-hash-public.service';
 import { noOnlySpacesValidator } from '../../../shared/validators/noOnlySpacesValidator.validator';
+import { ChatMessageLoadingComponent } from './chat-message-loading/chat-message-loading.component';
 
 const CoreModule = [CommonModule, FormsModule, ReactiveFormsModule];
 const SharedComponent = [
-  SystemUnavailableComponent,
   ModalComponent,
-  LoadShimmerComponent,
   ButtonStyleDirective,
+  ChatMessageLoadingComponent,
+  ErrorRequestComponent,
+  TranslateModule,
+  ButtonDirective,
 ];
 
 @Component({
@@ -48,11 +55,12 @@ const SharedComponent = [
   templateUrl: './chat-message.component.html',
   styleUrls: ['./chat-message.component.scss'],
   imports: [...CoreModule, ...SharedComponent],
+  animations: [...statusIndicatorAnimation],
   standalone: true,
 })
-export class ChatMessageComponent implements OnInit, OnDestroy {
-  isLoading: boolean = true;
-  showSystemUnavailable: boolean = false;
+export class ChatMessageComponent implements OnInit, OnDestroy, AfterViewInit {
+  loading: boolean = true;
+  error: boolean = false;
   isLoadingMore: boolean = false;
   newMessage: string = '';
   userHashPublic: string = '';
@@ -64,9 +72,9 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   tips: string[] = [];
   isInputFocused: boolean = false;
+  private socketInitialized = false;
 
   @ViewChild('containMessages') containMessages?: ElementRef;
-  @ViewChild('generateModalTips') generateModalTips!: ModalComponent;
   @ViewChild('chooseAction') chooseAction!: ModalComponent;
   @ViewChild('repostProblem') repostProblem!: ModalComponent;
 
@@ -82,7 +90,13 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
   errorReportProblem: boolean = false;
   showSuccessMessageReportProblem: boolean = false;
   pageView: string = 'DatingMatch:ChatMessage';
+  public matchUserId!: string;
   private destroy$: Subject<void> = new Subject<void>();
+
+  public newAppMessage = '';
+
+  public messagesChate: ChatMessageUI[] = [];
+  public isUserOnline: boolean = false;
 
   constructor(
     private router: Router,
@@ -93,33 +107,44 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
     private socketSenMessageService: SocketSenMessageService,
     private userHashPublicService: UserHashPublicService,
     private zone: NgZone,
-    private generateTipsService: GenerateTipsService,
     private reportProblemService: ReportProblemService,
     private loggerService: LoggerService,
-    private unmatchService: UnmatchService
+    private unmatchService: UnmatchService,
+    private preferencesUserAuthenticateService: PreferencesUserAuthenticateService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit() {
-    this.onLoadUserHashPublic();
     this.createSendMessageFormBuilder();
 
-    this.dataConnectChatMessageService
-      .getDataConnectChatMessage()
+    combineLatest([
+      this.userHashPublicService.getUserHashPublic(),
+      this.dataConnectChatMessageService.getDataConnectChatMessage(),
+    ])
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((data) => {
-        this.userMatchAvatar = data.avatar;
-        this.userMatchName = data.name;
-        this.userMatchLocation = data.userLocation;
+      .subscribe(([userHash, chatData]) => {
+        if (userHash) {
+          this.userHashPublic = userHash;
+        }
 
-        this.matchId = data.mathId;
+        if (chatData) {
+          this.userMatchAvatar = chatData.avatar;
+          this.userMatchName = chatData.name;
+          this.userMatchLocation = chatData.userLocation;
+          this.matchId = chatData.matchId;
+        }
 
-        if (this.matchId) {
-          this.onListenSocketSendMessage(this.matchId);
+        if (this.userHashPublic && this.matchId && !this.socketInitialized) {
+          this.socketInitialized = true;
+
           this.loadSendMessage();
-        } else {
-          console.error('matchId não foi definido');
+          this.loadSocketUserStatus();
         }
       });
+  }
+
+  ngAfterViewInit(): void {
+    this.initializeScrollEvent();
   }
 
   ngOnDestroy(): void {
@@ -129,12 +154,65 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  onLoadUserHashPublic() {
-    this.userHashPublicService.getUserHashPublic().subscribe((result) => {
-      if (result) {
-        this.userHashPublic = result;
-      }
+  loadSocketUserStatus() {
+    this.preferencesUserAuthenticateService.getToken().subscribe({
+      next: (response) => {
+        if (response) {
+          this.socketSenMessageService.connect(response.token);
+
+          this.socketSenMessageService.onConnect(() => {
+            console.log('🚀 SOCKET PRONTO');
+
+            this.socketSenMessageService.joinRoomSendMessage(this.matchId);
+          });
+        }
+      },
     });
+
+    // ✅ ONLINE
+    this.socketSenMessageService
+      .onUserOnline()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((data) => {
+        if (!this.matchUserId) return;
+
+        if (data.userHashPublic === this.matchUserId) {
+          this.isUserOnline = true;
+        }
+      });
+
+    // ✅ OFFLINE
+    this.socketSenMessageService
+      .onUserOffline()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((data) => {
+        if (!this.matchUserId) return;
+
+        if (data.userHashPublic === this.matchUserId) {
+          this.isUserOnline = false;
+        }
+      });
+
+    // ✅ MENSAGENS
+    this.socketSenMessageService
+      .onSendMessage()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((response) => {
+        this.zone.run(() => {
+          const isOwn = response.user.userHashPublic === this.userHashPublic;
+          if (isOwn) return;
+
+          this.messagesChate.push({
+            id: response.id,
+            content: response.content,
+            isOwnMessage: isOwn,
+            time: format(new Date(response.createdAt), 'HH:mm'),
+            dateLabel: format(new Date(response.createdAt), 'dd/MM/yyyy'),
+          });
+
+          this.scrollToBottom();
+        });
+      });
   }
 
   createSendMessageFormBuilder() {
@@ -162,62 +240,59 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
 
   loadSendMessage(
     page: number = 1,
-    limit: number = 10,
+    limit: number = 15,
     prepend: boolean = false
   ) {
     const element = this.containMessages?.nativeElement;
     const previousHeight = prepend ? element?.scrollHeight : 0;
+    console.log('====>>>', previousHeight);
 
     this.getSendMessageService
       .sendMessage(this.matchId, page, limit)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
-          setTimeout(() => {
-            this.initializeScrollEvent();
-          }, 200);
+          console.log('Resposta da API:', response); // Log da resposta completa para depuração
+
           this.totalPage = response.pagination.totalPages;
 
-          const newMessages = response.messages.sort(
-            (a, b) =>
-              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          // 🔥 dados do usuário (header)
+          this.userMatchName = response.match.otherUser.name;
+          this.userMatchAvatar = response.match.otherUser.avatar;
+
+          // 🔥 status online
+          this.isUserOnline = response.match.otherUser.isOnline;
+          this.matchUserId = response.match.otherUser.userHashPublic;
+
+          // 🔥 ADAPTER
+          const newMessages = ChatMessageAdapter.fromApi(
+            response.messages.sort(
+              (a, b) =>
+                new Date(a.createdAt).getTime() -
+                new Date(b.createdAt).getTime()
+            )
           );
 
+          this.loading = false;
           if (prepend) {
-            this.messages = [...newMessages, ...this.messages];
+            this.messagesChate = [...newMessages, ...this.messagesChate];
             this.adjustScrollPosition(element, previousHeight);
           } else {
-            this.messages = [...this.messages, ...newMessages];
+            this.messagesChate = [...this.messagesChate, ...newMessages];
             this.scrollToBottom();
           }
+
+          setTimeout(() => this.initializeScrollEvent(), 200);
         },
         error: () => {
-          this.showSystemUnavailable = true;
-          this.isLoading = false;
+          this.error = true;
+          this.loading = false;
         },
         complete: () => {
-          this.isLoading = false;
+          this.loading = false;
           this.isLoadingMore = false;
         },
       });
-  }
-  loadTips() {
-    this.showOptionTips = true;
-    this.isLoadingTips = true;
-    this.generateTipsService.tips(this.matchId).subscribe({
-      next: (response) => {
-        this.tips = response;
-      },
-      error: (errorResponse) => {
-        this.errorLoadTips = true;
-        this.responseErrorTips = errorResponse.error.message.message;
-        this.isLoading = false;
-      },
-      complete: () => {
-        this.isLoading = false;
-        this.isLoadingTips = false;
-      },
-    });
   }
 
   adjustScrollPosition(
@@ -250,11 +325,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
   }
 
   goToListChat(): void {
-    this.router.navigateByUrl('home/list-chat');
-  }
-
-  getAlignment(messageId: string): boolean {
-    return messageId === this.userHashPublic;
+    this.router.navigateByUrl('home/main/chat');
   }
 
   tryAgain(): void {
@@ -268,17 +339,15 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
         ?.value.trim();
       const tempId = crypto.randomUUID();
 
-      this.messages.push({
+      this.messagesChate.push({
         id: tempId,
-        createdAt: new Date(),
         content: messageContent,
-        user: {
-          userHashPublic: this.userHashPublic,
-          name: 'Você',
-          avatar: {
-            image: 'path/to/default-avatar.png',
-          },
-        },
+        isOwnMessage: true,
+        time: format(new Date(), 'HH:mm'),
+        dateLabel: format(
+          new Date(),
+          this.translate.currentLang === 'pt' ? 'dd/MM/yyyy' : 'MM/dd/yyyy'
+        ),
       });
 
       this.scrollToBottom();
@@ -304,72 +373,13 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
     }
   }
 
-  onListenSocketSendMessage(matchId: string) {
-    this.socketSenMessageService.joinRoomSendMessage(matchId);
-    this.socketSenMessageService
-      .onSendMessage()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((response) => {
-        this.zone.run(() => {
-          // this.messages.push(response);
-          if (response.user.userHashPublic !== this.userHashPublic) {
-            this.messages.push(response);
-          }
-          this.scrollToBottom();
-        });
-      });
-  }
-
-  choseTipsSendMessage(tip: string): void {
-    this.showOptionTips = false;
-
-    this.messages.push({
-      createdAt: new Date(),
-      content: tip,
-      user: {
-        userHashPublic: this.userHashPublic,
-        name: 'Você',
-        avatar: {
-          image: 'path/to/default-avatar.png',
-        },
-      },
-    });
-
-    this.generateModalTips.closeDialog();
-
-    this.scrollToBottom();
-    this.sendMessageService
-      .sendMessage({
-        matchId: this.matchId,
-        userHashPublic: this.userHashPublic,
-        content: tip,
-      })
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        error: (error) => console.error(error),
-      });
-  }
-
-  formatedCreatedAt(date: Date) {
-    if (isToday(date)) {
-      return format(date, 'HH:mm', { locale: ptBR });
-    } else {
-      return formatDistanceToNow(date, { addSuffix: true, locale: ptBR });
-    }
-  }
-
-  openModalTips() {
-    this.generateModalTips.openDialog();
-    this.loadTips();
-  }
-
   openModalChooseAction() {
-    this.chooseAction.openDialog();
+    this.chooseAction.open();
   }
 
   openModalReportProblem() {
-    this.chooseAction.closeDialog();
-    this.repostProblem.openDialog();
+    this.chooseAction.close();
+    this.repostProblem.open();
   }
 
   reportProblem(typeReportProblem: string) {
@@ -379,7 +389,7 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.showSuccessMessageReportProblem = true;
-          this.repostProblem.closeDialog();
+          this.repostProblem.close();
 
           const logger: TrackAction = {
             pageView: this.pageView,

@@ -1,0 +1,82 @@
+<div class="content">
+  <div class="header">
+    <app-logo-dropmessage [fontSize]="'1rem'"></app-logo-dropmessage>
+  </div>
+
+  <div class="container-title-subtitle">
+    <h1 class="title">{{ "text.notifications" | translate }}</h1>
+    <p class="subtitle">{{ "text.shareMomentLimitedTime" | translate }}</p>
+  </div>
+
+  @if(loading) {
+  <section class="notifications-loading">
+    @for (item of [1, 2, 3, 4, 5]; track $index) {
+    <div class="notifications-loading__list">
+      <div class="notifications-loading__item">
+        <div class="notifications-loading__avatar-wrapper">
+          <div class="notifications-loading__avatar skeleton"></div>
+          <div class="notifications-loading__badge skeleton"></div>
+        </div>
+
+        <div class="notifications-loading__content">
+          <div
+            class="notifications-loading__line notifications-loading__line--primary skeleton"
+          ></div>
+          <div
+            class="notifications-loading__line notifications-loading__line--secondary skeleton"
+          ></div>
+        </div>
+
+        <div class="notifications-loading__preview skeleton"></div>
+      </div>
+    </div>
+    }
+  </section>
+  } @else if(error) {
+  <app-error-request>
+    <button appButton="info">{{ "button.tryAgain" | translate }}</button>
+  </app-error-request>
+  } @else { @if (notifications.items.length === 0) {
+  <section class="notification-empty">
+    <div class="notification-empty__illustration">
+      <div class="notification-empty__icon-wrapper">
+        <span class="material-symbols-outlined notification-empty__icon-main">
+          notifications
+        </span>
+
+        <div class="notification-empty__icon-badge">
+          <span
+            class="material-symbols-outlined notification-empty__icon-cancel"
+          >
+            bedtime
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="notification-empty__content">
+      <h2 class="notification-empty__title">
+        {{ "text.noNotifications" | translate }}
+      </h2>
+
+      <p class="notification-empty__description">
+        {{ "text.notificationsEmptyDescription" | translate }}
+      </p>
+    </div>
+    <button appButton="info" (click)="goToTakePicture()">
+      {{ "button.createPost" | translate }}
+    </button>
+  </section>
+  }@else {
+
+  <div class="notifications-page">
+    <section class="notifications-page__section">
+      <app-notification-list
+        [notifications]="filtered"
+        [subscriptions]="notifications.subscription"
+      >
+      </app-notification-list>
+    </section>
+  </div>
+  } }
+</div>

@@ -7,7 +7,6 @@ import {
   OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { Preferences } from '@capacitor/preferences';
 import { AdmobService } from '../../../../shared/service/ad-mob/ad-mob.service';
 import { LottieAnimationIconService } from '../../../../shared/service/lottie-animation-icon/lottie-animation-icon.service';
 
@@ -45,28 +44,26 @@ export class AdmobVideoRewardCardFreeTrialComponent
   }
 
   async onShowRewardAd() {
-    await this.admobService
-      .rewardVideo()
-      .catch((error) => {
-        console.log(error);
-        this.erroLoadVideoReward = true;
-        this.isLoading = false;
-      })
-      .finally(async () => {
-        this.isLoading = false;
-
-        await Preferences.set({
-          key: 'preferencesWatchedVideoRewardAdmob',
-          value: JSON.stringify(true),
-        });
-
-        // this.router.navigateByUrl('home/view-card-free-trial');
-        this.router.navigateByUrl('home/post-messages');
-      });
+    // await this.admobService
+    //   .rewardVideo()
+    //   .catch((error) => {
+    //     console.log(error);
+    //     this.erroLoadVideoReward = true;
+    //     this.isLoading = false;
+    //   })
+    //   .finally(async () => {
+    //     this.isLoading = false;
+    //     await Preferences.set({
+    //       key: 'preferencesWatchedVideoRewardAdmob',
+    //       value: JSON.stringify(true),
+    //     });
+    //     // this.router.navigateByUrl('home/view-card-free-trial');
+    //     this.router.navigateByUrl('home/main/post-message');
+    //   });
   }
 
   goToCardFreeTrial() {
-    this.router.navigateByUrl('home/post-messages');
+    this.router.navigateByUrl('home/main/post-message');
     // this.router.navigateByUrl('home/view-card-free-trial');
   }
 

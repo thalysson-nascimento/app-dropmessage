@@ -17,25 +17,16 @@
   <p class="text-login">{{ "text.titleCreateAccount" | translate }}</p>
 
   <div class="contain-button-google">
-    <button class="button-google" (click)="createAccountWithGoogle()">
+    <button
+      class="button-google"
+      (click)="createAccountWithGoogle()"
+      [disabled]="isLoadingButtonGoogleOAuth"
+    >
       @if (isLoadingButtonGoogleOAuth) {
-      <div class="loader">
-        <svg class="circular" viewBox="25 25 50 50">
-          <circle
-            class="path"
-            cx="50"
-            cy="50"
-            r="20"
-            fill="none"
-            stroke-width="3"
-            stroke-miterlimit="10"
-          />
-        </svg>
-      </div>
-
+      <app-spinner color="#666" backgroundColor="#999"></app-spinner>
       }@else {
       <img src="assets/icon-static/logo-google.svg" alt="" />
-      <span>{{ "button.createAccountWithGoogle" | translate }}</span>
+      <span>{{ "button.accessWithGoogle" | translate }}</span>
       }
     </button>
 
@@ -75,23 +66,17 @@
       class="input-custom"
     />
     <button
-      appButtonStyle
+      appButton
       type="submit"
       class="button-create-acount"
-      [buttonType]="'primary'"
       [disabled]="buttonDisalbled || createAccountFormGroup.invalid"
-      [disabledButton]="buttonDisalbled || createAccountFormGroup.invalid"
       aria-label="criar conta"
     >
-      <span *ngIf="!buttonDisalbled">{{
-        "button.buttonCreateAccount" | translate
-      }}</span>
-      <div *ngIf="buttonDisalbled" class="bouncing-dots">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>
+      @if (isLoadingButton) {
+      <app-spinner></app-spinner>
+      }@else {
+      <span>{{ "button.buttonCreateAccount" | translate }}</span>
+      }
     </button>
   </form>
 
@@ -105,9 +90,35 @@
   </div>
 </div>
 
-<app-error-modal #modalErrorRequest [type]="typeErrorModal">
-  <p>
-    <strong>{{ "text.titleError" | translate }}</strong>
-  </p>
-  <p class="description-error">{{ errorMessage }}</p>
-</app-error-modal>
+<app-modal #modalSuccess>
+  <app-feedback-overlay
+    variant="success"
+    icon="celebration"
+    [title]="'text.createAccountSuccess' | translate"
+    [description]="'text.descriptionCreateAccountSuccess' | translate"
+  ></app-feedback-overlay>
+
+  <button appButton (click)="goToAuthSign()">
+    {{ "button.goToLogin" | translate }}
+  </button>
+</app-modal>
+
+<app-modal #modalError>
+  <app-feedback-overlay
+    variant="error"
+    [title]="'text.errorSomethingWentWrong' | translate"
+    [description]="errorMessage"
+  ></app-feedback-overlay>
+
+  <button appButton (click)="tryAgain()">
+    {{ "button.tryAgain" | translate }}
+  </button>
+  <button
+    appButton="ghost"
+    class="btn-ghost"
+    variant="ghost"
+    (click)="closeModal()"
+  >
+    {{ "button.cancel" | translate }}
+  </button>
+</app-modal>

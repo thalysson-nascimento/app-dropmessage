@@ -51,7 +51,7 @@
   <ul class="list-action-timer">
     <li class="action-timer" (click)="goToUserData()">
       <div class="contain-icon-and-description">
-        <i class="fi fi-tr-circle-user"></i>
+        <span class="material-icons-outlined action-icon">person_outline</span>
         <div>
           <p>{{ "text.profile" | translate }}</p>
           <span class="drescription-timer">{{
@@ -63,7 +63,7 @@
     </li>
     <li class="action-timer" (click)="goToUserPosts()">
       <div class="contain-icon-and-description">
-        <i class="fi fi-tr-copy-image"></i>
+        <span class="material-icons-outlined action-icon">grid_view</span>
         <div>
           <p>{{ "text.sharedPosts" | translate }}</p>
           <span class="drescription-timer">{{
@@ -75,7 +75,9 @@
     </li>
     <li class="action-timer" (click)="goToNotification()">
       <div class="contain-icon-and-description">
-        <i class="fi fi-tr-bell-ring"></i>
+        <span class="material-icons-outlined action-icon"
+          >notifications_none</span
+        >
         <div>
           <p>{{ "text.notifications" | translate }}</p>
           <span class="drescription-timer">{{
@@ -87,7 +89,9 @@
     </li>
     <li class="action-timer" (click)="goToListChat()">
       <div class="contain-icon-and-description">
-        <i class="fi fi-tr-comment-dots"></i>
+        <span class="material-icons-outlined action-icon"
+          >chat_bubble_outline</span
+        >
         <div>
           <p>{{ "text.chat" | translate }}</p>
           <span class="drescription-timer">{{
@@ -99,7 +103,7 @@
     </li>
     <li class="action-timer" (click)="goToAppInfor()">
       <div class="contain-icon-and-description">
-        <i class="fi fi-tr-comment-info"></i>
+        <span class="material-icons-outlined action-icon">info</span>
         <div>
           <p>{{ "text.appInfor" | translate }}</p>
           <span class="drescription-timer">{{
@@ -111,7 +115,7 @@
     </li>
     <li class="action-timer" (click)="goToPrivecePolice()">
       <div class="contain-icon-and-description">
-        <i class="fi fi-tr-password-email"></i>
+        <span class="material-icons-outlined action-icon">security</span>
         <div>
           <p>{{ "text.privacyPolices" | translate }}</p>
           <span class="drescription-timer">{{
@@ -123,7 +127,7 @@
     </li>
     <li class="action-timer" (click)="logout()">
       <div class="contain-icon-and-description">
-        <i class="fi fi-ts-sign-out-alt"></i>
+        <span class="material-icons-outlined action-icon">logout</span>
         <div>
           <p>{{ "text.logout" | translate }}</p>
           <span class="drescription-timer">{{

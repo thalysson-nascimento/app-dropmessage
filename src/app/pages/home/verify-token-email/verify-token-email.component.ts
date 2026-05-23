@@ -119,7 +119,7 @@ export class VerifyTokenEmailComponent implements OnInit, OnDestroy {
                         .info(loggerGender)
                         .pipe(takeUntil(this.destroy$))
                         .subscribe();
-                      this.router.navigateByUrl('home/post-messages');
+                      this.router.navigateByUrl('home/main/post-message');
                     },
                   });
               }

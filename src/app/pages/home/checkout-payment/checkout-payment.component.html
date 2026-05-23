@@ -21,21 +21,19 @@
     <app-error></app-error>
     } @else {
     <div class="main-content-form">
-      <p class="plan">
-        {{ "text.subscribeToPlan" | translate }} {{ planSubscription.name }}
-      </p>
+      <p class="plan">{{ "text.subscribeToPlan" | translate }} DatingMatch</p>
       <div class="contain-price">
         <span class="price">{{
           planSubscription.prices[0].unitAmount
             | currency : planSubscription.prices[0].currency.toUpperCase()
         }}</span>
         <strong class="timer-plan">
-          {{
+          <!-- {{
             timerSubscription(
               planSubscription.prices[0].interval,
               planSubscription.prices[0].intervalCount
             )
-          }}
+          }} -->
         </strong>
         <p class="description">{{ planSubscription.description }}</p>
       </div>

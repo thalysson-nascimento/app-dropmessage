@@ -1,11 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-privacy-police-extends',
   templateUrl: './privacy-police-extends.component.html',
   styleUrls: ['./privacy-police-extends.component.scss'],
   standalone: true,
-  imports: [],
+  imports: [TranslateModule, CommonModule],
 })
 export class PrivacyPoliceExtendsComponent implements OnInit {
   constructor(private elementRef: ElementRef) {}

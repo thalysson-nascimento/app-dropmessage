@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { ButtonStyleDirective } from '../../../shared/directives/button-style/button-style.directive';
 
-const SharedComponents = [ButtonStyleDirective];
+const SharedComponents = [ButtonStyleDirective, TranslateModule];
 
 @Component({
   selector: 'app-user-welcome',
@@ -17,6 +18,6 @@ export class UserWelcomeComponent implements OnInit {
   ngOnInit() {}
 
   toGoPostMessage() {
-    this.router.navigateByUrl('/home/post-messages');
+    this.router.navigateByUrl('/home/main/post-message');
   }
 }

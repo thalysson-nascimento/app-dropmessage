@@ -1,0 +1,21 @@
+<div class="feedback" [class]="'feedback--' + variant">
+  <div class="feedback__icon-wrapper">
+    <span class="material-symbols-rounded feedback__icon">
+      {{ icon }}
+    </span>
+  </div>
+
+  @if (title) {
+  <h2 class="feedback__title">
+    {{ title }}
+  </h2>
+  } @if (description) {
+  <p class="feedback__description">
+    {{ description }}
+  </p>
+  }
+
+  <div class="feedback__actions">
+    <ng-content></ng-content>
+  </div>
+</div>

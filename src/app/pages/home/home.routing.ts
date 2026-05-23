@@ -11,18 +11,56 @@ export const HomeRouting: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'post-messages',
+        redirectTo: 'main',
         pathMatch: 'full',
       },
       {
-        path: 'post-messages',
+        path: 'main',
         resolve: {
           verify: VerifyUserPermissionResolver,
         },
         loadComponent: () =>
-          import('./post-messages/post-messages.component').then(
-            (m) => m.PostMessagesComponent
-          ),
+          import('./main/main.component').then((m) => m.MainComponent),
+        children: [
+          {
+            path: '',
+            redirectTo: 'post-message', // sua tela principal de cards
+            pathMatch: 'full',
+          },
+          {
+            path: 'post-message',
+            loadComponent: () =>
+              import('./main/post-message/post-message.component').then(
+                (m) => m.PostMessageComponent
+              ),
+          },
+          {
+            path: 'chat',
+            loadComponent: () =>
+              import('./main/chat/chat.component').then((m) => m.ChatComponent),
+          },
+          {
+            path: 'notification',
+            loadComponent: () =>
+              import('./main/notification/notification.component').then(
+                (m) => m.NotificationComponent
+              ),
+          },
+          {
+            path: 'ia-profile',
+            loadComponent: () =>
+              import('./main/ia-profile/ia-profile.component').then(
+                (m) => m.IaProfileComponent
+              ),
+          },
+          {
+            path: 'profile',
+            loadComponent: () =>
+              import('./main/profile/profile.component').then(
+                (m) => m.ProfileComponent
+              ),
+          },
+        ],
       },
       {
         path: 'take-picture-shared-message',
@@ -54,20 +92,6 @@ export const HomeRouting: Routes = [
         path: 'profile',
         loadComponent: () =>
           import('./profile/profile.component').then((m) => m.ProfileComponent),
-      },
-      {
-        path: 'user-location',
-        loadComponent: () =>
-          import('./user-location/user-location.component').then(
-            (m) => m.UserLocationComponent
-          ),
-      },
-      {
-        path: 'notification',
-        loadComponent: () =>
-          import('./notification/notification.component').then(
-            (m) => m.NotificationComponent
-          ),
       },
       {
         path: 'privacy-police',
@@ -140,6 +164,13 @@ export const HomeRouting: Routes = [
           ),
       },
       {
+        path: 'list-subscription-ai',
+        loadComponent: () =>
+          import('./list-subscription-ai/list-subscription-ai.component').then(
+            (m) => m.ListSubscriptionAiComponent
+          ),
+      },
+      {
         path: 'checkout-payment',
         loadComponent: () =>
           import('./checkout-payment/checkout-payment.component').then(
@@ -189,10 +220,45 @@ export const HomeRouting: Routes = [
           ).then((m) => m.AdmobVideoRewardCardFreeTrialComponent),
       },
       {
+        path: 'ia-profile-details',
+        loadComponent: () =>
+          import('./ia-profile-details/ia-profile-details.component').then(
+            (m) => m.IaProfileDetailsComponent
+          ),
+      },
+      {
         path: 'app-infor',
         loadComponent: () =>
           import('./app-infor/app-infor.component').then(
             (m) => m.AppInforComponent
+          ),
+      },
+      {
+        path: 'plan-gold-free-trial',
+        loadComponent: () =>
+          import('./plan-gold-free-trial/plan-gold-free-trial.component').then(
+            (m) => m.PlanGoldFreeTrialComponent
+          ),
+      },
+      {
+        path: 'update-avatar',
+        loadComponent: () =>
+          import('./update-avatar/update-avatar.component').then(
+            (m) => m.UpdateAvatarComponent
+          ),
+      },
+      {
+        path: 'admob-intertistial',
+        loadComponent: () =>
+          import('./admob-intertistial/admob-intertistial.component').then(
+            (m) => m.AdmobIntertistialComponent
+          ),
+      },
+      {
+        path: 'code-confirmation',
+        loadComponent: () =>
+          import('./code-confirmation/code-confirmation.component').then(
+            (m) => m.CodeConfirmationComponent
           ),
       },
     ],
