@@ -37,7 +37,7 @@
   </app-system-unavailable>
 
   <section *ngIf="!showSystemUnavailable">
-    <div *ngIf="!isLoading">
+    <div *ngIf="!isLoading" class="user-post-message__grid">
       <div
         class="user-post-message__image-wrapper"
         *ngFor="let postMessage of listPostMessage; let i = index"

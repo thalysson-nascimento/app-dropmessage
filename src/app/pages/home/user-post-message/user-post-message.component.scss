@@ -39,15 +39,15 @@ img {
   margin-bottom: var(--space-small);
   object-fit: cover;
 }
-
-section {
-  column-count: 2;
+.user-post-message__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-large) var(--space-medium);
 }
 
 // BEM STRUCTURE
 .user-post-message__image-wrapper {
   position: relative;
-  margin-bottom: 2rem;
 }
 
 .user-post-message__badge {
