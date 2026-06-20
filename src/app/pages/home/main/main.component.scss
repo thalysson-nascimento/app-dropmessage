@@ -1,11 +1,10 @@
 .main-layout {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-}
+  height: 100dvh;
 
-app-main-header {
-  flex: 0 0 auto;
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
 }
 
 .content {

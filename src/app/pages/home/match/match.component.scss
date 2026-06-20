@@ -1,6 +1,6 @@
 .contain {
   width: 100%; // Ocupa 100% da largura da tela
-  height: 100vh; // Ocupa 100% da altura da tela
+  height: 100dvh; // Ocupa 100% da altura da tela
   display: flex;
   flex-direction: column;
   position: relative; // Para posicionar os filhos de forma absoluta

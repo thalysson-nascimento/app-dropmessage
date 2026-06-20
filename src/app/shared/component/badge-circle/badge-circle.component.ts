@@ -10,7 +10,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class BadgeCircleComponent implements OnInit {
   @Input() title!: string;
-  @Input() fontSize?: string = ''; // ~14px (default atual)
+  @Input() fontSize?: string = '10px'; // ~14px (default atual)
   @Input() padding?: string = '';
 
   constructor() {}

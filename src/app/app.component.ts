@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
   async initializationTranslateApp() {
     const info = await Device.getLanguageCode();
     const deviceLang = info.value.split('-')[0];
-    const defaultLang = deviceLang.match(/en|pt/) ? deviceLang : 'pt';
+    const defaultLang = deviceLang.match(/en|pt/) ? deviceLang : 'en';
 
     this.translate.setTranslation(defaultLang, getTranslation(defaultLang));
     this.translate.use(defaultLang);

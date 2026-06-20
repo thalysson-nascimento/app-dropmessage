@@ -1,19 +1,11 @@
 .main-menu {
   display: flex;
   justify-content: space-between;
-  margin: 0 var(--space-medium);
   align-items: center;
 
-  button {
-    background: transparent;
-    border: none;
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    touch-action: manipulation;
-  }
+  margin: 0 var(--space-medium);
+
+  padding-bottom: max(12px, var(--safe-bottom));
 
   button {
     background: transparent;

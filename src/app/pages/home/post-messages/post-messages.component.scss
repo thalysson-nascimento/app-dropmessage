@@ -32,12 +32,12 @@
 
 body {
   display: grid;
-  height: 100vh;
+  height: 100dvh;
 }
 
 .list-post-message {
   display: flex;
-  height: calc(100vh - 4rem);
+  height: calc(100dvh - 4rem);
 }
 
 .list-post-message::-webkit-scrollbar {
@@ -245,7 +245,7 @@ img {
 
 .contain-loading {
   display: flex;
-  height: calc(100vh - 4rem);
+  height: calc(100dvh - 4rem);
   justify-content: center;
   align-items: center;
 }

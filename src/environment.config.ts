@@ -35,11 +35,11 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
   //   apiKeyGeoLocationCageData: '5f25465dd2a74ba884e38fb29b700814',
   // },
   development: {
-    baseURL: 'https://victor-partly-fold-nicole.trycloudflare.com',
+    baseURL: 'https://philips-mel-controller-ver.trycloudflare.com',
     pathURL: '/api/dev',
     production: false,
     mock: false,
-    baseUrlSocket: 'https://victor-partly-fold-nicole.trycloudflare.com',
+    baseUrlSocket: 'https://philips-mel-controller-ver.trycloudflare.com',
     apiKeyGeoLocationCageData: '5f25465dd2a74ba884e38fb29b700814',
   },
 };

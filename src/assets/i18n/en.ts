@@ -225,7 +225,7 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     inappropriatePhotos: 'Inappropriate photos or names',
     childSexualExploitation: 'Child sexual exploitation',
     privacyPolicy: PRIVACY_POLICY_EN,
-    ai: 'ai',
+    ai: 'Active AI',
     and: 'and',
     otherPeople: '{{count}} others',
     likedYourPost: 'liked your post.',

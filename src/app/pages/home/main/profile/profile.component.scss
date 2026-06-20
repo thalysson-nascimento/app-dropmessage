@@ -1,13 +1,13 @@
 .profile {
   display: flex;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 100dvh;
   background: #f9fafb;
   font-family: "Inter", sans-serif;
 
   &__container {
     width: 100%;
-    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     background: #f9fafb;

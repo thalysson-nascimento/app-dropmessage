@@ -151,6 +151,32 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         if (response) {
           this.avatar = response;
+
+          if (
+            this.avatar.user.email === 'simonessilva.dhl@gmail.com' ||
+            this.avatar.user.email === 'thalyssonwg.nascimento@gmail.com' ||
+            this.avatar.user.email === 'diego.brs.teste@gmail.com'
+          ) {
+            const testeAds = {
+              title: 'Test Ads',
+              items: [
+                {
+                  label: 'Testar banner Admob',
+                  description: 'See how we protect your information',
+                  icon: 'security',
+                  route: 'home/admob-intertistial',
+                },
+                {
+                  label: 'Testar banner reward',
+                  description: 'See how we protect your information',
+                  icon: 'security',
+                  route: 'home/admob-video-reward',
+                },
+              ],
+            };
+
+            this.menuSections.push(testeAds);
+          }
         }
       },
 

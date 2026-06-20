@@ -1,5 +1,5 @@
 .user-data {
-  min-height: 100vh;
+  min-height: 100dvh;
   background: #ffffff;
   display: flex;
   flex-direction: column;
@@ -11,7 +11,7 @@
   &__cover {
     position: relative;
     height: 60vh;
-    overflow: hidden;
+    // overflow: hidden;
   }
 
   &__cover-image {

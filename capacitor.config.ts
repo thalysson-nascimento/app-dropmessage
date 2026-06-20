@@ -28,13 +28,12 @@ const config: CapacitorConfig = {
       scopes: ['profile', 'email'],
     },
     SplashScreen: {
-      launchShowDuration: 2000, // Evita que a splash screen seja oculta automaticamente
+      launchShowDuration: 2000,
       backgroundColor: '#ffffff',
       showSpinner: false,
-      androidSpinnerStyle: 'small',
-      iosSpinnerStyle: 'small',
-      splashFullScreen: true,
-      splashImmersive: true,
+
+      splashFullScreen: false,
+      splashImmersive: false,
     },
   },
 };
