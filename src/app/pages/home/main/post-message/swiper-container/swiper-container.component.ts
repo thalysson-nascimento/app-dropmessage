@@ -29,6 +29,7 @@ import { LoggerService } from '../../../../../shared/service/logger/logger.servi
 import { PostMessageService } from '../../../../../shared/service/post/post.service';
 import { UnlikePostMessageService } from '../../../../../shared/service/unlike-post-message/unlike-post-message.service';
 import { AdmobVideoRewardComponent } from '../../../admob-video-reward/admob-video-reward.component';
+import { getCountryFlagUrl } from '../../../../../shared/utils/country-flag.util';
 import { LikeLimiteRewardComponent } from '../../../like-limite-reward/like-limite-reward.component';
 register();
 
@@ -514,5 +515,9 @@ export class SwiperContainerComponent
     console.log('fechado video reward');
     this.showRewardCard = false;
     this.loadPosts(1);
+  }
+
+  getCountryFlag(countryCode: string | null | undefined): string | null {
+    return getCountryFlagUrl(countryCode);
   }
 }

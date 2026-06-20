@@ -1,22 +1,15 @@
 @if (showRewardCard) {
 <app-admob-video-reward (close)="closeVideoReward()"></app-admob-video-reward>
 } @if (showCard) {
-<app-like-limite-reward
-  (closeCard)="closeCard()"
-  (openReward)="openVideoReward()"
-></app-like-limite-reward>
+<app-like-limite-reward (closeCard)="closeCard()" (openReward)="openVideoReward()"></app-like-limite-reward>
 }
 
 <div class="container">
   @if (!posts || posts.length === 0) {
   <div class="content">
     @if (profileAI) {
-    <app-cards
-      [name]="profileAI.name"
-      [userProfile]="profileAI.typeProfle"
-      [image]="profileAI.avatar"
-      [badge]="'text.ai' | translate"
-    ></app-cards>
+    <app-cards [name]="profileAI.name" [userProfile]="profileAI.typeProfle" [image]="profileAI.avatar"
+      [badge]="'text.ai' | translate"></app-cards>
     }
     <div class="card-explorer-ia">
       <div class="contain-description">
@@ -34,14 +27,8 @@
   </div>
   } @else {
   <div class="contain-swiper">
-    <swiper-container
-      #swiperRef
-      class="list-post-message mySwiper"
-      slides-per-view="1"
-      space-between="10"
-      centered-slides="true"
-      grab-cursor="true"
-    >
+    <swiper-container #swiperRef class="list-post-message mySwiper" slides-per-view="1" space-between="10"
+      centered-slides="true" grab-cursor="true">
       <swiper-slide *ngFor="let post of posts" class="user-post-image">
         @if (post.type.includes('POST')) {
         <div class="post-card">
@@ -52,16 +39,22 @@
               @if (post.user.UserLocation.city) {
               <div class="user-location">
                 <span class="user-location__label">
-                  <i class="fi fi-sr-marker"></i>
+                  @if (getCountryFlag(post.user.UserLocation.countryCode)) {
+                  <img class="user-location__flag" [src]="getCountryFlag(post.user.UserLocation.countryCode)"
+                    alt="flag" />
+                  }
                   {{ post.user.UserLocation.city }}/{{
-                    post.user.UserLocation.stateCode
+                  post.user.UserLocation.stateCode
                   }}
                 </span>
               </div>
               } @else {
               <div class="user-location" (click)="goToSubscription()">
                 <span class="user-location__label">
-                  <i class="fi fi-sr-marker"></i>
+                  @if (getCountryFlag(post.user.UserLocation.countryCode)) {
+                  <img class="user-location__flag" [src]="getCountryFlag(post.user.UserLocation.countryCode)"
+                    alt="flag" />
+                  }
                   <p>View location</p>
                 </span>
               </div>
@@ -75,12 +68,8 @@
           post.type.includes('WATCH_VIDEO')) {
           <div class="content">
             @if (profileAI) {
-            <app-cards
-              [name]="profileAI.name"
-              [userProfile]="profileAI.typeProfle"
-              [image]="profileAI.avatar"
-              [badge]="'text.ai' | translate"
-            ></app-cards>
+            <app-cards [name]="profileAI.name" [userProfile]="profileAI.typeProfle" [image]="profileAI.avatar"
+              [badge]="'text.ai' | translate"></app-cards>
             }
             <div class="card-explorer-ia">
               <div class="contain-description">
@@ -99,12 +88,8 @@
           } @else if (post.type.includes('AI_SUGGESTION')) {
           <div class="content">
             @if (profileAI) {
-            <app-cards
-              [name]="profileAI.name"
-              [userProfile]="profileAI.typeProfle"
-              [image]="profileAI.avatar"
-              [badge]="'text.ai' | translate"
-            ></app-cards>
+            <app-cards [name]="profileAI.name" [userProfile]="profileAI.typeProfle" [image]="profileAI.avatar"
+              [badge]="'text.ai' | translate"></app-cards>
             }
             <div class="card-explorer-ia">
               <div class="contain-description">

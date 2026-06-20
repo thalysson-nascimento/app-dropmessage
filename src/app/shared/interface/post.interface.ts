@@ -14,6 +14,7 @@ export interface FeedPost {
     UserLocation: {
       city: string | null;
       stateCode: string | null;
+      countryCode?: string | null;
     };
   };
 }

@@ -152,6 +152,17 @@ $border-color: rgba(255, 255, 255, 0.2);
     font-family: "Inter", sans-serif;
     letter-spacing: 0.5px;
     text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__flag {
+    width: 16px;
+    height: 11px;
+    border-radius: 2px;
+    object-fit: cover;
+    display: inline-block;
   }
 }
 
