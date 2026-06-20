@@ -26,22 +26,22 @@ export const environmentConfig: Record<Environment, TypeEnveronment> = {
     baseUrlSocket: '',
     apiKeyGeoLocationCageData: '5f25465dd2a74ba884e38fb29b700814',
   },
-  // development: {
-  //   baseURL: 'http://localhost:3000',
-  //   pathURL: '/api/dev',
-  //   production: false,
-  //   mock: false,
-  //   baseUrlSocket: 'http://localhost:3000',
-  //   apiKeyGeoLocationCageData: '5f25465dd2a74ba884e38fb29b700814',
-  // },
   development: {
-    baseURL: 'https://philips-mel-controller-ver.trycloudflare.com',
+    baseURL: 'http://localhost:3000',
     pathURL: '/api/dev',
     production: false,
     mock: false,
-    baseUrlSocket: 'https://philips-mel-controller-ver.trycloudflare.com',
+    baseUrlSocket: 'http://localhost:3000',
     apiKeyGeoLocationCageData: '5f25465dd2a74ba884e38fb29b700814',
   },
+  // development: {
+  //   baseURL: 'https://philips-mel-controller-ver.trycloudflare.com',
+  //   pathURL: '/api/dev',
+  //   production: false,
+  //   mock: false,
+  //   baseUrlSocket: 'https://philips-mel-controller-ver.trycloudflare.com',
+  //   apiKeyGeoLocationCageData: '5f25465dd2a74ba884e38fb29b700814',
+  // },
 };
 
 // Função que retorna o ambiente ou 'development' como padrão
