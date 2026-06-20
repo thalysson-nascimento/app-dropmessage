@@ -1,11 +1,6 @@
 <div class="container">
   <div class="header">
-    <img
-      src="assets/icon-static/arrow-left.svg"
-      style="width: 24px; height: 24px"
-      alt=""
-      (click)="goToProfile()"
-    />
+    <img src="assets/icon-static/arrow-left.svg" style="width: 24px; height: 24px" alt="" (click)="goToProfile()" />
   </div>
 
   <div class="container-title-subtitle">
@@ -13,63 +8,140 @@
     <p class="subtitle">{{ userName }}</p>
   </div>
 
-  <div *ngIf="isLoading">
-    <app-load-shimmer [height]="'50px'"></app-load-shimmer>
-
-    <app-load-shimmer [height]="'50px'"></app-load-shimmer>
-
-    <div class="custumer-shimmer">
-      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
-    </div>
-
-    <div class="custumer-shimmer-80">
-      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
-    </div>
-  </div>
-
-  <app-system-unavailable
-    *ngIf="showSystemUnavailable"
-    (clickLoading)="tryAgain()"
-    [infoMessage]="
-      'No momento estamos com nossos serviços indisponíves, volte novamente mais tarde!'
-    "
-  >
+  @if (showSystemUnavailable) {
+  <app-system-unavailable (clickLoading)="tryAgain()" [infoMessage]="
+        'No momento estamos com nossos serviços indisponíves, volte novamente mais tarde!'
+      ">
   </app-system-unavailable>
-
-  <section *ngIf="!showSystemUnavailable">
-    <div *ngIf="!isLoading" class="user-post-message__grid">
-      <div
-        class="user-post-message__image-wrapper"
-        *ngFor="let postMessage of listPostMessage; let i = index"
-      >
+  } @else {
+  <section>
+    @if (isLoading) {
+    <div>
+      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+      <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+      <div class="custumer-shimmer">
+        <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+      </div>
+      <div class="custumer-shimmer-80">
+        <app-load-shimmer [height]="'50px'"></app-load-shimmer>
+      </div>
+    </div>
+    } @else {
+    <div class="user-post-message__grid">
+      @for (postMessage of listPostMessage; track postMessage.id; let i = $index) {
+      <div class="user-post-message__image-wrapper" (click)="onPostClick(postMessage)">
         @if (!postMessage.isExpired) {
         <div class="user-post-message__badge">
           <div class="user-post-message__badge">
-            <app-badge-circle
-              [title]="postMessage.updatedAt"
-              fontSize="0.5625rem"
-              padding="0.25rem 0.6rem"
-            ></app-badge-circle>
+            <app-badge-circle [title]="postMessage.updatedAt" fontSize="0.5625rem"
+              padding="0.25rem 0.6rem"></app-badge-circle>
           </div>
         </div>
         }
         <div class="user-post-message__image-container">
-          <img
-            [src]="postMessage.image"
-            [style.height]="randomHeights[i]"
-            alt=""
-            class="user-post-message__image"
-          />
+          <img [src]="postMessage.image" [style.height]="randomHeights[i]" alt="" class="user-post-message__image" />
           <div class="user-post-message__overlay">
-            <img
-              src="assets/icon-static/heart-like.svg"
-              class="user-post-message__heart-like"
-              alt=""
-            />
+            <img src="assets/icon-static/heart-like.svg" class="user-post-message__heart-like" alt="" />
             <p>{{ postMessage.totalLikes }}</p>
           </div>
         </div>
       </div>
+      }
+    </div>
+    }
+  </section>
+  }
+</div>
+
+<!-- Modal 1: Actions Menu -->
+<app-modal #actionsModal>
+  <app-feedback-overlay variant="success" icon="image" [title]="'text.chooseOption' | translate"></app-feedback-overlay>
+
+  <div class="modal-buttons-container">
+    @if (selectedPost && !selectedPost.isExpired) {
+    <button appButton [disabled]="isLoadingDeactivate || isLoadingDelete" (click)="deactivatePost()">
+      @if (isLoadingDeactivate) {
+      <app-spinner></app-spinner>
+      } @else {
+      {{ "button.deactivatePost" | translate }}
+      }
+    </button>
+    }
+
+    <button appButton [disabled]="isLoadingDeactivate || isLoadingDelete" (click)="deletePost()">
+      @if (isLoadingDelete) {
+      <app-spinner></app-spinner>
+      } @else {
+      {{ "button.deletePost" | translate }}
+      }
+    </button>
+
+    <button appButton variant="outline" [disabled]="isLoadingDeactivate || isLoadingDelete"
+      (click)="openUpdateDurationModal()">
+      {{ "button.updatePost" | translate }}
+    </button>
+
+    <button appButton="ghost" class="btn-ghost" variant="ghost" [disabled]="isLoadingDeactivate || isLoadingDelete"
+      (click)="closeActionsModal()">
+      {{ "button.cancel" | translate }}
+    </button>
+  </div>
+</app-modal>
+
+<!-- Modal 2: Update Expiration Duration -->
+<app-modal #updateDurationModal>
+  <app-feedback-overlay variant="info" icon="timer" [title]="'text.chooseTimer' | translate"></app-feedback-overlay>
+
+  <section class="duration">
+    <div class="duration-list">
+      @for (item of durations; track item.value) {
+      <app-duration-option [option]="item" [disabled]="isLoadingUpdate" [selected]="selectedDuration === item.value"
+        (select)="selectDuration(item)">
+      </app-duration-option>
+      }
     </div>
   </section>
-</div>
+
+  <div class="modal-buttons-container" style="margin-top: 1.5rem;">
+    <button appButton [disabled]="isLoadingUpdate" (click)="updatePostDuration()">
+      @if (isLoadingUpdate) {
+      <app-spinner></app-spinner>
+      } @else {
+      {{ "button.confirm" | translate }}
+      }
+    </button>
+
+    <button appButton="ghost" class="btn-ghost" variant="ghost" [disabled]="isLoadingUpdate"
+      (click)="closeUpdateDurationModal()">
+      {{ "button.cancel" | translate }}
+    </button>
+  </div>
+</app-modal>
+
+<!-- Modal 3: Success Feedback -->
+<app-modal #feedbackModal>
+  <app-feedback-overlay [variant]="feedbackVariant" [icon]="feedbackIcon" [title]="feedbackTitle | translate"
+    [description]="feedbackDescription | translate"></app-feedback-overlay>
+
+  <div class="modal-buttons-container" style="margin-top: 1.5rem;">
+    <button appButton (click)="closeFeedbackModal()">
+      {{ "button.close" | translate }}
+    </button>
+  </div>
+</app-modal>
+
+<!-- Modal 4: Request Error Feedback -->
+<app-modal #requestErrorModal>
+  <app-feedback-overlay variant="error" icon="error" [title]="'text.errorSomethingWentWrong' | translate"
+    [description]="'text.describeErrorTryAgain' | translate"></app-feedback-overlay>
+
+  <div class="modal-buttons-container" style="margin-top: 1.5rem;">
+    <button appButton (click)="retryFailedAction()">
+      {{ "button.tryAgain" | translate }}
+    </button>
+
+    <button appButton="ghost" class="btn-ghost" variant="ghost" (click)="closeRequestErrorModal()">
+      {{ "button.cancel" | translate }}
+    </button>
+  </div>
+</app-modal>

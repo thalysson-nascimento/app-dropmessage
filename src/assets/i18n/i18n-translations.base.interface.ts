@@ -35,6 +35,10 @@ export interface I18nTranslationsBase {
     go_to_feed: string;
     create_another_post: string;
     save: string;
+    deactivatePost: string;
+    deletePost: string;
+    updatePost: string;
+    confirm: string;
   };
   input: {
     placeholder: {
@@ -199,5 +203,9 @@ export interface I18nTranslationsBase {
     descriptionCreateAccountSuccess: string;
     professionTitle: string;
     professionDescription: string;
+    postDeactivatedSuccess: string;
+    postDeletedSuccess: string;
+    postUpdatedSuccess: string;
+    errorActionFailed: string;
   };
 }

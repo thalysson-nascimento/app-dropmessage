@@ -43,6 +43,10 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     create_another_post: 'Create another Post',
     comingSoon: 'Premium Coming Soon',
     save: 'Save',
+    deactivatePost: 'Deactivate post',
+    deletePost: 'Delete post',
+    updatePost: 'Update post',
+    confirm: 'Confirm',
   },
   input: {
     placeholder: {
@@ -273,5 +277,9 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     professionTitle: 'What do you do for a living?',
     professionDescription:
       'Add your profession so people can learn a little more about your daily life.',
+    postDeactivatedSuccess: 'Post deactivated successfully!',
+    postDeletedSuccess: 'Post deleted successfully!',
+    postUpdatedSuccess: 'Post updated successfully!',
+    errorActionFailed: 'Could not complete the action at this time. Please try again later.',
   },
 };

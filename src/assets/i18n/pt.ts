@@ -44,6 +44,10 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     create_another_post: 'Criar outro Post',
     comingSoon: 'Em breve...',
     save: 'Salvar',
+    deactivatePost: 'Desativar postagem',
+    deletePost: 'Deletar postagem',
+    updatePost: 'Atualizar postagem',
+    confirm: 'Confirmar',
   },
   input: {
     placeholder: {
@@ -278,5 +282,9 @@ export const PT_TRANSLATIONS: I18nTranslationsBase = {
     professionTitle: 'Com o que você trabalha?',
     professionDescription:
       'Adicione sua profissão para que as pessoas conheçam um pouco mais sobre sua rotina.',
+    postDeactivatedSuccess: 'Postagem desativada com sucesso!',
+    postDeletedSuccess: 'Postagem deletada com sucesso!',
+    postUpdatedSuccess: 'Postagem atualizada com sucesso!',
+    errorActionFailed: 'Não foi possível realizar a ação no momento. Tente novamente mais tarde.',
   },
 };

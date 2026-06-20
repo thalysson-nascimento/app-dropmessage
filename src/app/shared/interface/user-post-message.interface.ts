@@ -14,3 +14,11 @@ export interface UserPostMessageElement {
   isExpired: boolean;
   totalLikes: number;
 }
+
+export interface DeletePostResponse {
+  message: string;
+}
+
+export interface UpdatePostResponse {
+  message: string;
+}
