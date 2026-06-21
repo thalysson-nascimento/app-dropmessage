@@ -47,6 +47,8 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     deletePost: 'Delete post',
     updatePost: 'Update post',
     confirm: 'Confirm',
+    comment: 'Comment',
+    watchVideo: 'Watch video',
   },
   input: {
     placeholder: {
@@ -59,6 +61,7 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
       maskDateOfBirth: '0000/00/00',
       identifyYourSelf: 'How do you identify?',
       interest: 'interest',
+      comment: 'Write a comment...',
     },
   },
   text: {
@@ -281,5 +284,11 @@ export const EN_TRANSLATIONS: I18nTranslationsBase = {
     postDeletedSuccess: 'Post deleted successfully!',
     postUpdatedSuccess: 'Post updated successfully!',
     errorActionFailed: 'Could not complete the action at this time. Please try again later.',
+    commentPostTitle: 'Comment on post',
+    commentPostSubtitle: 'What do you think of {{name}}\'s post?',
+    commentSuccess: 'Comment sent successfully!',
+    commentUnlockTitle: 'Comments locked',
+    commentUnlockDescription: 'To be able to comment on this post, please watch a sponsored video.',
+    checkingStatus: 'Checking post status...',
   },
 };

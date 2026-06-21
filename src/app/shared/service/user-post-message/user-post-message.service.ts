@@ -28,4 +28,22 @@ export class UserPostMessageService {
       .patch<UpdatePostResponse>(`${this.baseURL}/user-post-message/${id}`, { expirationTimer })
       .pipe(catchError((err: HttpErrorResponse) => throwError(() => err)));
   }
+
+  unlockComment(id: string): Observable<any> {
+    return this.httpCliente
+      .post<any>(`${this.baseURL}/user-post-message/comment/unlock`, { id })
+      .pipe(catchError((err: HttpErrorResponse) => throwError(() => err)));
+  }
+
+  createComment(id: string, content: string): Observable<any> {
+    return this.httpCliente
+      .post<any>(`${this.baseURL}/user-post-message/comment`, { id, content })
+      .pipe(catchError((err: HttpErrorResponse) => throwError(() => err)));
+  }
+
+  checkCommentUnlockStatus(id: string): Observable<{ unlocked: boolean }> {
+    return this.httpCliente
+      .get<{ unlocked: boolean }>(`${this.baseURL}/user-post-message/comment/unlock/${id}`)
+      .pipe(catchError((err: HttpErrorResponse) => throwError(() => err)));
+  }
 }

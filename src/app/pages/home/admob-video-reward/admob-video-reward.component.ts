@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -12,6 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { lastValueFrom } from 'rxjs';
 import { AdmobService } from '../../../shared/service/ad-mob/ad-mob.service';
 import { ConfirmRewardService } from '../../../shared/service/confirm-reward/confirm-reward.service';
+import { UserPostMessageService } from '../../../shared/service/user-post-message/user-post-message.service';
 
 @Component({
   selector: 'app-admob-video-reward',
@@ -21,6 +23,11 @@ import { ConfirmRewardService } from '../../../shared/service/confirm-reward/con
   imports: [CommonModule, TranslateModule],
 })
 export class AdmobVideoRewardComponent implements OnInit, OnDestroy {
+  @Input() mode: 'likes' | 'comment' = 'likes';
+  @Input() commentPostId?: string;
+  @Input() customTitle?: string;
+  @Input() customDescription?: string;
+
   @Output() close = new EventEmitter<void>();
   @Output() rewarded = new EventEmitter<boolean>();
 
@@ -34,6 +41,7 @@ export class AdmobVideoRewardComponent implements OnInit, OnDestroy {
   constructor(
     private admobService: AdmobService,
     private confirmRewardService: ConfirmRewardService,
+    private userPostMessageService: UserPostMessageService,
     private cd: ChangeDetectorRef
   ) {}
 
@@ -57,12 +65,31 @@ export class AdmobVideoRewardComponent implements OnInit, OnDestroy {
       if (result.rewarded) {
         console.log('Vídeo assistido com sucesso');
         this.statusMessage = 'text.videoRewardChecking';
-        const confirmResult = await lastValueFrom(
-          this.confirmRewardService.confirmReward()
-        );
-        console.log('confirmResult:', confirmResult);
+        let confirmSuccess = false;
 
-        if (confirmResult?.success) {
+        if (this.mode === 'comment') {
+          if (this.commentPostId) {
+            try {
+              const res = await lastValueFrom(
+                this.userPostMessageService.unlockComment(this.commentPostId)
+              );
+              confirmSuccess = !!res;
+            } catch (err) {
+              console.error('Error unlocking comment in video component:', err);
+            }
+          }
+        } else {
+          try {
+            const confirmResult = await lastValueFrom(
+              this.confirmRewardService.confirmReward()
+            );
+            confirmSuccess = !!confirmResult?.success;
+          } catch (err) {
+            console.error('Error confirming likes reward:', err);
+          }
+        }
+
+        if (confirmSuccess) {
           console.log('Recompensa confirmada, setando rewardConfirmed = true');
           this.rewardConfirmed = true;
           this.statusMessage = 'text.videoRewardReleased';

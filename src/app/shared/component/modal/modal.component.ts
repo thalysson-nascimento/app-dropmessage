@@ -10,12 +10,14 @@ import { Component } from '@angular/core';
 })
 export class ModalComponent {
   public isOpen = false;
+  public isLocked = false;
 
   open() {
     this.isOpen = true;
   }
 
   close() {
+    if (this.isLocked) return;
     this.isOpen = false;
   }
 }

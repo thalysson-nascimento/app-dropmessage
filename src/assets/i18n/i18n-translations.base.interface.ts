@@ -39,6 +39,8 @@ export interface I18nTranslationsBase {
     deletePost: string;
     updatePost: string;
     confirm: string;
+    comment: string;
+    watchVideo: string;
   };
   input: {
     placeholder: {
@@ -51,6 +53,7 @@ export interface I18nTranslationsBase {
       maskDateOfBirth: string;
       identifyYourSelf: string;
       interest: string;
+      comment: string;
     };
   };
   text: {
@@ -207,5 +210,11 @@ export interface I18nTranslationsBase {
     postDeletedSuccess: string;
     postUpdatedSuccess: string;
     errorActionFailed: string;
+    commentPostTitle: string;
+    commentPostSubtitle: string;
+    commentSuccess: string;
+    commentUnlockTitle: string;
+    commentUnlockDescription: string;
+    checkingStatus: string;
   };
 }

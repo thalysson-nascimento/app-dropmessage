@@ -8,8 +8,8 @@
 
     <div class="video-reward-card__header">
       <div class="video-reward-card__header-content">
-        <h2>{{ "text.videoRewardTitle" | translate }}</h2>
-        <p>{{ "text.videoRewardDescription" | translate }}</p>
+        <h2>{{ customTitle || ("text.videoRewardTitle" | translate) }}</h2>
+        <p>{{ customDescription || ("text.videoRewardDescription" | translate) }}</p>
       </div>
     </div>
 

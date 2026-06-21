@@ -2,6 +2,15 @@
 <app-admob-video-reward (close)="closeVideoReward()"></app-admob-video-reward>
 } @if (showCard) {
 <app-like-limite-reward (closeCard)="closeCard()" (openReward)="openVideoReward()"></app-like-limite-reward>
+} @if (showCommentRewardCard) {
+<app-admob-video-reward
+  mode="comment"
+  [commentPostId]="activePost?.id"
+  [customTitle]="'text.commentUnlockTitle' | translate"
+  [customDescription]="'text.commentUnlockDescription' | translate"
+  (rewarded)="onCommentRewarded($event)"
+  (close)="closeCommentVideoReward()">
+</app-admob-video-reward>
 }
 
 <div class="container">
@@ -125,7 +134,145 @@
         <span class="material-symbols-rounded">favorite</span>
       </button>
     </div>
+    <div class="comment-button-container">
+      <button class="comment-button" type="button" (click)="openCommentModal()">
+        <span class="material-symbols-rounded">chat_bubble</span>
+      </button>
+    </div>
     }
   </div>
   }
 </div>
+
+<!-- Modal de Comentário -->
+<app-modal #commentModal>
+  @if (activePost) {
+  <div class="comment-modal">
+    <div class="comment-modal__avatar-wrapper">
+      <img
+        class="comment-modal__avatar"
+        [src]="activePost.image"
+        [alt]="activePost.user.name"
+      />
+
+      <div class="comment-modal__action-icon">
+        <span class="material-symbols-rounded">chat_bubble</span>
+      </div>
+    </div>
+
+    <div class="comment-modal__info">
+      <h1 class="comment-modal__title">
+        {{ "text.commentPostTitle" | translate }}
+      </h1>
+      <p class="comment-modal__subtitle">
+        {{ "text.commentPostSubtitle" | translate : { name: activePost.user.name } }}
+      </p>
+    </div>
+
+    <div class="comment-modal__form">
+      <div class="comment-modal__input-wrapper">
+        <input
+          type="text"
+          class="comment-modal__input"
+          maxlength="50"
+          [placeholder]="'input.placeholder.comment' | translate"
+          [(ngModel)]="commentText"
+          [disabled]="isLoadingComment"
+          (keydown.enter)="submitComment()"
+        />
+        <span class="comment-modal__char-counter">
+          {{ commentText ? commentText.length : 0 }}/50
+        </span>
+      </div>
+    </div>
+
+    <div class="comment-modal__buttons">
+      <button
+        appButton
+        [disabled]="!commentText || commentText.trim().length === 0 || isLoadingComment"
+        (click)="submitComment()"
+      >
+        @if (isLoadingComment) {
+        <app-spinner></app-spinner>
+        } @else {
+        {{ "button.comment" | translate }}
+        }
+      </button>
+
+      <button
+        appButton="ghost"
+        class="btn-ghost"
+        variant="ghost"
+        [disabled]="isLoadingComment"
+        (click)="closeCommentModal()"
+      >
+        {{ "button.cancel" | translate }}
+      </button>
+    </div>
+  </div>
+  }
+</app-modal>
+
+<!-- Modal de Feedback de Sucesso -->
+<app-modal #feedbackModal>
+  <app-feedback-overlay
+    variant="success"
+    icon="check_circle"
+    [title]="'text.commentSuccess' | translate"
+  ></app-feedback-overlay>
+
+  <div class="modal-buttons-container" style="margin-top: 1.5rem;">
+    <button appButton (click)="closeFeedbackModal()">
+      {{ "button.close" | translate }}
+    </button>
+  </div>
+</app-modal>
+
+<!-- Modal de Desbloqueio de Comentário por Vídeo -->
+<app-modal #commentUnlockModal>
+  <app-feedback-overlay
+    variant="info"
+    icon="play_circle"
+    [title]="'text.commentUnlockTitle' | translate"
+    [description]="'text.commentUnlockDescription' | translate"
+  ></app-feedback-overlay>
+
+  <div class="modal-buttons-container" style="margin-top: 1.5rem;">
+    <button appButton (click)="startCommentVideoReward()">
+      {{ "button.watchVideo" | translate }}
+    </button>
+    
+    <button appButton="ghost" class="btn-ghost" variant="ghost" (click)="closeCommentUnlockModal()">
+      {{ "button.cancel" | translate }}
+    </button>
+  </div>
+</app-modal>
+
+<!-- Modal de Aguarde (Verificação de Status) -->
+<app-modal #waitingModal>
+  <app-feedback-overlay
+    variant="info"
+    icon="hourglass_empty"
+    [title]="'text.waitAMoment' | translate"
+    [description]="'text.checkingStatus' | translate"
+  ></app-feedback-overlay>
+  <div class="comment-modal__loading" style="margin-top: 1.5rem;">
+    <app-spinner color="#3b82f6"></app-spinner>
+  </div>
+</app-modal>
+
+<!-- Modal de Erro do Comentário -->
+<app-modal #commentErrorModal>
+  <app-feedback-overlay
+    variant="error"
+    icon="error"
+    [title]="'text.errorSomethingWentWrong' | translate"
+    [description]="'text.describeErrorTryAgain' | translate"
+  ></app-feedback-overlay>
+
+  <div class="modal-buttons-container" style="margin-top: 1.5rem;">
+    <button appButton (click)="closeCommentErrorModal()">
+      {{ "button.close" | translate }}
+    </button>
+  </div>
+</app-modal>
