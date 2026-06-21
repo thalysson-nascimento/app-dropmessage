@@ -15,11 +15,15 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { concatMap, Subject, takeUntil, tap } from 'rxjs';
+import { catchError, concatMap, of, Subject, takeUntil, tap } from 'rxjs';
 import { register } from 'swiper/element/bundle';
 import { CardsComponent } from '../../../../../shared/component/cards/cards.component';
+import { FeedbackOverlayComponent } from '../../../../../shared/component/feedback-overlay/feedback-overlay.component';
+import { ModalComponent } from '../../../../../shared/component/modal/modal.component';
+import { SpinnerComponent } from '../../../../../shared/component/spinner/spinner.component';
 import { ButtonDirective } from '../../../../../shared/directives/button-ia/button-ia.directive';
 import { AIProfileInterface } from '../../../../../shared/interface/ai-profile.interface';
 import { FeedPost } from '../../../../../shared/interface/post.interface';
@@ -29,13 +33,9 @@ import { LoggerService } from '../../../../../shared/service/logger/logger.servi
 import { PostMessageService } from '../../../../../shared/service/post/post.service';
 import { UnlikePostMessageService } from '../../../../../shared/service/unlike-post-message/unlike-post-message.service';
 import { UserPostMessageService } from '../../../../../shared/service/user-post-message/user-post-message.service';
-import { AdmobVideoRewardComponent } from '../../../admob-video-reward/admob-video-reward.component';
 import { getCountryFlagUrl } from '../../../../../shared/utils/country-flag.util';
+import { AdmobVideoRewardComponent } from '../../../admob-video-reward/admob-video-reward.component';
 import { LikeLimiteRewardComponent } from '../../../like-limite-reward/like-limite-reward.component';
-import { FormsModule } from '@angular/forms';
-import { ModalComponent } from '../../../../../shared/component/modal/modal.component';
-import { SpinnerComponent } from '../../../../../shared/component/spinner/spinner.component';
-import { FeedbackOverlayComponent } from '../../../../../shared/component/feedback-overlay/feedback-overlay.component';
 register();
 
 @Component({
@@ -215,6 +215,10 @@ export class SwiperContainerComponent
                   .pipe(takeUntil(this.destroy$))
                   .subscribe();
               },
+            }),
+            catchError((err) => {
+              console.error('Error in likeQueue processing:', err);
+              return of(null);
             })
           );
         })
@@ -255,6 +259,10 @@ export class SwiperContainerComponent
                   .pipe(takeUntil(this.destroy$))
                   .subscribe();
               },
+            }),
+            catchError((err) => {
+              console.error('Error in unlikeQueue processing:', err);
+              return of(null);
             })
           )
         )
@@ -462,20 +470,6 @@ export class SwiperContainerComponent
     const currentActiveIndex = this.mySwiper?.activeIndex ?? 0;
     this.posts.splice(idx, 1);
 
-    // ULTIMA SUGESTÃO DA IA PARA EVITAR OS CARDES DUPLICADOS CONFORME O ULTIMO RESPONSE DO ENDPOINT QUANDO ACABA OS VIDEOS ADS
-    // Após remover o post, garanta que só exista um AI_SUGGESTION
-    // const aiIndexes = this.posts
-    //   .map((p, i) =>
-    //     Array.isArray(p.type) && p.type.includes('AI_SUGGESTION') ? i : -1
-    //   )
-    //   .filter((i) => i !== -1);
-    // if (aiIndexes.length > 1) {
-    //   const first = aiIndexes[0];
-    //   this.posts = this.posts.filter(
-    //     (_, i) => i === first || !aiIndexes.includes(i)
-    //   );
-    // }
-
     this.mySwiper?.removeSlide(idx);
     this.mySwiper?.update();
 
@@ -502,13 +496,13 @@ export class SwiperContainerComponent
     const postId = post?.id;
     if (!postId) return;
     if (postId !== 'no-matches' && postId !== 'watch-video-reward') {
-      this.dislikePostMessage(postId);
+      this.dislikePostMessage(post);
     }
     this.removePostById(postId, true);
   }
 
-  dislikePostMessage(postId: any) {
-    this.unlikeQueue.next(postId.id);
+  dislikePostMessage(post: any) {
+    this.unlikeQueue.next(post);
   }
 
   goToAdMobVideoReward() {
