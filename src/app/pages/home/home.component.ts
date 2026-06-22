@@ -8,6 +8,7 @@ import { MatchDataDetailsService } from '../../shared/service/match-details/matc
 // import { PostMock } from '../../shared/service/post/post.mock';
 import { PostMessageService } from '../../shared/service/post/post.service';
 import { SocketMatchService } from '../../shared/service/socket-match/socket-match.service';
+import { SocketService } from '../../shared/service/socket.service.ts/socket.service';
 import { TokenStorageSecurityRequestService } from '../../shared/service/token-storage-security-request/token-storage-security-request.service';
 import { DevelopmentRequestHttpBackend } from '../../shared/utils/developmentRequestHttpBackend/developmentRequestHttpBackend';
 
@@ -32,6 +33,7 @@ const environmentMock = currentEnvironment.mock;
 export class HomeComponent implements OnInit {
   constructor(
     private socketMatchService: SocketMatchService,
+    private socketService: SocketService,
     private router: Router,
     private matchDataDetailsService: MatchDataDetailsService,
     private tokenStorageSecurityRequestService: TokenStorageSecurityRequestService
@@ -45,6 +47,7 @@ export class HomeComponent implements OnInit {
     this.tokenStorageSecurityRequestService.getToken().subscribe({
       next: (token) => {
         if (token) {
+          this.socketService.authenticate(token);
           const decoded = jwtDecode(token);
           this.onListenSocketMatch(decoded.sub);
         }

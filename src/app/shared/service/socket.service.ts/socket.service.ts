@@ -1,47 +1,30 @@
-// import { Injectable } from '@angular/core';
-// import { Observable } from 'rxjs';
-// import { io, Socket } from 'socket.io-client';
+import { Inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Socket } from 'socket.io-client';
 
-// @Injectable({
-//   providedIn: 'root',
-// })
-// export class SocketService {
-//   private socket!: Socket;
+@Injectable({
+  providedIn: 'root',
+})
+export class SocketService {
+  constructor(@Inject('SOCKET_IO') private socket: Socket) {}
 
-//   connect(userId: string) {
-//     if (!userId) return;
+  onNotificationUnread(): Observable<{ count: number; hasUnread: boolean }> {
+    return new Observable((observer) => {
+      this.socket.on('notification:unread', (data) => {
+        console.log('📩 socket notification:unread received:', data);
+        observer.next(data);
+      });
+      return () => this.socket.off('notification:unread');
+    });
+  }
 
-//     if (this.socket?.connected) return;
-
-//     this.socket = io('http://localhost:3000', {
-//       auth: {
-//         userId,
-//       },
-//       transports: ['websocket'],
-//     });
-
-//     this.socket.emit('join', userId);
-//   }
-
-//   joinMatch(matchId: string) {
-//     this.socket.emit('join-send-message', matchId);
-//   }
-
-//   onUserOnline(): Observable<{ userId: string; userHashPublic: string }> {
-//     return new Observable((observer) => {
-//       this.socket.on('user-online', (data) => observer.next(data));
-//     });
-//   }
-
-//   onUserOffline(): Observable<{ userId: string; userHashPublic: string }> {
-//     return new Observable((observer) => {
-//       this.socket.on('user-offline', (data) => observer.next(data));
-//     });
-//   }
-
-//   disconnect() {
-//     if (this.socket.connected) {
-//       this.socket.disconnect();
-//     }
-//   }
-// }
+  authenticate(token: string) {
+    console.log('🔐 Authenticating socket with token...');
+    this.socket.auth = { token };
+    if (this.socket.connected) {
+      this.socket.disconnect().connect();
+    } else {
+      this.socket.connect();
+    }
+  }
+}

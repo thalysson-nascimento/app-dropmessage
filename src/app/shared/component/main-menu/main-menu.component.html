@@ -115,6 +115,11 @@
     </svg>
   </button>
   <button routerLink="/home/main/notification" routerLinkActive="active">
+    @if (unreadCount$ | async; as count) {
+      @if (count > 0) {
+        <span class="badge">{{ count }}</span>
+      }
+    }
     <svg
       class="icon-main-menu"
       viewBox="0 0 24 24"

@@ -8,6 +8,7 @@
   padding-bottom: max(12px, var(--safe-bottom));
 
   button {
+    position: relative;
     background: transparent;
     border: none;
     padding: 12px;
@@ -27,6 +28,25 @@
 
   button:active {
     transform: scale(0.96);
+  }
+
+  .badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background-color: #ff5252; // vermelho suave
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    box-sizing: border-box;
+    border: 2px solid var(--white, white);
   }
 }
 

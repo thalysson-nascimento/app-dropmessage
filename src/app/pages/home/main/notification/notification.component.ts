@@ -58,6 +58,8 @@ export class NotificationComponent implements OnInit {
         this.notifications = data;
         this.loading = false;
         this.error = false;
+        this.notificationService.unreadCount$.next(0);
+        this.notificationService.hasUnread$.next(false);
       },
       error: () => {
         this.loading = false;
